@@ -8263,28 +8263,43 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       });
 
       const claimedRuns: Array<typeof heartbeatRuns.$inferSelect> = [];
-      await withInstanceAdmissionLock(async () => {
-        let instanceSlots = availableSlots; // start from the per-agent budget
-        try {
-          const general = await instanceSettingsService(db).getGeneral();
-          const { cap } = resolveEffectiveCap(
-            { instanceMaxConcurrentRuns: general.maxConcurrentRuns ?? null },
-            PHASE1_WRITERS,
-          );
-          if (cap !== null) {
-            const running = await countRunningRunsInstanceWide();
-            instanceSlots = Math.min(availableSlots, Math.max(0, cap - running));
-          }
-        } catch (err) {
-          logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
-          instanceSlots = availableSlots;
-        }
+      const claimUpTo = async (budget: number) => {
         for (const queuedRun of prioritizedRuns) {
-          if (claimedRuns.length >= instanceSlots) break;
+          if (claimedRuns.length >= budget) break;
           const claimed = await claimQueuedRun(queuedRun, companyAgents);
           if (claimed) claimedRuns.push(claimed); // claim flips queued→running atomically
         }
-      });
+      };
+
+      // Resolve the instance-wide cap FIRST, outside the lock. Fail open: if the
+      // settings read throws, treat the cap as unset (per-agent only).
+      let cap: number | null = null;
+      try {
+        const general = await instanceSettingsService(db).getGeneral();
+        ({ cap } = resolveEffectiveCap(
+          { instanceMaxConcurrentRuns: general.maxConcurrentRuns ?? null },
+          PHASE1_WRITERS,
+        ));
+      } catch (err) {
+        logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
+        cap = null;
+      }
+
+      if (cap === null) {
+        // No cap configured (the default): admission is byte-identical to the
+        // pre-Phase-1 behavior — the original per-agent claim loop with NO global
+        // lock and NO instance-wide count query.
+        await claimUpTo(availableSlots);
+      } else {
+        // Cap configured: serialize the count+claim step instance-wide so
+        // concurrent ticks can't collectively breach the ceiling.
+        const effectiveCap = cap;
+        await withInstanceAdmissionLock(async () => {
+          const running = await countRunningRunsInstanceWide();
+          const instanceSlots = Math.min(availableSlots, Math.max(0, effectiveCap - running));
+          await claimUpTo(instanceSlots);
+        });
+      }
       if (claimedRuns.length === 0) return [];
 
       for (const claimedRun of claimedRuns) {

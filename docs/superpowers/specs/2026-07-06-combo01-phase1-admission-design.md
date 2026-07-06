@@ -110,6 +110,15 @@ Fail-safe by construction; every failure degrades toward today's behavior.
 - **Null claims** → `claimQueuedRun` returning `null` never increments `claimed.length` and
   never flips a row to `running`, so it consumes neither a per-agent nor an instance slot.
 
+### Known limitation (Phase 1)
+
+The instance admission lock is an **in-memory, single-process** mutex. It serializes the
+count+claim step only *within one server process*. If the deployment runs multiple server
+replicas, each replica holds its own independent lock, so each can admit up to the cap and
+the replicas can collectively breach the instance ceiling. Phase 1 accepts this: it targets
+the single-process deployment and still guarantees the ceiling there. The multi-process fix
+(a DB advisory lock or `SELECT ... FOR UPDATE` around the count+claim) is a later slice.
+
 ## Testing (TDD, red-first)
 
 Existing `server/src/__tests__` harness + `embedded-postgres.ts` helper; real DB, no mocks.

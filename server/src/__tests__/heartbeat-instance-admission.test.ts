@@ -35,6 +35,7 @@ import {
 import { heartbeatService } from "../services/heartbeat.ts";
 import { instanceSettingsService } from "../services/instance-settings.ts";
 import * as instanceSettingsModule from "../services/instance-settings.ts";
+import * as instanceAdmissionLockModule from "../services/instance-admission-lock.ts";
 import { runningProcesses } from "../adapters/index.ts";
 
 // Neutralize the fire-and-forget executeRun(...) that runs AFTER admission: replace
@@ -358,6 +359,31 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     await saturateQueue(companyId, agentIds, 5);
     expect(await runTickForAllAgents(agentIds)).toBe(4); // runs still start
     spy.mockRestore();
+  });
+
+  it("does not acquire the instance admission lock when the cap is unset", async () => {
+    // Explicitly clear any instance cap left over from a prior test (a falsy value
+    // resets to "unlimited" per the settings service). Unlimited => must stay
+    // byte-identical to today: no global lock and no instance-wide count query.
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 0 });
+    const companyId = await createCompany();
+    const agentIds = await createAgents(companyId, 3, { maxConcurrentRuns: 2 });
+    await saturateQueue(companyId, agentIds, 5);
+    const lockSpy = vi.spyOn(instanceAdmissionLockModule, "withInstanceAdmissionLock");
+    expect(await runTickForAllAgents(agentIds)).toBe(6); // per-agent budget only
+    expect(lockSpy).not.toHaveBeenCalled();
+  });
+
+  it("acquires the instance admission lock when a cap is configured", async () => {
+    // Positive counterpart to the unset test above: guards against a mis-wired
+    // spy silently passing the not.toHaveBeenCalled() assertion.
+    const companyId = await createCompany();
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    const [agentId] = await createAgents(companyId, 1, { maxConcurrentRuns: 2 });
+    await saturateQueue(companyId, [agentId], 5);
+    const lockSpy = vi.spyOn(instanceAdmissionLockModule, "withInstanceAdmissionLock");
+    expect(await runTickForAllAgents([agentId])).toBe(2); // per-agent cap still binds
+    expect(lockSpy).toHaveBeenCalled();
   });
 
   it("under-admits (never breaches) when running rows are leaked", async () => {
