@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/heartbeat.ts
+ * ABOUT: heartbeat.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/heartbeat.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execFile as execFileCallback } from "node:child_process";
@@ -161,6 +175,8 @@ import { recoveryService } from "./recovery/service.js";
 import { productivityReviewService } from "./productivity-review.js";
 import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
+import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
+import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
 import {
   evaluateAgentInvokability,
   evaluateAgentInvokabilityFromDb,
@@ -8247,11 +8263,28 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       });
 
       const claimedRuns: Array<typeof heartbeatRuns.$inferSelect> = [];
-      for (const queuedRun of prioritizedRuns) {
-        if (claimedRuns.length >= availableSlots) break;
-        const claimed = await claimQueuedRun(queuedRun, companyAgents);
-        if (claimed) claimedRuns.push(claimed);
-      }
+      await withInstanceAdmissionLock(async () => {
+        let instanceSlots = availableSlots; // start from the per-agent budget
+        try {
+          const general = await instanceSettingsService(db).getGeneral();
+          const { cap } = resolveEffectiveCap(
+            { instanceMaxConcurrentRuns: general.maxConcurrentRuns ?? null },
+            PHASE1_WRITERS,
+          );
+          if (cap !== null) {
+            const running = await countRunningRunsInstanceWide();
+            instanceSlots = Math.min(availableSlots, Math.max(0, cap - running));
+          }
+        } catch (err) {
+          logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
+          instanceSlots = availableSlots;
+        }
+        for (const queuedRun of prioritizedRuns) {
+          if (claimedRuns.length >= instanceSlots) break;
+          const claimed = await claimQueuedRun(queuedRun, companyAgents);
+          if (claimed) claimedRuns.push(claimed); // claim flips queued→running atomically
+        }
+      });
       if (claimedRuns.length === 0) return [];
 
       for (const claimedRun of claimedRuns) {
@@ -12317,5 +12350,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     },
 
     countRunningRunsInstanceWide,
+    startNextQueuedRunForAgent,
   };
 }
+// [END: module]

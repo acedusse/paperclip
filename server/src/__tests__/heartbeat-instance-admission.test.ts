@@ -1,16 +1,69 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-instance-admission.test.ts
+ * ABOUT: heartbeat-instance-admission.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-instance-admission.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-instance-admission.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-instance-admission.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import {
+  activityLog,
   agents,
+  agentRuntimeState,
+  agentWakeupRequests,
   companies,
+  companySkills,
   createDb,
+  environmentLeases,
+  executionWorkspaces,
+  heartbeatRunEvents,
   heartbeatRuns,
+  workspaceOperations,
 } from "@paperclipai/db";
 import {
   getEmbeddedPostgresTestSupport,
   startEmbeddedPostgresTestDatabase,
 } from "./helpers/embedded-postgres.js";
 import { heartbeatService } from "../services/heartbeat.ts";
+import { instanceSettingsService } from "../services/instance-settings.ts";
+import * as instanceSettingsModule from "../services/instance-settings.ts";
+import { runningProcesses } from "../adapters/index.ts";
+
+// Neutralize the fire-and-forget executeRun(...) that runs AFTER admission: replace
+// the real adapter with a fast, side-effect-free success so background execution can
+// never spawn a process or emit error logs. Admission itself (the claim decision) is
+// asserted synchronously via the value returned from startNextQueuedRunForAgent, so
+// these tests never depend on executeRun's async aftermath.
+const mockAdapterExecute = vi.hoisted(() =>
+  vi.fn(async () => ({
+    exitCode: 0,
+    signal: null,
+    timedOut: false,
+    errorMessage: null,
+    summary: "Instance admission test run.",
+    provider: "test",
+    model: "test-model",
+  })),
+);
+
+vi.mock("../adapters/index.ts", async () => {
+  const actual = await vi.importActual<typeof import("../adapters/index.ts")>("../adapters/index.ts");
+  return {
+    ...actual,
+    getServerAdapter: vi.fn(() => ({
+      supportsLocalAgentJwt: false,
+      execute: mockAdapterExecute,
+    })),
+  };
+});
 
 const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
 const describeEmbeddedPostgres = embeddedPostgresSupport.supported ? describe : describe.skip;
@@ -33,14 +86,153 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
   }, 20_000);
 
   afterEach(async () => {
-    await db.delete(heartbeatRuns);
-    await db.delete(agents);
-    await db.delete(companies);
+    // Restore the fail-open spy (if any) BEFORE draining so background executeRun(...)
+    // calls resolve normally, then wait for those fire-and-forget runs to finish so we
+    // never delete rows out from under an in-flight run. Require several *consecutive*
+    // idle polls (plus a settle) because executeRun keeps writing child rows (run events)
+    // for a short tail after a run leaves the "running" state.
+    vi.restoreAllMocks();
+    let idlePolls = 0;
+    for (let attempt = 0; attempt < 300; attempt += 1) {
+      const rows = await db.select({ status: heartbeatRuns.status }).from(heartbeatRuns);
+      const hasActiveRun = rows.some((run) => run.status === "queued" || run.status === "running");
+      if (!hasActiveRun) {
+        idlePolls += 1;
+        if (idlePolls >= 3) break;
+      } else {
+        idlePolls = 0;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    runningProcesses.clear();
+    // Delete child tables (written by background executeRun) before their parents so
+    // foreign-key constraints are satisfied. Retry to absorb any last-moment child-row
+    // write from a fire-and-forget run that is still finishing.
+    const teardown = async () => {
+      await db.delete(environmentLeases);
+      await db.delete(activityLog);
+      await db.delete(heartbeatRunEvents);
+      await db.delete(agentWakeupRequests);
+      await db.delete(workspaceOperations);
+      await db.delete(executionWorkspaces);
+      await db.delete(agentRuntimeState);
+      await db.delete(heartbeatRuns);
+      await db.delete(companySkills);
+      await db.delete(agents);
+      await db.delete(companies);
+    };
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        await teardown();
+        break;
+      } catch (err) {
+        if (attempt >= 5) throw err;
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+    }
   });
 
   afterAll(async () => {
     await tempDb?.cleanup();
   });
+
+  // ---- fixtures --------------------------------------------------------------
+
+  async function createCompany(): Promise<string> {
+    const companyId = randomUUID();
+    await db.insert(companies).values({
+      id: companyId,
+      name: "Paperclip",
+      issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+    return companyId;
+  }
+
+  async function createAgents(
+    companyId: string,
+    count: number,
+    opts: { maxConcurrentRuns: number },
+  ): Promise<string[]> {
+    const agentIds = Array.from({ length: count }, () => randomUUID());
+    await db.insert(agents).values(
+      agentIds.map((id, index) => ({
+        id,
+        companyId,
+        name: `Agent-${index}-${id.slice(0, 8)}`,
+        role: "engineer",
+        status: "active" as const,
+        adapterType: "codex_local" as const,
+        adapterConfig: {},
+        runtimeConfig: { heartbeat: { maxConcurrentRuns: opts.maxConcurrentRuns } },
+        permissions: {},
+      })),
+    );
+    return agentIds;
+  }
+
+  // Insert `perAgent` queued runs for each agent (no issueId => no dependency gating).
+  async function saturateQueue(companyId: string, agentIds: string[], perAgent: number) {
+    const rows = agentIds.flatMap((agentId) =>
+      Array.from({ length: perAgent }, () => ({
+        id: randomUUID(),
+        companyId,
+        agentId,
+        invocationSource: "assignment" as const,
+        triggerDetail: "system" as const,
+        status: "queued" as const,
+      })),
+    );
+    if (rows.length > 0) await db.insert(heartbeatRuns).values(rows);
+  }
+
+  // Simulate leaked/orphaned running rows (e.g. from a crash) under a dedicated agent,
+  // so the instance-wide running count is inflated without touching the tested agents'
+  // per-agent budgets.
+  async function seedOrphanRunningRows(companyId: string, count: number) {
+    const orphanAgentId = randomUUID();
+    await db.insert(agents).values({
+      id: orphanAgentId,
+      companyId,
+      name: `Orphan-${orphanAgentId.slice(0, 8)}`,
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: {},
+      permissions: {},
+    });
+    await db.insert(heartbeatRuns).values(
+      Array.from({ length: count }, () => ({
+        id: randomUUID(),
+        companyId,
+        agentId: orphanAgentId,
+        invocationSource: "assignment" as const,
+        triggerDetail: "system" as const,
+        status: "running" as const,
+      })),
+    );
+  }
+
+  async function countRunning(): Promise<number> {
+    return heartbeat.countRunningRunsInstanceWide();
+  }
+
+  // Run one admission tick for each agent and return the total number of runs ADMITTED
+  // (claimed out of "queued") this tick. The returned claimedRuns count is the gate's
+  // synchronous decision — it is fixed before executeRun(...) fires, so assertions on it
+  // are deterministic regardless of executeRun's async aftermath.
+  async function runTickForAllAgents(agentIds: string[]): Promise<number> {
+    let admitted = 0;
+    for (const agentId of agentIds) {
+      const claimed = await heartbeat.startNextQueuedRunForAgent(agentId);
+      admitted += claimed.length;
+    }
+    return admitted;
+  }
+
+  // ---- Task 4 count test (unchanged) ----------------------------------------
 
   it("counts running runs across all agents in the instance", async () => {
     const companyId = randomUUID();
@@ -115,4 +307,68 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
 
     expect(await heartbeat.countRunningRunsInstanceWide()).toBe(3);
   });
+
+  // ---- Task 5 admission gate cases ------------------------------------------
+
+  it("never exceeds the instance cap under saturation (exit criterion)", async () => {
+    const companyId = await createCompany();
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    const agentIds = await createAgents(companyId, 30, { maxConcurrentRuns: 20 });
+    await saturateQueue(companyId, agentIds, 20);
+    for (let tick = 0; tick < 5; tick++) {
+      await runTickForAllAgents(agentIds);
+      // The gate counts real running rows inside the lock and only executeRun can
+      // reduce that count, so the instance-wide running total is never above the cap.
+      expect(await countRunning()).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it("is a no-op when the cap is unset (behavior identical to today)", async () => {
+    // no updateGeneral call => unlimited
+    const companyId = await createCompany();
+    const agentIds = await createAgents(companyId, 3, { maxConcurrentRuns: 2 });
+    await saturateQueue(companyId, agentIds, 5);
+    // Each agent still claims exactly its per-agent cap (2), unbounded by any instance cap.
+    expect(await runTickForAllAgents(agentIds)).toBe(6);
+  });
+
+  it("binds on the tighter of per-agent and instance caps", async () => {
+    const companyId = await createCompany();
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    const [agentId] = await createAgents(companyId, 1, { maxConcurrentRuns: 2 });
+    await saturateQueue(companyId, [agentId], 5);
+    // per-agent cap (2) still binds even though the instance cap (10) is looser.
+    expect(await runTickForAllAgents([agentId])).toBe(2);
+  });
+
+  it("falls back to per-agent-only when the cap lookup throws (fail-open)", async () => {
+    const companyId = await createCompany();
+    // A cap that WOULD restrict admission: with the gate active the two agents could
+    // only admit 1 run total (cap 1). If the lookup instead throws and we fail open,
+    // each agent admits its full per-agent budget (2) => 4 total. Asserting 4 proves the
+    // fail-open path actually fired (a plain unset-cap scenario would also yield 4 and
+    // could pass by accident).
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 1 });
+    const spy = vi
+      .spyOn(instanceSettingsModule, "instanceSettingsService")
+      .mockImplementation(() => {
+        throw new Error("db blip");
+      });
+    const agentIds = await createAgents(companyId, 2, { maxConcurrentRuns: 2 });
+    await saturateQueue(companyId, agentIds, 5);
+    expect(await runTickForAllAgents(agentIds)).toBe(4); // runs still start
+    spy.mockRestore();
+  });
+
+  it("under-admits (never breaches) when running rows are leaked", async () => {
+    const companyId = await createCompany();
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    await seedOrphanRunningRows(companyId, 10); // simulate a crash leak
+    const agentIds = await createAgents(companyId, 3, { maxConcurrentRuns: 20 });
+    await saturateQueue(companyId, agentIds, 20);
+    const admitted = await runTickForAllAgents(agentIds);
+    expect(admitted).toBe(0); // 0 new admitted; never > cap
+    expect(await countRunning()).toBe(10); // leaked rows untouched
+  });
 });
+// [END: module]
