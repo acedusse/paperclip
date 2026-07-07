@@ -14,7 +14,7 @@
 // [START: module]
 import { randomUUID } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import {
   activityLog,
   agents,
@@ -219,6 +219,10 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
 
   async function countRunning(): Promise<number> {
     return heartbeat.countRunningRunsInstanceWide();
+  }
+
+  async function countRunningForCompany(companyId: string): Promise<number> {
+    return heartbeat.countRunningRunsForCompany(companyId);
   }
 
   // Run one admission tick for each agent and return the total number of runs ADMITTED
@@ -461,6 +465,92 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     const admitted = await runTickForAllAgents(agentIds);
     expect(admitted).toBe(0); // 0 new admitted; never > cap
     expect(await countRunning()).toBe(10); // leaked rows untouched
+  });
+
+  // ---- Task 4 per-company cap cases ------------------------------------------
+  //
+  // Determinism note: these assert on the SYNCHRONOUS claimed count returned by a single
+  // startNextQueuedRunForAgent(...) call. Within one call every claim (queued->running)
+  // completes before the fire-and-forget executeRun(...) loop fires, so no background
+  // run can drain a row mid-decision. DB running-count reads AFTER a tick are avoided
+  // for exact assertions because executeRun's async aftermath makes them non-deterministic.
+
+  it("caps a company's running runs and leaves other companies unaffected", async () => {
+    // Instance cap unset so the ONLY ceiling is company A's. (Instance settings persist
+    // across tests — a falsy value resets to "unlimited".)
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 0 });
+    const companyA = await createCompany();
+    const companyB = await createCompany();
+    await db.update(companies).set({ maxConcurrentRuns: 3 }).where(eq(companies.id, companyA));
+    const [agentA] = await createAgents(companyA, 1, { maxConcurrentRuns: 20 });
+    const [agentB] = await createAgents(companyB, 1, { maxConcurrentRuns: 20 });
+    await saturateQueue(companyA, [agentA], 20);
+    await saturateQueue(companyB, [agentB], 20);
+    // Company A: one admission call claims exactly the company cap (3). RED before the
+    // company gate exists: instance unset => fast path claims the full per-agent budget (20).
+    const claimedA = await heartbeat.startNextQueuedRunForAgent(agentA);
+    expect(claimedA.length).toBe(3);
+    // Company B (uncapped) is NOT throttled by A's ceiling: it claims its full per-agent budget.
+    const claimedB = await heartbeat.startNextQueuedRunForAgent(agentB);
+    expect(claimedB.length).toBe(20);
+  });
+
+  it("binds on the tighter of instance and company caps (company tighter)", async () => {
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    const company = await createCompany();
+    await db.update(companies).set({ maxConcurrentRuns: 3 }).where(eq(companies.id, company));
+    const [agent] = await createAgents(company, 1, { maxConcurrentRuns: 20 });
+    await saturateQueue(company, [agent], 20);
+    // budget = min(perAgent 20, instance 10, company 3) => company (3) binds. RED before the
+    // company gate: min(20, 10) => 10 claimed.
+    const claimed = await heartbeat.startNextQueuedRunForAgent(agent);
+    expect(claimed.length).toBe(3);
+  });
+
+  it("binds on the tighter of instance and company caps (instance tighter)", async () => {
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 3 });
+    const company = await createCompany();
+    await db.update(companies).set({ maxConcurrentRuns: 10 }).where(eq(companies.id, company));
+    const [agent] = await createAgents(company, 1, { maxConcurrentRuns: 20 });
+    await saturateQueue(company, [agent], 20);
+    // budget = min(perAgent 20, instance 3, company 10) => instance (3) binds. The company
+    // cap (10) must NOT loosen the tighter instance ceiling.
+    const claimed = await heartbeat.startNextQueuedRunForAgent(agent);
+    expect(claimed.length).toBe(3);
+  });
+
+  it("does not acquire the lock when neither instance nor company cap is set", async () => {
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 0 });
+    const company = await createCompany(); // company cap null by default
+    const agents = await createAgents(company, 3, { maxConcurrentRuns: 2 });
+    await saturateQueue(company, agents, 5);
+    const lockSpy = vi.spyOn(instanceAdmissionLockModule, "withInstanceAdmissionLock");
+    expect(await runTickForAllAgents(agents)).toBe(6); // per-agent budget only (3 x 2)
+    expect(lockSpy).not.toHaveBeenCalled();
+  });
+
+  it("falls back (fail-open) when the company cap lookup throws", async () => {
+    // Instance cap unset; company cap = 1 WOULD restrict admission to 1 run total. If the
+    // company-cap lookup fails open, both scopes are unset => per-agent only: 2 x 2 = 4.
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 0 });
+    const company = await createCompany();
+    await db.update(companies).set({ maxConcurrentRuns: 1 }).where(eq(companies.id, company));
+    const agents = await createAgents(company, 2, { maxConcurrentRuns: 2 });
+    await saturateQueue(company, agents, 5);
+    // Force the accessor's `SELECT max_concurrent_runs FROM companies` to throw by dropping
+    // the column mid-test. This is the only path in admission that reads that column, so the
+    // throw is isolated to getCompanyMaxConcurrentRuns' try/catch. If that catch were
+    // removed the error would propagate out of startNextQueuedRunForAgent and this tick
+    // would reject (admitted !== 4 => RED), so the test genuinely exercises the catch.
+    let admitted: number;
+    await db.execute(sql`ALTER TABLE companies DROP COLUMN max_concurrent_runs`);
+    try {
+      admitted = await runTickForAllAgents(agents);
+    } finally {
+      // Restore the exact DDL (nullable integer) before teardown / other tests.
+      await db.execute(sql`ALTER TABLE companies ADD COLUMN max_concurrent_runs integer`);
+    }
+    expect(admitted).toBe(4); // company gate bypassed => per-agent only, runs still start
   });
 });
 // [END: module]

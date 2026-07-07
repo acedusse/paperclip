@@ -7261,6 +7261,14 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return Number(count ?? 0);
   }
 
+  async function getCompanyMaxConcurrentRuns(companyId: string): Promise<number | null> {
+    const [row] = await db
+      .select({ max: companies.maxConcurrentRuns })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    return row?.max ?? null;
+  }
+
   async function claimQueuedRun(run: typeof heartbeatRuns.$inferSelect, companyAgents?: AgentOrgRow[]) {
     if (run.status !== "queued") return run;
     const agent = await getAgent(run.agentId);
@@ -8279,33 +8287,48 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         }
       };
 
-      // Resolve the instance-wide cap FIRST, outside the lock. Fail open: if the
-      // settings read throws, treat the cap as unset (per-agent only).
-      let cap: number | null = null;
+      // Resolve instance + company caps FIRST, outside the lock. Fail open per scope:
+      // if either lookup throws, treat that scope's cap as unset so runs still start.
+      let instanceCap: number | null = null;
       try {
         const general = await instanceSettingsService(db).getGeneral();
-        ({ cap } = resolveEffectiveCap(
+        ({ cap: instanceCap } = resolveEffectiveCap(
           { configuredMax: general.maxConcurrentRuns ?? null },
           PHASE1_WRITERS,
         ));
       } catch (err) {
         logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
-        cap = null;
+        instanceCap = null;
+      }
+      let companyCap: number | null = null;
+      try {
+        const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
+        ({ cap: companyCap } = resolveEffectiveCap({ configuredMax: companyMax }, PHASE1_WRITERS));
+      } catch (err) {
+        logger.warn({ err }, "company admission cap lookup failed; falling back");
+        companyCap = null;
       }
 
-      if (cap === null) {
+      if (instanceCap === null && companyCap === null) {
         // No cap configured (the default): admission is byte-identical to the
         // pre-Phase-1 behavior — the original per-agent claim loop with NO global
         // lock and NO instance-wide count query.
         await claimUpTo(availableSlots);
       } else {
-        // Cap configured: serialize the count+claim step instance-wide so
-        // concurrent ticks can't collectively breach the ceiling.
-        const effectiveCap = cap;
+        // At least one cap is configured: serialize the count+claim step instance-wide
+        // so concurrent ticks can't collectively breach a ceiling. The budget binds on
+        // the TIGHTEST configured scope (per-agent availableSlots, instance, company).
+        const iCap = instanceCap;
+        const cCap = companyCap;
         await withInstanceAdmissionLock(async () => {
-          const running = await countRunningRunsInstanceWide();
-          const instanceSlots = Math.min(availableSlots, Math.max(0, effectiveCap - running));
-          await claimUpTo(instanceSlots);
+          let budget = availableSlots;
+          if (iCap !== null) {
+            budget = Math.min(budget, Math.max(0, iCap - (await countRunningRunsInstanceWide())));
+          }
+          if (cCap !== null) {
+            budget = Math.min(budget, Math.max(0, cCap - (await countRunningRunsForCompany(agent.companyId))));
+          }
+          await claimUpTo(budget);
         });
       }
       if (claimedRuns.length === 0) return [];
