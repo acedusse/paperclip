@@ -8277,7 +8277,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       try {
         const general = await instanceSettingsService(db).getGeneral();
         ({ cap } = resolveEffectiveCap(
-          { instanceMaxConcurrentRuns: general.maxConcurrentRuns ?? null },
+          { configuredMax: general.maxConcurrentRuns ?? null },
           PHASE1_WRITERS,
         ));
       } catch (err) {

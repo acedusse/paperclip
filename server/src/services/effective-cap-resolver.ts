@@ -24,7 +24,7 @@ export const CAP_WRITER_PRECEDENCE = [
   "configured-default",
 ] as const;
 
-export type CapContext = { instanceMaxConcurrentRuns: number | null };
+export type CapContext = { configuredMax: number | null };
 
 export type CapWriter = {
   name: string;
@@ -35,7 +35,7 @@ export type CapWriter = {
 export const configuredDefaultWriter: CapWriter = {
   name: "configured-default",
   precedence: CAP_WRITER_PRECEDENCE.indexOf("configured-default"),
-  resolve: (ctx) => ctx.instanceMaxConcurrentRuns,
+  resolve: (ctx) => ctx.configuredMax,
 };
 
 export const PHASE1_WRITERS: CapWriter[] = [configuredDefaultWriter];
