@@ -80,8 +80,18 @@ def _render_tags(file_path: str, body: str) -> str:
         {"file": file_path, "imports": "see code", "exports": "see code"}
     )
     if file_path.endswith(".html"):
+        # Keep a leading <!doctype ...> as the very first bytes so the browser
+        # does not fall into quirks mode; the nav block and module section follow
+        # it as a preamble-then-body.
+        preamble = ""
+        rest = body
+        first, sep, remainder = body.partition("\n")
+        if first.lstrip().lower().startswith("<!doctype"):
+            preamble = first + "\n"
+            rest = remainder
         return (
-            "<!--\n"
+            preamble
+            + "<!--\n"
             f"FILE: {file_path}\n"
             f"ABOUT: {summary}\n"
             "\n"
@@ -95,7 +105,7 @@ def _render_tags(file_path: str, body: str) -> str:
             f"<!-- JSON_FLOW: {rich_flow} -->\n"
             "<!-- ========================================== -->\n"
             "<!-- [START: module] -->\n"
-            f"{body}\n"
+            f"{rest}\n"
             "<!-- [END: module] -->\n"
         )
     return (
@@ -123,7 +133,12 @@ def ensure_tags(path: Path, file_path: str) -> bool:
 
     Returns True if the file was modified. A no-op on already-tagged files.
     """
-    original = path.read_text(encoding="utf-8", errors="replace")
+    try:
+        original = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        # Never lossily rewrite a non-UTF-8 file (errors="replace" would
+        # substitute U+FFFD and destroy bytes). Skip injection instead.
+        return False
     if START.search(original):
         return False
     path.write_text(_render_tags(file_path, original.rstrip("\n")), encoding="utf-8")
@@ -197,7 +212,7 @@ def reconcile_ledger(root: Path, ledger_path: Path, inject: bool = True) -> dict
             deleted += 1
 
     inserted = updated = unchanged = 0
-    now = datetime.datetime.utcnow().isoformat()
+    now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None).isoformat()
     for fp in sources:
         path = root / fp
         if inject:
@@ -241,7 +256,12 @@ def reconcile_ledger(root: Path, ledger_path: Path, inject: bool = True) -> dict
 def _now_z() -> str:
     import datetime
 
-    return datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    return (
+        datetime.datetime.now(datetime.timezone.utc)
+        .replace(tzinfo=None, microsecond=0)
+        .isoformat()
+        + "Z"
+    )
 
 
 def write_index(root: Path) -> int:

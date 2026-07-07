@@ -138,14 +138,39 @@ def test_ensure_tags_injects_into_untagged_ts_file(tmp_path: Path) -> None:
 def test_ensure_tags_injects_into_untagged_html_file(tmp_path: Path) -> None:
     src = tmp_path / "ui" / "page.html"
     src.parent.mkdir(parents=True)
-    src.write_text("<!doctype html>\n")
+    src.write_text("<!doctype html>\n<html></html>\n")
 
     scm.ensure_tags(src, "ui/page.html")
 
     text = src.read_text()
+    # The doctype must remain the very first bytes so the browser doesn't fall
+    # into quirks mode; the nav block follows it.
+    assert text.startswith("<!doctype html>")
     assert "<!-- [META: module] -->" in text
-    assert scm.extract_module_section(src) == "<!doctype html>\n"
+    # The doctype is a preamble outside the module section; the section wraps the body.
+    assert scm.extract_module_section(src) == "<html></html>\n"
     assert scm.derive_intent("ui/page.html", text) == "page.html (ui module)."
+
+
+def test_ensure_tags_skips_non_utf8_file_without_corrupting(tmp_path: Path) -> None:
+    src = tmp_path / "weird.ts"
+    raw = b"const x = 1; // \xff\xfe not utf8\n"
+    src.write_bytes(raw)
+
+    changed = scm.ensure_tags(src, "weird.ts")
+
+    # Non-UTF-8 files are skipped, not lossily rewritten with U+FFFD.
+    assert changed is False
+    assert src.read_bytes() == raw
+
+
+def test_now_z_is_naive_iso_with_z_suffix() -> None:
+    import datetime
+
+    z = scm._now_z()
+    assert z.endswith("Z")
+    assert "+" not in z  # no timezone offset — matches the committed shim format
+    datetime.datetime.fromisoformat(z[:-1])  # parseable
 
 
 def test_ensure_tags_idempotent_on_already_tagged(tmp_path: Path) -> None:
