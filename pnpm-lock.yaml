@@ -6,6 +6,8 @@ settings:
 
 overrides:
   rollup: '>=4.59.0'
+  '@codemirror/state': 6.6.0
+  '@codemirror/view': 6.43.1
 
 patchedDependencies:
   embedded-postgres@18.1.0-beta.16:
@@ -404,11 +406,11 @@ importers:
         specifier: ^6.12.3
         version: 6.12.3
       '@codemirror/state':
-        specifier: ^6.4.0
-        version: 6.5.4
+        specifier: 6.6.0
+        version: 6.6.0
       '@codemirror/view':
-        specifier: ^6.28.0
-        version: 6.39.15
+        specifier: 6.43.1
+        version: 6.43.1
       '@lezer/highlight':
         specifier: ^1.2.1
         version: 1.2.3
@@ -1511,17 +1513,8 @@ packages:
   '@codemirror/search@6.6.0':
     resolution: {integrity: sha512-koFuNXcDvyyotWcgOnZGmY7LZqEOXZaaxD/j6n18TCLx2/9HieZJ5H6hs1g8FiRxBD0DNfs0nXn17g872RmYdw==}
 
-  '@codemirror/state@6.5.4':
-    resolution: {integrity: sha512-8y7xqG/hpB53l25CIoit9/ngxdfoG+fx+V3SHBrinnhOtLvKHRyAJJuHzkWrR4YXXLX8eXBsejgAAxHUOdW1yw==}
-
   '@codemirror/state@6.6.0':
     resolution: {integrity: sha512-4nbvra5R5EtiCzr9BTHiTLc+MLXK2QGiAVYMyi8PkQd3SR+6ixar/Q/01Fa21TBIDOZXgeWV4WppsQolSreAPQ==}
-
-  '@codemirror/view@6.39.15':
-    resolution: {integrity: sha512-aCWjgweIIXLBHh7bY6cACvXuyrZ0xGafjQ2VInjp4RM4gMfscK5uESiNdrH0pE+e1lZr2B4ONGsjchl2KsKZzg==}
-
-  '@codemirror/view@6.43.0':
-    resolution: {integrity: sha512-V7ZCLQO3Jus9hzh2jVCCPW3mO4IBMr43O37PqSUYautJSnnJF41YlgLw21x0fLJTYvJ+Vkm6Gp+qKGH9pltgXA==}
 
   '@codemirror/view@6.43.1':
     resolution: {integrity: sha512-+BIjw/AG3tDQ4pJgTLPYdAW25eDE66YsvM4LKyVPgGzVgZ4a9Wj1SRX8kPVKgBDdPt8oHtZ15F0qx7p0oOHdHw==}
@@ -4921,36 +4914,42 @@ packages:
     resolution: {integrity: sha512-RvTXH21sLpswEo8xLeQXcA/uWZauyNP1y+WI6b355+/o7sQ5wrvBkxt+NyhaJXJIQvbfdpl04LND4cmM+DTcNg==}
     cpu: [arm64]
     os: [darwin]
+    deprecated: This package has been replaced by @agentclientprotocol/codex-acp. Please migrate to continue receiving updates.
     hasBin: true
 
   '@zed-industries/codex-acp-darwin-x64@0.12.0':
     resolution: {integrity: sha512-N7EhrUTioix3L21qnm6kZzAESc+B7Mac+/uW3khn/UQe7fJJ7u1ojbgMPDdGo/8Xm6HBBXgak2NOj7mJ+NNXSw==}
     cpu: [x64]
     os: [darwin]
+    deprecated: This package has been replaced by @agentclientprotocol/codex-acp. Please migrate to continue receiving updates.
     hasBin: true
 
   '@zed-industries/codex-acp-linux-arm64@0.12.0':
     resolution: {integrity: sha512-Kq35FclgZiSMBKyf80PnCvvJ3xfMjZIkPJXpci35U/VqXVQelhHCwYWwA3waTxvW07tNHxsehv1eQICz7wZdVQ==}
     cpu: [arm64]
     os: [linux]
+    deprecated: This package has been replaced by @agentclientprotocol/codex-acp. Please migrate to continue receiving updates.
     hasBin: true
 
   '@zed-industries/codex-acp-linux-x64@0.12.0':
     resolution: {integrity: sha512-twmX9noSqfgWgVkGG1dd9u20Pxp8vNRXggvJ61RQSrNYITGuqHil2F3ViYICZoXyr9w1gok28bWG5DU2d9adPg==}
     cpu: [x64]
     os: [linux]
+    deprecated: This package has been replaced by @agentclientprotocol/codex-acp. Please migrate to continue receiving updates.
     hasBin: true
 
   '@zed-industries/codex-acp-win32-arm64@0.12.0':
     resolution: {integrity: sha512-VoFsTIrQopO917x2EpxYXm3jTIoSknCbzP76FwX9uOThlRms+M+fHWJ4kJttOPpeofz1ulAS3vPVMQ3WNlvnhw==}
     cpu: [arm64]
     os: [win32]
+    deprecated: This package has been replaced by @agentclientprotocol/codex-acp. Please migrate to continue receiving updates.
     hasBin: true
 
   '@zed-industries/codex-acp-win32-x64@0.12.0':
     resolution: {integrity: sha512-HImgXGIYgW6Wxr3rylrHS7Dzs35zvcQQB7eqAEWZ2Lj+3AxP/7TViW9KkjS+PTPnVWqpTkz0hYDQhk63Ruw3JA==}
     cpu: [x64]
     os: [win32]
+    deprecated: This package has been replaced by @agentclientprotocol/codex-acp. Please migrate to continue receiving updates.
     hasBin: true
 
   '@zed-industries/codex-acp@0.12.0':
@@ -5372,8 +5371,8 @@ packages:
     resolution: {integrity: sha512-1prg2gv44sYfpHscP26uLT/ePrh0mlmVwMSoSd3zYKQ92Ab3jPRLzyCnpyOCQLJbK+YdNs4HvMRqMNYdy4pMhA==}
     peerDependencies:
       '@codemirror/language': ^6.0.0
-      '@codemirror/state': ^6.0.0
-      '@codemirror/view': ^6.0.0
+      '@codemirror/state': 6.6.0
+      '@codemirror/view': 6.43.1
       '@lezer/highlight': ^1.0.0
 
   cmdk@1.1.1:
@@ -8975,21 +8974,21 @@ snapshots:
     dependencies:
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.43.0
+      '@codemirror/view': 6.43.1
       '@lezer/common': 1.5.2
 
   '@codemirror/autocomplete@6.20.3':
     dependencies:
       '@codemirror/language': 6.12.3
-      '@codemirror/state': 6.5.4
-      '@codemirror/view': 6.39.15
+      '@codemirror/state': 6.6.0
+      '@codemirror/view': 6.43.1
       '@lezer/common': 1.5.2
 
   '@codemirror/commands@6.10.2':
     dependencies:
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.43.0
+      '@codemirror/view': 6.43.1
       '@lezer/common': 1.5.2
 
   '@codemirror/commands@6.10.3':
@@ -9052,7 +9051,7 @@ snapshots:
       '@codemirror/language': 6.12.3
       '@codemirror/lint': 6.9.6
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.43.0
+      '@codemirror/view': 6.43.1
       '@lezer/common': 1.5.2
       '@lezer/javascript': 1.5.4
 
@@ -9203,7 +9202,7 @@ snapshots:
   '@codemirror/language@6.12.3':
     dependencies:
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.43.0
+      '@codemirror/view': 6.43.1
       '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.10
@@ -9216,13 +9215,13 @@ snapshots:
   '@codemirror/lint@6.9.4':
     dependencies:
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.43.0
+      '@codemirror/view': 6.43.1
       crelt: 1.0.6
 
   '@codemirror/lint@6.9.6':
     dependencies:
-      '@codemirror/state': 6.5.4
-      '@codemirror/view': 6.43.0
+      '@codemirror/state': 6.6.0
+      '@codemirror/view': 6.43.1
       crelt: 1.0.6
 
   '@codemirror/merge@6.12.2':
@@ -9236,30 +9235,12 @@ snapshots:
   '@codemirror/search@6.6.0':
     dependencies:
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.43.0
+      '@codemirror/view': 6.43.1
       crelt: 1.0.6
-
-  '@codemirror/state@6.5.4':
-    dependencies:
-      '@marijn/find-cluster-break': 1.0.2
 
   '@codemirror/state@6.6.0':
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
-
-  '@codemirror/view@6.39.15':
-    dependencies:
-      '@codemirror/state': 6.5.4
-      crelt: 1.0.6
-      style-mod: 4.1.3
-      w3c-keyname: 2.2.8
-
-  '@codemirror/view@6.43.0':
-    dependencies:
-      '@codemirror/state': 6.6.0
-      crelt: 1.0.6
-      style-mod: 4.1.3
-      w3c-keyname: 2.2.8
 
   '@codemirror/view@6.43.1':
     dependencies:
@@ -12819,8 +12800,8 @@ snapshots:
       '@codemirror/language': 6.12.3
       '@codemirror/lint': 6.9.4
       '@codemirror/search': 6.6.0
-      '@codemirror/state': 6.5.4
-      '@codemirror/view': 6.39.15
+      '@codemirror/state': 6.6.0
+      '@codemirror/view': 6.43.1
 
   color-support@1.1.3:
     optional: true
