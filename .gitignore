@@ -60,3 +60,6 @@ tests/release-smoke/playwright-report/
 .superpowers/
 .claude/worktrees/
 .herenow
+
+# Generated codebase-map artifacts (regenerate via scripts/nav/nav_endhook.py)
+nav/
