@@ -18,6 +18,14 @@ describe("effective-cap-resolver", () => {
     ]);
   });
 
+  it("freezes the precedence array so it cannot be mutated at runtime", () => {
+    expect(Object.isFrozen(CAP_WRITER_PRECEDENCE)).toBe(true);
+    expect(() => {
+      // @ts-expect-error runtime mutation attempt on a frozen readonly array
+      CAP_WRITER_PRECEDENCE.push("rogue");
+    }).toThrow();
+  });
+
   it("returns the first non-null writer by precedence", () => {
     const writers: CapWriter[] = [
       { name: "configured-default", precedence: 4, resolve: () => 10 },

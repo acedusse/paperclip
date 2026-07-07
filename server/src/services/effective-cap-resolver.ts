@@ -16,13 +16,13 @@
 // Locked precedence order (highest priority first). Later combo-01 slices
 // register writers at these names; a unit test asserts this array so nothing
 // can silently reorder it.
-export const CAP_WRITER_PRECEDENCE = [
+export const CAP_WRITER_PRECEDENCE = Object.freeze([
   "panic-drain",
   "predictive-breaker",
   "manual-override",
   "schedule",
   "configured-default",
-] as const;
+] as const);
 
 export type CapContext = { configuredMax: number | null };
 
