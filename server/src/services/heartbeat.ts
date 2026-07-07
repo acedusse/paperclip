@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/heartbeat.ts
+ * ABOUT: heartbeat.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/heartbeat.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execFile as execFileCallback } from "node:child_process";
@@ -161,6 +175,8 @@ import { recoveryService } from "./recovery/service.js";
 import { productivityReviewService } from "./productivity-review.js";
 import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
+import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
+import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
 import {
   evaluateAgentInvokability,
   evaluateAgentInvokabilityFromDb,
@@ -7229,6 +7245,14 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return Number(count ?? 0);
   }
 
+  async function countRunningRunsInstanceWide() {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.status, "running"));
+    return Number(count ?? 0);
+  }
+
   async function claimQueuedRun(run: typeof heartbeatRuns.$inferSelect, companyAgents?: AgentOrgRow[]) {
     if (run.status !== "queued") return run;
     const agent = await getAgent(run.agentId);
@@ -8239,10 +8263,42 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       });
 
       const claimedRuns: Array<typeof heartbeatRuns.$inferSelect> = [];
-      for (const queuedRun of prioritizedRuns) {
-        if (claimedRuns.length >= availableSlots) break;
-        const claimed = await claimQueuedRun(queuedRun, companyAgents);
-        if (claimed) claimedRuns.push(claimed);
+      const claimUpTo = async (budget: number) => {
+        for (const queuedRun of prioritizedRuns) {
+          if (claimedRuns.length >= budget) break;
+          const claimed = await claimQueuedRun(queuedRun, companyAgents);
+          if (claimed) claimedRuns.push(claimed); // claim flips queued→running atomically
+        }
+      };
+
+      // Resolve the instance-wide cap FIRST, outside the lock. Fail open: if the
+      // settings read throws, treat the cap as unset (per-agent only).
+      let cap: number | null = null;
+      try {
+        const general = await instanceSettingsService(db).getGeneral();
+        ({ cap } = resolveEffectiveCap(
+          { instanceMaxConcurrentRuns: general.maxConcurrentRuns ?? null },
+          PHASE1_WRITERS,
+        ));
+      } catch (err) {
+        logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
+        cap = null;
+      }
+
+      if (cap === null) {
+        // No cap configured (the default): admission is byte-identical to the
+        // pre-Phase-1 behavior — the original per-agent claim loop with NO global
+        // lock and NO instance-wide count query.
+        await claimUpTo(availableSlots);
+      } else {
+        // Cap configured: serialize the count+claim step instance-wide so
+        // concurrent ticks can't collectively breach the ceiling.
+        const effectiveCap = cap;
+        await withInstanceAdmissionLock(async () => {
+          const running = await countRunningRunsInstanceWide();
+          const instanceSlots = Math.min(availableSlots, Math.max(0, effectiveCap - running));
+          await claimUpTo(instanceSlots);
+        });
       }
       if (claimedRuns.length === 0) return [];
 
@@ -12307,5 +12363,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         .limit(1);
       return run ?? null;
     },
+
+    countRunningRunsInstanceWide,
+    startNextQueuedRunForAgent,
   };
 }
+// [END: module]

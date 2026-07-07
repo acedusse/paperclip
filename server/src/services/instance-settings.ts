@@ -30,6 +30,8 @@ function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
       backupRetention: parsed.data.backupRetention ?? DEFAULT_BACKUP_RETENTION,
       // Absent => unrestricted; only carry through an explicit policy.
       ...(parsed.data.executionMode ? { executionMode: parsed.data.executionMode } : {}),
+      // Absent => unlimited; only carry through an explicit cap.
+      ...(parsed.data.maxConcurrentRuns ? { maxConcurrentRuns: parsed.data.maxConcurrentRuns } : {}),
     };
   }
   return {

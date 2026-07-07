@@ -1,5 +1,19 @@
-import { describe, expect, it } from "vitest";
-import { normalizeExperimentalSettings } from "../services/instance-settings.js";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { createDb, instanceSettings } from "@paperclipai/db";
+import {
+  getEmbeddedPostgresTestSupport,
+  startEmbeddedPostgresTestDatabase,
+} from "./helpers/embedded-postgres.js";
+import { instanceSettingsService, normalizeExperimentalSettings } from "../services/instance-settings.js";
+
+const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
+const describeEmbeddedPostgres = embeddedPostgresSupport.supported ? describe : describe.skip;
+
+if (!embeddedPostgresSupport.supported) {
+  console.warn(
+    `Skipping embedded Postgres instance settings service tests on this host: ${embeddedPostgresSupport.reason ?? "unsupported environment"}`,
+  );
+}
 
 describe("instance settings service", () => {
   it("ignores retired experimental flags without resetting current settings", () => {
@@ -64,5 +78,34 @@ describe("instance settings service", () => {
     expect(
       normalizeExperimentalSettings({ enableConferenceRoomChat: "yes" }).enableConferenceRoomChat,
     ).toBe(false);
+  });
+});
+
+describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns", () => {
+  let db!: ReturnType<typeof createDb>;
+  let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
+
+  beforeAll(async () => {
+    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-instance-settings-service-");
+    db = createDb(tempDb.connectionString);
+  }, 20_000);
+
+  afterEach(async () => {
+    await db.delete(instanceSettings);
+  });
+
+  afterAll(async () => {
+    await tempDb?.cleanup();
+  });
+
+  it("persists and reads back maxConcurrentRuns", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxConcurrentRuns: 10 });
+    expect((await svc.getGeneral()).maxConcurrentRuns).toBe(10);
+  });
+
+  it("omits maxConcurrentRuns when unset (unlimited)", async () => {
+    const svc = instanceSettingsService(db);
+    expect((await svc.getGeneral()).maxConcurrentRuns).toBeUndefined();
   });
 });

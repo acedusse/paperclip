@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/instance.ts
+ * ABOUT: instance.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/instance.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { FeedbackDataSharingPreference } from "./feedback.js";
 
 export const DAILY_RETENTION_PRESETS = [3, 7, 14] as const;
@@ -42,6 +56,11 @@ export interface InstanceGeneralSettings {
    * Kubernetes sandbox provider and denies local/ssh execution.
    */
   executionMode?: InstanceExecutionMode;
+  /**
+   * Instance-wide cap on concurrently running agent runs. Absent = unlimited
+   * (no instance-level admission gating).
+   */
+  maxConcurrentRuns?: number;
 }
 
 export interface InstanceExperimentalSettings {
@@ -97,3 +116,4 @@ export interface IssueGraphLivenessAutoRecoveryPreview {
   skippedOutsideLookback: number;
   items: IssueGraphLivenessAutoRecoveryPreviewItem[];
 }
+// [END: module]
