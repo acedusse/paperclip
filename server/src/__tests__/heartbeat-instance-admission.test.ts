@@ -328,6 +328,21 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     expect(await heartbeat.countRunningRunsForCompany(companyB)).toBe(1);
   });
 
+  it("counts queued runs instance-wide and per-company, excluding running", async () => {
+    const companyA = await createCompany();
+    const companyB = await createCompany();
+    const agentA = await createAgentInCompany(companyA);
+    const agentB = await createAgentInCompany(companyB);
+    await insertRun({ companyId: companyA, agentId: agentA, status: "queued" });
+    await insertRun({ companyId: companyA, agentId: agentA, status: "queued" });
+    await insertRun({ companyId: companyA, agentId: agentA, status: "running" });
+    await insertRun({ companyId: companyB, agentId: agentB, status: "queued" });
+
+    expect(await heartbeat.countQueuedRunsInstanceWide()).toBe(3);
+    expect(await heartbeat.countQueuedRunsForCompany(companyA)).toBe(2);
+    expect(await heartbeat.countQueuedRunsForCompany(companyB)).toBe(1);
+  });
+
   // ---- Task 4 count test (unchanged) ----------------------------------------
 
   it("counts running runs across all agents in the instance", async () => {

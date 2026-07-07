@@ -7261,6 +7261,22 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return Number(count ?? 0);
   }
 
+  async function countQueuedRunsInstanceWide() {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.status, "queued"));
+    return Number(count ?? 0);
+  }
+
+  async function countQueuedRunsForCompany(companyId: string) {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(heartbeatRuns)
+      .where(and(eq(heartbeatRuns.companyId, companyId), eq(heartbeatRuns.status, "queued")));
+    return Number(count ?? 0);
+  }
+
   async function getCompanyMaxConcurrentRuns(companyId: string): Promise<number | null> {
     const [row] = await db
       .select({ max: companies.maxConcurrentRuns })
@@ -12406,6 +12422,8 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
 
     countRunningRunsInstanceWide,
     countRunningRunsForCompany,
+    countQueuedRunsInstanceWide,
+    countQueuedRunsForCompany,
     startNextQueuedRunForAgent,
   };
 }
