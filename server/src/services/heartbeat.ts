@@ -8322,11 +8322,20 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         const cCap = companyCap;
         await withInstanceAdmissionLock(async () => {
           let budget = availableSlots;
-          if (iCap !== null) {
-            budget = Math.min(budget, Math.max(0, iCap - (await countRunningRunsInstanceWide())));
-          }
-          if (cCap !== null) {
-            budget = Math.min(budget, Math.max(0, cCap - (await countRunningRunsForCompany(agent.companyId))));
+          try {
+            if (iCap !== null) {
+              budget = Math.min(budget, Math.max(0, iCap - (await countRunningRunsInstanceWide())));
+            }
+            if (cCap !== null) {
+              budget = Math.min(budget, Math.max(0, cCap - (await countRunningRunsForCompany(agent.companyId))));
+            }
+          } catch (err) {
+            // Fail open per the design's COUNT-error rule: if a running-count
+            // query fails (e.g. transient DB error) we cannot compute the gated
+            // budget, so fall back to the per-agent budget rather than throwing
+            // and disrupting the tick. Over-admit risk is transient; never a halt.
+            logger.warn({ err }, "instance/company running-count lookup failed; falling back to per-agent budget");
+            budget = availableSlots;
           }
           await claimUpTo(budget);
         });

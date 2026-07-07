@@ -35,6 +35,25 @@ describe("withInstanceAdmissionLock", () => {
     expect(events).toEqual(["enter-a", "exit-a", "enter-b", "exit-b"]);
   });
 
+  it("preserves FIFO order across 3+ concurrent callers (no interleave)", async () => {
+    const events: string[] = [];
+    const critical = (id: string) =>
+      withInstanceAdmissionLock(async () => {
+        events.push(`enter-${id}`);
+        await new Promise((r) => setTimeout(r, 5));
+        events.push(`exit-${id}`);
+      });
+    await Promise.all([critical("a"), critical("b"), critical("c")]);
+    expect(events).toEqual([
+      "enter-a",
+      "exit-a",
+      "enter-b",
+      "exit-b",
+      "enter-c",
+      "exit-c",
+    ]);
+  });
+
   it("releases the lock even when fn throws", async () => {
     await expect(
       withInstanceAdmissionLock(async () => {
