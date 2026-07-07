@@ -38,6 +38,7 @@ import { instanceSettingsService } from "../services/instance-settings.ts";
 import * as instanceSettingsModule from "../services/instance-settings.ts";
 import * as instanceAdmissionLockModule from "../services/instance-admission-lock.ts";
 import { runningProcesses } from "../adapters/index.ts";
+import { companyService } from "../services/companies.js";
 
 // Neutralize the fire-and-forget executeRun(...) that runs AFTER admission: replace
 // the real adapter with a fast, side-effect-free success so background execution can
@@ -237,6 +238,30 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     }
     return admitted;
   }
+
+  // ---- Task 1 schema tests ---------------------------------------------------
+
+  it("persists and clears a company maxConcurrentRuns via companiesService.update", async () => {
+    const companyId = await createCompany();
+    const svc = companyService(db);
+
+    await svc.update(companyId, { maxConcurrentRuns: 5 } as any);
+    let [row] = await db.select({ m: companies.maxConcurrentRuns }).from(companies).where(eq(companies.id, companyId));
+    expect(row.m).toBe(5);
+
+    await svc.update(companyId, { maxConcurrentRuns: null } as any);
+    [row] = await db.select({ m: companies.maxConcurrentRuns }).from(companies).where(eq(companies.id, companyId));
+    expect(row.m).toBeNull();
+  });
+
+  it("updateCompanySchema rejects non-positive / non-integer maxConcurrentRuns", async () => {
+    const { updateCompanySchema } = await import("@paperclipai/shared");
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: 3 }).success).toBe(true);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: null }).success).toBe(true);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: 0 }).success).toBe(false);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: -1 }).success).toBe(false);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: 1.5 }).success).toBe(false);
+  });
 
   // ---- Task 2 schema test -----------------------------------------------------
 
