@@ -343,6 +343,40 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     expect(await heartbeat.countQueuedRunsForCompany(companyB)).toBe(1);
   });
 
+  // ---- Task 3 admission-status helpers ---------------------------------------
+
+  it("reports instance admission status (cap/source/running/queued)", async () => {
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    const company = await createCompany();
+    const agent = await createAgentInCompany(company);
+    await insertRun({ companyId: company, agentId: agent, status: "running" });
+    await insertRun({ companyId: company, agentId: agent, status: "queued" });
+
+    const s = await heartbeat.getInstanceAdmissionStatus();
+    expect(s).toEqual({ cap: 10, source: "configured-default", running: 1, queued: 1 });
+  });
+
+  it("reports company admission status, unset cap => null/none, isolated per company", async () => {
+    const companyA = await createCompany();
+    const companyB = await createCompany();
+    await db.update(companies).set({ maxConcurrentRuns: 3 }).where(eq(companies.id, companyA));
+    const agentA = await createAgentInCompany(companyA);
+    await insertRun({ companyId: companyA, agentId: agentA, status: "running" });
+
+    expect(await heartbeat.getCompanyAdmissionStatus(companyA)).toEqual({
+      cap: 3,
+      source: "configured-default",
+      running: 1,
+      queued: 0,
+    });
+    expect(await heartbeat.getCompanyAdmissionStatus(companyB)).toEqual({
+      cap: null,
+      source: "none",
+      running: 0,
+      queued: 0,
+    });
+  });
+
   // ---- Task 4 count test (unchanged) ----------------------------------------
 
   it("counts running runs across all agents in the instance", async () => {

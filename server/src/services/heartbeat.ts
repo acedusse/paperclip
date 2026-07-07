@@ -7285,6 +7285,33 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.max ?? null;
   }
 
+  async function getInstanceAdmissionStatus() {
+    const general = await instanceSettingsService(db).getGeneral();
+    const { cap, source } = resolveEffectiveCap(
+      { configuredMax: general.maxConcurrentRuns ?? null },
+      PHASE1_WRITERS,
+    );
+    return {
+      cap,
+      source,
+      running: await countRunningRunsInstanceWide(),
+      queued: await countQueuedRunsInstanceWide(),
+    };
+  }
+
+  async function getCompanyAdmissionStatus(companyId: string) {
+    const { cap, source } = resolveEffectiveCap(
+      { configuredMax: await getCompanyMaxConcurrentRuns(companyId) },
+      PHASE1_WRITERS,
+    );
+    return {
+      cap,
+      source,
+      running: await countRunningRunsForCompany(companyId),
+      queued: await countQueuedRunsForCompany(companyId),
+    };
+  }
+
   async function claimQueuedRun(run: typeof heartbeatRuns.$inferSelect, companyAgents?: AgentOrgRow[]) {
     if (run.status !== "queued") return run;
     const agent = await getAgent(run.agentId);
@@ -12424,6 +12451,8 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     countRunningRunsForCompany,
     countQueuedRunsInstanceWide,
     countQueuedRunsForCompany,
+    getInstanceAdmissionStatus,
+    getCompanyAdmissionStatus,
     startNextQueuedRunForAgent,
   };
 }
