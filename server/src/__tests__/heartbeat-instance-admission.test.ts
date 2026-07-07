@@ -14,6 +14,7 @@
 // [START: module]
 import { randomUUID } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { eq } from "drizzle-orm";
 import {
   activityLog,
   agents,
@@ -232,6 +233,24 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     }
     return admitted;
   }
+
+  // ---- Task 2 schema test -----------------------------------------------------
+
+  it("persists a per-company maxConcurrentRuns (nullable, unset by default)", async () => {
+    const companyId = await createCompany();
+    const [before] = await db
+      .select({ max: companies.maxConcurrentRuns })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    expect(before.max).toBeNull();
+
+    await db.update(companies).set({ maxConcurrentRuns: 3 }).where(eq(companies.id, companyId));
+    const [after] = await db
+      .select({ max: companies.maxConcurrentRuns })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    expect(after.max).toBe(3);
+  });
 
   // ---- Task 4 count test (unchanged) ----------------------------------------
 
