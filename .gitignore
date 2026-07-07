@@ -61,5 +61,6 @@ tests/release-smoke/playwright-report/
 .claude/worktrees/
 .herenow
 
-# Generated codebase-map artifacts (regenerate via scripts/nav/nav_endhook.py)
-nav/
+# Generated codebase-map artifacts (regenerate via scripts/nav/nav_endhook.py).
+# Anchored to repo root so it does not also match scripts/nav/ (the tool source).
+/nav/
