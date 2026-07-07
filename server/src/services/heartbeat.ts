@@ -3383,6 +3383,14 @@ export interface HeartbeatServiceOptions {
   environmentRuntime?: HeartbeatEnvironmentRuntime;
 }
 
+// Return shape shared by getInstanceAdmissionStatus / getCompanyAdmissionStatus below.
+export type AdmissionStatus = {
+  cap: number | null;
+  source: string;
+  running: number;
+  queued: number;
+};
+
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
   const instanceSettings = instanceSettingsService(db);
   const getCurrentUserRedactionOptions = async () => ({
@@ -7285,12 +7293,15 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.max ?? null;
   }
 
-  async function getInstanceAdmissionStatus() {
+  async function getInstanceAdmissionStatus(): Promise<AdmissionStatus> {
     const general = await instanceSettingsService(db).getGeneral();
     const { cap, source } = resolveEffectiveCap(
       { configuredMax: general.maxConcurrentRuns ?? null },
       PHASE1_WRITERS,
     );
+    // Cap, running, and queued are read via separate queries (no shared transaction), so a
+    // run transitioning queued -> running mid-read can be momentarily double- or mis-counted.
+    // That's acceptable for a pollable observability endpoint; don't "fix" it with a lock.
     return {
       cap,
       source,
@@ -7299,11 +7310,13 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     };
   }
 
-  async function getCompanyAdmissionStatus(companyId: string) {
+  async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
     const { cap, source } = resolveEffectiveCap(
       { configuredMax: await getCompanyMaxConcurrentRuns(companyId) },
       PHASE1_WRITERS,
     );
+    // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
+    // the three queries aren't in a transaction, so counts can be momentarily inconsistent.
     return {
       cap,
       source,

@@ -4,6 +4,7 @@ import request from "supertest";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import {
+  activityLog,
   agents,
   companies,
   createDb,
@@ -41,6 +42,7 @@ describeEmbeddedPostgres("admission-status routes", () => {
   afterEach(async () => {
     await db.delete(heartbeatRuns);
     await db.delete(agents);
+    await db.delete(activityLog);
     await db.delete(companies);
   });
 
@@ -153,5 +155,30 @@ describeEmbeddedPostgres("admission-status routes", () => {
     });
     const res = await request(app).get(`/api/companies/${company}/admission-status`);
     expect(res.status).toBe(403);
+  });
+
+  it("PATCH /api/companies/:id persists maxConcurrentRuns and clears it back to null", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const setRes = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({ maxConcurrentRuns: 7 });
+    expect(setRes.status).toBe(200);
+    expect(setRes.body.maxConcurrentRuns).toBe(7);
+
+    const afterSetStatus = await request(app).get(`/api/companies/${company}/admission-status`);
+    expect(afterSetStatus.status).toBe(200);
+    expect(afterSetStatus.body).toEqual({ cap: 7, source: "configured-default", running: 0, queued: 0 });
+
+    const clearRes = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({ maxConcurrentRuns: null });
+    expect(clearRes.status).toBe(200);
+    expect(clearRes.body.maxConcurrentRuns).toBeNull();
+
+    const afterClearStatus = await request(app).get(`/api/companies/${company}/admission-status`);
+    expect(afterClearStatus.status).toBe(200);
+    expect(afterClearStatus.body.cap).toBeNull();
   });
 });
