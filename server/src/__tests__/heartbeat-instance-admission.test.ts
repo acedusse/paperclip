@@ -252,6 +252,53 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     expect(after.max).toBe(3);
   });
 
+  // ---- Task 3 per-company count test -----------------------------------------
+
+  async function createAgentInCompany(companyId: string): Promise<string> {
+    const agentId = randomUUID();
+    await db.insert(agents).values({
+      id: agentId,
+      companyId,
+      name: `Agent-${agentId.slice(0, 8)}`,
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: {},
+      permissions: {},
+    });
+    return agentId;
+  }
+
+  async function insertRun(params: {
+    companyId: string;
+    agentId: string;
+    status: "running" | "queued";
+  }): Promise<void> {
+    await db.insert(heartbeatRuns).values({
+      id: randomUUID(),
+      companyId: params.companyId,
+      agentId: params.agentId,
+      invocationSource: "assignment",
+      triggerDetail: "system",
+      status: params.status,
+    });
+  }
+
+  it("counts running runs for one company, isolated from others", async () => {
+    const companyA = await createCompany();
+    const companyB = await createCompany();
+    const agentA = await createAgentInCompany(companyA);
+    const agentB = await createAgentInCompany(companyB);
+    await insertRun({ companyId: companyA, agentId: agentA, status: "running" });
+    await insertRun({ companyId: companyA, agentId: agentA, status: "running" });
+    await insertRun({ companyId: companyA, agentId: agentA, status: "queued" });
+    await insertRun({ companyId: companyB, agentId: agentB, status: "running" });
+
+    expect(await heartbeat.countRunningRunsForCompany(companyA)).toBe(2);
+    expect(await heartbeat.countRunningRunsForCompany(companyB)).toBe(1);
+  });
+
   // ---- Task 4 count test (unchanged) ----------------------------------------
 
   it("counts running runs across all agents in the instance", async () => {
