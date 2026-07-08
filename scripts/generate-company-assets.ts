@@ -1,3 +1,4 @@
+#!/usr/bin/env npx tsx
 /**
  * FILE: scripts/generate-company-assets.ts
  * ABOUT: generate-company-assets.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "scripts/generate-company-assets.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env npx tsx
 /**
  * Generate org chart images and READMEs for agent company packages.
  *

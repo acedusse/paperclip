@@ -1,3 +1,4 @@
+"use client"
 /**
  * FILE: ui/src/components/ui/command.tsx
  * ABOUT: command.tsx (ui module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "ui/src/components/ui/command.tsx", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-"use client"
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"

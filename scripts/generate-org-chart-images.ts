@@ -1,3 +1,4 @@
+#!/usr/bin/env npx tsx
 /**
  * FILE: scripts/generate-org-chart-images.ts
  * ABOUT: generate-org-chart-images.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "scripts/generate-org-chart-images.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env npx tsx
 /**
  * Standalone org chart image generator.
  *

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * FILE: packages/plugins/sdk/src/dev-cli.ts
  * ABOUT: dev-cli.ts (src module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "packages/plugins/sdk/src/dev-cli.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env node
 import path from "node:path";
 import { startPluginDevServer } from "./dev-server.js";
 

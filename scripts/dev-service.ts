@@ -1,3 +1,4 @@
+#!/usr/bin/env -S node --import tsx
 /**
  * FILE: scripts/dev-service.ts
  * ABOUT: dev-service.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "scripts/dev-service.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env -S node --import tsx
 import { listLocalServiceRegistryRecords, removeLocalServiceRegistryRecord, terminateLocalService } from "../server/src/services/local-service-supervisor.ts";
 import { repoRoot } from "./dev-service-profile.ts";
 

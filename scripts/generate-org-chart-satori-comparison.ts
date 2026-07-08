@@ -1,3 +1,4 @@
+#!/usr/bin/env npx tsx
 /**
  * FILE: scripts/generate-org-chart-satori-comparison.ts
  * ABOUT: generate-org-chart-satori-comparison.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "scripts/generate-org-chart-satori-comparison.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env npx tsx
 /**
  * Standalone org chart comparison generator — pure SVG (no Playwright).
  *

@@ -1,3 +1,4 @@
+#!/usr/bin/env tsx
 /**
  * FILE: packages/db/scripts/clean-poisoned-claude-sessions.ts
  * ABOUT: clean-poisoned-claude-sessions.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "packages/db/scripts/clean-poisoned-claude-sessions.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env tsx
 /**
  * One-shot cleaner for `agent_task_sessions` rows whose persisted `claude_local`
  * session is poisoned by a non-`msg_*` `previous_message_id`.

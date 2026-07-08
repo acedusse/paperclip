@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * FILE: packages/adapters/claude-local/src/cli/quota-probe.ts
  * ABOUT: quota-probe.ts (cli module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "packages/adapters/claude-local/src/cli/quota-probe.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env node
 
 import {
   captureClaudeCliUsageText,

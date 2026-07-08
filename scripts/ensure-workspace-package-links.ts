@@ -1,3 +1,4 @@
+#!/usr/bin/env -S node --import tsx
 /**
  * FILE: scripts/ensure-workspace-package-links.ts
  * ABOUT: ensure-workspace-package-links.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "scripts/ensure-workspace-package-links.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env -S node --import tsx
 import fs from "node:fs/promises";
 import { existsSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import path from "node:path";

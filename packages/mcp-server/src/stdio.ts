@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * FILE: packages/mcp-server/src/stdio.ts
  * ABOUT: stdio.ts (src module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "packages/mcp-server/src/stdio.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env node
 import { runServer } from "./index.js";
 
 void runServer().catch((error) => {

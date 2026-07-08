@@ -1,3 +1,4 @@
+#!/usr/bin/env npx tsx
 /**
  * FILE: scripts/paperclip-commit-metrics.ts
  * ABOUT: paperclip-commit-metrics.ts (scripts module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "scripts/paperclip-commit-metrics.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env npx tsx
 
 import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";

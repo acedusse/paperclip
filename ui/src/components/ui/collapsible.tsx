@@ -1,3 +1,4 @@
+"use client"
 /**
  * FILE: ui/src/components/ui/collapsible.tsx
  * ABOUT: collapsible.tsx (ui module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "ui/src/components/ui/collapsible.tsx", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-"use client"
 
 import { Collapsible as CollapsiblePrimitive } from "radix-ui"
 

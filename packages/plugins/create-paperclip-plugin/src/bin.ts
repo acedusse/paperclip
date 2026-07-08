@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * FILE: packages/plugins/create-paperclip-plugin/src/bin.ts
  * ABOUT: bin.ts (src module).
@@ -12,7 +13,6 @@
 // JSON_FLOW: {"file": "packages/plugins/create-paperclip-plugin/src/bin.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-#!/usr/bin/env node
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { scaffoldPluginProject, type ScaffoldPluginOptions } from "./index.js";
