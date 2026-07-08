@@ -12,7 +12,10 @@ import { authApi } from "@/api/auth";
 import { healthApi } from "@/api/health";
 import { instanceSettingsApi } from "@/api/instanceSettings";
 import { ModeBadge } from "@/components/access/ModeBadge";
+import { AdmissionStatusLine } from "@/components/AdmissionStatusLine";
 import { Button } from "../components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Field } from "@/components/agent-config-primitives";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { queryKeys } from "../lib/queryKeys";
 import { ToggleSwitch } from "@/components/ui/toggle-switch";
@@ -64,6 +67,17 @@ export function InstanceGeneralSettings() {
     },
   });
 
+  const admissionStatusQuery = useQuery({
+    queryKey: ["instance-admission-status"],
+    queryFn: instanceSettingsApi.getAdmissionStatus,
+    refetchInterval: 10_000,
+  });
+
+  const [maxRuns, setMaxRuns] = useState("");
+  useEffect(() => {
+    setMaxRuns(String(generalQuery.data?.maxConcurrentRuns ?? ""));
+  }, [generalQuery.data?.maxConcurrentRuns]);
+
   if (generalQuery.isLoading) {
     return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
   }
@@ -82,6 +96,16 @@ export function InstanceGeneralSettings() {
   const keyboardShortcuts = generalQuery.data?.keyboardShortcuts === true;
   const feedbackDataSharingPreference = generalQuery.data?.feedbackDataSharingPreference ?? "prompt";
   const backupRetention: BackupRetentionPolicy = generalQuery.data?.backupRetention ?? DEFAULT_BACKUP_RETENTION;
+
+  const trimmedMaxRuns = maxRuns.trim();
+  const maxRunsValid =
+    trimmedMaxRuns === "" || (Number.isInteger(Number(trimmedMaxRuns)) && Number(trimmedMaxRuns) > 0);
+
+  function saveMaxRuns() {
+    updateGeneralMutation.mutate({
+      maxConcurrentRuns: trimmedMaxRuns === "" ? null : Number(trimmedMaxRuns),
+    });
+  }
 
   return (
     <div className="max-w-4xl space-y-6">
@@ -132,6 +156,47 @@ export function InstanceGeneralSettings() {
               value={healthQuery.data?.bootstrapInviteActive ? "Active" : "None"}
             />
           </div>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-border bg-card p-5">
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <h2 className="text-sm font-semibold">Admission control</h2>
+            <p className="max-w-2xl text-sm text-muted-foreground">
+              Cap how many agent runs may execute at once across the whole instance. Additional
+              runs queue until capacity frees up.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="w-40">
+              <Field
+                label="Max concurrent runs"
+                hint="Instance-wide cap on running agent runs. Empty = unlimited."
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  value={maxRuns}
+                  onChange={(e) => setMaxRuns(e.target.value)}
+                  aria-invalid={!maxRunsValid}
+                />
+              </Field>
+            </div>
+            <Button
+              size="sm"
+              onClick={saveMaxRuns}
+              disabled={!maxRunsValid || updateGeneralMutation.isPending}
+            >
+              {updateGeneralMutation.isPending ? "Saving..." : "Save"}
+            </Button>
+          </div>
+          {!maxRunsValid && (
+            <span className="text-xs text-destructive">
+              Enter a positive whole number, or leave empty for unlimited.
+            </span>
+          )}
+          <AdmissionStatusLine status={admissionStatusQuery.data} isError={admissionStatusQuery.isError} />
         </div>
       </section>
 
