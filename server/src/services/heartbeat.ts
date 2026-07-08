@@ -3383,6 +3383,14 @@ export interface HeartbeatServiceOptions {
   environmentRuntime?: HeartbeatEnvironmentRuntime;
 }
 
+// Return shape shared by getInstanceAdmissionStatus / getCompanyAdmissionStatus below.
+export type AdmissionStatus = {
+  cap: number | null;
+  source: string;
+  running: number;
+  queued: number;
+};
+
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
   const instanceSettings = instanceSettingsService(db);
   const getCurrentUserRedactionOptions = async () => ({
@@ -7261,12 +7269,60 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return Number(count ?? 0);
   }
 
+  async function countQueuedRunsInstanceWide() {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.status, "queued"));
+    return Number(count ?? 0);
+  }
+
+  async function countQueuedRunsForCompany(companyId: string) {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(heartbeatRuns)
+      .where(and(eq(heartbeatRuns.companyId, companyId), eq(heartbeatRuns.status, "queued")));
+    return Number(count ?? 0);
+  }
+
   async function getCompanyMaxConcurrentRuns(companyId: string): Promise<number | null> {
     const [row] = await db
       .select({ max: companies.maxConcurrentRuns })
       .from(companies)
       .where(eq(companies.id, companyId));
     return row?.max ?? null;
+  }
+
+  async function getInstanceAdmissionStatus(): Promise<AdmissionStatus> {
+    const general = await instanceSettingsService(db).getGeneral();
+    const { cap, source } = resolveEffectiveCap(
+      { configuredMax: general.maxConcurrentRuns ?? null },
+      PHASE1_WRITERS,
+    );
+    // Cap, running, and queued are read via separate queries (no shared transaction), so a
+    // run transitioning queued -> running mid-read can be momentarily double- or mis-counted.
+    // That's acceptable for a pollable observability endpoint; don't "fix" it with a lock.
+    return {
+      cap,
+      source,
+      running: await countRunningRunsInstanceWide(),
+      queued: await countQueuedRunsInstanceWide(),
+    };
+  }
+
+  async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
+    const { cap, source } = resolveEffectiveCap(
+      { configuredMax: await getCompanyMaxConcurrentRuns(companyId) },
+      PHASE1_WRITERS,
+    );
+    // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
+    // the three queries aren't in a transaction, so counts can be momentarily inconsistent.
+    return {
+      cap,
+      source,
+      running: await countRunningRunsForCompany(companyId),
+      queued: await countQueuedRunsForCompany(companyId),
+    };
   }
 
   async function claimQueuedRun(run: typeof heartbeatRuns.$inferSelect, companyAgents?: AgentOrgRow[]) {
@@ -12406,6 +12462,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
 
     countRunningRunsInstanceWide,
     countRunningRunsForCompany,
+    countQueuedRunsInstanceWide,
+    countQueuedRunsForCompany,
+    getInstanceAdmissionStatus,
+    getCompanyAdmissionStatus,
     startNextQueuedRunForAgent,
   };
 }

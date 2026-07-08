@@ -34,6 +34,11 @@ export function instanceSettingsRoutes(db: Db) {
     res.json(await svc.get());
   });
 
+  router.get("/instance/admission-status", async (req, res) => {
+    assertBoardOrgAccess(req);
+    res.json(await heartbeat.getInstanceAdmissionStatus());
+  });
+
   router.patch(
     "/instance/settings",
     validate(patchInstanceSettingsSchema),

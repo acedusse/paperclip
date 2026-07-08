@@ -38,6 +38,7 @@ import { instanceSettingsService } from "../services/instance-settings.ts";
 import * as instanceSettingsModule from "../services/instance-settings.ts";
 import * as instanceAdmissionLockModule from "../services/instance-admission-lock.ts";
 import { runningProcesses } from "../adapters/index.ts";
+import { companyService } from "../services/companies.js";
 
 // Neutralize the fire-and-forget executeRun(...) that runs AFTER admission: replace
 // the real adapter with a fast, side-effect-free success so background execution can
@@ -238,6 +239,30 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     return admitted;
   }
 
+  // ---- Task 1 schema tests ---------------------------------------------------
+
+  it("persists and clears a company maxConcurrentRuns via companiesService.update", async () => {
+    const companyId = await createCompany();
+    const svc = companyService(db);
+
+    await svc.update(companyId, { maxConcurrentRuns: 5 } as any);
+    let [row] = await db.select({ m: companies.maxConcurrentRuns }).from(companies).where(eq(companies.id, companyId));
+    expect(row.m).toBe(5);
+
+    await svc.update(companyId, { maxConcurrentRuns: null } as any);
+    [row] = await db.select({ m: companies.maxConcurrentRuns }).from(companies).where(eq(companies.id, companyId));
+    expect(row.m).toBeNull();
+  });
+
+  it("updateCompanySchema rejects non-positive / non-integer maxConcurrentRuns", async () => {
+    const { updateCompanySchema } = await import("@paperclipai/shared");
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: 3 }).success).toBe(true);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: null }).success).toBe(true);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: 0 }).success).toBe(false);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: -1 }).success).toBe(false);
+    expect(updateCompanySchema.safeParse({ maxConcurrentRuns: 1.5 }).success).toBe(false);
+  });
+
   // ---- Task 2 schema test -----------------------------------------------------
 
   it("persists a per-company maxConcurrentRuns (nullable, unset by default)", async () => {
@@ -301,6 +326,55 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
 
     expect(await heartbeat.countRunningRunsForCompany(companyA)).toBe(2);
     expect(await heartbeat.countRunningRunsForCompany(companyB)).toBe(1);
+  });
+
+  it("counts queued runs instance-wide and per-company, excluding running", async () => {
+    const companyA = await createCompany();
+    const companyB = await createCompany();
+    const agentA = await createAgentInCompany(companyA);
+    const agentB = await createAgentInCompany(companyB);
+    await insertRun({ companyId: companyA, agentId: agentA, status: "queued" });
+    await insertRun({ companyId: companyA, agentId: agentA, status: "queued" });
+    await insertRun({ companyId: companyA, agentId: agentA, status: "running" });
+    await insertRun({ companyId: companyB, agentId: agentB, status: "queued" });
+
+    expect(await heartbeat.countQueuedRunsInstanceWide()).toBe(3);
+    expect(await heartbeat.countQueuedRunsForCompany(companyA)).toBe(2);
+    expect(await heartbeat.countQueuedRunsForCompany(companyB)).toBe(1);
+  });
+
+  // ---- Task 3 admission-status helpers ---------------------------------------
+
+  it("reports instance admission status (cap/source/running/queued)", async () => {
+    await instanceSettingsService(db).updateGeneral({ maxConcurrentRuns: 10 });
+    const company = await createCompany();
+    const agent = await createAgentInCompany(company);
+    await insertRun({ companyId: company, agentId: agent, status: "running" });
+    await insertRun({ companyId: company, agentId: agent, status: "queued" });
+
+    const s = await heartbeat.getInstanceAdmissionStatus();
+    expect(s).toEqual({ cap: 10, source: "configured-default", running: 1, queued: 1 });
+  });
+
+  it("reports company admission status, unset cap => null/none, isolated per company", async () => {
+    const companyA = await createCompany();
+    const companyB = await createCompany();
+    await db.update(companies).set({ maxConcurrentRuns: 3 }).where(eq(companies.id, companyA));
+    const agentA = await createAgentInCompany(companyA);
+    await insertRun({ companyId: companyA, agentId: agentA, status: "running" });
+
+    expect(await heartbeat.getCompanyAdmissionStatus(companyA)).toEqual({
+      cap: 3,
+      source: "configured-default",
+      running: 1,
+      queued: 0,
+    });
+    expect(await heartbeat.getCompanyAdmissionStatus(companyB)).toEqual({
+      cap: null,
+      source: "none",
+      running: 0,
+      queued: 0,
+    });
   });
 
   // ---- Task 4 count test (unchanged) ----------------------------------------
