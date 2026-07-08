@@ -11,8 +11,10 @@ import { assetsApi } from "../api/assets";
 import { instanceSettingsApi } from "../api/instanceSettings";
 import { queryKeys } from "../lib/queryKeys";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Settings, CloudUpload, Download, Upload } from "lucide-react";
 import { CompanyPatternIcon } from "../components/CompanyPatternIcon";
+import { AdmissionStatusLine } from "../components/AdmissionStatusLine";
 import {
   Field,
   ToggleField,
@@ -39,6 +41,7 @@ export function CompanySettings() {
   const [description, setDescription] = useState("");
   const [brandColor, setBrandColor] = useState("");
   const [attachmentMaxMiB, setAttachmentMaxMiB] = useState(String(DEFAULT_COMPANY_ATTACHMENT_MAX_MIB));
+  const [maxRuns, setMaxRuns] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [logoUploadError, setLogoUploadError] = useState<string | null>(null);
 
@@ -49,6 +52,7 @@ export function CompanySettings() {
     setDescription(selectedCompany.description ?? "");
     setBrandColor(selectedCompany.brandColor ?? "");
     setAttachmentMaxMiB(String(Math.round((selectedCompany.attachmentMaxBytes ?? DEFAULT_COMPANY_ATTACHMENT_MAX_BYTES) / BYTES_PER_MIB)));
+    setMaxRuns(String(selectedCompany.maxConcurrentRuns ?? ""));
     setLogoUrl(selectedCompany.logoUrl ?? "");
   }, [selectedCompany]);
 
@@ -57,14 +61,26 @@ export function CompanySettings() {
     Number.isInteger(attachmentMaxBytes)
     && attachmentMaxBytes >= BYTES_PER_MIB
     && attachmentMaxBytes <= MAX_COMPANY_ATTACHMENT_MAX_BYTES;
+  const trimmedMaxRuns = maxRuns.trim();
+  const maxRunsValid =
+    trimmedMaxRuns === "" || (Number.isInteger(Number(trimmedMaxRuns)) && Number(trimmedMaxRuns) > 0);
+  const maxRunsPayload = trimmedMaxRuns === "" ? null : Number(trimmedMaxRuns);
   const cloudSyncEnabled = experimentalSettings?.enableCloudSync === true;
+
+  const admissionStatusQuery = useQuery({
+    queryKey: queryKeys.companies.admissionStatus(selectedCompanyId ?? ""),
+    queryFn: () => companiesApi.getAdmissionStatus(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
+    refetchInterval: 10_000,
+  });
 
   const generalDirty =
     !!selectedCompany &&
     (companyName !== selectedCompany.name ||
       description !== (selectedCompany.description ?? "") ||
       brandColor !== (selectedCompany.brandColor ?? "") ||
-      attachmentMaxBytes !== (selectedCompany.attachmentMaxBytes ?? DEFAULT_COMPANY_ATTACHMENT_MAX_BYTES));
+      attachmentMaxBytes !== (selectedCompany.attachmentMaxBytes ?? DEFAULT_COMPANY_ATTACHMENT_MAX_BYTES) ||
+      maxRunsPayload !== (selectedCompany.maxConcurrentRuns ?? null));
 
   const generalMutation = useMutation({
     mutationFn: (data: {
@@ -72,9 +88,13 @@ export function CompanySettings() {
       description: string | null;
       brandColor: string | null;
       attachmentMaxBytes: number;
+      maxConcurrentRuns: number | null;
     }) => companiesApi.update(selectedCompanyId!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
+      if (selectedCompanyId) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.companies.admissionStatus(selectedCompanyId) });
+      }
     }
   });
 
@@ -165,7 +185,8 @@ export function CompanySettings() {
       name: companyName.trim(),
       description: description.trim() || null,
       brandColor: brandColor || null,
-      attachmentMaxBytes
+      attachmentMaxBytes,
+      maxConcurrentRuns: maxRunsPayload
     });
   }
 
@@ -321,6 +342,31 @@ export function CompanySettings() {
                   )}
                 </div>
               </Field>
+              <Field
+                label="Max concurrent runs"
+                hint="Cap on this company's running agent runs. Empty = unlimited."
+              >
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    type="number"
+                    min={1}
+                    value={maxRuns}
+                    onChange={(e) => setMaxRuns(e.target.value)}
+                    aria-invalid={!maxRunsValid}
+                    data-testid="company-max-runs-input"
+                    className="w-28"
+                  />
+                  {!maxRunsValid && (
+                    <span className="text-xs text-destructive">
+                      Enter a positive whole number, or leave empty for unlimited.
+                    </span>
+                  )}
+                  <AdmissionStatusLine
+                    status={admissionStatusQuery.data}
+                    isError={admissionStatusQuery.isError}
+                  />
+                </div>
+              </Field>
             </div>
           </div>
         </div>
@@ -332,7 +378,7 @@ export function CompanySettings() {
           <Button
             size="sm"
             onClick={handleSaveGeneral}
-            disabled={generalMutation.isPending || !companyName.trim() || !attachmentMaxValid}
+            disabled={generalMutation.isPending || !companyName.trim() || !attachmentMaxValid || !maxRunsValid}
           >
             {generalMutation.isPending ? "Saving..." : "Save changes"}
           </Button>

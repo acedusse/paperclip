@@ -108,4 +108,13 @@ describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns",
     const svc = instanceSettingsService(db);
     expect((await svc.getGeneral()).maxConcurrentRuns).toBeUndefined();
   });
+
+  it("clears instance maxConcurrentRuns when set to null", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxConcurrentRuns: 8 });
+    expect((await svc.getGeneral()).maxConcurrentRuns).toBe(8);
+
+    await svc.updateGeneral({ maxConcurrentRuns: null });
+    expect((await svc.getGeneral()).maxConcurrentRuns).toBeUndefined();
+  });
 });

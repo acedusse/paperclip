@@ -10,6 +10,7 @@ import type {
   UpdateCompanyBranding,
 } from "@paperclipai/shared";
 import { api } from "./client";
+import type { AdmissionStatus } from "./instanceSettings";
 
 export type CompanyStats = Record<string, { agentCount: number; issueCount: number }>;
 
@@ -17,6 +18,8 @@ export const companiesApi = {
   list: () => api.get<Company[]>("/companies"),
   get: (companyId: string) => api.get<Company>(`/companies/${companyId}`),
   stats: () => api.get<CompanyStats>("/companies/stats"),
+  getAdmissionStatus: (companyId: string) =>
+    api.get<AdmissionStatus>(`/companies/${companyId}/admission-status`),
   create: (data: {
     name: string;
     description?: string | null;
@@ -38,7 +41,9 @@ export const companiesApi = {
         | "brandColor"
         | "logoAssetId"
       >
-    >,
+    > & {
+      maxConcurrentRuns?: number | null;
+    },
   ) => api.patch<Company>(`/companies/${companyId}`, data),
   updateBranding: (companyId: string, data: UpdateCompanyBranding) =>
     api.patch<Company>(`/companies/${companyId}/branding`, data),

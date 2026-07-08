@@ -9,9 +9,18 @@ import type {
 } from "@paperclipai/shared";
 import { api } from "./client";
 
+export type AdmissionStatus = {
+  cap: number | null;
+  source: string;
+  running: number;
+  queued: number;
+};
+
 export const instanceSettingsApi = {
   get: () =>
     api.get<InstanceSettings>("/instance/settings"),
+  getAdmissionStatus: () =>
+    api.get<AdmissionStatus>("/instance/admission-status"),
   update: (patch: PatchInstanceSettings) =>
     api.patch<InstanceSettings>("/instance/settings", patch),
   getGeneral: () =>
