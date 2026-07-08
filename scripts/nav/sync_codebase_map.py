@@ -108,8 +108,15 @@ def _render_tags(file_path: str, body: str) -> str:
             f"{rest}\n"
             "<!-- [END: module] -->\n"
         )
+    # Keep any leading shebang and/or directive prologue ("use client",
+    # "use strict", …) as the very first line(s) so the nav header does not push
+    # them off line 1. A shebang not on line 1 is a syntax error, and a directive
+    # only takes effect as the first statement — same reasoning as the <!doctype>
+    # preamble above.
+    preamble, body = _split_leading_directives(body)
     return (
-        "/**\n"
+        preamble
+        + "/**\n"
         f" * FILE: {file_path}\n"
         f" * ABOUT: {summary}\n"
         " *\n"
@@ -126,6 +133,35 @@ def _render_tags(file_path: str, body: str) -> str:
         f"{body}\n"
         "// [END: module]\n"
     )
+
+
+# A JS/TS directive prologue statement: a bare single- or double-quoted string
+# literal like "use client"; / 'use strict'.
+_DIRECTIVE_RE = re.compile(r"""^(["'])use [a-z-]+\1;?$""")
+
+
+def _split_leading_directives(body: str) -> tuple[str, str]:
+    """Split off a leading shebang and/or directive prologue from ``body``.
+
+    Returns ``(preamble, rest)`` where ``preamble`` is the newline-terminated
+    lines that must stay at the top of the file (empty string if none) and
+    ``rest`` is the remaining body to wrap in the module section.
+    """
+    lines = body.split("\n")
+    i = 0
+    while i < len(lines):
+        stripped = lines[i].strip()
+        is_shebang = i == 0 and stripped.startswith("#!")
+        is_directive = _DIRECTIVE_RE.match(stripped) is not None
+        if is_shebang or is_directive:
+            i += 1
+        else:
+            break
+    if i == 0:
+        return "", body
+    preamble = "\n".join(lines[:i]) + "\n"
+    rest = "\n".join(lines[i:])
+    return preamble, rest
 
 
 def ensure_tags(path: Path, file_path: str) -> bool:

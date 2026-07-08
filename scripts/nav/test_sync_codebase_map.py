@@ -152,6 +152,54 @@ def test_ensure_tags_injects_into_untagged_html_file(tmp_path: Path) -> None:
     assert scm.derive_intent("ui/page.html", text) == "page.html (ui module)."
 
 
+def test_ensure_tags_keeps_shebang_on_line_1(tmp_path: Path) -> None:
+    src = tmp_path / "scripts" / "run.ts"
+    src.parent.mkdir(parents=True)
+    src.write_text("#!/usr/bin/env -S node --import tsx\nexport const x = 1;\n")
+
+    changed = scm.ensure_tags(src, "scripts/run.ts")
+
+    assert changed is True
+    text = src.read_text()
+    # A shebang not on line 1 is a syntax error — it must remain the first bytes,
+    # with the nav header following it (mirrors the <!doctype> handling for HTML).
+    assert text.startswith("#!/usr/bin/env -S node --import tsx\n")
+    assert "// [META: module]" in text
+    # The shebang is a preamble outside the module section; the section wraps the body.
+    assert scm.extract_module_section(src) == "export const x = 1;\n"
+    # Idempotent: an already-tagged file (shebang + tags) is not rewritten.
+    assert scm.ensure_tags(src, "scripts/run.ts") is False
+
+
+def test_ensure_tags_keeps_use_client_directive_on_line_1(tmp_path: Path) -> None:
+    src = tmp_path / "ui" / "c.tsx"
+    src.parent.mkdir(parents=True)
+    src.write_text('"use client";\nexport function C() { return null; }\n')
+
+    changed = scm.ensure_tags(src, "ui/c.tsx")
+
+    assert changed is True
+    text = src.read_text()
+    # A directive prologue ("use client"/"use server") only takes effect as the
+    # first statement, so it must lead the file with the nav header after it.
+    assert text.startswith('"use client";\n')
+    assert "// [META: module]" in text
+    assert scm.extract_module_section(src) == "export function C() { return null; }\n"
+
+
+def test_ensure_tags_keeps_shebang_and_directive_together(tmp_path: Path) -> None:
+    src = tmp_path / "cli.ts"
+    src.write_text('#!/usr/bin/env node\n"use strict";\nconst y = 2;\n')
+
+    scm.ensure_tags(src, "cli.ts")
+
+    text = src.read_text()
+    # Both leading lines are preserved, in order, ahead of the nav header.
+    assert text.startswith('#!/usr/bin/env node\n"use strict";\n')
+    assert "// [START: module]" in text
+    assert scm.extract_module_section(src) == "const y = 2;\n"
+
+
 def test_ensure_tags_skips_non_utf8_file_without_corrupting(tmp_path: Path) -> None:
     src = tmp_path / "weird.ts"
     raw = b"const x = 1; // \xff\xfe not utf8\n"
