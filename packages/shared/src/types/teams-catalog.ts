@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/teams-catalog.ts
+ * ABOUT: teams-catalog.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams-catalog.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams-catalog.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/teams-catalog.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CompanyPortabilityAdapterOverride,
   CompanyPortabilityAgentSelection,
@@ -215,3 +229,4 @@ export interface InstalledCatalogTeam {
   /** True when a present team has at least one stale installed originHash. */
   outOfDate: boolean;
 }
+// [END: module]

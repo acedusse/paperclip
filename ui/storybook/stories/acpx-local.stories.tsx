@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/acpx-local.stories.tsx
+ * ABOUT: acpx-local.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - acpx-local.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: acpx-local.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/acpx-local.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useQueryClient } from "@tanstack/react-query";
@@ -901,3 +915,4 @@ export const SkillsTabEmptyLibrary: StoryObj = {
   name: "Skills tab — empty company library",
   render: () => <AcpxClaudeSkillsEmptyLibraryStory />,
 };
+// [END: module]

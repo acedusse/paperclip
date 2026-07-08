@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/workspace-runtime-read-model.ts
+ * ABOUT: workspace-runtime-read-model.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-runtime-read-model.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-runtime-read-model.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-runtime-read-model.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Db } from "@paperclipai/db";
 import { workspaceRuntimeServices } from "@paperclipai/db";
 import { and, desc, eq, inArray } from "drizzle-orm";
@@ -94,3 +108,4 @@ export async function listCurrentRuntimeServicesForExecutionWorkspaces(
     ]),
   );
 }
+// [END: module]

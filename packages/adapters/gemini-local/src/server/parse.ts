@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/gemini-local/src/server/parse.ts
+ * ABOUT: parse.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/gemini-local/src/server/parse.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { asNumber, asString, parseJson, parseObject } from "@paperclipai/adapter-utils/server-utils";
 
 function collectMessageText(message: unknown): string[] {
@@ -321,3 +335,4 @@ export function isGeminiTurnLimitResult(
     reason === "turn_limit_exhausted",
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/workspace-file-resources.ts
+ * ABOUT: workspace-file-resources.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-file-resources.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-file-resources.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-file-resources.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -1401,3 +1415,4 @@ export function workspaceFileResourceService(db: Db) {
     readContent,
   };
 }
+// [END: module]

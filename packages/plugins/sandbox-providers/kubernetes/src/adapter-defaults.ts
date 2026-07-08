@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/adapter-defaults.ts
+ * ABOUT: adapter-defaults.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-defaults.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-defaults.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/adapter-defaults.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterRegistryEntry } from "./adapter-registry.js";
 
 export interface AdapterDefaults {
@@ -127,3 +141,4 @@ export function buildAdapterEnv(
   }
   return out;
 }
+// [END: module]

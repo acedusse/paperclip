@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Secrets.test.ts
+ * ABOUT: Secrets.test.ts (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Secrets.test.ts (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Secrets.test.ts (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Secrets.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { describe, expect, it } from "vitest";
@@ -127,3 +141,4 @@ describe("Secrets page provider helpers", () => {
     ).toBe("This provider vault is saved as draft metadata only.");
   });
 });
+// [END: module]

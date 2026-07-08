@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-cloud/src/server/session.ts
+ * ABOUT: session.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - session.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: session.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-cloud/src/server/session.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterSessionCodec } from "@paperclipai/adapter-utils";
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -59,3 +73,4 @@ export const sessionCodec: AdapterSessionCodec = {
     return normalized ? String(normalized.cursorAgentId) : null;
   },
 };
+// [END: module]

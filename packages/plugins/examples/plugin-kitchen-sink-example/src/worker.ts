@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-kitchen-sink-example/src/worker.ts
+ * ABOUT: worker.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worker.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worker.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-kitchen-sink-example/src/worker.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Buffer } from "node:buffer";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
@@ -1049,3 +1063,4 @@ const plugin: PaperclipPlugin = definePlugin({
 
 export default plugin;
 runWorker(plugin, import.meta.url);
+// [END: module]

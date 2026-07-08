@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/source-trust.ts
+ * ABOUT: source-trust.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - source-trust.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: source-trust.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/source-trust.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, heartbeatRuns, projects } from "@paperclipai/db";
@@ -171,3 +185,4 @@ export async function resolveActorSourceTrustForIssue(input: {
     agentId: input.actor.agentId,
   });
 }
+// [END: module]

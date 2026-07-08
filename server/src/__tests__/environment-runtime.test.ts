@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-runtime.test.ts
+ * ABOUT: environment-runtime.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-runtime.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-runtime.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-runtime.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
@@ -1574,3 +1588,4 @@ describeEmbeddedPostgres("environmentRuntimeService", () => {
     expect(acquired.lease.metadata?.driver).toBe("local");
   });
 });
+// [END: module]

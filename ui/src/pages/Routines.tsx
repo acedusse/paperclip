@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Routines.tsx
+ * ABOUT: Routines.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Routines.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Routines.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Routines.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useSearchParams } from "@/lib/router";
@@ -964,3 +978,4 @@ export function Routines() {
     </div>
   );
 }
+// [END: module]

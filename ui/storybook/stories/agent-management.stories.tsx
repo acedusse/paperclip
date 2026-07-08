@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/agent-management.stories.tsx
+ * ABOUT: agent-management.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-management.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-management.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/agent-management.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useQueryClient } from "@tanstack/react-query";
@@ -860,3 +874,4 @@ export const ForcedKubernetesExecution: Story = {
 export const ForcedKubernetesMissingEnvironment: Story = {
   render: () => <ForcedKubernetesStory environmentFixtures={[]} />,
 };
+// [END: module]

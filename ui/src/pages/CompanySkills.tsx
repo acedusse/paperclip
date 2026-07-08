@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanySkills.tsx
+ * ABOUT: CompanySkills.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySkills.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySkills.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanySkills.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState, type SVGProps } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -4697,3 +4711,4 @@ export function CompanySkills() {
     </>
   );
 }
+// [END: module]

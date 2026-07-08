@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ActivityFeed.tsx
+ * ABOUT: ActivityFeed.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ActivityFeed.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ActivityFeed.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ActivityFeed.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState, useRef, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { ActivityEvent, Agent } from "@paperclipai/shared";
@@ -701,3 +715,4 @@ export function ActivityFeed({ className }: ActivityFeedProps) {
     </aside>
   );
 }
+// [END: module]

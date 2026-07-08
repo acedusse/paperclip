@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MobileBottomNav.tsx
+ * ABOUT: MobileBottomNav.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MobileBottomNav.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MobileBottomNav.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MobileBottomNav.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import { NavLink, useLocation } from "@/lib/router";
 import {
@@ -123,3 +137,4 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
     </nav>
   );
 }
+// [END: module]

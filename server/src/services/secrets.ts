@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/secrets.ts
+ * ABOUT: secrets.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, inArray, like, ne, notInArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -2479,3 +2493,4 @@ export function secretService(db: Db) {
     },
   };
 }
+// [END: module]

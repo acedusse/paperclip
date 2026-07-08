@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-thread-interactions.ts
+ * ABOUT: issue-thread-interactions.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-thread-interactions.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-thread-interactions.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-thread-interactions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { isDeepStrictEqual } from "node:util";
 import { and, asc, eq, inArray, isNotNull } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -1451,3 +1465,4 @@ export function issueThreadInteractionService(db: Db) {
     },
   };
 }
+// [END: module]

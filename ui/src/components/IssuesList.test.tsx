@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssuesList.test.tsx
+ * ABOUT: IssuesList.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssuesList.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssuesList.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssuesList.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -1751,3 +1765,4 @@ describe("IssuesList", () => {
     });
   });
 });
+// [END: module]

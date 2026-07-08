@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/service.pause-durability.test.ts
+ * ABOUT: service.pause-durability.test.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - service.pause-durability.test.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: service.pause-durability.test.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/service.pause-durability.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { classifyContinuationFailure } from "./service.js";
 
@@ -36,3 +50,4 @@ describe("pause durability: continuation retry classification", () => {
     expect(classifyContinuationFailure(run("some_adapter_error")).kind).toBe("default");
   });
 });
+// [END: module]

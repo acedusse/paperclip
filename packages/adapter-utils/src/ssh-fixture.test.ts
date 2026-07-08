@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/ssh-fixture.test.ts
+ * ABOUT: ssh-fixture.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ssh-fixture.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ssh-fixture.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/ssh-fixture.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -736,3 +750,4 @@ describe("ssh env-lab fixture", () => {
     expect(recentSubjects).toContain("remote update b");
   }, SSH_FIXTURE_TEST_TIMEOUT_MS);
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/App.test.tsx
+ * ABOUT: App.test.tsx (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - App.test.tsx (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: App.test.tsx (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/App.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -227,3 +241,4 @@ describe("CloudAccessGate", () => {
     unmountRoot(root);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/models.ts
+ * ABOUT: models.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - models.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: models.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/models.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import os from "node:os";
 import type { AdapterModel } from "@paperclipai/adapter-utils";
@@ -230,3 +244,4 @@ export async function listOpenCodeModels(): Promise<AdapterModel[]> {
 export function resetOpenCodeModelsCacheForTests() {
   discoveryCache.clear();
 }
+// [END: module]

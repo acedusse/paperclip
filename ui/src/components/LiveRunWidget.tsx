@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/LiveRunWidget.tsx
+ * ABOUT: LiveRunWidget.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - LiveRunWidget.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: LiveRunWidget.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/LiveRunWidget.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -158,3 +172,4 @@ export function LiveRunWidget({ issueId, companyId }: LiveRunWidgetProps) {
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/sidebar-takeover.spec.ts
+ * ABOUT: sidebar-takeover.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sidebar-takeover.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sidebar-takeover.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/sidebar-takeover.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { test, expect, request as pwRequest, type APIRequestContext } from "@playwright/test";
 
 /**
@@ -159,3 +173,4 @@ test.describe("Sidebar takeover (collapse + secondary pane)", () => {
     await expect(page.getByLabel(APP_SIDEBAR_EXPANDED_MARKER)).toBeVisible();
   });
 });
+// [END: module]

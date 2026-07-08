@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/project-goal-telemetry-routes.test.ts
+ * ABOUT: project-goal-telemetry-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-goal-telemetry-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-goal-telemetry-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/project-goal-telemetry-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -163,3 +177,4 @@ describe("project and goal telemetry routes", () => {
     expect(mockTelemetryTrack).toHaveBeenCalledWith("goal.created", { goal_level: "team" });
   });
 });
+// [END: module]

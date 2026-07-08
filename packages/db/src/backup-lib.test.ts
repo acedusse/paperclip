@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/backup-lib.test.ts
+ * ABOUT: backup-lib.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - backup-lib.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: backup-lib.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/backup-lib.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -455,3 +469,4 @@ describeEmbeddedPostgres("runDatabaseBackup", () => {
     20_000,
   );
 });
+// [END: module]

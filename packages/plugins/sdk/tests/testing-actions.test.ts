@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/tests/testing-actions.test.ts
+ * ABOUT: testing-actions.test.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - testing-actions.test.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: testing-actions.test.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/tests/testing-actions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 
 import { createTestHarness } from "../src/testing.js";
@@ -128,3 +142,4 @@ describe("createTestHarness issue interactions", () => {
     });
   });
 });
+// [END: module]

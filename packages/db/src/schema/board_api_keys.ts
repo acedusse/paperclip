@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/board_api_keys.ts
+ * ABOUT: board_api_keys.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board_api_keys.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board_api_keys.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/board_api_keys.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { authUsers } from "./auth.js";
 
@@ -18,3 +32,4 @@ export const boardApiKeys = pgTable(
     userIdx: index("board_api_keys_user_idx").on(table.userId),
   }),
 );
+// [END: module]

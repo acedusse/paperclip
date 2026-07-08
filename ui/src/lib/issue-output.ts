@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-output.ts
+ * ABOUT: issue-output.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-output.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-output.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-output.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   attachmentArtifactWorkProductMetadataSchema,
   type AttachmentArtifactWorkProductMetadata,
@@ -289,3 +303,4 @@ export function getPromotedOutputAttachmentIds(workProducts: IssueWorkProduct[] 
     }),
   );
 }
+// [END: module]

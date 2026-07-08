@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/reusable-execution-workspaces.ts
+ * ABOUT: reusable-execution-workspaces.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - reusable-execution-workspaces.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: reusable-execution-workspaces.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/reusable-execution-workspaces.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface ReusableExecutionWorkspaceLike {
   id: string;
   name: string;
@@ -47,3 +61,4 @@ export function orderReusableExecutionWorkspaces<T extends ReusableExecutionWork
     ...alphabetized.filter((workspace) => workspace.id !== mostRecentlyUsed.id),
   ];
 }
+// [END: module]

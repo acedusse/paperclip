@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/health-dev-server-token.test.ts
+ * ABOUT: health-dev-server-token.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - health-dev-server-token.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: health-dev-server-token.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/health-dev-server-token.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -204,3 +218,4 @@ describe("POST /health/dev-server/restart", () => {
     }
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const type = "grok_local";
 export const label = "Grok Build (local)";
 
@@ -43,3 +57,4 @@ Notes:
 - Paperclip stages desired runtime skills into \`.claude/skills\` inside the execution workspace so Grok discovers them as project skills.
 - Use \`grok models\` to inspect authentication and available models on the host.
 `;
+// [END: module]

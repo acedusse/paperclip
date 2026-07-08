@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterModelProfileDefinition } from "@paperclipai/adapter-utils";
 
 export const type = "opencode_local";
@@ -138,3 +152,4 @@ Notes:
   runtime config with \`permission.external_directory=allow\` so headless runs do \
   not stall on approval prompts.
 `;
+// [END: module]

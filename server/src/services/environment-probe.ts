@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/environment-probe.ts
+ * ABOUT: environment-probe.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-probe.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-probe.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/environment-probe.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Environment, EnvironmentProbeResult } from "@paperclipai/shared";
 import type { Db } from "@paperclipai/db";
 import { ensureSshWorkspaceReady } from "@paperclipai/adapter-utils/ssh";
@@ -133,3 +147,4 @@ export async function probeEnvironment(
     };
   }
 }
+// [END: module]

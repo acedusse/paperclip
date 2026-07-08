@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/adapters/metadata.ts
+ * ABOUT: metadata.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - metadata.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: metadata.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/metadata.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Adapter metadata utilities — built on top of the display registry and UI adapter list.
  *
  * This module bridges the static display metadata with the dynamic adapter registry.
@@ -84,3 +98,4 @@ export function listVisibleUIAdapters(): UIAdapterModule[] {
 export function listVisibleAdapterTypes(): string[] {
   return listVisibleUIAdapters().map((a) => a.type);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/label.tsx
+ * ABOUT: label.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - label.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: label.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/label.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { Label as LabelPrimitive } from "radix-ui"
 
@@ -20,3 +34,4 @@ function Label({
 }
 
 export { Label }
+// [END: module]

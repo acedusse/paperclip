@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/plugin_managed_resources.ts
+ * ABOUT: plugin_managed_resources.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin_managed_resources.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin_managed_resources.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/plugin_managed_resources.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { plugins } from "./plugins.js";
@@ -32,3 +46,4 @@ export const pluginManagedResources = pgTable(
     ),
   }),
 );
+// [END: module]

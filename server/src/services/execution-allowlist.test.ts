@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/execution-allowlist.test.ts
+ * ABOUT: execution-allowlist.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-allowlist.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-allowlist.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/execution-allowlist.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   KUBERNETES_PROVIDER_KEY,
@@ -94,3 +108,4 @@ describe("evaluateExecutionAllowlist", () => {
     });
   });
 });
+// [END: module]

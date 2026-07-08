@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/company_secret_versions.ts
+ * ABOUT: company_secret_versions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company_secret_versions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company_secret_versions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/company_secret_versions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, integer, jsonb, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companySecrets } from "./company_secrets.js";
@@ -26,3 +40,4 @@ export const companySecretVersions = pgTable(
     secretVersionUq: uniqueIndex("company_secret_versions_secret_version_uq").on(table.secretId, table.version),
   }),
 );
+// [END: module]

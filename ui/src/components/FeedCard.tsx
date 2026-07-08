@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FeedCard.tsx
+ * ABOUT: FeedCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FeedCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FeedCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FeedCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Link } from "@/lib/router";
 import { AgentIcon } from "./AgentIconPicker";
 import { timeAgo } from "../lib/timeAgo";
@@ -488,3 +502,4 @@ export function FeedCard({
   }
   return card;
 }
+// [END: module]

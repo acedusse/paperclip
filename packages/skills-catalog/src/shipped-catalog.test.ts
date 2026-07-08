@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/skills-catalog/src/shipped-catalog.test.ts
+ * ABOUT: shipped-catalog.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - shipped-catalog.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: shipped-catalog.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/skills-catalog/src/shipped-catalog.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { catalogManifest, catalogSkills, resolveCatalogSkillRef } from "./index.js";
 
@@ -88,3 +102,4 @@ describe("shipped skills catalog", () => {
     expect(resolveCatalogSkillRef(sample.slug)).toMatchObject({ key: sample.key });
   });
 });
+// [END: module]

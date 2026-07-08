@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/execution_workspaces.ts
+ * ABOUT: execution_workspaces.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution_workspaces.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution_workspaces.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/execution_workspaces.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   type AnyPgColumn,
   index,
@@ -66,3 +80,4 @@ export const executionWorkspaces = pgTable(
     ),
   }),
 );
+// [END: module]

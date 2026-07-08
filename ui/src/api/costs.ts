@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/costs.ts
+ * ABOUT: costs.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - costs.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: costs.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/costs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CostSummary,
   CostByAgent,
@@ -57,3 +71,4 @@ function dateParamsWithLimit(from?: string, to?: string, limit?: number): string
   const qs = params.toString();
   return qs ? `?${qs}` : "";
 }
+// [END: module]

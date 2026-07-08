@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Projects.test.tsx
+ * ABOUT: Projects.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Projects.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Projects.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Projects.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -242,3 +256,4 @@ describe("Projects", () => {
     expect(hiddenDescriptionLine?.className).toContain("min-h-4");
   });
 });
+// [END: module]

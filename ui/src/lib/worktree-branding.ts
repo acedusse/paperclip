@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/worktree-branding.ts
+ * ABOUT: worktree-branding.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree-branding.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree-branding.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/worktree-branding.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type WorktreeUiBranding = {
   enabled: true;
   name: string;
@@ -63,3 +77,4 @@ export function getWorktreeUiBranding(): WorktreeUiBranding | null {
     textColor: normalizeHexColor(readMetaContent("paperclip-worktree-text-color")) ?? pickReadableTextColor(color),
   };
 }
+// [END: module]

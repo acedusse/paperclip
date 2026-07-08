@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/schema-config-fields.test.ts
+ * ABOUT: schema-config-fields.test.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - schema-config-fields.test.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: schema-config-fields.test.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/schema-config-fields.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { AdapterConfigSchema, ConfigFieldSchema } from "@paperclipai/adapter-utils";
 import { fieldMatchesVisibleWhen } from "./schema-config-fields";
@@ -45,3 +59,4 @@ describe("fieldMatchesVisibleWhen", () => {
     expect(fieldMatchesVisibleWhen(field, () => "codex", schema)).toBe(false);
   });
 });
+// [END: module]

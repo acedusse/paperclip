@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/DesignGuide.tsx
+ * ABOUT: DesignGuide.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DesignGuide.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DesignGuide.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/DesignGuide.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import {
   BookOpen,
@@ -1692,3 +1706,4 @@ export function DesignGuide() {
     </div>
   );
 }
+// [END: module]

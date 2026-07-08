@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useCompanyOrder.ts
+ * ABOUT: useCompanyOrder.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useCompanyOrder.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useCompanyOrder.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useCompanyOrder.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Company } from "@paperclipai/shared";
@@ -98,3 +112,4 @@ export function useCompanyOrder({ companies, userId }: UseCompanyOrderParams) {
     persistOrder,
   };
 }
+// [END: module]

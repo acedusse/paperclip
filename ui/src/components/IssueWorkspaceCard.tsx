@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueWorkspaceCard.tsx
+ * ABOUT: IssueWorkspaceCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueWorkspaceCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueWorkspaceCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueWorkspaceCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@/lib/router";
 import type { Issue, ExecutionWorkspace } from "@paperclipai/shared";
@@ -551,3 +565,4 @@ export function IssueWorkspaceCard({
     </div>
   );
 }
+// [END: module]

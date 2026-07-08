@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/ProfileSettings.tsx
+ * ABOUT: ProfileSettings.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProfileSettings.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProfileSettings.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/ProfileSettings.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Camera, LoaderCircle, Save, Trash2, UserRoundPen } from "lucide-react";
@@ -272,3 +286,4 @@ export function ProfileSettings() {
     </div>
   );
 }
+// [END: module]

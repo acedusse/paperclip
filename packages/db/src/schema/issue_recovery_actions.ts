@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_recovery_actions.ts
+ * ABOUT: issue_recovery_actions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_recovery_actions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_recovery_actions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_recovery_actions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import {
   index,
@@ -66,3 +80,4 @@ export const issueRecoveryActions = pgTable(
       .where(sql`${table.status} in ('active', 'escalated')`),
   }),
 );
+// [END: module]

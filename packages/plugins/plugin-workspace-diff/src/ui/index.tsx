@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/src/ui/index.tsx
+ * ABOUT: index.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/src/ui/index.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PluginDetailTabProps } from "@paperclipai/plugin-sdk/ui";
 import { usePluginData, usePluginToast } from "@paperclipai/plugin-sdk/ui";
 import { DIFFS_TAG_NAME, getSingularPatch } from "@pierre/diffs";
@@ -822,3 +836,4 @@ export function ChangesTab({ context }: PluginDetailTabProps) {
     </div>
   );
 }
+// [END: module]

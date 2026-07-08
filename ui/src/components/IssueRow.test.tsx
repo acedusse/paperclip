@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueRow.test.tsx
+ * ABOUT: IssueRow.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueRow.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueRow.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueRow.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -315,3 +329,4 @@ describe("IssueRow", () => {
     });
   });
 });
+// [END: module]

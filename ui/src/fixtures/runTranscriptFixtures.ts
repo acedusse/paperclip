@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/fixtures/runTranscriptFixtures.ts
+ * ABOUT: runTranscriptFixtures.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runTranscriptFixtures.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runTranscriptFixtures.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/fixtures/runTranscriptFixtures.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { TranscriptEntry } from "../adapters";
 
 export interface RunTranscriptFixtureMeta {
@@ -223,4 +237,4 @@ export const runTranscriptFixtureEntries: TranscriptEntry[] = [
     errors: [],
   },
 ];
-
+// [END: module]

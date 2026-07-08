@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/utils.test.ts
+ * ABOUT: utils.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - utils.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: utils.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/utils.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { deriveCompanySlug, deriveNamespaceName, newRunUlidDns, paperclipLabels } from "../../src/utils.js";
 
@@ -58,3 +72,4 @@ describe("paperclipLabels", () => {
     expect(labels["paperclip.io/managed-by"]).toBe("paperclip-k8s-plugin");
   });
 });
+// [END: module]

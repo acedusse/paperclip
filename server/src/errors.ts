@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/errors.ts
+ * ABOUT: errors.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - errors.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: errors.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/errors.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export class HttpError extends Error {
   status: number;
   details?: unknown;
@@ -32,3 +46,4 @@ export function conflict(message: string, details?: unknown) {
 export function unprocessable(message: string, details?: unknown) {
   return new HttpError(422, message, details);
 }
+// [END: module]

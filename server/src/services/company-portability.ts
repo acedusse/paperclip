@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/company-portability.ts
+ * ABOUT: company-portability.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-portability.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-portability.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/company-portability.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import { execFile } from "node:child_process";
@@ -4996,3 +5010,4 @@ export function companyPortabilityService(db: Db, storage?: StorageService) {
     importBundle,
   };
 }
+// [END: module]

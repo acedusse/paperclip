@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/adapter-skills.ts
+ * ABOUT: adapter-skills.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-skills.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-skills.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/adapter-skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 
 export const agentSkillStateSchema = z.enum([
@@ -63,3 +77,4 @@ export const agentSkillSyncSchema = z.object({
 });
 
 export type AgentSkillSync = z.infer<typeof agentSkillSyncSchema>;
+// [END: module]

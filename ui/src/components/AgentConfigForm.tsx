@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentConfigForm.tsx
+ * ABOUT: AgentConfigForm.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentConfigForm.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentConfigForm.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentConfigForm.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -1966,3 +1980,4 @@ function ThinkingEffortDropdown({
     </Field>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/quota.ts
+ * ABOUT: quota.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - quota.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: quota.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/quota.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -539,3 +553,4 @@ export async function getQuotaWindows(): Promise<ProviderQuotaResult> {
     windows: [],
   };
 }
+// [END: module]

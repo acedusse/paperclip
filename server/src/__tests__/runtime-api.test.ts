@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/runtime-api.test.ts
+ * ABOUT: runtime-api.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-api.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-api.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/runtime-api.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildRuntimeApiCandidateUrls,
@@ -156,3 +170,4 @@ describe("runtime API discovery", () => {
     ]);
   });
 });
+// [END: module]

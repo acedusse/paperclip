@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/routine.test.ts
+ * ABOUT: routine.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/routine.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   routineRevisionSnapshotV1Schema,
@@ -84,3 +98,4 @@ describe("routine validators", () => {
     }).baseRevisionId).toBe(baseRevisionId);
   });
 });
+// [END: module]

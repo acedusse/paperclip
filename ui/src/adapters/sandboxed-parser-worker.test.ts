@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/sandboxed-parser-worker.test.ts
+ * ABOUT: sandboxed-parser-worker.test.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandboxed-parser-worker.test.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandboxed-parser-worker.test.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/sandboxed-parser-worker.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 
 import { getWorkerBootstrapSource } from "./sandboxed-parser-worker";
@@ -23,3 +37,4 @@ describe("sandboxed parser worker bootstrap", () => {
     expect(getWorkerBootstrapSource()).not.toContain("parse_batch");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/routine-sections/editable-sections.test.tsx
+ * ABOUT: editable-sections.test.tsx (routine-sections module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - editable-sections.test.tsx (routine-sections module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: editable-sections.test.tsx (routine-sections module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/routine-sections/editable-sections.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { useState } from "react";
@@ -143,3 +157,4 @@ describe("TriggersSection", () => {
     act(() => root.unmount());
   });
 });
+// [END: module]

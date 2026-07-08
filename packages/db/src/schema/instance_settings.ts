@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/instance_settings.ts
+ * ABOUT: instance_settings.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance_settings.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance_settings.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/instance_settings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, uniqueIndex } from "drizzle-orm/pg-core";
 import { environments } from "./environments.js";
 
@@ -16,3 +30,4 @@ export const instanceSettings = pgTable(
     singletonKeyIdx: uniqueIndex("instance_settings_singleton_key_idx").on(table.singletonKey),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Agents.test.tsx
+ * ABOUT: Agents.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Agents.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Agents.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Agents.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -276,3 +290,4 @@ describe("Agents", () => {
     expect(container.querySelector('[aria-label="Invalid reporting chain"]')).not.toBeNull();
   });
 });
+// [END: module]

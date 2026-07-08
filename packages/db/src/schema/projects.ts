@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/projects.ts
+ * ABOUT: projects.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - projects.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: projects.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/projects.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, date, index, jsonb } from "drizzle-orm/pg-core";
 import type { AgentEnvConfig } from "@paperclipai/shared";
 import { companies } from "./companies.js";
@@ -29,3 +43,4 @@ export const projects = pgTable(
     companyIdx: index("projects_company_idx").on(table.companyId),
   }),
 );
+// [END: module]

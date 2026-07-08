@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * `@paperclipai/plugin-sdk` — Paperclip plugin worker-side SDK.
  *
  * This is the main entrypoint for plugin worker code.  For plugin UI bundles,
@@ -392,3 +406,4 @@ export {
   MEMBERSHIP_STATUSES,
   PRINCIPAL_TYPES,
 } from "@paperclipai/shared";
+// [END: module]

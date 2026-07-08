@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-plugin-environment.test.ts
+ * ABOUT: heartbeat-plugin-environment.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-plugin-environment.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-plugin-environment.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-plugin-environment.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
@@ -670,3 +684,4 @@ describeEmbeddedPostgres("heartbeat plugin environments", () => {
     });
   }, 15_000);
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/integration/_kind-harness.ts
+ * ABOUT: _kind-harness.ts (integration module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - _kind-harness.ts (integration module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: _kind-harness.ts (integration module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/integration/_kind-harness.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
@@ -20,3 +34,4 @@ export function deleteNamespaceIfExists(namespace: string): void {
     // ignore
   }
 }
+// [END: module]

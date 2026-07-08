@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/agents.ts
+ * ABOUT: agents.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agents.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agents.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/agents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   type AnyPgColumn,
   pgTable,
@@ -44,3 +58,4 @@ export const agents = pgTable(
     companyDefaultEnvironmentIdx: index("agents_company_default_environment_idx").on(table.companyId, table.defaultEnvironmentId),
   }),
 );
+// [END: module]

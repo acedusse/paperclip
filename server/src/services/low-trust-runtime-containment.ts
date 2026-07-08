@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/low-trust-runtime-containment.ts
+ * ABOUT: low-trust-runtime-containment.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - low-trust-runtime-containment.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: low-trust-runtime-containment.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/low-trust-runtime-containment.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { issues } from "@paperclipai/db";
@@ -103,3 +117,4 @@ export function assertLowTrustRuntimeServicesAllowed(input: {
     code: "low_trust_runtime_services_denied",
   });
 }
+// [END: module]

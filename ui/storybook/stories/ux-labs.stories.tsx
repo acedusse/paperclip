@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/ux-labs.stories.tsx
+ * ABOUT: ux-labs.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ux-labs.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ux-labs.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/ux-labs.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IssueChatUxLab } from "@/pages/IssueChatUxLab";
 import { InviteUxLab } from "@/pages/InviteUxLab";
@@ -95,3 +109,4 @@ export const InviteAndAccessFlow: Story = {
     },
   },
 };
+// [END: module]

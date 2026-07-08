@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/company-search-rate-limit.ts
+ * ABOUT: company-search-rate-limit.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-search-rate-limit.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-search-rate-limit.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/company-search-rate-limit.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const COMPANY_SEARCH_RATE_LIMIT_WINDOW_MS = 60_000;
 export const COMPANY_SEARCH_RATE_LIMIT_MAX_REQUESTS = 60;
 
@@ -61,3 +75,4 @@ export function createCompanySearchRateLimiter(options: {
     },
   };
 }
+// [END: module]

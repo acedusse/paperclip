@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueFiltersPopover.tsx
+ * ABOUT: IssueFiltersPopover.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueFiltersPopover.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueFiltersPopover.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueFiltersPopover.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -370,3 +384,4 @@ export function IssueFiltersPopover({
     </Popover>
   );
 }
+// [END: module]

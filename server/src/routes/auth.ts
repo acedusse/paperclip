@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/auth.ts
+ * ABOUT: auth.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import { eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -98,3 +112,4 @@ export function authRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/plugins/bridge-init.ts
+ * ABOUT: bridge-init.ts (plugins module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bridge-init.ts (plugins module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bridge-init.ts (plugins module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/plugins/bridge-init.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Plugin bridge initialization.
  *
  * Registers the host's React instances and bridge hook implementations
@@ -701,3 +715,4 @@ export function initPluginBridge(
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/companies.ts
+ * ABOUT: companies.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - companies.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: companies.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/companies.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, count, eq, gte, inArray, isNull, lt, notInArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -494,3 +508,4 @@ export function companyService(db: Db) {
       }),
   };
 }
+// [END: module]

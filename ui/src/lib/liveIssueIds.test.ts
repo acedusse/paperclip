@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/liveIssueIds.test.ts
+ * ABOUT: liveIssueIds.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - liveIssueIds.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: liveIssueIds.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/liveIssueIds.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { LiveRunForIssue } from "../api/heartbeats";
 import { collectLiveIssueIds, collectSubtreeLiveCounts } from "./liveIssueIds";
@@ -121,3 +135,4 @@ describe("collectSubtreeLiveCounts", () => {
     expect(counts.has("a")).toBe(false);
   });
 });
+// [END: module]

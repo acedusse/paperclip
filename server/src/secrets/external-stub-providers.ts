@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/secrets/external-stub-providers.ts
+ * ABOUT: external-stub-providers.ts (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - external-stub-providers.ts (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: external-stub-providers.ts (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/secrets/external-stub-providers.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { unprocessable } from "../errors.js";
 import type { PreparedSecretVersion, SecretProviderModule } from "./types.js";
 import { createHash } from "node:crypto";
@@ -85,3 +99,4 @@ export const gcpSecretManagerProvider = unavailableProvider(
   "GCP Secret Manager",
 );
 export const vaultProvider = unavailableProvider("vault", "HashiCorp Vault");
+// [END: module]

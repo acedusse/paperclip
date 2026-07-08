@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/workspace-file-parser.ts
+ * ABOUT: workspace-file-parser.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-file-parser.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-file-parser.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/workspace-file-parser.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface ParsedWorkspaceFileRef {
   path: string;
   resourceKind?: "file" | "directory";
@@ -106,3 +120,4 @@ export function formatWorkspaceFileRefDisplay(ref: ParsedWorkspaceFileRef): stri
       : ref.path;
   return ref.projectName ? `${ref.projectName} / ${path}` : path;
 }
+// [END: module]

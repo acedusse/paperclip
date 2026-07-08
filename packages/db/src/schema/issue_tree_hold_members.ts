@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_tree_hold_members.ts
+ * ABOUT: issue_tree_hold_members.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_tree_hold_members.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_tree_hold_members.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_tree_hold_members.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, pgTable, text, timestamp, uniqueIndex, uuid, boolean, integer } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companies } from "./companies.js";
@@ -31,3 +45,4 @@ export const issueTreeHoldMembers = pgTable(
     holdDepthIdx: index("issue_tree_hold_members_hold_depth_idx").on(table.holdId, table.depth),
   }),
 );
+// [END: module]

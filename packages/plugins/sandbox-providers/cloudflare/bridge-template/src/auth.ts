@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/auth.ts
+ * ABOUT: auth.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export function readBearerToken(request: Request): string | null {
   const header = request.headers.get("Authorization");
   if (!header) return null;
@@ -38,3 +52,4 @@ export async function isAuthorizedRequest(
   if (!presented) return false;
   return timingSafeStringEqual(presented, expectedToken);
 }
+// [END: module]

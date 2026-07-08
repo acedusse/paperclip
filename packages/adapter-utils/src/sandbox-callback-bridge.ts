@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/sandbox-callback-bridge.ts
+ * ABOUT: sandbox-callback-bridge.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-callback-bridge.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-callback-bridge.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/sandbox-callback-bridge.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import os from "node:os";
@@ -1181,3 +1195,4 @@ server.listen(port, host, async () => {
   await fs.rename(tempReadyFile, readyFile);
 });`;
 }
+// [END: module]

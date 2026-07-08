@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/bundlers.ts
+ * ABOUT: bundlers.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bundlers.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bundlers.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/bundlers.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Bundling presets for Paperclip plugins.
  *
  * These helpers return plain config objects so plugin authors can use them
@@ -159,3 +173,4 @@ export function createPluginBundlerPresets(input: PluginBundlerPresetInput = {})
     },
   };
 }
+// [END: module]

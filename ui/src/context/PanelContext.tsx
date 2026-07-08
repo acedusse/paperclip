@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/PanelContext.tsx
+ * ABOUT: PanelContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PanelContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PanelContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/PanelContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 
 const STORAGE_KEY = "paperclip:panel-visible";
@@ -71,3 +85,4 @@ export function usePanel() {
   }
   return ctx;
 }
+// [END: module]

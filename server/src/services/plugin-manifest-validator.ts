@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-manifest-validator.ts
+ * ABOUT: plugin-manifest-validator.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-manifest-validator.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-manifest-validator.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-manifest-validator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginManifestValidator — schema validation for plugin manifest files.
  *
  * Uses the shared Zod schema (`pluginManifestV1Schema`) to validate
@@ -161,3 +175,4 @@ export function pluginManifestValidator(): PluginManifestValidator {
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-registry.ts
+ * ABOUT: plugin-registry.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-registry.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-registry.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { asc, eq, isNull, ne, sql, and } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -782,3 +796,4 @@ export function pluginRegistryService(db: Db) {
     },
   };
 }
+// [END: module]

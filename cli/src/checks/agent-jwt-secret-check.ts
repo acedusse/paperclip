@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/agent-jwt-secret-check.ts
+ * ABOUT: agent-jwt-secret-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-jwt-secret-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-jwt-secret-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/agent-jwt-secret-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   ensureAgentJwtSecret,
   readAgentJwtSecretFromEnv,
@@ -38,3 +52,4 @@ export function agentJwtSecretCheck(configPath?: string): CheckResult {
     repairHint: `Run with --repair to create ${envPath} containing PAPERCLIP_AGENT_JWT_SECRET`,
   };
 }
+// [END: module]

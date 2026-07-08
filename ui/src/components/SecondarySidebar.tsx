@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SecondarySidebar.tsx
+ * ABOUT: SecondarySidebar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SecondarySidebar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SecondarySidebar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SecondarySidebar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarNavExpandedProvider } from "./SidebarNavItem";
@@ -37,3 +51,4 @@ export function SecondarySidebar({
     </div>
   );
 }
+// [END: module]

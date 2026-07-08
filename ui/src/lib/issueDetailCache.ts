@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issueDetailCache.ts
+ * ABOUT: issueDetailCache.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueDetailCache.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueDetailCache.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issueDetailCache.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { QueryClient } from "@tanstack/react-query";
 import type { Issue } from "@paperclipai/shared";
 import { issuesApi } from "@/api/issues";
@@ -115,3 +129,4 @@ export function prefetchIssueDetail(
     staleTime: ISSUE_DETAIL_STALE_TIME_MS,
   });
 }
+// [END: module]

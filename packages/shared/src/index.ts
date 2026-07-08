@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export { agentAdapterTypeSchema, optionalAgentAdapterTypeSchema } from "./adapter-type.js";
 export {
   getAgentOrgChainHealth,
@@ -1449,3 +1463,4 @@ export {
   adapterRegistrySchema,
   type AdapterRegistryEntryParsed,
 } from "./validators/adapter-registry.js";
+// [END: module]

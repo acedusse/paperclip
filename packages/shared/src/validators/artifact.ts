@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/artifact.ts
+ * ABOUT: artifact.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - artifact.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: artifact.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/artifact.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 
 export const COMPANY_ARTIFACTS_DEFAULT_LIMIT = 30;
@@ -77,3 +91,4 @@ export const companyArtifactsResponseSchema = z.object({
 });
 
 export type CompanyArtifactsQuery = z.infer<typeof companyArtifactsQuerySchema>;
+// [END: module]

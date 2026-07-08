@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-portability-sidebar.test.ts
+ * ABOUT: company-portability-sidebar.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-portability-sidebar.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-portability-sidebar.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-portability-sidebar.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Agent, Project } from "@paperclipai/shared";
 import {
@@ -101,3 +115,4 @@ describe("company portability sidebar order", () => {
     });
   });
 });
+// [END: module]

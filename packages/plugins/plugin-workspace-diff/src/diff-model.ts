@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/src/diff-model.ts
+ * ABOUT: diff-model.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - diff-model.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: diff-model.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/src/diff-model.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   WorkspaceDiffFile,
   WorkspaceDiffFilePatch,
@@ -141,3 +155,4 @@ export function nextExpandedFileSet(
 export function initialExpandedFileSet(files: readonly DiffFileViewModel[]): Set<string> {
   return new Set(files.filter((file) => !file.longDiff).map((file) => file.path));
 }
+// [END: module]

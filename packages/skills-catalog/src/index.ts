@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/skills-catalog/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/skills-catalog/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import catalogManifestJson from "../generated/catalog.json" with { type: "json" };
 import type { CatalogManifest, CatalogSkill } from "./types.js";
 
@@ -37,3 +51,4 @@ export function resolveCatalogSkillRef(ref: string): CatalogSkill | null {
 
   return null;
 }
+// [END: module]

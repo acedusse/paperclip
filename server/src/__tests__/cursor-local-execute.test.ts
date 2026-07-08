@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/cursor-local-execute.test.ts
+ * ABOUT: cursor-local-execute.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cursor-local-execute.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cursor-local-execute.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/cursor-local-execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -444,3 +458,4 @@ describe("cursor execute", () => {
     }
   });
 });
+// [END: module]

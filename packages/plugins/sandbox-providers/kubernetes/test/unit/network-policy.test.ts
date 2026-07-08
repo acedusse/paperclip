@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/network-policy.test.ts
+ * ABOUT: network-policy.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - network-policy.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: network-policy.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/network-policy.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { buildNetworkPolicyManifests } from "../../src/network-policy.js";
 
@@ -93,3 +107,4 @@ describe("buildNetworkPolicyManifests", () => {
     expect(fallback).toBeUndefined();
   });
 });
+// [END: module]

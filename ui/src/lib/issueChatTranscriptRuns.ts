@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issueChatTranscriptRuns.ts
+ * ABOUT: issueChatTranscriptRuns.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueChatTranscriptRuns.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueChatTranscriptRuns.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issueChatTranscriptRuns.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ActiveRunForIssue, LiveRunForIssue } from "../api/heartbeats";
 import type { RunTranscriptSource } from "../components/transcript/useLiveRunTranscripts";
 import type { IssueChatLinkedRun } from "./issue-chat-messages";
@@ -45,3 +59,4 @@ export function resolveIssueChatTranscriptRuns(args: {
 
   return [...combined.values()];
 }
+// [END: module]

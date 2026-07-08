@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-log-retention.ts
+ * ABOUT: plugin-log-retention.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-log-retention.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-log-retention.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-log-retention.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { lt, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { pluginLogs } from "@paperclipai/db";
@@ -84,3 +98,4 @@ export function startPluginLogRetention(
 
   return () => clearInterval(timer);
 }
+// [END: module]

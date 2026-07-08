@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/TeamCatalog.tsx
+ * ABOUT: TeamCatalog.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - TeamCatalog.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: TeamCatalog.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/TeamCatalog.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -2534,3 +2548,4 @@ export function TeamCatalog() {
     </div>
   );
 }
+// [END: module]

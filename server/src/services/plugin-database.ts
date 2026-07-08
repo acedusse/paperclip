@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-database.ts
+ * ABOUT: plugin-database.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-database.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-database.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-database.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
@@ -570,3 +584,4 @@ export function pluginDatabaseService(db: PluginDatabaseRootClient) {
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/board-chat.ts
+ * ABOUT: board-chat.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-chat.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-chat.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/board-chat.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
@@ -400,3 +414,4 @@ export function boardChatRoutes(
 
   return router;
 }
+// [END: module]

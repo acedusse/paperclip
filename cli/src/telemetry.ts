@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/telemetry.ts
+ * ABOUT: telemetry.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - telemetry.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: telemetry.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/telemetry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import {
   TelemetryClient,
@@ -47,3 +61,4 @@ export {
   trackInstallCompleted,
   trackCompanyImported,
 };
+// [END: module]

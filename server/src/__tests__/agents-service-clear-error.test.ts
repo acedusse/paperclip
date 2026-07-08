@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agents-service-clear-error.test.ts
+ * ABOUT: agents-service-clear-error.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agents-service-clear-error.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agents-service-clear-error.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agents-service-clear-error.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { eq } from "drizzle-orm";
@@ -236,3 +250,4 @@ describeEmbeddedPostgres("agent service clearError", () => {
     });
   });
 });
+// [END: module]

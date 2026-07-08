@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/assignees.test.ts
+ * ABOUT: assignees.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - assignees.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: assignees.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/assignees.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   assigneeValueFromSelection,
@@ -90,3 +104,4 @@ describe("assignee selection helpers", () => {
     ).toBe("agent:agent-123");
   });
 });
+// [END: module]

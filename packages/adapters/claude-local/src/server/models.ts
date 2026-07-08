@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/models.ts
+ * ABOUT: models.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - models.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: models.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/models.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import type { AdapterModel } from "@paperclipai/adapter-utils";
 import { models as DIRECT_MODELS } from "../index.js";
@@ -162,3 +176,4 @@ export function resetClaudeModelsCacheForTests() {
 export function isBedrockModelId(model: string): boolean {
   return /^\w+\.anthropic\./.test(model) || model.startsWith("arn:aws:bedrock:");
 }
+// [END: module]

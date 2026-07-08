@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/parse.ts
+ * ABOUT: parse.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/parse.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   asString,
   asNumber,
@@ -259,3 +273,4 @@ export function isCodexTransientUpstreamError(input: {
   // becomes safe again.
   return CODEX_REMOTE_COMPACTION_RE.test(haystack) || /high\s+demand|temporary\s+errors/i.test(haystack);
 }
+// [END: module]

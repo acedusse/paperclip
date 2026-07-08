@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/button.tsx
+ * ABOUT: button.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - button.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: button.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/button.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
@@ -69,3 +83,4 @@ const Button = React.forwardRef<
 Button.displayName = "Button"
 
 export { Button, buttonVariants }
+// [END: module]

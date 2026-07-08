@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/issue-graph-liveness.ts
+ * ABOUT: issue-graph-liveness.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-graph-liveness.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-graph-liveness.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/issue-graph-liveness.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { getAgentWorkEligibility, isAgentInvokable } from "@paperclipai/shared";
 import { buildIssueGraphLivenessIncidentKey } from "./origins.js";
 
@@ -604,3 +618,4 @@ export function classifyIssueGraphLiveness(input: IssueGraphLivenessInput): Issu
 
   return findings;
 }
+// [END: module]

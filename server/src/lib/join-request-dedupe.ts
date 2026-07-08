@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/lib/join-request-dedupe.ts
+ * ABOUT: join-request-dedupe.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - join-request-dedupe.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: join-request-dedupe.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/lib/join-request-dedupe.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { joinRequests } from "@paperclipai/db";
 
 type JoinRequestLike = Pick<
@@ -86,3 +100,4 @@ export function collapseDuplicatePendingHumanJoinRequests<
     return true;
   });
 }
+// [END: module]

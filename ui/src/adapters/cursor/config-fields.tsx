@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/cursor/config-fields.tsx
+ * ABOUT: config-fields.tsx (cursor module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config-fields.tsx (cursor module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config-fields.tsx (cursor module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/cursor/config-fields.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterConfigFieldsProps } from "../types";
 import {
   Field,
@@ -47,3 +61,4 @@ export function CursorLocalConfigFields({
     </Field>
   );
 }
+// [END: module]

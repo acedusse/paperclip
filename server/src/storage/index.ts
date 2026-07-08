@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/storage/index.ts
+ * ABOUT: index.ts (storage module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (storage module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (storage module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/storage/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { loadConfig, type Config } from "../config.js";
 import { createStorageProviderFromConfig } from "./provider-registry.js";
 import { createStorageService } from "./service.js";
@@ -33,3 +47,4 @@ export function getStorageService(): StorageService {
 }
 
 export type { StorageService, PutFileResult } from "./types.js";
+// [END: module]

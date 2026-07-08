@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/api/plugins.ts
+ * ABOUT: plugins.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugins.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugins.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/plugins.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Frontend API client for the Paperclip plugin system.
  *
  * All functions in `pluginsApi` map 1:1 to REST endpoints on
@@ -514,3 +528,4 @@ export const pluginsApi = {
       renderEnvironment: renderEnvironment ?? undefined,
     }),
 };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/JsonSchemaForm.test.tsx
+ * ABOUT: JsonSchemaForm.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - JsonSchemaForm.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: JsonSchemaForm.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/JsonSchemaForm.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -601,3 +615,4 @@ describe("JsonSchemaForm enum rendering", () => {
     });
   });
 });
+// [END: module]

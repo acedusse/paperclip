@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssuesQuicklook.tsx
+ * ABOUT: IssuesQuicklook.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssuesQuicklook.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssuesQuicklook.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssuesQuicklook.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Issue } from "@paperclipai/shared";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -38,3 +52,4 @@ export function IssuesQuicklook({ issue, children }: IssuesQuicklookProps) {
     </Popover>
   );
 }
+// [END: module]

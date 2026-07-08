@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/budgets.ts
+ * ABOUT: budgets.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budgets.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budgets.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/budgets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   BudgetIncident,
   BudgetIncidentResolutionInput,
@@ -18,3 +32,4 @@ export const budgetsApi = {
       data,
     ),
 };
+// [END: module]

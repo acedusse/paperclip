@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueColumns.test.tsx
+ * ABOUT: IssueColumns.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueColumns.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueColumns.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueColumns.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createRoot } from "react-dom/client";
@@ -79,3 +93,4 @@ describe("InboxIssueMetaLeading live state", () => {
     expect(text).not.toContain("live below");
   });
 });
+// [END: module]

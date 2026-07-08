@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-chat-scroll.test.ts
+ * ABOUT: issue-chat-scroll.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-chat-scroll.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-chat-scroll.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-chat-scroll.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { describe, expect, it, vi } from "vitest";
@@ -129,3 +143,4 @@ describe("issue-chat-scroll", () => {
     composer.remove();
   });
 });
+// [END: module]

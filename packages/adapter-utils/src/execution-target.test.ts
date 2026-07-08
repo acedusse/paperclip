@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/execution-target.test.ts
+ * ABOUT: execution-target.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-target.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-target.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/execution-target.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as ssh from "./ssh.js";
 import * as serverUtils from "./server-utils.js";
@@ -401,3 +415,4 @@ describe("resolveAdapterExecutionTargetCwd", () => {
     );
   });
 });
+// [END: module]

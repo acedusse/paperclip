@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-dev-watcher.test.ts
+ * ABOUT: plugin-dev-watcher.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-dev-watcher.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-dev-watcher.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-dev-watcher.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { EventEmitter } from "node:events";
 import os from "node:os";
@@ -146,3 +160,4 @@ describe("createPluginDevWatcher", () => {
     devWatcher.close();
   });
 });
+// [END: module]

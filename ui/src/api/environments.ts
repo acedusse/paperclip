@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/environments.ts
+ * ABOUT: environments.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environments.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environments.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/environments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Environment, EnvironmentCapabilities, EnvironmentLease, EnvironmentProbeResult } from "@paperclipai/shared";
 import { api } from "./client";
 
@@ -30,3 +44,4 @@ export const environmentsApi = {
     metadata?: Record<string, unknown> | null;
   }) => api.post<EnvironmentProbeResult>(`/companies/${companyId}/environments/probe-config`, body),
 };
+// [END: module]

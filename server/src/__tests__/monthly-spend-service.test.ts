@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/monthly-spend-service.test.ts
+ * ABOUT: monthly-spend-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - monthly-spend-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: monthly-spend-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/monthly-spend-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { companyService } from "../services/companies.ts";
 import { agentService } from "../services/agents.ts";
@@ -109,3 +123,4 @@ describe("monthly spend hydration", () => {
     expect(agent?.spentMonthlyCents).toBe(175);
   });
 });
+// [END: module]

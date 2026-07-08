@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useRetryNowMutation.ts
+ * ABOUT: useRetryNowMutation.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useRetryNowMutation.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useRetryNowMutation.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useRetryNowMutation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback } from "react";
 import { useMutation, useQueryClient, type UseMutationResult } from "@tanstack/react-query";
 import type { IssueRetryNowOutcome, IssueRetryNowResponse } from "@paperclipai/shared";
@@ -102,3 +116,4 @@ export function useRetryNowMutation(
     lastError: RetryNowError | null;
   };
 }
+// [END: module]

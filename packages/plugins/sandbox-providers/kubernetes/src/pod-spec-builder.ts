@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/pod-spec-builder.ts
+ * ABOUT: pod-spec-builder.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - pod-spec-builder.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: pod-spec-builder.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/pod-spec-builder.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface BuildJobManifestInput {
   namespace: string;
   jobName: string;
@@ -97,3 +111,4 @@ export function buildJobManifest(input: BuildJobManifestInput): Record<string, u
     },
   };
 }
+// [END: module]

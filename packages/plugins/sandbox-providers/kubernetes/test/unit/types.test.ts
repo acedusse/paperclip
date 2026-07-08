@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/types.test.ts
+ * ABOUT: types.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/types.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { kubernetesProviderConfigSchema, parseKubernetesProviderConfig } from "../../src/types.js";
 
@@ -37,3 +51,4 @@ describe("kubernetesProviderConfigSchema", () => {
     ).toThrow(/CIDR/i);
   });
 });
+// [END: module]

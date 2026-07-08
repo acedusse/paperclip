@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/release-smoke/playwright.config.ts
+ * ABOUT: playwright.config.ts (release-smoke module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - playwright.config.ts (release-smoke module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: playwright.config.ts (release-smoke module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/release-smoke/playwright.config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { defineConfig } from "@playwright/test";
 
 const BASE_URL =
@@ -30,3 +44,4 @@ export default defineConfig({
   outputDir: "./test-results",
   reporter: [["list"], ["html", { open: "never", outputFolder: "./playwright-report" }]],
 });
+// [END: module]

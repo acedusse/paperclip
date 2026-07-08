@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/OrgChart.test.tsx
+ * ABOUT: OrgChart.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OrgChart.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OrgChart.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/OrgChart.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -263,3 +277,4 @@ describe("OrgChart mobile gestures", () => {
     expect(layer.style.transform).toBe("translate(-45px, 40px) scale(1.5)");
   });
 });
+// [END: module]

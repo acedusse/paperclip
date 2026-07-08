@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/test-embedded-postgres.ts
+ * ABOUT: test-embedded-postgres.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test-embedded-postgres.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test-embedded-postgres.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/test-embedded-postgres.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import net from "node:net";
 import os from "node:os";
@@ -177,3 +191,4 @@ export async function startEmbeddedPostgresTestDatabase(
     );
   }
 }
+// [END: module]

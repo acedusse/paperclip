@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ScrollToBottom.tsx
+ * ABOUT: ScrollToBottom.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ScrollToBottom.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ScrollToBottom.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ScrollToBottom.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useState } from "react";
 import { ArrowDown } from "lucide-react";
 import { usePanel } from "../context/PanelContext";
@@ -83,3 +97,4 @@ export function ScrollToBottom() {
     </button>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/routine-run-display.ts
+ * ABOUT: routine-run-display.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-run-display.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-run-display.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/routine-run-display.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { RoutineRunSummary, RoutineVariable } from "@paperclipai/shared";
 
 /**
@@ -52,3 +66,4 @@ export function runRowSubtitle(
   }
   return parts.join(", ");
 }
+// [END: module]

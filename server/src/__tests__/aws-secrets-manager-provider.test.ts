@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/aws-secrets-manager-provider.test.ts
+ * ABOUT: aws-secrets-manager-provider.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - aws-secrets-manager-provider.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: aws-secrets-manager-provider.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/aws-secrets-manager-provider.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createAwsSecretsManagerProvider } from "../secrets/aws-secrets-manager-provider.js";
 import { SecretProviderClientError } from "../secrets/types.js";
@@ -915,3 +929,4 @@ describe("awsSecretsManagerProvider", () => {
     ]);
   });
 });
+// [END: module]

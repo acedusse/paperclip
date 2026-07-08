@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/recovery-display.ts
+ * ABOUT: recovery-display.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recovery-display.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recovery-display.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/recovery-display.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssueRecoveryAction, IssueRecoveryActionKind } from "@paperclipai/shared";
 import { Eye, OctagonAlert, RefreshCw, TriangleAlert } from "lucide-react";
 
@@ -65,3 +79,4 @@ export function recoveryChipLabel(
   }
   return RECOVERY_CHIP_DEFAULT_TONE[state].label;
 }
+// [END: module]

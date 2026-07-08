@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/PluginSettings.tsx
+ * ABOUT: PluginSettings.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PluginSettings.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PluginSettings.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/PluginSettings.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Puzzle, ArrowLeft, ShieldAlert, ActivitySquare, CheckCircle, XCircle, Loader2, Clock, Cpu, Webhook, CalendarClock, AlertTriangle, FolderOpen, Save } from "lucide-react";
@@ -1208,3 +1222,4 @@ function DeliveryStatusDot({ status }: { status: string }) {
     />
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/mention-chips.ts
+ * ABOUT: mention-chips.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - mention-chips.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: mention-chips.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/mention-chips.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CSSProperties } from "react";
 import {
   parseAgentMentionHref,
@@ -230,3 +244,4 @@ function escapeAttribute(value: string): string {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
+// [END: module]

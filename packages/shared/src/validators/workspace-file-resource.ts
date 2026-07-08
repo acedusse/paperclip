@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/workspace-file-resource.ts
+ * ABOUT: workspace-file-resource.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-file-resource.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-file-resource.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/workspace-file-resource.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 
 const workspaceFileListSearchMaxBytes = 128;
@@ -105,3 +119,4 @@ export const workspaceFileContentSchema = z.object({
 
 export type WorkspaceFileResourceQuery = z.infer<typeof workspaceFileResourceQuerySchema>;
 export type WorkspaceFileListQuery = z.infer<typeof workspaceFileListQuerySchema>;
+// [END: module]

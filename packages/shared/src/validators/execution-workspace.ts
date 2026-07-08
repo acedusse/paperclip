@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/execution-workspace.ts
+ * ABOUT: execution-workspace.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspace.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspace.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/execution-workspace.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 
 export const executionWorkspaceStatusSchema = z.enum([
@@ -129,3 +143,4 @@ export const updateExecutionWorkspaceSchema = z.object({
 }).strict();
 
 export type UpdateExecutionWorkspace = z.infer<typeof updateExecutionWorkspaceSchema>;
+// [END: module]

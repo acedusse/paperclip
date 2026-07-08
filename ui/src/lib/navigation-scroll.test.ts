@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/navigation-scroll.test.ts
+ * ABOUT: navigation-scroll.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - navigation-scroll.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: navigation-scroll.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/navigation-scroll.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { describe, expect, it, vi } from "vitest";
@@ -124,3 +138,4 @@ describe("navigation-scroll", () => {
     expect(windowScrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: "auto" });
   });
 });
+// [END: module]

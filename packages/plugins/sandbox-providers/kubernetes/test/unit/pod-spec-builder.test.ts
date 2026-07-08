@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/pod-spec-builder.test.ts
+ * ABOUT: pod-spec-builder.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - pod-spec-builder.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: pod-spec-builder.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/pod-spec-builder.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { buildJobManifest } from "../../src/pod-spec-builder.js";
 
@@ -93,3 +107,4 @@ describe("buildJobManifest", () => {
     expect(job.spec.template.metadata.labels["paperclip.io/role"]).toBe("agent");
   });
 });
+// [END: module]

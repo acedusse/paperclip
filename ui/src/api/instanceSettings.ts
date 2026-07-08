@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/instanceSettings.ts
+ * ABOUT: instanceSettings.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instanceSettings.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instanceSettings.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/instanceSettings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   InstanceExperimentalSettings,
   InstanceGeneralSettings,
@@ -53,3 +67,4 @@ export const instanceSettingsApi = {
       input,
     ),
 };
+// [END: module]

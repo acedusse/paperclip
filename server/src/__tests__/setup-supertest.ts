@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/setup-supertest.ts
+ * ABOUT: setup-supertest.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - setup-supertest.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: setup-supertest.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/setup-supertest.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createRequire } from "node:module";
 import type { AddressInfo, Server as NetServer } from "node:net";
 import { Server as TlsServer } from "node:tls";
@@ -45,3 +59,4 @@ if (!SupertestTest.prototype.__paperclipLoopbackPatched) {
 
   SupertestTest.prototype.__paperclipLoopbackPatched = true;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/routines-service.test.ts
+ * ABOUT: routines-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/routines-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHmac, randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -1692,3 +1706,4 @@ describeEmbeddedPostgres("routine service live-execution coalescing", () => {
     expect(runsAfterResume.some((run) => run.status === "issue_created")).toBe(true);
   });
 });
+// [END: module]

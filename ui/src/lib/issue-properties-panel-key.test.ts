@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-properties-panel-key.test.ts
+ * ABOUT: issue-properties-panel-key.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-properties-panel-key.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-properties-panel-key.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-properties-panel-key.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Issue } from "@paperclipai/shared";
 import { buildIssuePropertiesPanelKey } from "./issue-properties-panel-key";
@@ -92,3 +106,4 @@ describe("buildIssuePropertiesPanelKey", () => {
     expect(second).not.toBe(first);
   });
 });
+// [END: module]

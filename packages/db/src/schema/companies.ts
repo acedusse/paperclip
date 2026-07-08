@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/companies.ts
+ * ABOUT: companies.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - companies.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: companies.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/companies.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, integer, timestamp, boolean, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const companies = pgTable(
@@ -34,3 +48,4 @@ export const companies = pgTable(
     issuePrefixUniqueIdx: uniqueIndex("companies_issue_prefix_idx").on(table.issuePrefix),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/check-migration-numbering.ts
+ * ABOUT: check-migration-numbering.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - check-migration-numbering.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: check-migration-numbering.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/check-migration-numbering.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
@@ -87,3 +101,4 @@ async function main() {
 }
 
 await main();
+// [END: module]

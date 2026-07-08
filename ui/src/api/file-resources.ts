@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/file-resources.ts
+ * ABOUT: file-resources.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - file-resources.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: file-resources.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/file-resources.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ResolvedWorkspaceResource,
   WorkspaceFileContent,
@@ -63,3 +77,4 @@ export const fileResourcesApi = {
     );
   },
 };
+// [END: module]

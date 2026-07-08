@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ConferenceRoomChatGate.tsx
+ * ABOUT: ConferenceRoomChatGate.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ConferenceRoomChatGate.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ConferenceRoomChatGate.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ConferenceRoomChatGate.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Navigate, Outlet } from "@/lib/router";
 import { useConferenceRoomChatEnabled } from "@/hooks/useConferenceRoomChatEnabled";
 
@@ -16,3 +30,4 @@ export function ConferenceRoomChatGate() {
   if (!enabled) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 }
+// [END: module]

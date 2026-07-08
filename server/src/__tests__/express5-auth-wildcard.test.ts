@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/express5-auth-wildcard.test.ts
+ * ABOUT: express5-auth-wildcard.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - express5-auth-wildcard.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: express5-auth-wildcard.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/express5-auth-wildcard.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
@@ -54,3 +68,4 @@ describe("Express 5 /api/auth wildcard route", () => {
     expect(getCallCount()).toBe(4);
   });
 });
+// [END: module]

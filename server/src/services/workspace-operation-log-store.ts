@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/workspace-operation-log-store.ts
+ * ABOUT: workspace-operation-log-store.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-operation-log-store.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-operation-log-store.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-operation-log-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -154,3 +168,4 @@ export function getWorkspaceOperationLogStore() {
   cachedStore = createLocalFileWorkspaceOperationLogStore(basePath);
   return cachedStore;
 }
+// [END: module]

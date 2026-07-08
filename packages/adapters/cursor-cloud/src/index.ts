@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-cloud/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-cloud/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const type = "cursor_cloud";
 export const label = "Cursor Cloud";
 
@@ -32,3 +46,4 @@ Notes:
 - Paperclip injects PAPERCLIP_* runtime env vars into the cloud agent shell through Cursor SDK cloud envVars.
 - Paperclip remains the source of truth for issue/task state; Cursor provides the remote execution surface.
 `;
+// [END: module]

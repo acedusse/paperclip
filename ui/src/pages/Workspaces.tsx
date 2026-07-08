@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Workspaces.tsx
+ * ABOUT: Workspaces.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Workspaces.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Workspaces.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Workspaces.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo } from "react";
 import { Link, Navigate } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -161,3 +175,4 @@ export function Workspaces() {
     </div>
   );
 }
+// [END: module]

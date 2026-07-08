@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/invite-join-grants.test.ts
+ * ABOUT: invite-join-grants.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-join-grants.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-join-grants.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/invite-join-grants.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   agentJoinGrantsFromDefaults,
@@ -130,3 +144,4 @@ describe("human invite roles", () => {
     ]);
   });
 });
+// [END: module]

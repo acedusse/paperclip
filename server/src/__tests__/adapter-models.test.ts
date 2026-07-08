@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/adapter-models.test.ts
+ * ABOUT: adapter-models.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-models.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-models.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/adapter-models.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { models as claudeFallbackModels } from "@paperclipai/adapter-claude-local";
 import { resetClaudeModelsCacheForTests } from "@paperclipai/adapter-claude-local/server";
@@ -281,3 +295,4 @@ describe("adapter model listing", () => {
     });
   });
 });
+// [END: module]

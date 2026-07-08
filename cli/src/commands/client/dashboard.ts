@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/dashboard.ts
+ * ABOUT: dashboard.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dashboard.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dashboard.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/dashboard.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type { DashboardSummary } from "@paperclipai/shared";
 import {
@@ -33,3 +47,4 @@ export function registerDashboardCommands(program: Command): void {
     { includeCompany: false },
   );
 }
+// [END: module]

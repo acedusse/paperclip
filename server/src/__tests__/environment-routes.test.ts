@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-routes.test.ts
+ * ABOUT: environment-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Server } from "node:http";
 import express from "express";
 import request from "supertest";
@@ -1601,3 +1615,4 @@ describe("environment routes", () => {
     expect(mockProbeEnvironment).not.toHaveBeenCalled();
   });
 });
+// [END: module]

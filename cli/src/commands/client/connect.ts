@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/connect.ts
+ * ABOUT: connect.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - connect.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: connect.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/connect.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
@@ -263,3 +277,4 @@ function assertNotCancelled<T>(value: T | symbol): asserts value is T {
     process.exit(0);
   }
 }
+// [END: module]

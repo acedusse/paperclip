@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/workspace-runtime-service-authz.ts
+ * ABOUT: workspace-runtime-service-authz.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-runtime-service-authz.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-runtime-service-authz.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/workspace-runtime-service-authz.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, heartbeatRuns, issues, projects } from "@paperclipai/db";
@@ -323,3 +337,4 @@ export async function assertCanManageExecutionWorkspaceRuntimeServices(
   if (req.actor.type === "board") return;
   await assertAgentCanManageRuntimeServicesForWorkspace(db, req, input);
 }
+// [END: module]

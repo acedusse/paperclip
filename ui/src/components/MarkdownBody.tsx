@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MarkdownBody.tsx
+ * ABOUT: MarkdownBody.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MarkdownBody.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MarkdownBody.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MarkdownBody.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { isValidElement, useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Check, Copy, ExternalLink, Github, WrapText } from "lucide-react";
@@ -762,3 +776,4 @@ export function MarkdownBody({
     </div>
   );
 }
+// [END: module]

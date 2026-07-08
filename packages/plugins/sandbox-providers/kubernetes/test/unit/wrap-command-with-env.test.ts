@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/wrap-command-with-env.test.ts
+ * ABOUT: wrap-command-with-env.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - wrap-command-with-env.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: wrap-command-with-env.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/wrap-command-with-env.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { wrapCommandWithEnv } from "../../src/pod-exec.js";
 
@@ -42,3 +56,4 @@ describe("wrapCommandWithEnv", () => {
     expect(out[2]).toContain("export V='a'\\''b';");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/openclaw-gateway/src/server/execute.test.ts
+ * ABOUT: execute.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/openclaw-gateway/src/server/execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { resolveSessionKey } from "./execute.js";
 
@@ -50,3 +64,4 @@ describe("resolveSessionKey", () => {
     ).toBe("agent:meridian:paperclip");
   });
 });
+// [END: module]

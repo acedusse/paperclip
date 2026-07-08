@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/secrets.ts
+ * ABOUT: secrets.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import {
@@ -512,3 +526,4 @@ export function secretRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/src/ui/runtime.ts
+ * ABOUT: runtime.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/ui/runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type PluginBridgeRegistry = {
   react?: {
     createElement?: (type: unknown, props?: Record<string, unknown> | null) => unknown;
@@ -49,3 +63,4 @@ export function renderSdkUiComponent<TProps>(
 
   throw new Error(`Paperclip plugin UI component "${name}" is not callable`);
 }
+// [END: module]

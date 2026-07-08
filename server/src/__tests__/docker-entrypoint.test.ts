@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/docker-entrypoint.test.ts
+ * ABOUT: docker-entrypoint.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - docker-entrypoint.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: docker-entrypoint.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/docker-entrypoint.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { execFile } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync, existsSync } from "node:fs";
@@ -120,3 +134,4 @@ describe("docker-entrypoint.sh", () => {
     expect(calls).toBe("");
   });
 });
+// [END: module]

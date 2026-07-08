@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/BlockedReasonChip.tsx
+ * ABOUT: BlockedReasonChip.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BlockedReasonChip.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BlockedReasonChip.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/BlockedReasonChip.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { AlertTriangle, Clock, Pause, User, Wrench } from "lucide-react";
 import type { ComponentType } from "react";
 import type { IssueBlockedInboxSeverity } from "@paperclipai/shared";
@@ -80,3 +94,4 @@ export function BlockedReasonChip({
     </span>
   );
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/lease-lifecycle.ts
+ * ABOUT: lease-lifecycle.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - lease-lifecycle.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: lease-lifecycle.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/lease-lifecycle.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Resume + destroy lifecycle helpers for Kubernetes sandbox leases.
  *
  * Resume semantics: a lease is resumable only while its workload resource
@@ -191,3 +205,4 @@ export async function destroyLeaseResources(
     );
   }
 }
+// [END: module]

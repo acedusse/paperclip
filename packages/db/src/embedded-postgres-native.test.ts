@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/embedded-postgres-native.test.ts
+ * ABOUT: embedded-postgres-native.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - embedded-postgres-native.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: embedded-postgres-native.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/embedded-postgres-native.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -41,3 +55,4 @@ describe("embedded Postgres native runtime", () => {
     expect(fs.readlinkSync(path.join(tempDir, "libicuuc.so.60"))).toBe("libicuuc.so.60.2");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/billing.ts
+ * ABOUT: billing.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - billing.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: billing.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/billing.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 function readEnv(env: NodeJS.ProcessEnv, key: string): string | null {
   const value = env[key];
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
@@ -18,3 +32,4 @@ export function inferOpenAiCompatibleBiller(
 
   return fallback;
 }
+// [END: module]

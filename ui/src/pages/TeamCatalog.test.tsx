@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/TeamCatalog.test.tsx
+ * ABOUT: TeamCatalog.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - TeamCatalog.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: TeamCatalog.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/TeamCatalog.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -451,3 +465,4 @@ describe("TeamCatalog install preview path", () => {
     expect(findButton("Re-install latest")).toBeTruthy();
   });
 });
+// [END: module]

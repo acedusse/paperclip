@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueSiblingNavigation.tsx
+ * ABOUT: IssueSiblingNavigation.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueSiblingNavigation.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueSiblingNavigation.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueSiblingNavigation.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Issue } from "@paperclipai/shared";
 import type { IssueSiblingNavigation as IssueSiblingNavigationState } from "@/lib/issue-detail-subissues";
@@ -88,3 +102,4 @@ function SiblingLink({
     </Link>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/task-watchdog-scope.ts
+ * ABOUT: task-watchdog-scope.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - task-watchdog-scope.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: task-watchdog-scope.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/task-watchdog-scope.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { heartbeatRuns, issues, issueWatchdogs } from "@paperclipai/db";
@@ -172,3 +186,4 @@ export async function taskWatchdogScopeAllowsIssueMutation(
     detail: "Task-watchdog runs can only mutate the watched issue subtree.",
   };
 }
+// [END: module]

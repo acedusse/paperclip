@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/acpx-local/src/cli/format-event.test.ts
+ * ABOUT: format-event.test.ts (cli module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - format-event.test.ts (cli module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: format-event.test.ts (cli module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/acpx-local/src/cli/format-event.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { printAcpxStreamEvent } from "./format-event.js";
 
@@ -119,3 +133,4 @@ describe("printAcpxStreamEvent", () => {
     expect(strip(captured.log[0])).toBe("not json");
   });
 });
+// [END: module]

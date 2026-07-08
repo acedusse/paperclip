@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/access-parity.test.ts
+ * ABOUT: access-parity.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - access-parity.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: access-parity.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/access-parity.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerAccessCommands } from "../commands/client/access.js";
@@ -138,3 +152,4 @@ describe("access parity commands", () => {
 function jsonResponse(body: unknown = { ok: true }, init: ResponseInit = { status: 200 }): Response {
   return new Response(JSON.stringify(body), init);
 }
+// [END: module]

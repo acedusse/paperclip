@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/cloud-store.ts
+ * ABOUT: cloud-store.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-store.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-store.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/cloud-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { resolvePaperclipInstanceRoot } from "../../config/home.js";
@@ -175,3 +189,4 @@ function stringValue(value: unknown): string | null {
 function stringArray(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === "string") : [];
 }
+// [END: module]

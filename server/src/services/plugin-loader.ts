@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-loader.ts
+ * ABOUT: plugin-loader.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-loader.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-loader.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-loader.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginLoader — discovery, installation, and runtime activation of plugins.
  *
  * This service is the entry point for the plugin system's I/O boundary:
@@ -2399,3 +2413,4 @@ function isPathInsideDir(candidatePath: string, parentDir: string): boolean {
   const relative = path.relative(resolvedParent, resolvedCandidate);
   return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
 }
+// [END: module]

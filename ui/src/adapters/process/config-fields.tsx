@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/process/config-fields.tsx
+ * ABOUT: config-fields.tsx (process module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config-fields.tsx (process module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config-fields.tsx (process module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/process/config-fields.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterConfigFieldsProps } from "../types";
 import {
   Field,
@@ -75,3 +89,4 @@ export function ProcessConfigFields({
     </>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/mcp-server/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/mcp-server/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { PaperclipApiClient } from "./client.js";
@@ -28,3 +42,4 @@ export async function runServer(config: PaperclipMcpConfig = readConfigFromEnv()
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
+// [END: module]

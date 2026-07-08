@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-managed-routines.ts
+ * ABOUT: plugin-managed-routines.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-managed-routines.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-managed-routines.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-managed-routines.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -521,3 +535,4 @@ export function pluginManagedRoutineService(
     run,
   };
 }
+// [END: module]

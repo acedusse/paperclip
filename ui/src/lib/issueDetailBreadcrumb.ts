@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issueDetailBreadcrumb.ts
+ * ABOUT: issueDetailBreadcrumb.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueDetailBreadcrumb.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueDetailBreadcrumb.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issueDetailBreadcrumb.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue } from "@paperclipai/shared";
 
 type IssueDetailSource = "issues" | "inbox";
@@ -259,3 +273,4 @@ export function shouldArmIssueDetailInboxQuickArchive(state: unknown): boolean {
   if (typeof state !== "object" || state === null) return false;
   return (state as IssueDetailLocationState).issueDetailInboxQuickArchiveArmed === true;
 }
+// [END: module]

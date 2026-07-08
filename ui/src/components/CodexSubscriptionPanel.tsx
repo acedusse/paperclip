@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CodexSubscriptionPanel.tsx
+ * ABOUT: CodexSubscriptionPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CodexSubscriptionPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CodexSubscriptionPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CodexSubscriptionPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { QuotaWindow } from "@paperclipai/shared";
 import { cn, quotaSourceDisplayName } from "@/lib/utils";
 
@@ -155,3 +169,4 @@ function QuotaWindowRow({ window }: { window: QuotaWindow }) {
     </div>
   );
 }
+// [END: module]

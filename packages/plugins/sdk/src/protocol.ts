@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/protocol.ts
+ * ABOUT: protocol.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - protocol.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: protocol.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/protocol.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * JSON-RPC 2.0 message types and protocol helpers for the host ↔ worker IPC
  * channel.
  *
@@ -1702,3 +1716,4 @@ export class JsonRpcCallError extends Error {
 export function _resetIdCounter(): void {
   _nextId = 1;
 }
+// [END: module]

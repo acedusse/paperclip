@@ -1,4 +1,18 @@
 "use client"
+/**
+ * FILE: ui/src/components/ui/tooltip.tsx
+ * ABOUT: tooltip.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - tooltip.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: tooltip.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/tooltip.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 
 import * as React from "react"
 import { Tooltip as TooltipPrimitive } from "radix-ui"
@@ -55,3 +69,4 @@ function TooltipContent({
 }
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+// [END: module]

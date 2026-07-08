@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/StatusBadge.test.tsx
+ * ABOUT: StatusBadge.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - StatusBadge.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: StatusBadge.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/StatusBadge.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { renderToStaticMarkup } from "react-dom/server";
@@ -129,3 +143,4 @@ describe("IssueStatusGlyph", () => {
     expect(html).toContain('d="M3 9 9 3"');
   });
 });
+// [END: module]

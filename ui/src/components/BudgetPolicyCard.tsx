@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/BudgetPolicyCard.tsx
+ * ABOUT: BudgetPolicyCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BudgetPolicyCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BudgetPolicyCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/BudgetPolicyCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import type { BudgetPolicySummary } from "@paperclipai/shared";
 import { AlertTriangle, PauseCircle, ShieldAlert, Wallet } from "lucide-react";
@@ -217,3 +231,4 @@ export function BudgetPolicyCard({
     </Card>
   );
 }
+// [END: module]

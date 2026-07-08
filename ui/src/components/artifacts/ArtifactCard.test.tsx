@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/artifacts/ArtifactCard.test.tsx
+ * ABOUT: ArtifactCard.test.tsx (artifacts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ArtifactCard.test.tsx (artifacts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ArtifactCard.test.tsx (artifacts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/artifacts/ArtifactCard.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -243,3 +257,4 @@ describe("ArtifactCard", () => {
     expect(markup).not.toContain('aria-label="Open file in new tab"');
   });
 });
+// [END: module]

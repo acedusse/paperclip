@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/mention-aware-link-node.test.ts
+ * ABOUT: mention-aware-link-node.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - mention-aware-link-node.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: mention-aware-link-node.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/mention-aware-link-node.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { $createLinkNode } from "@lexical/link";
 import { createEditor } from "lexical";
@@ -48,3 +62,4 @@ describe("getMentionAwareLinkNodeInit", () => {
     expect(created).toBeInstanceOf(MentionAwareLinkNode);
   });
 });
+// [END: module]

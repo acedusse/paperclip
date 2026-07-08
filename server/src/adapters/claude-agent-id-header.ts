@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/claude-agent-id-header.ts
+ * ABOUT: claude-agent-id-header.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - claude-agent-id-header.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: claude-agent-id-header.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/claude-agent-id-header.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ServerAdapterModule } from "./types.js";
 
 type ClaudeExecute = ServerAdapterModule["execute"];
@@ -37,3 +51,4 @@ export function stampClaudeAgentIdHeader(inner: ClaudeExecute): ClaudeExecute {
     return inner({ ...ctx, config: { ...config, env } } as Parameters<ClaudeExecute>[0]);
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/EmptyState.tsx
+ * ABOUT: EmptyState.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - EmptyState.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: EmptyState.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/EmptyState.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Plus } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,3 +39,4 @@ export function EmptyState({ icon: Icon, message, action, onAction }: EmptyState
     </div>
   );
 }
+// [END: module]

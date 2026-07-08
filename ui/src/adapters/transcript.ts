@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/transcript.ts
+ * ABOUT: transcript.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - transcript.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: transcript.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/transcript.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { redactHomePathUserSegments, redactTranscriptEntryPaths } from "@paperclipai/adapter-utils";
 import type { TranscriptEntry, StdoutLineParser, TranscriptParserSource } from "./types";
 
@@ -148,3 +162,4 @@ export function buildTranscript(
 
   return entries;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/e2b/src/e2b.d.ts
+ * ABOUT: e2b.d.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - e2b.d.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: e2b.d.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/e2b/src/e2b.d.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 declare module "e2b" {
   export class CommandExitError extends Error {
     exitCode: number;
@@ -55,3 +69,4 @@ declare module "e2b" {
     };
   }
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/pages/PluginManager.tsx
+ * ABOUT: PluginManager.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PluginManager.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PluginManager.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/PluginManager.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Plugin Manager page — admin UI for discovering,
  * installing, enabling/disabling, and uninstalling plugins.
  *
@@ -564,3 +578,4 @@ export function PluginManager() {
     </div>
   );
 }
+// [END: module]

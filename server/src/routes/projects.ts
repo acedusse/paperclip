@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/projects.ts
+ * ABOUT: projects.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - projects.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: projects.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/projects.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request, type Response } from "express";
 import type { Db } from "@paperclipai/db";
 import {
@@ -704,3 +718,4 @@ export function projectRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/doctor.test.ts
+ * ABOUT: doctor.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - doctor.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: doctor.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/doctor.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -100,3 +114,4 @@ describe("doctor", () => {
     expect(process.env.PAPERCLIP_AGENT_JWT_SECRET).toBeTruthy();
   });
 });
+// [END: module]

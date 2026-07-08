@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/plugin_webhooks.ts
+ * ABOUT: plugin_webhooks.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin_webhooks.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin_webhooks.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/plugin_webhooks.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   pgTable,
   uuid,
@@ -67,3 +81,4 @@ export const pluginWebhookDeliveries = pgTable(
     keyIdx: index("plugin_webhook_deliveries_key_idx").on(table.webhookKey),
   }),
 );
+// [END: module]

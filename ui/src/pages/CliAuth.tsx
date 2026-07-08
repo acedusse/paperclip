@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CliAuth.tsx
+ * ABOUT: CliAuth.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CliAuth.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CliAuth.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CliAuth.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "@/lib/router";
@@ -182,3 +196,4 @@ export function CliAuthPage() {
     </div>
   );
 }
+// [END: module]

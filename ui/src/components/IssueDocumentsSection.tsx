@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueDocumentsSection.tsx
+ * ABOUT: IssueDocumentsSection.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueDocumentsSection.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueDocumentsSection.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueDocumentsSection.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -1349,3 +1363,4 @@ export function IssueDocumentsSection({
     </div>
   );
 }
+// [END: module]

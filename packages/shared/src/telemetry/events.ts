@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/telemetry/events.ts
+ * ABOUT: events.ts (telemetry module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - events.ts (telemetry module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: events.ts (telemetry module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/telemetry/events.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { TelemetryClient } from "./client.js";
 
 export function trackInstallStarted(client: TelemetryClient): void {
@@ -96,3 +110,4 @@ export function trackErrorHandlerCrash(
 ): void {
   client.track("error.handler_crash", { error_code: dims.errorCode });
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/test.ts
+ * ABOUT: test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -439,3 +453,4 @@ export async function testEnvironment(
     testedAt: new Date().toISOString(),
   };
 }
+// [END: module]

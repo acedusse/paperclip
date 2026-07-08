@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/adapter-routes-authz.test.ts
+ * ABOUT: adapter-routes-authz.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-routes-authz.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-routes-authz.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/adapter-routes-authz.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -341,3 +355,4 @@ describe.sequential("adapter management route authorization", () => {
     },
   );
 });
+// [END: module]

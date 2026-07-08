@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issues-checkout-wakeup.test.ts
+ * ABOUT: issues-checkout-wakeup.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issues-checkout-wakeup.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issues-checkout-wakeup.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issues-checkout-wakeup.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { shouldWakeAssigneeOnCheckout } from "../routes/issues-checkout-wakeup.js";
 
@@ -46,3 +60,4 @@ describe("shouldWakeAssigneeOnCheckout", () => {
     ).toBe(true);
   });
 });
+// [END: module]

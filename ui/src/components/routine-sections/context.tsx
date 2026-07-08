@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/routine-sections/context.tsx
+ * ABOUT: context.tsx (routine-sections module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - context.tsx (routine-sections module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: context.tsx (routine-sections module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/routine-sections/context.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useContext } from "react";
 import type { UseMutationResult } from "@tanstack/react-query";
 import type {
@@ -178,3 +192,4 @@ export function useRoutineDetail(): RoutineDetailContextValue {
   }
   return value;
 }
+// [END: module]

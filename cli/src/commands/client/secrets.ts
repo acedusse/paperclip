@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/secrets.ts
+ * ABOUT: secrets.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import pc from "picocolors";
 import type {
@@ -724,3 +738,4 @@ function addSecretProviderConfigDelete(parent: Command, name: string, descriptio
 function parseJson(value: string): unknown {
   return JSON.parse(value) as unknown;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/job-orchestrator.test.ts
+ * ABOUT: job-orchestrator.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - job-orchestrator.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: job-orchestrator.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/job-orchestrator.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi } from "vitest";
 import { createJob, deleteJob, getJobStatus, findPodForJob, JobTimeoutError, waitForJobCompletion } from "../../src/job-orchestrator.js";
 
@@ -85,3 +99,4 @@ describe("waitForJobCompletion", () => {
     ).rejects.toBeInstanceOf(JobTimeoutError);
   });
 });
+// [END: module]

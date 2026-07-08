@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/cloud-upstreams.ts
+ * ABOUT: cloud-upstreams.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-upstreams.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-upstreams.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/cloud-upstreams.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import { badRequest, notFound } from "../errors.js";
@@ -116,3 +130,4 @@ function activationEntityTypeBody(body: unknown): "agents" | "routines" | "monit
   }
   return value;
 }
+// [END: module]

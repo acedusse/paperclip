@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/utils/banner.ts
+ * ABOUT: banner.ts (utils module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - banner.ts (utils module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: banner.ts (utils module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/utils/banner.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import pc from "picocolors";
 
 const PAPERCLIP_ART = [
@@ -22,3 +36,4 @@ export function printPaperclipCliBanner(): void {
 
   console.log(lines.join("\n"));
 }
+// [END: module]

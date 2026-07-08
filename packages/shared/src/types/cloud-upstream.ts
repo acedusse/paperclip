@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/cloud-upstream.ts
+ * ABOUT: cloud-upstream.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-upstream.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-upstream.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/cloud-upstream.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type CloudUpstreamStep = "connect" | "scan" | "preview" | "push" | "verify" | "activate";
 
 export type CloudUpstreamRunStatus = "previewed" | "running" | "succeeded" | "failed" | "cancelled";
@@ -108,3 +122,4 @@ export interface CloudUpstreamConnectStartResponse {
   authorizationUrl: string;
   connection: CloudUpstreamConnection;
 }
+// [END: module]

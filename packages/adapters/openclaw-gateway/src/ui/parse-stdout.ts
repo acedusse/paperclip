@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/openclaw-gateway/src/ui/parse-stdout.ts
+ * ABOUT: parse-stdout.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse-stdout.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse-stdout.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/openclaw-gateway/src/ui/parse-stdout.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { TranscriptEntry } from "@paperclipai/adapter-utils";
 import { normalizeOpenClawGatewayStreamLine } from "../shared/stream.js";
 
@@ -73,3 +87,4 @@ export function parseOpenClawGatewayStdoutLine(line: string, ts: string): Transc
 
   return [{ kind: "stdout", ts, text: normalized.line }];
 }
+// [END: module]

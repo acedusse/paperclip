@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/plugin.test.ts
+ * ABOUT: plugin.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/plugin.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { PLUGIN_CAPABILITIES } from "../constants.js";
 import { pluginManagedRoutineDeclarationSchema, pluginManifestV1Schema, pluginUiSlotDeclarationSchema } from "./plugin.js";
@@ -186,3 +200,4 @@ describe("plugin UI slot validators", () => {
     expect(parsed.error.issues.some((issue) => issue.message.includes("reserved by the host"))).toBe(true);
   });
 });
+// [END: module]

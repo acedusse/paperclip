@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/index.ts
+ * ABOUT: index.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export { claudeSessionCwdMatchesExecutionTarget, execute, runClaudeLogin } from "./execute.js";
 export { listClaudeSkills, syncClaudeSkills } from "./skills.js";
 export { listClaudeModels, refreshClaudeModels, resetClaudeModelsCacheForTests } from "./models.js";
@@ -84,3 +98,4 @@ export const sessionCodec: AdapterSessionCodec = {
     return readNonEmptyString(params.sessionId) ?? readNonEmptyString(params.session_id);
   },
 };
+// [END: module]

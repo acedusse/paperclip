@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-tool-dispatcher.ts
+ * ABOUT: plugin-tool-dispatcher.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-tool-dispatcher.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-tool-dispatcher.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-tool-dispatcher.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginToolDispatcher — orchestrates plugin tool discovery, lifecycle
  * integration, and execution routing for the agent service.
  *
@@ -453,3 +467,4 @@ export function createPluginToolDispatcher(
     },
   };
 }
+// [END: module]

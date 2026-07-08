@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/budget_policies.ts
+ * ABOUT: budget_policies.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budget_policies.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budget_policies.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/budget_policies.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { boolean, index, integer, pgTable, text, timestamp, uuid, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 
@@ -41,3 +55,4 @@ export const budgetPolicies = pgTable(
     ),
   }),
 );
+// [END: module]

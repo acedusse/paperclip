@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { onboard } from "./commands/onboard.js";
 import { doctor } from "./commands/doctor.js";
@@ -217,3 +231,4 @@ async function main(): Promise<void> {
 }
 
 void main();
+// [END: module]

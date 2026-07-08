@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/config/env.ts
+ * ABOUT: env.ts (config module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - env.ts (config module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: env.ts (config module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/config/env.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { randomBytes } from "node:crypto";
@@ -123,3 +137,4 @@ export function mergePaperclipEnvEntries(
   writePaperclipEnvEntries(next, filePath);
   return next;
 }
+// [END: module]

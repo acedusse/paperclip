@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/paperclip-skill-utils.test.ts
+ * ABOUT: paperclip-skill-utils.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - paperclip-skill-utils.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: paperclip-skill-utils.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/paperclip-skill-utils.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -104,3 +118,4 @@ describe("paperclip skill utils", () => {
     expect((await fs.lstat(path.join(skillsHome, "release-notes"))).isSymbolicLink()).toBe(true);
   });
 });
+// [END: module]

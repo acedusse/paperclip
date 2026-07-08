@@ -1,5 +1,19 @@
 #!/usr/bin/env npx tsx
 /**
+ * FILE: scripts/generate-org-chart-satori-comparison.ts
+ * ABOUT: generate-org-chart-satori-comparison.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - generate-org-chart-satori-comparison.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: generate-org-chart-satori-comparison.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/generate-org-chart-satori-comparison.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Standalone org chart comparison generator — pure SVG (no Playwright).
  *
  * Generates SVG files for all 5 styles × 3 org sizes, plus a comparison HTML page.
@@ -223,3 +237,4 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueContinuationHandoff.tsx
+ * ABOUT: IssueContinuationHandoff.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueContinuationHandoff.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueContinuationHandoff.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueContinuationHandoff.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { IssueDocument } from "@paperclipai/shared";
 import { ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY } from "@paperclipai/shared";
@@ -99,3 +113,4 @@ export function IssueContinuationHandoff({
     </div>
   );
 }
+// [END: module]

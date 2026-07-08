@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/json-schema-secret-refs.ts
+ * ABOUT: json-schema-secret-refs.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - json-schema-secret-refs.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: json-schema-secret-refs.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/json-schema-secret-refs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -77,3 +91,4 @@ export function writeConfigValueAtPath(
   }
   return result;
 }
+// [END: module]

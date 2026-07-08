@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/routines-list-groups.stories.tsx
+ * ABOUT: routines-list-groups.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines-list-groups.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines-list-groups.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/routines-list-groups.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
@@ -100,3 +114,4 @@ export default meta;
 type Story = StoryObj<typeof GroupedList>;
 
 export const GroupedCards: Story = {};
+// [END: module]

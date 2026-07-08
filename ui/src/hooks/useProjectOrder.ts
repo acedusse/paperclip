@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useProjectOrder.ts
+ * ABOUT: useProjectOrder.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useProjectOrder.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useProjectOrder.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useProjectOrder.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Project } from "@paperclipai/shared";
@@ -83,3 +97,4 @@ export function useProjectOrder({ projects, companyId, userId }: UseProjectOrder
     persistOrder,
   };
 }
+// [END: module]

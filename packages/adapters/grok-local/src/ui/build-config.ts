@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/ui/build-config.ts
+ * ABOUT: build-config.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - build-config.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: build-config.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/ui/build-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CreateConfigValues } from "@paperclipai/adapter-utils";
 import { DEFAULT_GROK_LOCAL_MODEL } from "../index.js";
 
@@ -72,3 +86,4 @@ export function buildGrokLocalConfig(v: CreateConfigValues): Record<string, unkn
   if (v.extraArgs) ac.extraArgs = parseCommaArgs(v.extraArgs);
   return ac;
 }
+// [END: module]

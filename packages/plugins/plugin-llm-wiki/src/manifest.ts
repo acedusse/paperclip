@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/src/manifest.ts
+ * ABOUT: manifest.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - manifest.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: manifest.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/src/manifest.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readFileSync } from "node:fs";
 import type { PaperclipPluginManifestV1 } from "@paperclipai/plugin-sdk";
 import { DEFAULT_AGENT_INSTRUCTION_FILES, DEFAULT_AGENT_INSTRUCTIONS } from "./templates.js";
@@ -599,3 +613,4 @@ const manifest: PaperclipPluginManifestV1 = {
 };
 
 export default manifest;
+// [END: module]

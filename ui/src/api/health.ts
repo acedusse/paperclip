@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/health.ts
+ * ABOUT: health.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - health.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: health.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/health.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type DevServerHealthStatus = {
   enabled: true;
   restartRequired: boolean;
@@ -50,3 +64,4 @@ export const healthApi = {
     }
   },
 };
+// [END: module]

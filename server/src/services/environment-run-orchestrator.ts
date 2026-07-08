@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/environment-run-orchestrator.ts
+ * ABOUT: environment-run-orchestrator.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-run-orchestrator.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-run-orchestrator.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/environment-run-orchestrator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Centralized environment run orchestrator.
  *
  * Owns the full environment lifecycle for a heartbeat run:
@@ -570,3 +584,4 @@ export function environmentRunOrchestrator(
 }
 
 export type EnvironmentRunOrchestrator = ReturnType<typeof environmentRunOrchestrator>;
+// [END: module]

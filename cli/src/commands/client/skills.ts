@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/skills.ts
+ * ABOUT: skills.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - skills.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: skills.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type {
   Agent,
@@ -1014,3 +1028,4 @@ async function confirmDangerousAction(yes: boolean | undefined, message: string)
     rl.close();
   }
 }
+// [END: module]

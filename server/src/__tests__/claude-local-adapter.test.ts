@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/claude-local-adapter.test.ts
+ * ABOUT: claude-local-adapter.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - claude-local-adapter.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: claude-local-adapter.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/claude-local-adapter.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { isClaudeMaxTurnsResult } from "@paperclipai/adapter-claude-local/server";
 import { parseClaudeStdoutLine } from "@paperclipai/adapter-claude-local/ui";
@@ -203,3 +217,4 @@ describe("claude_local cli formatter", () => {
     }
   });
 });
+// [END: module]

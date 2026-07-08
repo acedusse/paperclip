@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/runtime-config.ts
+ * ABOUT: runtime-config.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-config.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-config.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/runtime-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import {
@@ -234,3 +248,4 @@ export function resolveDatabaseTarget(): ResolvedDatabaseTarget {
     envPath,
   };
 }
+// [END: module]

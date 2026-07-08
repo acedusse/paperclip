@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/i18n/locale-validation.test.ts
+ * ABOUT: locale-validation.test.ts (i18n module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - locale-validation.test.ts (i18n module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: locale-validation.test.ts (i18n module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/i18n/locale-validation.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { t } from ".";
 import en from "./locales/en.json";
@@ -100,3 +114,4 @@ describe("locale validation", () => {
     ]);
   });
 });
+// [END: module]

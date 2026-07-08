@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/prompt.test.ts
+ * ABOUT: prompt.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - prompt.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: prompt.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/prompt.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -100,3 +114,4 @@ describe("prompt handoff", () => {
     expect(fetchMock.mock.calls[2]?.[0]).toBe("http://localhost:3100/api/agents/11111111-1111-4111-8111-111111111111/wakeup");
   });
 });
+// [END: module]

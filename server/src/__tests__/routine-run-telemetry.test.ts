@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/routine-run-telemetry.test.ts
+ * ABOUT: routine-run-telemetry.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-run-telemetry.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-run-telemetry.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/routine-run-telemetry.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -161,3 +175,4 @@ describeEmbeddedPostgres("routine run telemetry", () => {
     });
   });
 });
+// [END: module]

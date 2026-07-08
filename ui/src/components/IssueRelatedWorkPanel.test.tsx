@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueRelatedWorkPanel.test.tsx
+ * ABOUT: IssueRelatedWorkPanel.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueRelatedWorkPanel.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueRelatedWorkPanel.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueRelatedWorkPanel.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ComponentProps } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
@@ -94,3 +108,4 @@ describe("IssueRelatedWorkPanel", () => {
     expect(html).toContain("×3");
   });
 });
+// [END: module]

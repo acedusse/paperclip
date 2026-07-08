@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/data-viz-misc.stories.tsx
+ * ABOUT: data-viz-misc.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - data-viz-misc.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: data-viz-misc.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/data-viz-misc.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { HeartbeatRun, Issue } from "@paperclipai/shared";
@@ -763,3 +777,4 @@ export const PageSkeletonLayouts: Story = {
   name: "PageSkeleton / Layouts",
   render: () => <PageSkeletonMatrix />,
 };
+// [END: module]

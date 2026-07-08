@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/company-artifacts.ts
+ * ABOUT: company-artifacts.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-artifacts.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-artifacts.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/company-artifacts.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { buffer } from "node:stream/consumers";
 import { and, desc, eq, inArray, isNotNull, isNull, notInArray, or, sql, type SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
@@ -727,3 +741,4 @@ export function companyArtifactsService(db: Db, storage?: StorageService) {
     },
   };
 }
+// [END: module]

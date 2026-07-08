@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/DocumentAnnotationLayer.tsx
+ * ABOUT: DocumentAnnotationLayer.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DocumentAnnotationLayer.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DocumentAnnotationLayer.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/DocumentAnnotationLayer.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, MessageSquarePlus } from "lucide-react";
 import type {
@@ -513,3 +527,4 @@ export function DocumentAnnotationLayer({
     </>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/issue-output/IssueOutputSection.test.tsx
+ * ABOUT: IssueOutputSection.test.tsx (issue-output module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueOutputSection.test.tsx (issue-output module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueOutputSection.test.tsx (issue-output module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/issue-output/IssueOutputSection.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import type { IssueWorkProduct } from "@paperclipai/shared";
@@ -152,3 +166,4 @@ describe("IssueOutputSection", () => {
     expect(markup).not.toContain("download=1");
   });
 });
+// [END: module]

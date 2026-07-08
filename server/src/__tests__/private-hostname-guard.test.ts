@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/private-hostname-guard.test.ts
+ * ABOUT: private-hostname-guard.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - private-hostname-guard.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: private-hostname-guard.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/private-hostname-guard.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import express from "express";
 import request from "supertest";
@@ -77,3 +91,4 @@ describe("privateHostnameGuard", () => {
     );
   }, 20_000);
 });
+// [END: module]

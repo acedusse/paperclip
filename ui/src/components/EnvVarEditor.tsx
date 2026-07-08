@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/EnvVarEditor.tsx
+ * ABOUT: EnvVarEditor.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - EnvVarEditor.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: EnvVarEditor.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/EnvVarEditor.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useRef, useState } from "react";
 import type { CompanySecret, EnvBinding, SecretVersionSelector } from "@paperclipai/shared";
 import { AlertCircle, KeyRound, X } from "lucide-react";
@@ -423,3 +437,4 @@ export function EnvVarEditor({
     </div>
   );
 }
+// [END: module]

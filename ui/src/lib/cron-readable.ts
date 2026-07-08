@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/lib/cron-readable.ts
+ * ABOUT: cron-readable.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cron-readable.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cron-readable.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/cron-readable.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Tiny best-effort cron → plain-English helper for the routine Triggers section.
  * Not a full cron parser: it covers the common shapes Paperclip schedule triggers
  * produce (every N minutes/hours, daily at HH:MM, weekday/weekend, day-of-week).
@@ -77,3 +91,4 @@ export function describeCron(expression: string | null | undefined): string | nu
 
   return null;
 }
+// [END: module]

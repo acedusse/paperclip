@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/CompanyContext.test.tsx
+ * ABOUT: CompanyContext.test.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyContext.test.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyContext.test.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/CompanyContext.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act, useEffect } from "react";
@@ -193,3 +207,4 @@ describe("CompanyProvider", () => {
     expect(localStorage.getItem("paperclip.selectedCompanyId")).toBe("company-1");
   });
 });
+// [END: module]

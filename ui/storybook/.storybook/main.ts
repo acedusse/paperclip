@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/.storybook/main.ts
+ * ABOUT: main.ts (.storybook module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - main.ts (.storybook module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: main.ts (.storybook module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/.storybook/main.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/react-vite";
@@ -30,3 +44,4 @@ const config: StorybookConfig = {
 };
 
 export default config;
+// [END: module]

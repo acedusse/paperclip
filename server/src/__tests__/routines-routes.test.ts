@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/routines-routes.test.ts
+ * ABOUT: routines-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/routines-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -468,3 +482,4 @@ describe("routine routes", () => {
     expect(mockTrackRoutineCreated).toHaveBeenCalledWith(expect.anything());
   });
 });
+// [END: module]

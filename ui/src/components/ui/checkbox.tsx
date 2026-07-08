@@ -1,4 +1,18 @@
 "use client"
+/**
+ * FILE: ui/src/components/ui/checkbox.tsx
+ * ABOUT: checkbox.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - checkbox.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: checkbox.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/checkbox.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 
 import * as React from "react"
 import { CheckIcon } from "lucide-react"
@@ -30,3 +44,4 @@ function Checkbox({
 }
 
 export { Checkbox }
+// [END: module]

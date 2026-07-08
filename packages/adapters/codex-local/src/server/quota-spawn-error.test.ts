@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/quota-spawn-error.test.ts
+ * ABOUT: quota-spawn-error.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - quota-spawn-error.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: quota-spawn-error.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/quota-spawn-error.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { EventEmitter } from "node:events";
 import fs from "node:fs";
 import os from "node:os";
@@ -83,3 +97,4 @@ describe("CodexRpcClient spawn failures", () => {
     expect(result.error).toContain("spawn codex ENOENT");
   });
 });
+// [END: module]

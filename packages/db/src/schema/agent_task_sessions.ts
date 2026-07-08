@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/agent_task_sessions.ts
+ * ABOUT: agent_task_sessions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent_task_sessions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent_task_sessions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/agent_task_sessions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -37,3 +51,4 @@ export const agentTaskSessions = pgTable(
     ),
   }),
 );
+// [END: module]

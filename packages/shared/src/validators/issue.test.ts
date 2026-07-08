@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/issue.test.ts
+ * ABOUT: issue.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/issue.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { MAX_ISSUE_REQUEST_DEPTH } from "../index.js";
 import {
@@ -389,3 +403,4 @@ describe("issue validators", () => {
     expect(parsed.success).toBe(false);
   });
 });
+// [END: module]

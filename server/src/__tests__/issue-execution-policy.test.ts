@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issue-execution-policy.test.ts
+ * ABOUT: issue-execution-policy.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-execution-policy.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-execution-policy.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issue-execution-policy.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { applyIssueExecutionPolicyTransition, normalizeIssueExecutionPolicy, parseIssueExecutionState } from "../services/issue-execution-policy.ts";
 import type { IssueExecutionPolicy, IssueExecutionState } from "@paperclipai/shared";
@@ -1447,3 +1461,4 @@ describe("issue execution policy transitions", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SystemNotice.tsx
+ * ABOUT: SystemNotice.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SystemNotice.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SystemNotice.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SystemNotice.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useId, useState, type ReactNode } from "react";
 import {
   ChevronDown,
@@ -335,3 +349,4 @@ export function SystemNotice({
 }
 
 export default SystemNotice;
+// [END: module]

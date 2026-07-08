@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/instance_user_roles.ts
+ * ABOUT: instance_user_roles.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance_user_roles.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance_user_roles.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/instance_user_roles.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
 
 export const instanceUserRoles = pgTable(
@@ -14,3 +28,4 @@ export const instanceUserRoles = pgTable(
     roleIdx: index("instance_user_roles_role_idx").on(table.role),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/redact-sensitive.ts
+ * ABOUT: redact-sensitive.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - redact-sensitive.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: redact-sensitive.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/redact-sensitive.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Redaction for HTTP log payloads.
 //
 // `customProps` in logger.ts copies `req.body` / `req.params` / `req.query`
@@ -65,3 +79,4 @@ export function redactSensitive(value: unknown, depth = 0): unknown {
   }
   return out;
 }
+// [END: module]

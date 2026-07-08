@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/OrgChart.tsx
+ * ABOUT: OrgChart.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OrgChart.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OrgChart.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/OrgChart.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -625,3 +639,4 @@ const roleLabels: Record<string, string> = AGENT_ROLE_LABELS;
 function roleLabel(role: string): string {
   return roleLabels[role] ?? role;
 }
+// [END: module]

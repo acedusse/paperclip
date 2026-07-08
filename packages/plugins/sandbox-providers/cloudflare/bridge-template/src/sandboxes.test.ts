@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/sandboxes.test.ts
+ * ABOUT: sandboxes.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandboxes.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandboxes.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/sandboxes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { buildLeaseSandboxId, buildSentinelPath, isTimeoutError } from "./helpers.js";
 
@@ -30,3 +44,4 @@ describe("bridge sandbox helpers", () => {
     expect(isTimeoutError(new Error("some other error"))).toBe(false);
   });
 });
+// [END: module]

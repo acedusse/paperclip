@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/tests/worker-rpc-host.test.ts
+ * ABOUT: worker-rpc-host.test.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worker-rpc-host.test.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worker-rpc-host.test.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/tests/worker-rpc-host.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -296,3 +310,4 @@ describe("worker invocation scope propagation", () => {
     }
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/utils.ts
+ * ABOUT: utils.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - utils.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: utils.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/utils.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomInt } from "node:crypto";
 
 const ULID_ALPHABET = "0123456789abcdefghjkmnpqrstvwxyz";
@@ -59,3 +73,4 @@ export function paperclipLabels(input: LabelsInput): Record<string, string> {
     "paperclip.io/managed-by": "paperclip-k8s-plugin",
   };
 }
+// [END: module]

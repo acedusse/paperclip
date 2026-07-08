@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/agent_runtime_state.ts
+ * ABOUT: agent_runtime_state.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent_runtime_state.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent_runtime_state.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/agent_runtime_state.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, bigint, index } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companies } from "./companies.js";
@@ -25,4 +39,4 @@ export const agentRuntimeState = pgTable(
     companyUpdatedIdx: index("agent_runtime_state_company_updated_idx").on(table.companyId, table.updatedAt),
   }),
 );
-
+// [END: module]

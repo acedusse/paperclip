@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-host-service-cleanup.ts
+ * ABOUT: plugin-host-service-cleanup.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-host-service-cleanup.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-host-service-cleanup.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-host-service-cleanup.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PluginLifecycleManager } from "./plugin-lifecycle.js";
 
 type LifecycleLike = Pick<PluginLifecycleManager, "on" | "off">;
@@ -57,3 +71,4 @@ export function createPluginHostServiceCleanup(
     },
   };
 }
+// [END: module]

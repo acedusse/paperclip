@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/client/context.ts
+ * ABOUT: context.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - context.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: context.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/client/context.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { resolveDefaultContextPath } from "../config/home.js";
@@ -213,3 +227,4 @@ export function resolveProfile(
   const profile = context.profiles[name] ?? {};
   return { name, profile };
 }
+// [END: module]

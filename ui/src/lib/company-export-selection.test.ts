@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-export-selection.test.ts
+ * ABOUT: company-export-selection.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-export-selection.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-export-selection.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-export-selection.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { buildInitialExportCheckedFiles } from "./company-export-selection";
 
@@ -39,3 +53,4 @@ describe("buildInitialExportCheckedFiles", () => {
     ]);
   });
 });
+// [END: module]

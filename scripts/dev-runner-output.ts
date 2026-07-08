@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/dev-runner-output.ts
+ * ABOUT: dev-runner-output.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner-output.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner-output.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/dev-runner-output.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const DEFAULT_CAPTURED_OUTPUT_BYTES = 256 * 1024;
 const DEFAULT_JSON_RESPONSE_BYTES = 64 * 1024;
 
@@ -100,3 +114,4 @@ export async function parseJsonResponseWithLimit<T>(
 
   return JSON.parse(text) as T;
 }
+// [END: module]

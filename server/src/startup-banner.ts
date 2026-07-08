@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/startup-banner.ts
+ * ABOUT: startup-banner.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - startup-banner.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: startup-banner.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/startup-banner.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, readFileSync } from "node:fs";
 import { resolvePaperclipConfigPath, resolvePaperclipEnvPath } from "./paths.js";
 import type { BindMode, DeploymentExposure, DeploymentMode } from "@paperclipai/shared";
@@ -175,3 +189,4 @@ export function printStartupBanner(opts: StartupBannerOptions): void {
 
   console.log(lines.filter((line): line is string => line !== null).join("\n"));
 }
+// [END: module]

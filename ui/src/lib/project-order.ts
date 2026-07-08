@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/project-order.ts
+ * ABOUT: project-order.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-order.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-order.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/project-order.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Project } from "@paperclipai/shared";
 
 export const PROJECT_ORDER_UPDATED_EVENT = "paperclip:project-order-updated";
@@ -109,3 +123,4 @@ export function sortProjectsByStoredOrder(projects: Project[], orderedIds: strin
   }
   return sorted;
 }
+// [END: module]

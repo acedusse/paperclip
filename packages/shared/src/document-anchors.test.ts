@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/document-anchors.test.ts
+ * ABOUT: document-anchors.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-anchors.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-anchors.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/document-anchors.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   createDocumentAnchorSelector,
@@ -181,3 +195,4 @@ describe("document anchor verification and remapping", () => {
     expect(recovered.anchor?.selectedText).toBe("reviewed phrase");
   });
 });
+// [END: module]

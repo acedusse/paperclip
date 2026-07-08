@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/instance-settings-service.test.ts
+ * ABOUT: instance-settings-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-settings-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-settings-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/instance-settings-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { createDb, instanceSettings } from "@paperclipai/db";
 import {
@@ -118,3 +132,4 @@ describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns",
     expect((await svc.getGeneral()).maxConcurrentRuns).toBeUndefined();
   });
 });
+// [END: module]

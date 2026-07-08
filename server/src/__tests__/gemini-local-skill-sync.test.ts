@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/gemini-local-skill-sync.test.ts
+ * ABOUT: gemini-local-skill-sync.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - gemini-local-skill-sync.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: gemini-local-skill-sync.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/gemini-local-skill-sync.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -48,3 +62,4 @@ describe("gemini local skill sync", () => {
     expect((await fs.lstat(path.join(home, ".gemini", "skills", "paperclip"))).isSymbolicLink()).toBe(true);
   });
 });
+// [END: module]

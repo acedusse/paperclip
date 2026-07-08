@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/teams-catalog.ts
+ * ABOUT: teams-catalog.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams-catalog.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams-catalog.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/teams-catalog.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -1034,3 +1048,4 @@ export function teamsCatalogService(db: Db) {
     listInstalledCatalogTeams,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/plugins.test.ts
+ * ABOUT: plugins.test.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugins.test.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugins.test.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/plugins.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockApi = vi.hoisted(() => ({
@@ -62,3 +76,4 @@ describe("pluginsApi local folders", () => {
     );
   });
 });
+// [END: module]

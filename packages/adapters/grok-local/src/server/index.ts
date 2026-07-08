@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/server/index.ts
+ * ABOUT: index.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/server/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterSessionCodec } from "@paperclipai/adapter-utils";
 
 function readNonEmptyString(value: unknown): string | null {
@@ -64,3 +78,4 @@ export { execute } from "./execute.js";
 export { listGrokSkills, syncGrokSkills } from "./skills.js";
 export { testEnvironment } from "./test.js";
 export { parseGrokJsonl, isGrokUnknownSessionError } from "./parse.js";
+// [END: module]

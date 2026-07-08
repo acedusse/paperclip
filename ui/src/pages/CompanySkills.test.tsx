@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanySkills.test.tsx
+ * ABOUT: CompanySkills.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySkills.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySkills.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanySkills.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ComponentProps, ReactNode } from "react";
@@ -274,3 +288,4 @@ describe("SkillDetailPage versions tab", () => {
     expect(dialog.textContent).not.toContain("Both sides are the same version");
   });
 });
+// [END: module]

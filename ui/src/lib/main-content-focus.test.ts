@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/main-content-focus.test.ts
+ * ABOUT: main-content-focus.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - main-content-focus.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: main-content-focus.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/main-content-focus.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -64,3 +78,4 @@ describe("main-content-focus", () => {
     expect(shouldFocusMainContentAfterNavigation(main, staleButton)).toBe(true);
   });
 });
+// [END: module]

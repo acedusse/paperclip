@@ -1,4 +1,18 @@
 #!/usr/bin/env -S node --import tsx
+/**
+ * FILE: scripts/dev-service.ts
+ * ABOUT: dev-service.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-service.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-service.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/dev-service.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { listLocalServiceRegistryRecords, removeLocalServiceRegistryRecord, terminateLocalService } from "../server/src/services/local-service-supervisor.ts";
 import { repoRoot } from "./dev-service-profile.ts";
 
@@ -42,3 +56,4 @@ if (command === "stop") {
 
 console.error(`Unknown dev-service command: ${command}`);
 process.exit(1);
+// [END: module]

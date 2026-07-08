@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/IssueChatLongThreadPerf.tsx
+ * ABOUT: IssueChatLongThreadPerf.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueChatLongThreadPerf.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueChatLongThreadPerf.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/IssueChatLongThreadPerf.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Profiler, useEffect, useLayoutEffect, useMemo, useRef, useState, type ProfilerOnRenderCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -211,3 +225,4 @@ export function IssueChatLongThreadPerf() {
     </div>
   );
 }
+// [END: module]

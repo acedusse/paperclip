@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/helpers/zip.ts
+ * ABOUT: zip.ts (helpers module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - zip.ts (helpers module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: zip.ts (helpers module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/helpers/zip.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 function writeUint16(target: Uint8Array, offset: number, value: number) {
   target[offset] = value & 0xff;
   target[offset + 1] = (value >>> 8) & 0xff;
@@ -85,3 +99,4 @@ export function createStoredZipArchive(files: Record<string, string>, rootPath: 
 
   return archive;
 }
+// [END: module]

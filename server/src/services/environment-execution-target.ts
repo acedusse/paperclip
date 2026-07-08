@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/environment-execution-target.ts
+ * ABOUT: environment-execution-target.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-execution-target.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-execution-target.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/environment-execution-target.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Db } from "@paperclipai/db";
 import type { Environment, EnvironmentLease } from "@paperclipai/shared";
 import {
@@ -158,3 +172,4 @@ export async function resolveEnvironmentExecutionTransport(
 ): Promise<Record<string, unknown> | null> {
   return adapterExecutionTargetToRemoteSpec(await resolveEnvironmentExecutionTarget(input)) as Record<string, unknown> | null;
 }
+// [END: module]

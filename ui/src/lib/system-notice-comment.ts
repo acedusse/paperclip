@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/system-notice-comment.ts
+ * ABOUT: system-notice-comment.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - system-notice-comment.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: system-notice-comment.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/system-notice-comment.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   IssueCommentMetadata,
   IssueCommentMetadataRow,
@@ -123,3 +137,4 @@ export function buildSystemNoticeProps(input: {
     source: input.source,
   };
 }
+// [END: module]

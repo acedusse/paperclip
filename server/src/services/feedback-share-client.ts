@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/feedback-share-client.ts
+ * ABOUT: feedback-share-client.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback-share-client.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback-share-client.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/feedback-share-client.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { gzipSync } from "node:zlib";
 import type { FeedbackTraceBundle } from "@paperclipai/shared";
 import type { Config } from "../config.js";
@@ -57,3 +71,4 @@ export function createFeedbackTraceShareClientFromConfig(
     },
   };
 }
+// [END: module]

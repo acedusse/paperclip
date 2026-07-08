@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/sidebar-preferences.ts
+ * ABOUT: sidebar-preferences.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sidebar-preferences.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sidebar-preferences.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/sidebar-preferences.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -95,3 +109,4 @@ export function sidebarPreferenceService(db: Db) {
     },
   };
 }
+// [END: module]

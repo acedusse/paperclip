@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/foundations.stories.tsx
+ * ABOUT: foundations.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - foundations.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: foundations.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/foundations.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertTriangle, ArrowRight, Check, Copy, Play, Plus, Save, Search, Settings } from "lucide-react";
@@ -298,3 +312,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const AllPrimitives: Story = {};
+// [END: module]

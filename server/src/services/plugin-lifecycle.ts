@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-lifecycle.ts
+ * ABOUT: plugin-lifecycle.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-lifecycle.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-lifecycle.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-lifecycle.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginLifecycleManager — state-machine controller for plugin status
  * transitions and worker process coordination.
  *
@@ -847,3 +861,4 @@ export function pluginLifecycleManager(
     },
   };
 }
+// [END: module]

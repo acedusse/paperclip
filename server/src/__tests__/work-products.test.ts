@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/work-products.test.ts
+ * ABOUT: work-products.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - work-products.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: work-products.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/work-products.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { workProductService } from "../services/work-products.ts";
 
@@ -93,3 +107,4 @@ describe("workProductService", () => {
     expect(result?.reviewState).toBe("ready_for_review");
   });
 });
+// [END: module]

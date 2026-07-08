@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/types.ts
+ * ABOUT: types.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // ---------------------------------------------------------------------------
 // Minimal adapter-facing interfaces (no drizzle dependency)
 // ---------------------------------------------------------------------------
@@ -518,3 +532,4 @@ export interface CreateConfigValues {
   headersJson?: string;
   password?: string;
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-secrets-handler.ts
+ * ABOUT: plugin-secrets-handler.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-secrets-handler.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-secrets-handler.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-secrets-handler.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Plugin secrets host-side handler — resolves secret references through the
  * Paperclip secret provider system.
  *
@@ -236,3 +250,4 @@ export function createPluginSecretsHandler(
     },
   };
 }
+// [END: module]

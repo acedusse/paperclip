@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/codex-args.test.ts
+ * ABOUT: codex-args.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - codex-args.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: codex-args.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/codex-args.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { buildCodexExecArgs } from "./codex-args.js";
 
@@ -127,3 +141,4 @@ describe("buildCodexExecArgs", () => {
     ]);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/teams.ts
+ * ABOUT: teams.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/teams.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type {
   Approval,
@@ -718,3 +732,4 @@ function renderTableValue(value: unknown): string {
   if (typeof value === "number" || typeof value === "boolean") return String(value);
   return JSON.stringify(value);
 }
+// [END: module]

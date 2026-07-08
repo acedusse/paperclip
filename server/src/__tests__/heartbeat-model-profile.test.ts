@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-model-profile.test.ts
+ * ABOUT: heartbeat-model-profile.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-model-profile.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-model-profile.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-model-profile.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   listAdapterModelProfiles,
@@ -145,3 +159,4 @@ describe("heartbeat model profile application", () => {
     expect(contextSnapshot).toMatchObject({ modelProfile: "cheap" });
   });
 });
+// [END: module]

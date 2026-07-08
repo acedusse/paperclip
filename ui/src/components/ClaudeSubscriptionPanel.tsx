@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ClaudeSubscriptionPanel.tsx
+ * ABOUT: ClaudeSubscriptionPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ClaudeSubscriptionPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ClaudeSubscriptionPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ClaudeSubscriptionPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { QuotaWindow } from "@paperclipai/shared";
 import { cn, quotaSourceDisplayName } from "@/lib/utils";
 
@@ -138,3 +152,4 @@ export function ClaudeSubscriptionPanel({
     </div>
   );
 }
+// [END: module]

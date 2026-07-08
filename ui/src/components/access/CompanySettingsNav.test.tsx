@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/access/CompanySettingsNav.test.tsx
+ * ABOUT: CompanySettingsNav.test.tsx (access module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySettingsNav.test.tsx (access module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySettingsNav.test.tsx (access module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/access/CompanySettingsNav.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createRoot } from "react-dom/client";
@@ -128,3 +142,4 @@ describe("CompanySettingsNav", () => {
     });
   });
 });
+// [END: module]

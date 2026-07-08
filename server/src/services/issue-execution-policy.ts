@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-execution-policy.ts
+ * ABOUT: issue-execution-policy.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-execution-policy.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-execution-policy.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-execution-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import type {
   IssueExecutionDecision,
@@ -1053,3 +1067,4 @@ export function applyIssueExecutionPolicyTransition(input: TransitionInput): Tra
   Object.assign(stageResult.patch, monitorPatch);
   return stageResult;
 }
+// [END: module]

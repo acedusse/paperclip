@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/workspace-routines.test.ts
+ * ABOUT: workspace-routines.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-routines.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-routines.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/workspace-routines.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { RoutineListItem } from "@paperclipai/shared";
 import { describe, expect, it } from "vitest";
 import {
@@ -69,3 +83,4 @@ describe("workspace routine helpers", () => {
     expect(routineHasWorkspaceSpecificVariables(routine)).toBe(false);
   });
 });
+// [END: module]

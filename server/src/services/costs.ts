@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/costs.ts
+ * ABOUT: costs.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - costs.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: costs.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/costs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, gte, isNotNull, isNull, lt, lte, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import type { Db } from "@paperclipai/db";
@@ -502,3 +516,4 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
     },
   };
 }
+// [END: module]

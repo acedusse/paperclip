@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/plugins/slots.test.ts
+ * ABOUT: slots.test.ts (plugins module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - slots.test.ts (plugins module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: slots.test.ts (plugins module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/plugins/slots.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createElement } from "react";
@@ -85,3 +99,4 @@ describe("plugin slot export registration", () => {
     expect(container.querySelector("paperclip-test-sidebar")).not.toBeNull();
   });
 });
+// [END: module]

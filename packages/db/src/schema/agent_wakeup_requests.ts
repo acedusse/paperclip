@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/agent_wakeup_requests.ts
+ * ABOUT: agent_wakeup_requests.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent_wakeup_requests.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent_wakeup_requests.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/agent_wakeup_requests.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, integer, index } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -38,3 +52,4 @@ export const agentWakeupRequests = pgTable(
     agentRequestedIdx: index("agent_wakeup_requests_agent_requested_idx").on(table.agentId, table.requestedAt),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-recovery-actions.ts
+ * ABOUT: issue-recovery-actions.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-recovery-actions.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-recovery-actions.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-recovery-actions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { issueRecoveryActions } from "@paperclipai/db";
@@ -293,3 +307,4 @@ export function issueRecoveryActionService(db: Db) {
     upsertSourceScoped,
   };
 }
+// [END: module]

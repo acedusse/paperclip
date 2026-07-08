@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/lease-lifecycle.test.ts
+ * ABOUT: lease-lifecycle.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - lease-lifecycle.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: lease-lifecycle.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/lease-lifecycle.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi } from "vitest";
 import {
   checkLeaseResumable,
@@ -346,3 +360,4 @@ describe("destroyLeaseResources", () => {
     ).rejects.toThrow("forbidden");
   });
 });
+// [END: module]

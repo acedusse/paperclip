@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/sidebar-preferences.ts
+ * ABOUT: sidebar-preferences.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sidebar-preferences.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sidebar-preferences.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/sidebar-preferences.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request, type Response } from "express";
 import type { Db } from "@paperclipai/db";
 import { upsertSidebarOrderPreferenceSchema } from "@paperclipai/shared";
@@ -69,3 +83,4 @@ export function sidebarPreferenceRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

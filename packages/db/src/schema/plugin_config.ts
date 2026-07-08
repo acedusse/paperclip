@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/plugin_config.ts
+ * ABOUT: plugin_config.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin_config.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin_config.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/plugin_config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, uniqueIndex } from "drizzle-orm/pg-core";
 import { plugins } from "./plugins.js";
 
@@ -28,3 +42,4 @@ export const pluginConfig = pgTable(
     pluginIdIdx: uniqueIndex("plugin_config_plugin_id_idx").on(table.pluginId),
   }),
 );
+// [END: module]

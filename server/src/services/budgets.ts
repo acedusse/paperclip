@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/budgets.ts
+ * ABOUT: budgets.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budgets.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budgets.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/budgets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, gte, inArray, lt, ne, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -957,3 +971,4 @@ export function budgetService(db: Db, hooks: BudgetServiceHooks = {}) {
     },
   };
 }
+// [END: module]

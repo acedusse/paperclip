@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/company-skills.test.ts
+ * ABOUT: company-skills.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skills.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skills.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/company-skills.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import os from "node:os";
 import path from "node:path";
 import { promises as fs } from "node:fs";
@@ -347,3 +361,4 @@ describe("missing local skill reconciliation", () => {
     expect(missingIds).toEqual(["skill-1"]);
   });
 });
+// [END: module]

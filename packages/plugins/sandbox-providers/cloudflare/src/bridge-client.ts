@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/src/bridge-client.ts
+ * ABOUT: bridge-client.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bridge-client.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bridge-client.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/src/bridge-client.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CloudflareBridgeAcquireLeaseRequest,
   CloudflareBridgeExecuteRequest,
@@ -355,3 +369,4 @@ export function createCloudflareBridgeClient(options: BridgeClientOptions) {
     },
   };
 }
+// [END: module]

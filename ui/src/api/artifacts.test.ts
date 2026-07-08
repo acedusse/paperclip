@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/artifacts.test.ts
+ * ABOUT: artifacts.test.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - artifacts.test.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: artifacts.test.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/artifacts.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockApi = vi.hoisted(() => ({
@@ -108,3 +122,4 @@ describe("artifactsApi.list", () => {
     expect(result).toEqual({ artifacts: [artifact], nextCursor: null });
   });
 });
+// [END: module]

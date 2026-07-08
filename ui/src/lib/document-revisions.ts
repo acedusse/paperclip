@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/document-revisions.ts
+ * ABOUT: document-revisions.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-revisions.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-revisions.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/document-revisions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { DocumentRevision, IssueDocument } from "@paperclipai/shared";
 
 type DocumentRevisionState = {
@@ -70,3 +84,4 @@ export function deriveDocumentRevisionState(
     revisions: dedupedRevisions,
   };
 }
+// [END: module]

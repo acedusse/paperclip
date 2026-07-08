@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/exec.test.ts
+ * ABOUT: exec.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - exec.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: exec.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/exec.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@cloudflare/sandbox", () => ({
@@ -149,3 +163,4 @@ describe("bridge exec", () => {
     })).toThrow("Invalid sandbox environment variable key: bad-key");
   });
 });
+// [END: module]

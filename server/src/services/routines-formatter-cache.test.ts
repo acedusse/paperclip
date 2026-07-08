@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/routines-formatter-cache.test.ts
+ * ABOUT: routines-formatter-cache.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines-formatter-cache.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines-formatter-cache.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/routines-formatter-cache.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { nextCronTickInTimeZone } from "./routines.js";
 
@@ -49,3 +63,4 @@ describe("nextCronTickInTimeZone formatter caching", () => {
     expect(constructions).toBe(0);
   });
 });
+// [END: module]

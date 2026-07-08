@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/principal-access-compatibility.ts
+ * ABOUT: principal-access-compatibility.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - principal-access-compatibility.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: principal-access-compatibility.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/principal-access-compatibility.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, notInArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, companyMemberships, principalPermissionGrants } from "@paperclipai/db";
@@ -139,3 +153,4 @@ export async function backfillPrincipalAccessCompatibility(
     humanGrantsInserted,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-thread-interactions.test.ts
+ * ABOUT: issue-thread-interactions.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-thread-interactions.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-thread-interactions.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-thread-interactions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockCreateChild = vi.fn();
@@ -213,3 +227,4 @@ describe("issueThreadInteractionService", () => {
     expect(state.issueTouches).toHaveLength(1);
   });
 });
+// [END: module]

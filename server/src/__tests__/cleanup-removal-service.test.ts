@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/cleanup-removal-service.test.ts
+ * ABOUT: cleanup-removal-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cleanup-removal-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cleanup-removal-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/cleanup-removal-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -259,3 +273,4 @@ describeEmbeddedPostgres("cleanup removal services", () => {
     await expect(db.select().from(companies).where(eq(companies.id, otherCompanyId))).resolves.toHaveLength(1);
   });
 });
+// [END: module]

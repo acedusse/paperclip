@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/__tests__/plugin-lifecycle-restart.test.ts
+ * ABOUT: plugin-lifecycle-restart.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-lifecycle-restart.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-lifecycle-restart.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-lifecycle-restart.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Regression test for PAP-9585.
  *
  * `restartWorker` is called by the dev file-watcher whenever a local-path
@@ -127,3 +141,4 @@ describe("pluginLifecycleManager.restartWorker", () => {
     expect(started).toHaveBeenCalledWith({ pluginId: "plugin-1", pluginKey: "example.plugin" });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/duplicate-agent-payload.test.ts
+ * ABOUT: duplicate-agent-payload.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - duplicate-agent-payload.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: duplicate-agent-payload.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/duplicate-agent-payload.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { buildDuplicateAgentPayload, duplicateAgentName } from "./duplicate-agent-payload";
@@ -83,3 +97,4 @@ describe("duplicate agent payload", () => {
     expect(payload.adapterConfig).not.toHaveProperty("promptTemplate");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/tests/host-client-factory.test.ts
+ * ABOUT: host-client-factory.test.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - host-client-factory.test.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: host-client-factory.test.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/tests/host-client-factory.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 
 import type { HostServices } from "../src/host-client-factory.js";
@@ -173,3 +187,4 @@ describe("createHostClientHandlers invocation company scope", () => {
     expect(searchAudit).not.toHaveBeenCalled();
   });
 });
+// [END: module]

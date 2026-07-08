@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-local-folders.test.ts
+ * ABOUT: plugin-local-folders.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-local-folders.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-local-folders.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-local-folders.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import os from "node:os";
 import path from "node:path";
@@ -280,3 +294,4 @@ describe("plugin local folders", () => {
     }
   });
 });
+// [END: module]

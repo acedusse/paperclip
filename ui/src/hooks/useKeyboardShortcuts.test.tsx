@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useKeyboardShortcuts.test.tsx
+ * ABOUT: useKeyboardShortcuts.test.tsx (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useKeyboardShortcuts.test.tsx (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useKeyboardShortcuts.test.tsx (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useKeyboardShortcuts.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -159,3 +173,4 @@ describe("useKeyboardShortcuts", () => {
     });
   });
 });
+// [END: module]

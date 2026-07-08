@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/approval.ts
+ * ABOUT: approval.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approval.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approval.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/approval.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ApprovalStatus, ApprovalType } from "../constants.js";
 
 export interface Approval {
@@ -25,3 +39,4 @@ export interface ApprovalComment {
   createdAt: Date;
   updatedAt: Date;
 }
+// [END: module]

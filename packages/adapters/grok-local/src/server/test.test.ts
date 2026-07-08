@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/server/test.test.ts
+ * ABOUT: test.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/server/test.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 const ensureDirectoryMock = vi.hoisted(() => vi.fn(async () => {}));
@@ -140,3 +154,4 @@ describe("grok_local testEnvironment", () => {
     );
   });
 });
+// [END: module]

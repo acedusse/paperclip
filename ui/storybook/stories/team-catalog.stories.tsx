@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/team-catalog.stories.tsx
+ * ABOUT: team-catalog.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - team-catalog.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: team-catalog.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/team-catalog.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type {
@@ -364,3 +378,4 @@ export const InstallSuccess: Story = {
     </Frame>
   ),
 };
+// [END: module]

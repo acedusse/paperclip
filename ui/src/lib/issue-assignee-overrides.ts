@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-assignee-overrides.ts
+ * ABOUT: issue-assignee-overrides.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-assignee-overrides.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-assignee-overrides.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-assignee-overrides.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const ISSUE_OVERRIDE_ADAPTER_TYPES = new Set([
   "claude_local",
   "codex_local",
@@ -58,3 +72,4 @@ export function buildAssigneeAdapterOverrides(
   if (Object.keys(adapterConfig).length === 0) return null;
   return { adapterConfig };
 }
+// [END: module]

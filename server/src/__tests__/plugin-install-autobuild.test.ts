@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-install-autobuild.test.ts
+ * ABOUT: plugin-install-autobuild.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-install-autobuild.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-install-autobuild.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-install-autobuild.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
@@ -400,3 +414,4 @@ describeEmbeddedPostgres("plugin install auto-build route", () => {
     expect(mockLifecycle.load).not.toHaveBeenCalled();
   }, 20_000);
 });
+// [END: module]

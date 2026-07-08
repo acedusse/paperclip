@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/upload-interceptor.ts
+ * ABOUT: upload-interceptor.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - upload-interceptor.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: upload-interceptor.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/upload-interceptor.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Fast-upload interceptor for the chunked-shell file transfer protocol used by
  * `@paperclipai/adapter-utils`'s `command-managed-runtime.writeFile()`.
  *
@@ -144,3 +158,4 @@ export class FastUploadInterceptor {
     return this.buffers.size;
   }
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/quota-windows-service.test.ts
+ * ABOUT: quota-windows-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - quota-windows-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: quota-windows-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/quota-windows-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 vi.mock("../adapters/registry.js", () => ({
@@ -54,3 +68,4 @@ describe("fetchAllQuotaWindows", () => {
     ]);
   });
 });
+// [END: module]

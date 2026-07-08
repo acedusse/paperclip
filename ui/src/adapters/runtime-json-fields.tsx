@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/runtime-json-fields.tsx
+ * ABOUT: runtime-json-fields.tsx (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-json-fields.tsx (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-json-fields.tsx (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/runtime-json-fields.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import type { AdapterConfigFieldsProps } from "./types";
 import { Field, help } from "../components/agent-config-primitives";
@@ -120,3 +134,4 @@ export function PayloadTemplateJsonField({
     </Field>
   );
 }
+// [END: module]

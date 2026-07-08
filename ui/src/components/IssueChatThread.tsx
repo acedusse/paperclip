@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueChatThread.tsx
+ * ABOUT: IssueChatThread.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueChatThread.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueChatThread.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueChatThread.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   AssistantRuntimeProvider,
   useAui,
@@ -4819,3 +4833,4 @@ export function IssueChatThread({
     </AssistantRuntimeProvider>
   );
 }
+// [END: module]

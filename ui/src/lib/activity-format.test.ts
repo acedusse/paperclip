@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/activity-format.test.ts
+ * ABOUT: activity-format.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - activity-format.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: activity-format.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/activity-format.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Agent } from "@paperclipai/shared";
 import { describe, expect, it } from "vitest";
 import { formatActivityVerb, formatIssueActivityAction } from "./activity-format";
@@ -75,3 +89,4 @@ describe("activity formatting", () => {
     );
   });
 });
+// [END: module]

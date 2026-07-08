@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_labels.ts
+ * ABOUT: issue_labels.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_labels.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_labels.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_labels.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, timestamp, index, primaryKey } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { issues } from "./issues.js";
@@ -18,3 +32,4 @@ export const issueLabels = pgTable(
     companyIdx: index("issue_labels_company_idx").on(table.companyId),
   }),
 );
+// [END: module]

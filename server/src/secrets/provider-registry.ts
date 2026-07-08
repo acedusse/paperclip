@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/secrets/provider-registry.ts
+ * ABOUT: provider-registry.ts (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - provider-registry.ts (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: provider-registry.ts (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/secrets/provider-registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { SecretProvider, SecretProviderDescriptor } from "@paperclipai/shared";
 import { awsSecretsManagerProvider } from "./aws-secrets-manager-provider.js";
 import { localEncryptedProvider } from "./local-encrypted-provider.js";
@@ -32,3 +46,4 @@ export function listSecretProviders(): SecretProviderDescriptor[] {
 export async function checkSecretProviders(): Promise<SecretProviderHealthCheck[]> {
   return Promise.all(providers.map((provider) => provider.healthCheck()));
 }
+// [END: module]

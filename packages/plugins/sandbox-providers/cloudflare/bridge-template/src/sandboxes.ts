@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/sandboxes.ts
+ * ABOUT: sandboxes.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandboxes.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandboxes.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/sandboxes.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Sandbox as CloudflareSandbox } from "@cloudflare/sandbox";
 import { getSandbox } from "@cloudflare/sandbox";
 import { buildLeaseSandboxId, buildSentinelPath, isTimeoutError } from "./helpers.js";
@@ -55,3 +69,4 @@ export async function applySandboxKeepAlive(
 }
 
 export { buildLeaseSandboxId, buildSentinelPath, isTimeoutError };
+// [END: module]

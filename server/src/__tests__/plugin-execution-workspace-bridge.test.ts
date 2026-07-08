@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-execution-workspace-bridge.test.ts
+ * ABOUT: plugin-execution-workspace-bridge.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-execution-workspace-bridge.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-execution-workspace-bridge.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-execution-workspace-bridge.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { createHostClientHandlers } from "../../../packages/plugins/sdk/src/host-client-factory.js";
 import { PLUGIN_RPC_ERROR_CODES } from "../../../packages/plugins/sdk/src/protocol.js";
@@ -52,3 +66,4 @@ describe("plugin execution workspace bridge", () => {
     expect(get).not.toHaveBeenCalled();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/document-annotations.stories.tsx
+ * ABOUT: document-annotations.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotations.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotations.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/document-annotations.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useRef, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -569,3 +583,4 @@ export const DesktopStaleFocused: Story = {
 export const DesktopOrphanedFocused: Story = {
   render: () => <StatesShowcase focusedThreadId="orphan-1" />,
 };
+// [END: module]

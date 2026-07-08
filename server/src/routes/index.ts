@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/index.ts
+ * ABOUT: index.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export { healthRoutes } from "./health.js";
 export { companyRoutes } from "./companies.js";
 export { companySkillRoutes } from "./company-skills.js";
@@ -23,3 +37,4 @@ export { accessRoutes } from "./access.js";
 export { instanceSettingsRoutes } from "./instance-settings.js";
 export { instanceDatabaseBackupRoutes } from "./instance-database-backups.js";
 export { cloudUpstreamRoutes } from "./cloud-upstreams.js";
+// [END: module]

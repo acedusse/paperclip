@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/config.ts
+ * ABOUT: config.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readConfigFile } from "./config-file.js";
 import { execFileSync } from "node:child_process";
 import { existsSync, realpathSync } from "node:fs";
@@ -335,3 +349,4 @@ export function loadConfig(): Config {
     telemetryEnabled: fileConfig?.telemetry?.enabled ?? true,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-environment-driver-seam.test.ts
+ * ABOUT: plugin-environment-driver-seam.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-environment-driver-seam.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-environment-driver-seam.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-environment-driver-seam.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { PassThrough } from "node:stream";
 import { describe, expect, it } from "vitest";
 import {
@@ -166,3 +180,4 @@ async function waitForResponses(responses: unknown[], count: number): Promise<vo
   }
   expect(responses.length).toBeGreaterThanOrEqual(count);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/i18n/locale-validation.ts
+ * ABOUT: locale-validation.ts (i18n module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - locale-validation.ts (i18n module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: locale-validation.ts (i18n module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/i18n/locale-validation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import en from "./locales/en.json";
 
 const MAX_STRING_LENGTH = 2_000;
@@ -119,3 +133,4 @@ export function assertValidLocaleMessages(candidate: unknown, englishReference: 
     throw new Error(`Invalid locale messages:\n${errors.join("\n")}`);
   }
 }
+// [END: module]

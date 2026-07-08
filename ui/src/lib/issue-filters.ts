@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-filters.ts
+ * ABOUT: issue-filters.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-filters.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-filters.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-filters.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue } from "@paperclipai/shared";
 
 export type IssueFilterWorkspaceLookup = {
@@ -185,3 +199,4 @@ export function countActiveIssueFilters(
   if (enableRoutineVisibilityFilter && state.hideRoutineExecutions) count += 1;
   return count;
 }
+// [END: module]

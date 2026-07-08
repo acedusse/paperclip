@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-cloud/src/server/session.test.ts
+ * ABOUT: session.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - session.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: session.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-cloud/src/server/session.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { sessionCodec } from "./session.js";
 
@@ -29,3 +43,4 @@ describe("cursorCloud sessionCodec", () => {
     })).toBe("agent-789");
   });
 });
+// [END: module]

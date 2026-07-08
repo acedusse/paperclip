@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-assignee-overrides.test.ts
+ * ABOUT: issue-assignee-overrides.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-assignee-overrides.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-assignee-overrides.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-assignee-overrides.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -95,3 +109,4 @@ describe("buildAssigneeAdapterOverrides", () => {
     });
   });
 });
+// [END: module]

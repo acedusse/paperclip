@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/workflow-sort.ts
+ * ABOUT: workflow-sort.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workflow-sort.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workflow-sort.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/workflow-sort.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type WorkflowSortBlocker = { id: string };
 
 export type WorkflowSortIssue = {
@@ -115,3 +129,4 @@ function toTimestamp(value: Date | string | null | undefined): number {
   const ts = value instanceof Date ? value.getTime() : new Date(value).getTime();
   return Number.isFinite(ts) ? ts : 0;
 }
+// [END: module]

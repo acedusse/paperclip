@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/goal.ts
+ * ABOUT: goal.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - goal.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: goal.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/goal.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type { Goal } from "@paperclipai/shared";
 import { createGoalSchema, updateGoalSchema } from "@paperclipai/shared";
@@ -175,3 +189,4 @@ function parseNullableString(value: string | undefined): string | null | undefin
   if (value === undefined) return undefined;
   return value.trim().toLowerCase() === "null" ? null : value;
 }
+// [END: module]

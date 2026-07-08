@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/fixtures/issueChatUxFixtures.ts
+ * ABOUT: issueChatUxFixtures.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueChatUxFixtures.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueChatUxFixtures.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/fixtures/issueChatUxFixtures.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Agent, FeedbackVote } from "@paperclipai/shared";
 import type { LiveRunForIssue } from "../api/heartbeats";
 import type { InlineEntityOption } from "../components/InlineEntitySelector";
@@ -356,3 +370,4 @@ export const issueChatUxFeedbackVotes: FeedbackVote[] = [
     updatedAt: new Date("2026-04-06T12:35:00.000Z"),
   },
 ];
+// [END: module]

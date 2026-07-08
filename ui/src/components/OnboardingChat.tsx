@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/OnboardingChat.tsx
+ * ABOUT: OnboardingChat.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OnboardingChat.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OnboardingChat.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/OnboardingChat.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { IssueComment } from "@paperclipai/shared";
@@ -479,3 +493,4 @@ function WelcomeMessage({
     </>
   );
 }
+// [END: module]

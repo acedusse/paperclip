@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/board-claim.ts
+ * ABOUT: board-claim.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-claim.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-claim.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/board-claim.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomBytes } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -159,3 +173,4 @@ export async function claimBoardOwnership(
 
   return { status: "claimed", claimedByUserId: opts.userId };
 }
+// [END: module]

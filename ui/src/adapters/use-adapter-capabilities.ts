@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/use-adapter-capabilities.ts
+ * ABOUT: use-adapter-capabilities.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - use-adapter-capabilities.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: use-adapter-capabilities.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/use-adapter-capabilities.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adaptersApi, type AdapterCapabilities } from "@/api/adapters";
@@ -55,3 +69,4 @@ export function useAdapterCapabilities(): (type: string) => AdapterCapabilities 
   return (type: string): AdapterCapabilities =>
     capMap.get(type) ?? KNOWN_DEFAULTS[type] ?? ALL_FALSE;
 }
+// [END: module]

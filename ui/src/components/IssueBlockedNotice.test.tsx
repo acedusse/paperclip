@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueBlockedNotice.test.tsx
+ * ABOUT: IssueBlockedNotice.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueBlockedNotice.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueBlockedNotice.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueBlockedNotice.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createRoot } from "react-dom/client";
@@ -336,3 +350,4 @@ describe("IssueBlockedNotice", () => {
     expect(indicator?.textContent).toContain("Workspace recovery needed");
   });
 });
+// [END: module]

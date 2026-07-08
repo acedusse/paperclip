@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/join_requests.ts
+ * ABOUT: join_requests.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - join_requests.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: join_requests.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/join_requests.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import { pgTable, uuid, text, timestamp, jsonb, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
@@ -46,3 +60,4 @@ export const joinRequests = pgTable(
       .where(sql`${table.requestType} = 'human' AND ${table.status} = 'pending_approval' AND ${table.requestEmailSnapshot} IS NOT NULL`),
   }),
 );
+// [END: module]

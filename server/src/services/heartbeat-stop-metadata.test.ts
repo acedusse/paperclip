@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/heartbeat-stop-metadata.test.ts
+ * ABOUT: heartbeat-stop-metadata.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-stop-metadata.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-stop-metadata.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/heartbeat-stop-metadata.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildHeartbeatRunStopMetadata,
@@ -118,3 +132,4 @@ describe("heartbeat stop metadata", () => {
     });
   });
 });
+// [END: module]

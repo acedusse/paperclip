@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-local/src/server/test.test.ts
+ * ABOUT: test.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-local/src/server/test.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -130,3 +144,4 @@ describe("cursor testEnvironment", () => {
     }
   });
 });
+// [END: module]

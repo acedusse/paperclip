@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/heartbeat-run-summary.ts
+ * ABOUT: heartbeat-run-summary.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-run-summary.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-run-summary.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/heartbeat-run-summary.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const HEARTBEAT_RUN_RESULT_SUMMARY_MAX_CHARS = 500;
 export const HEARTBEAT_RUN_RESULT_OUTPUT_MAX_CHARS = 4_096;
 export const HEARTBEAT_RUN_SAFE_RESULT_JSON_MAX_BYTES = 64 * 1024;
@@ -106,3 +120,4 @@ export function buildHeartbeatRunIssueComment(
     ?? null
   );
 }
+// [END: module]

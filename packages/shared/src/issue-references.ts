@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/issue-references.ts
+ * ABOUT: issue-references.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-references.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-references.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/issue-references.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const ISSUE_REFERENCE_IDENTIFIER_RE = /^[A-Z][A-Z0-9]*-\d+$/;
 
 export interface IssueReferenceMatch {
@@ -186,3 +200,4 @@ export function extractIssueReferenceMatches(markdown: string): IssueReferenceMa
 
   return ordered;
 }
+// [END: module]

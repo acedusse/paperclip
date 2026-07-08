@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/opencode-local-adapter.test.ts
+ * ABOUT: opencode-local-adapter.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - opencode-local-adapter.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: opencode-local-adapter.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/opencode-local-adapter.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { isOpenCodeUnknownSessionError, parseOpenCodeJsonl } from "@paperclipai/adapter-opencode-local/server";
 import { parseOpenCodeStdoutLine } from "@paperclipai/adapter-opencode-local/ui";
@@ -223,3 +237,4 @@ describe("opencode_local cli formatter", () => {
     }
   });
 });
+// [END: module]

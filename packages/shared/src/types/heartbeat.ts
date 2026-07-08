@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/heartbeat.ts
+ * ABOUT: heartbeat.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/heartbeat.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   AgentRole,
   AgentStatus,
@@ -178,3 +192,4 @@ export interface InstanceSchedulerHeartbeatAgent {
   schedulerActive: boolean;
   lastHeartbeatAt: Date | null;
 }
+// [END: module]

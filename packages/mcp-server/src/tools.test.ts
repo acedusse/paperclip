@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/mcp-server/src/tools.test.ts
+ * ABOUT: tools.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - tools.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: tools.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/mcp-server/src/tools.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PaperclipApiClient } from "./client.js";
 import { createToolDefinitions } from "./tools.js";
@@ -398,3 +412,4 @@ describe("paperclip MCP tools", () => {
     expect(response.content[0]?.text).toContain("must not contain '..'");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/App.tsx
+ * ABOUT: App.tsx (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - App.tsx (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: App.tsx (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/App.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Navigate, Outlet, Route, Routes, useLocation, useParams } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n";
@@ -407,3 +421,4 @@ export function App() {
     </>
   );
 }
+// [END: module]

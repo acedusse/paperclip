@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/types.ts
+ * ABOUT: types.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { adapterRegistrySchema } from "./adapter-registry.js";
 import { KNOWN_ADAPTER_TYPES } from "./adapter-defaults.js";
@@ -91,3 +105,4 @@ export interface KubernetesLeaseMetadata {
   /** Which backend provisioned this lease. */
   backend: "sandbox-cr" | "job";
 }
+// [END: module]

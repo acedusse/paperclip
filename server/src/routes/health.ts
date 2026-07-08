@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/health.ts
+ * ABOUT: health.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - health.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: health.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/health.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { timingSafeEqual } from "node:crypto";
 import { Router } from "express";
 import type { Db } from "@paperclipai/db";
@@ -182,3 +196,4 @@ export function healthRoutes(
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-chat-scroll.ts
+ * ABOUT: issue-chat-scroll.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-chat-scroll.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-chat-scroll.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-chat-scroll.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type IssueChatScrollTarget =
   | { type: "element"; element: HTMLElement }
   | { type: "window" };
@@ -102,3 +116,4 @@ export function restoreComposerViewportSnapshot(
 
   win.scrollBy({ top: delta, left: 0, behavior: "auto" });
 }
+// [END: module]

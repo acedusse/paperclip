@@ -1,3 +1,17 @@
+/**
+ * FILE: doc/plans/2026-05-23-cli-api-parity-openapi-reference.ts
+ * ABOUT: 2026-05-23-cli-api-parity-openapi-reference.ts (plans module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - 2026-05-23-cli-api-parity-openapi-reference.ts (plans module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: 2026-05-23-cli-api-parity-openapi-reference.ts (plans module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "doc/plans/2026-05-23-cli-api-parity-openapi-reference.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
@@ -3583,3 +3597,4 @@ export function buildOpenApiSpec(): any {
     servers: [{ url: "/" }],
   }));
 }
+// [END: module]

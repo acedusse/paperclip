@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/search.ts
+ * ABOUT: search.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - search.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: search.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/search.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { COMPANY_SEARCH_SCOPES } from "../types/search.js";
 
@@ -35,3 +49,4 @@ export const companySearchQuerySchema = z.object({
 });
 
 export type CompanySearchQuery = z.infer<typeof companySearchQuerySchema>;
+// [END: module]

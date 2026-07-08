@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-worker-manager.ts
+ * ABOUT: plugin-worker-manager.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-worker-manager.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-worker-manager.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-worker-manager.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginWorkerManager — spawns and manages out-of-process plugin worker child
  * processes, routes JSON-RPC 2.0 calls over stdio, and handles lifecycle
  * management including crash recovery with exponential backoff.
@@ -1478,3 +1492,4 @@ export function createPluginWorkerManager(
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_work_products.ts
+ * ABOUT: issue_work_products.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_work_products.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_work_products.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_work_products.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   boolean,
   index,
@@ -64,3 +78,4 @@ export const issueWorkProducts = pgTable(
     ),
   }),
 );
+// [END: module]

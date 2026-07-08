@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/ceo-instructions.ts
+ * ABOUT: ceo-instructions.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ceo-instructions.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ceo-instructions.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/ceo-instructions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 interface ComposeCeoInstructionsInput {
   companyName: string;
   companyGoal: string;
@@ -95,3 +109,4 @@ When the user asks for a specific work product, save it as a document on the tas
 Use these keys consistently so the user's review flows (and any parsing logic) can locate the right artifact.
 `;
 }
+// [END: module]

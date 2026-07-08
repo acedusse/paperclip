@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issues-list-query-parsing.test.ts
+ * ABOUT: issues-list-query-parsing.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issues-list-query-parsing.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issues-list-query-parsing.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issues-list-query-parsing.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
@@ -72,3 +86,4 @@ describe("issue list status query parsing", () => {
     expect(res.body).toEqual({ statuses: [] });
   });
 });
+// [END: module]

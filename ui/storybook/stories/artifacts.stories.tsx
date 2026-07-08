@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/artifacts.stories.tsx
+ * ABOUT: artifacts.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - artifacts.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: artifacts.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/artifacts.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { ArrowLeft, Check, Layers, Package, Search, X } from "lucide-react";
@@ -656,3 +670,4 @@ export const Empty: Story = {
     </div>
   ),
 };
+// [END: module]

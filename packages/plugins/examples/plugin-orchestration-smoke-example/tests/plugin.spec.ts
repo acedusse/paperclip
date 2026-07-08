@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-orchestration-smoke-example/tests/plugin.spec.ts
+ * ABOUT: plugin.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-orchestration-smoke-example/tests/plugin.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import { pluginManifestV1Schema, type Issue } from "@paperclipai/shared";
@@ -160,3 +174,4 @@ describe("orchestration smoke plugin", () => {
     });
   });
 });
+// [END: module]

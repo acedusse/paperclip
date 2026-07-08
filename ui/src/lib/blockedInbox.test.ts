@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/blockedInbox.test.ts
+ * ABOUT: blockedInbox.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - blockedInbox.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: blockedInbox.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/blockedInbox.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -273,3 +287,4 @@ describe("blockedInbox", () => {
     expect(formatStoppedAge("2026-04-15T00:00:00.000Z", now)).toBe("stopped 3w");
   });
 });
+// [END: module]

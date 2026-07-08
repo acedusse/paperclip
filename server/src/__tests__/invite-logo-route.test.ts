@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/invite-logo-route.test.ts
+ * ABOUT: invite-logo-route.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-logo-route.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-logo-route.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/invite-logo-route.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Readable } from "node:stream";
 import express from "express";
 import request from "supertest";
@@ -144,3 +158,4 @@ describe("GET /invites/:token/logo", () => {
     expect(mockStorage.getObject).not.toHaveBeenCalled();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/search.ts
+ * ABOUT: search.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - search.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: search.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/search.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssuePriority, IssueStatus } from "../constants.js";
 
 export const COMPANY_SEARCH_SCOPES = ["all", "issues", "comments", "documents", "artifacts", "agents", "projects"] as const;
@@ -67,3 +81,4 @@ export interface CompanySearchResponse {
   countsByType: Record<CompanySearchResultType, number>;
   hasMore: boolean;
 }
+// [END: module]

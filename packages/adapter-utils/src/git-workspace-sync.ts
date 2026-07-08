@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/git-workspace-sync.ts
+ * ABOUT: git-workspace-sync.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - git-workspace-sync.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: git-workspace-sync.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/git-workspace-sync.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
@@ -319,3 +333,4 @@ export async function integrateImportedGitHead(input: {
 
   throw new Error(`Failed to integrate concurrent remote git history for ${input.importedHead.slice(0, 12)} after multiple retries.`);
 }
+// [END: module]

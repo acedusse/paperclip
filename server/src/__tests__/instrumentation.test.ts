@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/instrumentation.test.ts
+ * ABOUT: instrumentation.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instrumentation.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instrumentation.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/instrumentation.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**
@@ -108,3 +122,4 @@ describe("shutdownInstrumentation", () => {
     await expect(shutdownInstrumentation()).resolves.toBeUndefined();
   });
 });
+// [END: module]

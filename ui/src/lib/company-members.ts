@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-members.ts
+ * ABOUT: company-members.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-members.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-members.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-members.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanyMember, CompanyUserDirectoryEntry } from "@/api/access";
 import type { InlineEntityOption } from "@/components/InlineEntitySelector";
 import type { MentionOption } from "@/components/MarkdownEditor";
@@ -149,3 +163,4 @@ export function buildMarkdownMentionOptions(args: {
 
   return options;
 }
+// [END: module]

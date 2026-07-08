@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useCompanyPageMemory.test.ts
+ * ABOUT: useCompanyPageMemory.test.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useCompanyPageMemory.test.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useCompanyPageMemory.test.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useCompanyPageMemory.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   getRememberedPathOwnerCompanyId,
@@ -88,3 +102,4 @@ describe("sanitizeRememberedPathForCompany", () => {
     ).toBe("/skills/skill-123/files/SKILL.md");
   });
 });
+// [END: module]

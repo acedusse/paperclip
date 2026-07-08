@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useAgentOrder.ts
+ * ABOUT: useAgentOrder.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useAgentOrder.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useAgentOrder.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useAgentOrder.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Agent } from "@paperclipai/shared";
 import {
@@ -111,3 +125,4 @@ export function useAgentOrder({ agents, companyId, userId }: UseAgentOrderParams
     persistOrder,
   };
 }
+// [END: module]

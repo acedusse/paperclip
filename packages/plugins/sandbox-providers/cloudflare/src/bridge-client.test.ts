@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/src/bridge-client.test.ts
+ * ABOUT: bridge-client.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bridge-client.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bridge-client.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/src/bridge-client.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CloudflareDriverConfig } from "./types.js";
 import { createCloudflareBridgeClient, resolveRequestTimeoutMs } from "./bridge-client.js";
@@ -90,3 +104,4 @@ describe("Cloudflare bridge client timeouts", () => {
     expect(JSON.parse(String(init.body))).toMatchObject({ streamOutput: true });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/work-product.ts
+ * ABOUT: work-product.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - work-product.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: work-product.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/work-product.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { workspaceFileRefSchema } from "./workspace-file-resource.js";
 
@@ -100,3 +114,4 @@ export type CreateIssueWorkProduct = z.infer<typeof createIssueWorkProductSchema
 export const updateIssueWorkProductSchema = createIssueWorkProductSchema.partial();
 
 export type UpdateIssueWorkProduct = z.infer<typeof updateIssueWorkProductSchema>;
+// [END: module]

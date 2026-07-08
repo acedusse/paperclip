@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineHistoryTab.tsx
+ * ABOUT: RoutineHistoryTab.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineHistoryTab.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineHistoryTab.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineHistoryTab.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { History as HistoryIcon, RotateCcw, Search } from "lucide-react";
@@ -1296,3 +1310,4 @@ export function isUpdateConflictError(error: unknown): error is ApiError {
 export type RoutineHistoryDirtyFieldDescriptor = DirtyFieldDescriptor;
 export type RoutineHistoryAgentLookup = AgentLookup;
 export type RoutineHistoryProjectLookup = ProjectLookup;
+// [END: module]

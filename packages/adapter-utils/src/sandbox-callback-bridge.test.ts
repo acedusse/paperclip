@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/sandbox-callback-bridge.test.ts
+ * ABOUT: sandbox-callback-bridge.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-callback-bridge.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-callback-bridge.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/sandbox-callback-bridge.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile as execFileCallback } from "node:child_process";
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -981,3 +995,4 @@ describe("sandbox callback bridge", () => {
     }));
   });
 });
+// [END: module]

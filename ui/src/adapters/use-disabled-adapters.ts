@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/use-disabled-adapters.ts
+ * ABOUT: use-disabled-adapters.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - use-disabled-adapters.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: use-disabled-adapters.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/use-disabled-adapters.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adaptersApi } from "@/api/adapters";
@@ -52,3 +66,4 @@ export function useDisabledAdaptersSync(): Set<string> {
     [adapters],
   );
 }
+// [END: module]

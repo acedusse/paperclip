@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/TrustPresetSection.test.tsx
+ * ABOUT: TrustPresetSection.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - TrustPresetSection.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: TrustPresetSection.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/TrustPresetSection.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 import { createRoot, type Root } from "react-dom/client";
 import { flushSync } from "react-dom";
@@ -91,3 +105,4 @@ describe("TrustPresetSection", () => {
     expect(view.text()).not.toContain("Clear boundary");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/duplicate-agent-payload.ts
+ * ABOUT: duplicate-agent-payload.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - duplicate-agent-payload.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: duplicate-agent-payload.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/duplicate-agent-payload.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AgentDetail } from "@paperclipai/shared";
 
 const INSTRUCTION_CONFIG_KEYS = [
@@ -76,3 +90,4 @@ export function buildDuplicateAgentPayload(
 
   return payload;
 }
+// [END: module]

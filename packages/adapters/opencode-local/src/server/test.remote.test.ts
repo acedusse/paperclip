@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/test.remote.test.ts
+ * ABOUT: test.remote.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.remote.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.remote.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/test.remote.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { AdapterExecutionTarget } from "@paperclipai/adapter-utils/execution-target";
 
@@ -127,3 +141,4 @@ describe("opencode remote environment diagnostics", () => {
     );
   });
 });
+// [END: module]

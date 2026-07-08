@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/runRetryState.test.ts
+ * ABOUT: runRetryState.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runRetryState.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runRetryState.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/runRetryState.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { describeRunRetryState, formatRetryReason } from "./runRetryState";
 
@@ -58,3 +72,4 @@ describe("runRetryState", () => {
     });
   });
 });
+// [END: module]

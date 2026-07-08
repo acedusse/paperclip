@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/origins.ts
+ * ABOUT: origins.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - origins.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: origins.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/origins.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const RECOVERY_ORIGIN_KINDS = {
   issueGraphLivenessEscalation: "harness_liveness_escalation",
   issueProductivityReview: "issue_productivity_review",
@@ -59,3 +73,4 @@ export function buildIssueGraphLivenessLeafKey(input: {
     input.leafIssueId,
   ].join(":");
 }
+// [END: module]

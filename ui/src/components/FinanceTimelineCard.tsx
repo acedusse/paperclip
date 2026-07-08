@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FinanceTimelineCard.tsx
+ * ABOUT: FinanceTimelineCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FinanceTimelineCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FinanceTimelineCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FinanceTimelineCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { FinanceEvent } from "@paperclipai/shared";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,3 +83,4 @@ export function FinanceTimelineCard({
     </Card>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/i18n/locales.ts
+ * ABOUT: locales.ts (i18n module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - locales.ts (i18n module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: locales.ts (i18n module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/i18n/locales.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Resource } from "i18next";
 
 import { assertValidLocaleMessages } from "./locale-validation";
@@ -39,3 +53,4 @@ export const i18nextResources: Resource = Object.fromEntries(
 ) as Resource;
 
 export type SupportedLocale = keyof typeof localeMessages;
+// [END: module]

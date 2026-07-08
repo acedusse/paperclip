@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/dev-runner-worktree.test.ts
+ * ABOUT: dev-runner-worktree.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner-worktree.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner-worktree.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/dev-runner-worktree.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -109,3 +123,4 @@ describe("dev-runner worktree env bootstrap", () => {
     });
   });
 });
+// [END: module]

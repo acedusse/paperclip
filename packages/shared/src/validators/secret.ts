@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/secret.ts
+ * ABOUT: secret.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secret.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secret.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/secret.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   SECRET_BINDING_TARGET_TYPES,
@@ -302,3 +316,4 @@ export const remoteSecretImportSchema = z.object({
 
 export type RemoteSecretImportSelection = z.infer<typeof remoteSecretImportSelectionSchema>;
 export type RemoteSecretImport = z.infer<typeof remoteSecretImportSchema>;
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/acpx-local/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/acpx-local/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterModel } from "@paperclipai/adapter-utils";
 
 export const type = "acpx_local";
@@ -54,3 +68,4 @@ Dependency decision:
 - acpx_local declares direct dependencies on acpx, @agentclientprotocol/claude-agent-acp, and @zed-industries/codex-acp so the built-in adapter has deterministic package resolution instead of relying on globally installed ACP commands.
 - ACPX currently requires Node >=22.12.0. Paperclip keeps the repo-wide Node >=20 engine and surfaces the stricter runtime prerequisite through acpx_local diagnostics.
 `;
+// [END: module]

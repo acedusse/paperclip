@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/command-redaction.ts
+ * ABOUT: command-redaction.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - command-redaction.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: command-redaction.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/command-redaction.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const REDACTED_COMMAND_TEXT_VALUE = "***REDACTED***";
 
 const SECRET_NAME_PATTERN =
@@ -56,3 +70,4 @@ export function redactCommandText(command: string, redactedValue = REDACTED_COMM
     .replace(COMMAND_GITHUB_TOKEN_RE, redactedValue)
     .replace(COMMAND_JWT_RE, redactedValue);
 }
+// [END: module]

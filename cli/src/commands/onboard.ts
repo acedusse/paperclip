@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/onboard.ts
+ * ABOUT: onboard.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - onboard.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: onboard.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/onboard.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import path from "node:path";
 import pc from "picocolors";
@@ -690,3 +704,4 @@ export async function onboard(opts: OnboardOptions): Promise<void> {
 
   p.outro("You're all set!");
 }
+// [END: module]

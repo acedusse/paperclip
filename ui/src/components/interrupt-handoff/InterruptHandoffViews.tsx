@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/interrupt-handoff/InterruptHandoffViews.tsx
+ * ABOUT: InterruptHandoffViews.tsx (interrupt-handoff module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InterruptHandoffViews.tsx (interrupt-handoff module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InterruptHandoffViews.tsx (interrupt-handoff module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/interrupt-handoff/InterruptHandoffViews.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { AlertTriangle, Info, PauseCircle, User, X } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { AgentIcon } from "../AgentIconPicker";
@@ -347,3 +361,4 @@ export function PauseAffectsSummaryView({
     </div>
   );
 }
+// [END: module]

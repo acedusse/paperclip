@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issue-liveness.test.ts
+ * ABOUT: issue-liveness.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-liveness.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-liveness.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issue-liveness.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { classifyIssueGraphLiveness } from "../services/issue-liveness.ts";
 
@@ -519,3 +533,4 @@ describe("issue graph liveness classifier", () => {
     });
   });
 });
+// [END: module]

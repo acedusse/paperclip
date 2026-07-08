@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/select.tsx
+ * ABOUT: select.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - select.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: select.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/select.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import { Select as SelectPrimitive } from "radix-ui"
@@ -186,3 +200,4 @@ export {
   SelectTrigger,
   SelectValue,
 }
+// [END: module]

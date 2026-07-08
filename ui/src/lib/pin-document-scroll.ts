@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/pin-document-scroll.ts
+ * ABOUT: pin-document-scroll.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - pin-document-scroll.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: pin-document-scroll.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/pin-document-scroll.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Registers a capture-phase `scroll` listener on `win` that snaps the
 // `documentElement.scrollTop` and `body.scrollTop` back to 0 whenever they
 // drift. The desktop app shell expects neither to ever be non-zero — only
@@ -28,3 +42,4 @@ export function pinDocumentScrollToZero(
   win.addEventListener("scroll", onScroll, { capture: true });
   return () => win.removeEventListener("scroll", onScroll, { capture: true });
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RouteErrorBoundary.tsx
+ * ABOUT: RouteErrorBoundary.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RouteErrorBoundary.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RouteErrorBoundary.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RouteErrorBoundary.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { useLocation, useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
@@ -71,3 +85,4 @@ export function RouteErrorBoundary({ children }: { children: ReactNode }) {
     </RouteErrorBoundaryInner>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agent-skill-contract.test.ts
+ * ABOUT: agent-skill-contract.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-skill-contract.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-skill-contract.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agent-skill-contract.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   agentSkillEntrySchema,
@@ -47,3 +61,4 @@ describe("agent skill contract", () => {
     });
   });
 });
+// [END: module]

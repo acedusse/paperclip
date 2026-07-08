@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Activity.tsx
+ * ABOUT: Activity.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Activity.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Activity.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Activity.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { ActivityEvent, Agent } from "@paperclipai/shared";
@@ -158,3 +172,4 @@ export function Activity() {
     </div>
   );
 }
+// [END: module]

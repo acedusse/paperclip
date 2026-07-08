@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueBlockedNotice.tsx
+ * ABOUT: IssueBlockedNotice.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueBlockedNotice.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueBlockedNotice.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueBlockedNotice.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   IssueBlockerAttention,
   IssueRecoveryAction,
@@ -305,3 +319,4 @@ export function IssueBlockedNotice({
     </div>
   );
 }
+// [END: module]

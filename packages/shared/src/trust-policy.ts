@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/trust-policy.ts
+ * ABOUT: trust-policy.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - trust-policy.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: trust-policy.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/trust-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const TRUST_PRESETS = ["standard", "low_trust_review"] as const;
 
 export type TrustPreset = (typeof TRUST_PRESETS)[number];
@@ -65,3 +79,4 @@ export interface SourceTrustMetadata {
   promotedByActorId?: string | null;
   promotedAt?: string | null;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FileTree.tsx
+ * ABOUT: FileTree.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FileTree.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FileTree.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FileTree.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { KeyboardEvent, ReactNode } from "react";
 import { useMemo, useRef, useState } from "react";
 import { cn } from "../lib/utils";
@@ -498,3 +512,4 @@ export function FileTree({
     </div>
   );
 }
+// [END: module]

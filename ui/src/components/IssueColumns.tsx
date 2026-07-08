@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueColumns.tsx
+ * ABOUT: IssueColumns.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueColumns.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueColumns.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueColumns.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import type { Issue } from "@paperclipai/shared";
 import { Columns3 } from "lucide-react";
@@ -410,3 +424,4 @@ export function InboxIssueTrailingColumns({
     </span>
   );
 }
+// [END: module]

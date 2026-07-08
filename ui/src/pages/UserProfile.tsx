@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/UserProfile.tsx
+ * ABOUT: UserProfile.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - UserProfile.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: UserProfile.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/UserProfile.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, UserRound } from "lucide-react";
@@ -357,3 +371,4 @@ export function UserProfile() {
     </div>
   );
 }
+// [END: module]

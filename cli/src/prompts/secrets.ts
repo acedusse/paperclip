@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/prompts/secrets.ts
+ * ABOUT: secrets.ts (prompts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.ts (prompts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.ts (prompts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/prompts/secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import type { SecretProvider } from "@paperclipai/shared";
 import type { SecretsConfig } from "../config/schema.js";
@@ -99,3 +113,4 @@ export async function promptSecrets(current?: SecretsConfig): Promise<SecretsCon
     },
   };
 }
+// [END: module]

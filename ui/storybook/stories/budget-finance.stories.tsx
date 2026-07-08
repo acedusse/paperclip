@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/budget-finance.stories.tsx
+ * ABOUT: budget-finance.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budget-finance.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budget-finance.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/budget-finance.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type {
@@ -772,3 +786,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const FullMatrix: Story = {};
+// [END: module]

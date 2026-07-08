@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/approvals.ts
+ * ABOUT: approvals.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approvals.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approvals.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/approvals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request } from "express";
 import { eq } from "drizzle-orm";
 import { heartbeatRuns, type Db } from "@paperclipai/db";
@@ -423,3 +437,4 @@ export function approvalRoutes(
 
   return router;
 }
+// [END: module]

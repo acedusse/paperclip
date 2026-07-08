@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/openclaw-gateway/config-fields.tsx
+ * ABOUT: config-fields.tsx (openclaw-gateway module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config-fields.tsx (openclaw-gateway module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config-fields.tsx (openclaw-gateway module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/openclaw-gateway/config-fields.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import type { AdapterConfigFieldsProps } from "../types";
@@ -455,3 +469,4 @@ export function OpenClawGatewayConfigFields({
     </>
   );
 }
+// [END: module]

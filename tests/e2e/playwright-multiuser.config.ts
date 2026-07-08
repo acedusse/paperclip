@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/playwright-multiuser.config.ts
+ * ABOUT: playwright-multiuser.config.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - playwright-multiuser.config.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: playwright-multiuser.config.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/playwright-multiuser.config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { defineConfig } from "@playwright/test";
 
 const PORT = Number(process.env.PAPERCLIP_E2E_PORT ?? 3104);
@@ -24,3 +38,4 @@ export default defineConfig({
   outputDir: "./test-results",
   reporter: [["list"], ["html", { open: "never", outputFolder: "./playwright-report" }]],
 });
+// [END: module]

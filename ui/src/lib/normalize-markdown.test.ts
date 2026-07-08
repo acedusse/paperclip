@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/normalize-markdown.test.ts
+ * ABOUT: normalize-markdown.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - normalize-markdown.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: normalize-markdown.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/normalize-markdown.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { normalizeMarkdown } from "./normalize-markdown";
 
@@ -57,3 +71,4 @@ describe("normalizeMarkdown", () => {
     expect(normalizeMarkdown(input)).toBe(input);
   });
 });
+// [END: module]

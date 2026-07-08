@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/portable-files.ts
+ * ABOUT: portable-files.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - portable-files.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: portable-files.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/portable-files.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanyPortabilityFileEntry } from "@paperclipai/shared";
 
 const contentTypeByExtension: Record<string, string> = {
@@ -39,3 +53,4 @@ export function isPortableImageFile(
   const contentType = getPortableFileContentType(filePath, entry);
   return typeof contentType === "string" && contentType.startsWith("image/");
 }
+// [END: module]

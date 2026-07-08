@@ -1,4 +1,18 @@
 #!/usr/bin/env node
+/**
+ * FILE: packages/plugins/sdk/src/dev-cli.ts
+ * ABOUT: dev-cli.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-cli.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-cli.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/dev-cli.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { startPluginDevServer } from "./dev-server.js";
 
@@ -52,3 +66,4 @@ void main().catch((error) => {
   console.error(error instanceof Error ? error.message : String(error));
   process.exit(1);
 });
+// [END: module]

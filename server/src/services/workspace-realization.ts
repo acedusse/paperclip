@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/workspace-realization.ts
+ * ABOUT: workspace-realization.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-realization.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-realization.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-realization.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   Environment,
   EnvironmentLease,
@@ -269,3 +283,4 @@ export function buildWorkspaceRealizationRecordFromDriverInput(input: {
     providerMetadata: input.providerMetadata,
   });
 }
+// [END: module]

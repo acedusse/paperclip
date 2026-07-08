@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/token.test.ts
+ * ABOUT: token.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - token.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: token.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/token.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerTokenCommands } from "../commands/client/token.js";
@@ -130,3 +144,4 @@ describe("token commands", () => {
     expect(fetchMock.mock.calls[1]?.[0]).toBe(`http://localhost:3100/api/agents/${AGENT_ID}/keys`);
   });
 });
+// [END: module]

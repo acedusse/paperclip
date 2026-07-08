@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/zip.test.ts
+ * ABOUT: zip.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - zip.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: zip.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/zip.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { deflateRawSync } from "node:zlib";
@@ -287,3 +301,4 @@ describe("createZipArchive", () => {
     });
   });
 });
+// [END: module]

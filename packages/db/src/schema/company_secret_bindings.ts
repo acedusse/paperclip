@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/company_secret_bindings.ts
+ * ABOUT: company_secret_bindings.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company_secret_bindings.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company_secret_bindings.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/company_secret_bindings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { boolean, index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { companySecrets } from "./company_secrets.js";
@@ -29,3 +43,4 @@ export const companySecretBindings = pgTable(
     ),
   }),
 );
+// [END: module]

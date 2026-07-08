@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/transcriptPresentation.ts
+ * ABOUT: transcriptPresentation.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - transcriptPresentation.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: transcriptPresentation.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/transcriptPresentation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type TranscriptDensity = "comfortable" | "compact";
 
 type TranscriptActivity = {
@@ -279,3 +293,4 @@ export function shouldHideNiceModeStderr(text: string): boolean {
 export function summarizeNotice(text: string, max = 160): string {
   return truncate(compactWhitespace(text), max);
 }
+// [END: module]

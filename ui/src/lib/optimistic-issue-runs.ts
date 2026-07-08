@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/optimistic-issue-runs.ts
+ * ABOUT: optimistic-issue-runs.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - optimistic-issue-runs.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: optimistic-issue-runs.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/optimistic-issue-runs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue } from "@paperclipai/shared";
 import type { RunForIssue } from "../api/activity";
 import type { ActiveRunForIssue, LiveRunForIssue } from "../api/heartbeats";
@@ -83,3 +97,4 @@ export function clearIssueExecutionRun(
     updatedAt: new Date(),
   };
 }
+// [END: module]

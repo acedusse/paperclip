@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/quota-windows.ts
+ * ABOUT: quota-windows.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - quota-windows.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: quota-windows.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/quota-windows.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ProviderQuotaResult } from "@paperclipai/shared";
 import { listServerAdapters } from "../adapters/registry.js";
 
@@ -62,3 +76,4 @@ async function withQuotaTimeout(
     if (timeoutId) clearTimeout(timeoutId);
   }
 }
+// [END: module]

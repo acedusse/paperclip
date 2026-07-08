@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/live-events.ts
+ * ABOUT: live-events.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - live-events.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: live-events.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/live-events.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { EventEmitter } from "node:events";
 import type { LiveEvent, LiveEventType } from "@paperclipai/shared";
 
@@ -52,3 +66,4 @@ export function subscribeGlobalLiveEvents(listener: LiveEventListener) {
   emitter.on("*", listener);
   return () => emitter.off("*", listener);
 }
+// [END: module]

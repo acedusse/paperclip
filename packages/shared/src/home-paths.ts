@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/home-paths.ts
+ * ABOUT: home-paths.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - home-paths.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: home-paths.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/home-paths.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import os from "node:os";
 import path from "node:path";
 
@@ -90,3 +104,4 @@ export function resolveDefaultBackupDir(input: {
 export function resolveHomeAwarePath(value: string): string {
   return path.resolve(expandHomePrefix(value));
 }
+// [END: module]

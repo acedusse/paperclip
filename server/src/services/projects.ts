@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/projects.ts
+ * ABOUT: projects.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - projects.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: projects.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/projects.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -1213,3 +1227,4 @@ export function projectService(db: Db) {
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/network-bind.ts
+ * ABOUT: network-bind.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - network-bind.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: network-bind.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/network-bind.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { BindMode, DeploymentExposure, DeploymentMode } from "./constants.js";
 
 export const LOOPBACK_BIND_HOST = "127.0.0.1";
@@ -103,3 +117,4 @@ export function resolveRuntimeBind(input: {
     }
   }
 }
+// [END: module]

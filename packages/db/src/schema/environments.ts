@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/environments.ts
+ * ABOUT: environments.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environments.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environments.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/environments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import { index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
@@ -28,3 +42,4 @@ export const environments = pgTable(
     nameIdx: uniqueIndex("environments_name_idx").on(table.name),
   }),
 );
+// [END: module]

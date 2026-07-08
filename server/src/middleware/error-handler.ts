@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/error-handler.ts
+ * ABOUT: error-handler.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - error-handler.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: error-handler.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/error-handler.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { HttpError } from "../errors.js";
@@ -86,3 +100,4 @@ function shouldExposeTrustedCloudTenantImportError(req: Request) {
     && req.method === "POST"
     && req.originalUrl.split("?")[0] === COMPANY_IMPORT_API_PATH;
 }
+// [END: module]

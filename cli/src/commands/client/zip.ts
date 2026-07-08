@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/zip.ts
+ * ABOUT: zip.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - zip.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: zip.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/zip.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { inflateRawSync } from "node:zlib";
 import path from "node:path";
 import type { CompanyPortabilityFileEntry } from "@paperclipai/shared";
@@ -127,3 +141,4 @@ export async function readZipArchive(source: ArrayBuffer | Uint8Array): Promise<
 
   return { rootPath, files };
 }
+// [END: module]

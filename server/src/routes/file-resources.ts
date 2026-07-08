@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/file-resources.ts
+ * ABOUT: file-resources.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - file-resources.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: file-resources.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/file-resources.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import { ZodError } from "zod";
 import type { Db } from "@paperclipai/db";
@@ -642,3 +656,4 @@ export function fileResourceRoutes(db: Db, opts: {
 
   return router;
 }
+// [END: module]

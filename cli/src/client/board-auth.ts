@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/client/board-auth.ts
+ * ABOUT: board-auth.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-auth.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-auth.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/client/board-auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { spawn, type ChildProcess } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -300,3 +314,4 @@ export async function revokeStoredBoardCredential(params: {
     body: JSON.stringify({}),
   });
 }
+// [END: module]

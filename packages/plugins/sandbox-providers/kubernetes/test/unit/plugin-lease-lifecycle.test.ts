@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/plugin-lease-lifecycle.test.ts
+ * ABOUT: plugin-lease-lifecycle.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-lease-lifecycle.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-lease-lifecycle.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/plugin-lease-lifecycle.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock the kube-client module so the plugin handlers run against injected
@@ -229,3 +243,4 @@ describe("onEnvironmentDestroyLease", () => {
     expect(deleteCr).not.toHaveBeenCalled();
   });
 });
+// [END: module]

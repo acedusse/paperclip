@@ -1,4 +1,18 @@
 #!/usr/bin/env node
+/**
+ * FILE: packages/plugins/create-paperclip-plugin/src/bin.ts
+ * ABOUT: bin.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bin.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bin.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/create-paperclip-plugin/src/bin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { scaffoldPluginProject, type ScaffoldPluginOptions } from "./index.js";
@@ -60,3 +74,4 @@ function isMainModule(): boolean {
 if (isMainModule()) {
   runCli();
 }
+// [END: module]

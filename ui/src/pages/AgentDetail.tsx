@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/AgentDetail.tsx
+ * ABOUT: AgentDetail.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentDetail.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentDetail.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/AgentDetail.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useParams, useNavigate, Link, Navigate, useBeforeUnload } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -4301,3 +4315,4 @@ function KeysTab({ agentId, companyId }: { agentId: string; companyId?: string }
     </div>
   );
 }
+// [END: module]

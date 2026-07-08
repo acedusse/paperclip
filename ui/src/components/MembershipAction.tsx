@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MembershipAction.tsx
+ * ABOUT: MembershipAction.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MembershipAction.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MembershipAction.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MembershipAction.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { MouseEvent } from "react";
 import { Loader2, LogIn, LogOut } from "lucide-react";
 import type { ResourceMembershipState } from "@paperclipai/shared";
@@ -63,3 +77,4 @@ export function MembershipAction({
     </span>
   );
 }
+// [END: module]

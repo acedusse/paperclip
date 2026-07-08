@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-filters.test.ts
+ * ABOUT: issue-filters.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-filters.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-filters.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-filters.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -170,3 +184,4 @@ describe("issue filters", () => {
     )).toBe(true);
   });
 });
+// [END: module]

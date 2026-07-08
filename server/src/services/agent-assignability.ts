@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/agent-assignability.ts
+ * ABOUT: agent-assignability.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-assignability.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-assignability.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/agent-assignability.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents } from "@paperclipai/db";
@@ -169,3 +183,4 @@ export async function assertAssignableAgent(
         : null,
   }));
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/artifact.ts
+ * ABOUT: artifact.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - artifact.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: artifact.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/artifact.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type CompanyArtifactSource = "document" | "attachment" | "work_product";
 
 export type CompanyArtifactMediaKind = "image" | "video" | "text" | "document" | "file" | "empty";
@@ -55,3 +69,4 @@ export interface CompanyArtifactsResponse {
   selectedGroup?: CompanyArtifactGroup | null;
   nextCursor: string | null;
 }
+// [END: module]

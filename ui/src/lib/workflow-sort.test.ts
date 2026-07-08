@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/workflow-sort.test.ts
+ * ABOUT: workflow-sort.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workflow-sort.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workflow-sort.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/workflow-sort.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { workflowSort, type WorkflowSortIssue } from "./workflow-sort";
 
@@ -151,3 +165,4 @@ describe("workflowSort", () => {
     expect(workflowSort(single)).toEqual(single);
   });
 });
+// [END: module]

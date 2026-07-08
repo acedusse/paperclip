@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/playwright.config.ts
+ * ABOUT: playwright.config.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - playwright.config.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: playwright.config.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/playwright.config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -62,3 +76,4 @@ export default defineConfig({
   outputDir: "./test-results",
   reporter: [["list"], ["html", { open: "never", outputFolder: "./playwright-report" }]],
 });
+// [END: module]

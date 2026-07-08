@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/trust-policy.ts
+ * ABOUT: trust-policy.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - trust-policy.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: trust-policy.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/trust-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   LOW_TRUST_REVIEW_PRESET,
@@ -59,3 +73,4 @@ export type TrustPresetInput = z.infer<typeof trustPresetSchema>;
 export type LowTrustBoundaryInput = z.infer<typeof lowTrustBoundarySchema>;
 export type TrustAuthorizationPolicyInput = z.infer<typeof trustAuthorizationPolicySchema>;
 export type SourceTrustMetadataInput = z.infer<typeof sourceTrustMetadataSchema>;
+// [END: module]

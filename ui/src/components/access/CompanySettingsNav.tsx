@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/access/CompanySettingsNav.tsx
+ * ABOUT: CompanySettingsNav.tsx (access module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySettingsNav.tsx (access module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySettingsNav.tsx (access module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/access/CompanySettingsNav.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { PageTabBar } from "@/components/PageTabBar";
 import { Tabs } from "@/components/ui/tabs";
 import { INSTANCE_SETTINGS_PATH_PREFIX } from "@/lib/instance-settings";
@@ -99,3 +113,4 @@ export function CompanySettingsNav() {
     </Tabs>
   );
 }
+// [END: module]

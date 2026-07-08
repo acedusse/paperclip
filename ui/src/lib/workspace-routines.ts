@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/workspace-routines.ts
+ * ABOUT: workspace-routines.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-routines.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-routines.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/workspace-routines.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   extractRoutineVariableNames,
   WORKSPACE_BRANCH_ROUTINE_VARIABLE,
@@ -29,3 +43,4 @@ export function getWorkspaceSpecificRoutineVariableNames(routine: RoutineListIte
 export function routineHasWorkspaceSpecificVariables(routine: RoutineListItem): boolean {
   return getWorkspaceSpecificRoutineVariableNames(routine).length > 0;
 }
+// [END: module]

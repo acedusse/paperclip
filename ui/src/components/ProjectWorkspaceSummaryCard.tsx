@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ProjectWorkspaceSummaryCard.tsx
+ * ABOUT: ProjectWorkspaceSummaryCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectWorkspaceSummaryCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectWorkspaceSummaryCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ProjectWorkspaceSummaryCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Link } from "@/lib/router";
 import type { ExecutionWorkspace, Issue } from "@paperclipai/shared";
 import { Button } from "@/components/ui/button";
@@ -261,3 +275,4 @@ function IssuePill({ issue }: { issue: Issue }) {
     </IssuesQuicklook>
   );
 }
+// [END: module]

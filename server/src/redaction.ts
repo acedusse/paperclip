@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/redaction.ts
+ * ABOUT: redaction.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - redaction.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: redaction.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/redaction.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { redactCommandText } from "@paperclipai/adapter-utils";
 
 const SECRET_FIELD_NAME_PATTERN =
@@ -132,3 +146,4 @@ export function redactSensitiveText(input: string): string {
     REDACTED_EVENT_VALUE,
   );
 }
+// [END: module]

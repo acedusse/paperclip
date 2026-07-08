@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/workspace-operation.ts
+ * ABOUT: workspace-operation.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-operation.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-operation.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/workspace-operation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type WorkspaceOperationPhase =
   | "worktree_prepare"
   | "workspace_provision"
@@ -30,3 +44,4 @@ export interface WorkspaceOperation {
   createdAt: Date;
   updatedAt: Date;
 }
+// [END: module]

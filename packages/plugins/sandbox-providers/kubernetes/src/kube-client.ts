@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/kube-client.ts
+ * ABOUT: kube-client.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - kube-client.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: kube-client.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/kube-client.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   KubeConfig,
   CoreV1Api,
@@ -42,3 +56,4 @@ export function makeKubeClients(kc: KubeConfig): KubeClients {
     rbac: kc.makeApiClient(RbacAuthorizationV1Api),
   };
 }
+// [END: module]

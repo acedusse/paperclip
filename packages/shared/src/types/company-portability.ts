@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/company-portability.ts
+ * ABOUT: company-portability.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-portability.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-portability.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/company-portability.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AgentEnvConfig } from "./secrets.js";
 import type { RoutineVariable } from "./routine.js";
 import type { IssueCommentAuthorType } from "../constants.js";
@@ -335,3 +349,4 @@ export interface CompanyPortabilityExportRequest {
   expandReferencedSkills?: boolean;
   sidebarOrder?: Partial<CompanyPortabilitySidebarOrder>;
 }
+// [END: module]

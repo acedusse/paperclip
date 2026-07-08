@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentActionButtons.tsx
+ * ABOUT: AgentActionButtons.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentActionButtons.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentActionButtons.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentActionButtons.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useState } from "react";
 import { useNavigate } from "@/lib/router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -387,3 +401,4 @@ export function AgentActionButtons({
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/skills.ts
+ * ABOUT: skills.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - skills.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: skills.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type {
@@ -42,3 +56,4 @@ export function resolveCodexDesiredSkillNames(
 ) {
   return resolvePaperclipDesiredSkillNames(config, availableEntries);
 }
+// [END: module]

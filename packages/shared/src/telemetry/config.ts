@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/telemetry/config.ts
+ * ABOUT: config.ts (telemetry module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config.ts (telemetry module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config.ts (telemetry module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/telemetry/config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { TelemetryConfig } from "./types.js";
 
 const CI_ENV_VARS = ["CI", "CONTINUOUS_INTEGRATION", "BUILD_NUMBER", "GITHUB_ACTIONS", "GITLAB_CI"];
@@ -23,3 +37,4 @@ export function resolveTelemetryConfig(fileConfig?: { enabled?: boolean }): Tele
   const endpoint = process.env.PAPERCLIP_TELEMETRY_ENDPOINT || undefined;
   return { enabled: true, endpoint };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/subIssueDefaults.ts
+ * ABOUT: subIssueDefaults.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - subIssueDefaults.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: subIssueDefaults.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/subIssueDefaults.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue } from "@paperclipai/shared";
 
 type SubIssueDefaultSource = Pick<
@@ -50,3 +64,4 @@ export function buildSubIssueDefaultsForViewer(
     ...(inheritedAssigneeUserId ? { assigneeUserId: inheritedAssigneeUserId } : {}),
   };
 }
+// [END: module]

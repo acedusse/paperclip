@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueReferencePill.tsx
+ * ABOUT: IssueReferencePill.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueReferencePill.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueReferencePill.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueReferencePill.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import type { IssueRelationIssueSummary } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -56,3 +70,4 @@ export function IssueReferencePill({
     </Link>
   );
 }
+// [END: module]

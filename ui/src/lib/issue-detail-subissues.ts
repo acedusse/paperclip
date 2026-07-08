@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-detail-subissues.ts
+ * ABOUT: issue-detail-subissues.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-detail-subissues.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-detail-subissues.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-detail-subissues.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue, IssueStatus } from "@paperclipai/shared";
 import { workflowSort } from "./workflow-sort";
 
@@ -121,3 +135,4 @@ function isActionableStatus(status: IssueStatus): boolean {
 function isTerminalStatus(status: IssueStatus): boolean {
   return status === "done" || status === "cancelled";
 }
+// [END: module]

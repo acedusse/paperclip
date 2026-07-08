@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/paperclip-plugin-fake-sandbox/src/plugin.test.ts
+ * ABOUT: plugin.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/paperclip-plugin-fake-sandbox/src/plugin.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   assertEnvironmentEventOrder,
@@ -226,3 +240,4 @@ describe("fake sandbox provider plugin", () => {
     });
   });
 });
+// [END: module]

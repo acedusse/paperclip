@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ExecutionWorkspaceCloseDialog.tsx
+ * ABOUT: ExecutionWorkspaceCloseDialog.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ExecutionWorkspaceCloseDialog.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ExecutionWorkspaceCloseDialog.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ExecutionWorkspaceCloseDialog.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ExecutionWorkspace } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -312,3 +326,4 @@ export function ExecutionWorkspaceCloseDialog({
     </Dialog>
   );
 }
+// [END: module]

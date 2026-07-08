@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/websocket-url.test.ts
+ * ABOUT: websocket-url.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - websocket-url.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: websocket-url.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/websocket-url.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { browserReachableHost, buildSameOriginWebSocketUrl } from "./websocket-url";
 
@@ -49,3 +63,4 @@ describe("buildSameOriginWebSocketUrl", () => {
     })).toBe("ws://localhost:46259/api/events/ws");
   });
 });
+// [END: module]

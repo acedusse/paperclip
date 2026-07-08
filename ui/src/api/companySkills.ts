@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/companySkills.ts
+ * ABOUT: companySkills.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - companySkills.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: companySkills.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/companySkills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CatalogSkill,
   CatalogSkillFileDetail,
@@ -155,3 +169,4 @@ export const companySkillsApi = {
       payload,
     ),
 };
+// [END: module]

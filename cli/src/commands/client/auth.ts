@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/auth.ts
+ * ABOUT: auth.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Command } from "commander";
 import {
   getStoredBoardCredential,
@@ -201,3 +215,4 @@ function resolveChallengeToken(opts: AuthChallengeOptions): string {
   }
   throw new Error("Challenge secret is required. Pass --token or --token-env.");
 }
+// [END: module]

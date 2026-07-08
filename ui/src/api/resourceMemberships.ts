@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/resourceMemberships.ts
+ * ABOUT: resourceMemberships.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - resourceMemberships.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: resourceMemberships.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/resourceMemberships.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ResourceMemberships,
   ResourceMembershipUpdateResult,
@@ -19,3 +33,4 @@ export const resourceMembershipsApi = {
       data,
     ),
 };
+// [END: module]

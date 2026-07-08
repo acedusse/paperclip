@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/gemini-local-adapter.test.ts
+ * ABOUT: gemini-local-adapter.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - gemini-local-adapter.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: gemini-local-adapter.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/gemini-local-adapter.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import {
   isGeminiTurnLimitResult,
@@ -201,3 +215,4 @@ describe("gemini_local cli formatter", () => {
     expect(joined).toContain("error: boom");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CloudAccessGate.tsx
+ * ABOUT: CloudAccessGate.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CloudAccessGate.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CloudAccessGate.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CloudAccessGate.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Navigate, Outlet, useLocation } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { accessApi } from "@/api/access";
@@ -126,3 +140,4 @@ export function CloudAccessGate() {
 
   return <Outlet />;
 }
+// [END: module]

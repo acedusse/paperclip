@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/document_revisions.ts
+ * ABOUT: document_revisions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document_revisions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document_revisions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/document_revisions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, integer, timestamp, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -32,3 +46,4 @@ export const documentRevisions = pgTable(
     ),
   }),
 );
+// [END: module]

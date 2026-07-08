@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-selection-route-guards.test.ts
+ * ABOUT: environment-selection-route-guards.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-selection-route-guards.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-selection-route-guards.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-selection-route-guards.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Server } from "node:http";
 import express from "express";
 import request from "supertest";
@@ -394,3 +408,4 @@ describe.sequential("execution environment route guards", () => {
     expect(mockIssueService.update).toHaveBeenCalled();
   });
 });
+// [END: module]

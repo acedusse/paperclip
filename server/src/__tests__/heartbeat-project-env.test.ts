@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-project-env.test.ts
+ * ABOUT: heartbeat-project-env.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-project-env.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-project-env.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-project-env.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { buildSkillMentionHref } from "@paperclipai/shared";
 import {
@@ -477,3 +491,4 @@ describe("applyRunScopedMentionedSkillKeys", () => {
     });
   });
 });
+// [END: module]

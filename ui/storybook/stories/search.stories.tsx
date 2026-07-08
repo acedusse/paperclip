@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/search.stories.tsx
+ * ABOUT: search.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - search.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: search.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/search.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CompanySearchResult, CompanySearchResponse } from "@paperclipai/shared";
 import { Badge } from "@/components/ui/badge";
@@ -619,3 +633,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SearchSurfaces: Story = {};
+// [END: module]

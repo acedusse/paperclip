@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-routes-authz.test.ts
+ * ABOUT: plugin-routes-authz.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-routes-authz.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-routes-authz.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-routes-authz.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -1054,3 +1068,4 @@ describe.sequential("plugin tool and bridge authz", () => {
     expect(executeTool).not.toHaveBeenCalled();
   });
 });
+// [END: module]

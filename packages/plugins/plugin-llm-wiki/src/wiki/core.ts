@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/src/wiki/core.ts
+ * ABOUT: core.ts (wiki module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - core.ts (wiki module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: core.ts (wiki module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/src/wiki/core.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomUUID } from "node:crypto";
 import type { Agent, AgentSessionEvent, Issue, IssueComment, PluginContext, PluginEvent, PluginLocalFolderEntry, Project, ToolResult } from "@paperclipai/plugin-sdk";
 import type { IssueDocument, PluginIssueOriginKind, PluginManagedRoutineResolution, PluginManagedSkillResolution } from "@paperclipai/plugin-sdk/types";
@@ -4978,3 +4992,4 @@ export async function listOperations(ctx: PluginContext, input: {
     })),
   };
 }
+// [END: module]

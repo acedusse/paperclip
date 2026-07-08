@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/openapi-routes.test.ts
+ * ABOUT: openapi-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - openapi-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: openapi-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/openapi-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import fs from "node:fs";
 import path from "node:path";
@@ -188,3 +202,4 @@ describe("openapi routes", () => {
     expect(spec.paths["/api/companies/import"].post.responses["202"]).toBeDefined();
   });
 });
+// [END: module]

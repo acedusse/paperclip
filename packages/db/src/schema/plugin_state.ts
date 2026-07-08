@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/plugin_state.ts
+ * ABOUT: plugin_state.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin_state.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin_state.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/plugin_state.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   pgTable,
   uuid,
@@ -88,3 +102,4 @@ export const pluginState = pgTable(
     ),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-order.ts
+ * ABOUT: agent-order.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-order.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-order.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-order.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Agent } from "@paperclipai/shared";
 
 export const AGENT_ORDER_UPDATED_EVENT = "paperclip:agent-order-updated";
@@ -181,3 +195,4 @@ export function sortAgentsByStoredOrder(
 
   return sorted;
 }
+// [END: module]

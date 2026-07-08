@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/project-url-key.ts
+ * ABOUT: project-url-key.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-url-key.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-url-key.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/project-url-key.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const PROJECT_URL_KEY_DELIM_RE = /[^a-z0-9]+/g;
 const PROJECT_URL_KEY_TRIM_RE = /^-+|-+$/g;
 const NON_ASCII_RE = /[^\x00-\x7F]/;
@@ -34,3 +48,4 @@ export function deriveProjectUrlKey(name: string | null | undefined, fallback?: 
   if (shortId) return shortId;
   return base ?? normalizeProjectUrlKey(fallback) ?? "project";
 }
+// [END: module]

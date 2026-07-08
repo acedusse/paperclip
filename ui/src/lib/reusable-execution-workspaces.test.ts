@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/reusable-execution-workspaces.test.ts
+ * ABOUT: reusable-execution-workspaces.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - reusable-execution-workspaces.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: reusable-execution-workspaces.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/reusable-execution-workspaces.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { orderReusableExecutionWorkspaces, type ReusableExecutionWorkspaceLike } from "./reusable-execution-workspaces";
 
@@ -80,3 +94,4 @@ describe("orderReusableExecutionWorkspaces", () => {
     ]);
   });
 });
+// [END: module]

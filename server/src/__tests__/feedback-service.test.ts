@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/feedback-service.test.ts
+ * ABOUT: feedback-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/feedback-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
@@ -1141,3 +1155,4 @@ describe("feedbackService.saveIssueVote", () => {
     expect(traces[0]?.exportedAt).toBeNull();
   });
 });
+// [END: module]

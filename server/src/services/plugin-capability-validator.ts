@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-capability-validator.ts
+ * ABOUT: plugin-capability-validator.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-capability-validator.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-capability-validator.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-capability-validator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginCapabilityValidator — enforces the capability model at both
  * install-time and runtime.
  *
@@ -495,3 +509,4 @@ export function pluginCapabilityValidator(): PluginCapabilityValidator {
     },
   };
 }
+// [END: module]

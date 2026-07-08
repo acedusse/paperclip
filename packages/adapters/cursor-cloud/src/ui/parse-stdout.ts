@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-cloud/src/ui/parse-stdout.ts
+ * ABOUT: parse-stdout.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse-stdout.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse-stdout.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-cloud/src/ui/parse-stdout.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { TranscriptEntry } from "@paperclipai/adapter-utils";
 
 function safeJsonParse(text: string): unknown {
@@ -184,3 +198,4 @@ export function parseCursorCloudStdoutLine(line: string, ts: string): Transcript
 
   return [{ kind: "stdout", ts, text: line }];
 }
+// [END: module]

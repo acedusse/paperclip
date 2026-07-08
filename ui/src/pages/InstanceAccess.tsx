@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/InstanceAccess.tsx
+ * ABOUT: InstanceAccess.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InstanceAccess.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InstanceAccess.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/InstanceAccess.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Shield, ShieldCheck } from "lucide-react";
@@ -248,3 +262,4 @@ export function InstanceAccess() {
     </div>
   );
 }
+// [END: module]

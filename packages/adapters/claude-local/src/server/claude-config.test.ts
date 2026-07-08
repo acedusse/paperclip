@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/claude-config.test.ts
+ * ABOUT: claude-config.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - claude-config.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: claude-config.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/claude-config.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -64,3 +78,4 @@ describe("prepareClaudeConfigSeed", () => {
       .resolves.toBe(JSON.stringify({ theme: "dark" }));
   });
 });
+// [END: module]

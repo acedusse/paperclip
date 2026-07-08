@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/transcript/RunTranscriptView.tsx
+ * ABOUT: RunTranscriptView.tsx (transcript module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RunTranscriptView.tsx (transcript module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RunTranscriptView.tsx (transcript module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/transcript/RunTranscriptView.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { TranscriptEntry } from "../../adapters";
 import { MarkdownBody } from "../MarkdownBody";
@@ -1524,3 +1538,4 @@ export function RunTranscriptView({
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/artifacts.ts
+ * ABOUT: artifacts.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - artifacts.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: artifacts.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/artifacts.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { api } from "./client";
 import type {
   CompanyArtifact,
@@ -83,3 +97,4 @@ export const artifactsApi = {
     return normalizeArtifactsResponse(raw);
   },
 };
+// [END: module]

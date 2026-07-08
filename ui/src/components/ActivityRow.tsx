@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ActivityRow.tsx
+ * ABOUT: ActivityRow.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ActivityRow.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ActivityRow.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ActivityRow.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Link } from "@/lib/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { deriveInitials } from "./Identity";
@@ -92,3 +106,4 @@ export function ActivityRow({ event, agentMap, userProfileMap, entityNameMap, en
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/workspace-file-browser.stories.tsx
+ * ABOUT: workspace-file-browser.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-file-browser.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-file-browser.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/workspace-file-browser.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -210,3 +224,4 @@ export const BrowseRemoteWorkspace: Story = { render: () => <BrowseSheet data={u
 export const BrowseCleanedUpWorkspace: Story = { render: () => <BrowseSheet data={unavailable("workspace_unavailable")} /> };
 export const ViewModeFromBrowse: Story = { render: () => <ViewFromBrowse /> };
 export const CardPlacement: Story = { render: () => <Placement /> };
+// [END: module]

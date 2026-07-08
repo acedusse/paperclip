@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/app.ts
+ * ABOUT: app.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - app.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: app.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/app.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express, { Router, type Request as ExpressRequest } from "express";
 import path from "node:path";
 import fs from "node:fs";
@@ -568,3 +582,4 @@ export async function createApp(
 
   return app;
 }
+// [END: module]

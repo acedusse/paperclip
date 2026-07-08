@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/agent-invokability.ts
+ * ABOUT: agent-invokability.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-invokability.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-invokability.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/agent-invokability.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Db } from "@paperclipai/db";
 import { agents } from "@paperclipai/db";
 import { getAgentWorkEligibility, type AgentEligibilityAgent, type AgentOrgChainHealth } from "@paperclipai/shared";
@@ -162,3 +176,4 @@ export function listInvalidOrgChainDescendantIds(
 export function shouldCancelRunsForNonInvokableAgent(result: AgentInvokability) {
   return !result.invokable && (result.reason === "terminated" || result.invalidOrgChain);
 }
+// [END: module]

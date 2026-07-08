@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/storage/local-disk-provider.ts
+ * ABOUT: local-disk-provider.ts (storage module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - local-disk-provider.ts (storage module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: local-disk-provider.ts (storage module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/storage/local-disk-provider.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import type { StorageProvider, GetObjectResult, HeadObjectResult } from "./types.js";
@@ -93,3 +107,4 @@ export function createLocalDiskStorageProvider(baseDir: string): StorageProvider
     },
   };
 }
+// [END: module]

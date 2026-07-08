@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/api.ts
+ * ABOUT: api.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - api.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: api.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/api.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const API_PREFIX = "/api";
 
 export const API = {
@@ -25,3 +39,4 @@ export const API = {
   members: `${API_PREFIX}/members`,
   admin: `${API_PREFIX}/admin`,
 } as const;
+// [END: module]

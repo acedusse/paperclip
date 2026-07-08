@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/plugin.test.ts
+ * ABOUT: plugin.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/plugin.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import plugin from "../../src/plugin.js";
 
@@ -92,3 +106,4 @@ describe("plugin", () => {
     expect(result.warnings).toBeUndefined();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/transcript.test.ts
+ * ABOUT: transcript.test.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - transcript.test.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: transcript.test.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/transcript.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { buildTranscript, type RunLogChunk } from "./transcript";
 import { grokLocalUIAdapter } from "./grok-local";
@@ -200,3 +214,4 @@ describe("buildTranscript", () => {
     ]);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Search.tsx
+ * ABOUT: Search.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Search.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Search.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Search.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search as SearchIcon, AlertTriangle, FileQuestion, Plus, X } from "lucide-react";
@@ -633,3 +647,4 @@ function SearchTabContent({
     </div>
   );
 }
+// [END: module]

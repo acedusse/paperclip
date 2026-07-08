@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/NewGoalDialog.tsx
+ * ABOUT: NewGoalDialog.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - NewGoalDialog.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: NewGoalDialog.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/NewGoalDialog.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { GOAL_STATUSES, GOAL_LEVELS } from "@paperclipai/shared";
@@ -280,3 +294,4 @@ export function NewGoalDialog() {
     </Dialog>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/shared/turn-boundary.test.ts
+ * ABOUT: turn-boundary.test.ts (shared module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - turn-boundary.test.ts (shared module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: turn-boundary.test.ts (shared module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/shared/turn-boundary.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { applyTurnBoundary, createTurnBoundaryState } from "./turn-boundary.js";
 
@@ -49,3 +63,4 @@ describe("applyTurnBoundary", () => {
       .toBe("`ls`Then");
   });
 });
+// [END: module]

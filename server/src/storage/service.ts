@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/storage/service.ts
+ * ABOUT: service.ts (storage module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - service.ts (storage module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: service.ts (storage module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/storage/service.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import type { StorageService, StorageProvider, PutFileInput, PutFileResult } from "./types.js";
@@ -129,3 +143,4 @@ export function createStorageService(provider: StorageProvider): StorageService 
     },
   };
 }
+// [END: module]

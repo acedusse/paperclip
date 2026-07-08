@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-dev-watcher.ts
+ * ABOUT: plugin-dev-watcher.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-dev-watcher.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-dev-watcher.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-dev-watcher.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginDevWatcher — watches local-path plugin directories for file changes
  * and triggers worker restarts so plugin authors get a fast rebuild-and-reload
  * cycle without manually restarting the server.
@@ -353,3 +367,4 @@ export function createPluginDevWatcher(
     close,
   };
 }
+// [END: module]

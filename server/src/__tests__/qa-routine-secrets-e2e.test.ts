@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/qa-routine-secrets-e2e.test.ts
+ * ABOUT: qa-routine-secrets-e2e.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - qa-routine-secrets-e2e.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: qa-routine-secrets-e2e.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/qa-routine-secrets-e2e.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // QA validation for [PAP-9522](/PAP/issues/PAP-9522). Drives the routine-secret
 // chain end-to-end against a real embedded Postgres:
 //
@@ -456,3 +470,4 @@ describeEmbedded("PAP-9522 QA: routine secrets end-to-end", () => {
     expect(result.secretKeys.size).toBe(0);
   });
 });
+// [END: module]

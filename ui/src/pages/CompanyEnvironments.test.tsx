@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanyEnvironments.test.tsx
+ * ABOUT: CompanyEnvironments.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyEnvironments.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyEnvironments.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanyEnvironments.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createRoot } from "react-dom/client";
@@ -275,3 +289,4 @@ describe("CompanyEnvironments — test provider button", () => {
     expect(getOpenDialog()).toBeNull();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/log-redaction.ts
+ * ABOUT: log-redaction.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - log-redaction.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: log-redaction.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/log-redaction.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { TranscriptEntry } from "./types.js";
 
 export const REDACTED_HOME_PATH_USER = "*";
@@ -95,3 +109,4 @@ export function redactTranscriptEntryPaths(entry: TranscriptEntry, opts?: HomePa
       return entry;
   }
 }
+// [END: module]

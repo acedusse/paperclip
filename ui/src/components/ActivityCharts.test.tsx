@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ActivityCharts.test.tsx
+ * ABOUT: ActivityCharts.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ActivityCharts.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ActivityCharts.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ActivityCharts.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -107,3 +121,4 @@ describe("ActivityCharts", () => {
     expect(container.querySelector("[title='2026-04-20: 2 runs']")).not.toBeNull();
   });
 });
+// [END: module]

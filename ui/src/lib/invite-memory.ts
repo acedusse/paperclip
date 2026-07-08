@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/invite-memory.ts
+ * ABOUT: invite-memory.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-memory.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-memory.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/invite-memory.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const PENDING_INVITE_STORAGE_KEY = "paperclip:pending-invite-token";
 
 function canUseStorage() {
@@ -34,3 +48,4 @@ export function getRememberedInvitePath() {
     return null;
   }
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/company-delete.test.ts
+ * ABOUT: company-delete.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-delete.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-delete.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/company-delete.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Company } from "@paperclipai/shared";
 import { assertDeleteConfirmation, resolveCompanyForDeletion } from "../commands/client/company.js";
@@ -94,3 +108,4 @@ describe("assertDeleteConfirmation", () => {
       .toThrow(/does not match target company/);
   });
 });
+// [END: module]

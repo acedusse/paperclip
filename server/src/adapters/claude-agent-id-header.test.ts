@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/claude-agent-id-header.test.ts
+ * ABOUT: claude-agent-id-header.test.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - claude-agent-id-header.test.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: claude-agent-id-header.test.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/claude-agent-id-header.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { stampClaudeAgentIdHeader } from "./claude-agent-id-header.js";
 
@@ -105,3 +119,4 @@ describe("stampClaudeAgentIdHeader", () => {
     );
   });
 });
+// [END: module]

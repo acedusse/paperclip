@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/tests/diff-model.spec.ts
+ * ABOUT: diff-model.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - diff-model.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: diff-model.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/tests/diff-model.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildFilePatch,
@@ -191,3 +205,4 @@ describe("workspace diff UI model", () => {
     expect(statusLabel("type_changed")).toBe("Type changed");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/source-resolved-fold.stories.tsx
+ * ABOUT: source-resolved-fold.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - source-resolved-fold.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: source-resolved-fold.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/source-resolved-fold.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { SourceResolvedFoldCallout } from "@/components/SourceResolvedFoldCallout";
@@ -178,3 +192,4 @@ export const RunRowBadgeContext: Story = {
     </StoryFrame>
   ),
 };
+// [END: module]

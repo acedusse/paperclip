@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/src/plugin.ts
+ * ABOUT: plugin.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/src/plugin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { definePlugin } from "@paperclipai/plugin-sdk";
 import type {
   PluginLogger,
@@ -355,3 +369,4 @@ const plugin = definePlugin({
 });
 
 export default plugin;
+// [END: module]

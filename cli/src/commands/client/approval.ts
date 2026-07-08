@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/approval.ts
+ * ABOUT: approval.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approval.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approval.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/approval.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import {
   createApprovalSchema,
@@ -258,3 +272,4 @@ function parseJsonObject(value: string, name: string): Record<string, unknown> {
     throw new Error(`Invalid ${name} JSON: ${err instanceof Error ? err.message : String(err)}`);
   }
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/adapter-registry.ts
+ * ABOUT: adapter-registry.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-registry.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-registry.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/adapter-registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 
 /**
@@ -26,3 +40,4 @@ export const adapterRegistryEntrySchema = z
 export const adapterRegistrySchema = z.array(adapterRegistryEntrySchema);
 
 export type AdapterRegistryEntry = z.infer<typeof adapterRegistryEntrySchema>;
+// [END: module]

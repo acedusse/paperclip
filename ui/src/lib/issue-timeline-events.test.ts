@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-timeline-events.test.ts
+ * ABOUT: issue-timeline-events.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-timeline-events.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-timeline-events.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-timeline-events.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { ActivityEvent } from "@paperclipai/shared";
 import { extractIssueTimelineEvents } from "./issue-timeline-events";
@@ -291,3 +305,4 @@ describe("extractIssueTimelineEvents", () => {
     expect(events).toEqual([]);
   });
 });
+// [END: module]

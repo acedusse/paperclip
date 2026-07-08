@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-sdk-testing.test.ts
+ * ABOUT: plugin-sdk-testing.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-sdk-testing.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-sdk-testing.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-sdk-testing.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { PaperclipPluginManifestV1 } from "@paperclipai/shared";
 import { createTestHarness } from "@paperclipai/plugin-sdk/testing";
@@ -161,3 +175,4 @@ describe("plugin SDK test harness", () => {
     expect(JSON.stringify(comments)).not.toContain("secret plugin metadata");
   });
 });
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/components/IssueThreadInteractionCardClassic.tsx
+ * ABOUT: IssueThreadInteractionCardClassic.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueThreadInteractionCardClassic.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueThreadInteractionCardClassic.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueThreadInteractionCardClassic.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * CLASSIC FORK — do not extend (PAP-136 / PAP-139).
  *
  * Frozen copy of `IssueThreadInteractionCard.tsx` at merge-base e3aada1d
@@ -1888,3 +1902,4 @@ export function IssueThreadInteractionCardClassic({
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/agent.ts
+ * ABOUT: agent.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/agent.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   AGENT_ICON_NAMES,
@@ -167,3 +181,4 @@ export const updateAgentPermissionsSchema = z.object({
 });
 
 export type UpdateAgentPermissions = z.infer<typeof updateAgentPermissionsSchema>;
+// [END: module]

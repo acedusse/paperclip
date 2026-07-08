@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-portability-sidebar.ts
+ * ABOUT: company-portability-sidebar.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-portability-sidebar.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-portability-sidebar.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-portability-sidebar.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Agent, CompanyPortabilitySidebarOrder, Project } from "@paperclipai/shared";
 import { deriveProjectUrlKey, normalizeAgentUrlKey } from "@paperclipai/shared";
 
@@ -59,3 +73,4 @@ export function buildPortableSidebarOrder(input: {
 
   return sidebar.agents.length > 0 || sidebar.projects.length > 0 ? sidebar : undefined;
 }
+// [END: module]

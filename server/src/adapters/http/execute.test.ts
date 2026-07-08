@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/http/execute.test.ts
+ * ABOUT: execute.test.ts (http module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.test.ts (http module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.test.ts (http module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/http/execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { execute } from "./execute.js";
 
@@ -44,3 +58,4 @@ describe("http adapter execute", () => {
     expect(result.errorMessage).toContain("timed out after 1ms");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FinanceKindCard.tsx
+ * ABOUT: FinanceKindCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FinanceKindCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FinanceKindCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FinanceKindCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { FinanceByKind } from "@paperclipai/shared";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { financeEventKindDisplayName, formatCents } from "@/lib/utils";
@@ -41,3 +55,4 @@ export function FinanceKindCard({ rows }: FinanceKindCardProps) {
     </Card>
   );
 }
+// [END: module]

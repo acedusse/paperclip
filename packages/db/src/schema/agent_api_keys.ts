@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/agent_api_keys.ts
+ * ABOUT: agent_api_keys.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent_api_keys.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent_api_keys.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/agent_api_keys.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, index } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companies } from "./companies.js";
@@ -19,3 +33,4 @@ export const agentApiKeys = pgTable(
     companyAgentIdx: index("agent_api_keys_company_agent_idx").on(table.companyId, table.agentId),
   }),
 );
+// [END: module]

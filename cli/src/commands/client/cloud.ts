@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/cloud.ts
+ * ABOUT: cloud.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/cloud.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, generateKeyPairSync, randomBytes, randomUUID, sign } from "node:crypto";
 import { createServer, type Server } from "node:http";
 import { URL } from "node:url";
@@ -720,3 +734,4 @@ export const cloudCommandExitCodes = {
   conflict: CLOUD_SYNC_CONFLICT_EXIT_CODE,
   schemaMismatch: CLOUD_SYNC_SCHEMA_MISMATCH_EXIT_CODE,
 } as const;
+// [END: module]

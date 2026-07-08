@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/adapter-routes.test.ts
+ * ABOUT: adapter-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/adapter-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -392,3 +406,4 @@ describe("adapter routes", () => {
     setOverridePaused("codex_local", false);
   });
 });
+// [END: module]

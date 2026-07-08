@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/sandbox-provider-runtime.ts
+ * ABOUT: sandbox-provider-runtime.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-provider-runtime.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-provider-runtime.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/sandbox-provider-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import type {
   EnvironmentLeaseStatus,
@@ -377,3 +391,4 @@ export async function destroySandboxProviderLease(input: {
 }): Promise<void> {
   await requireSandboxProvider(input.config.provider).destroyLease(input);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/index.ts
+ * ABOUT: index.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export { api } from "./client";
 export { authApi } from "./auth";
 export { healthApi } from "./health";
@@ -19,3 +33,4 @@ export { sidebarPreferencesApi } from "./sidebarPreferences";
 export { resourceMembershipsApi } from "./resourceMemberships";
 export { inboxDismissalsApi } from "./inboxDismissals";
 export { companySkillsApi } from "./companySkills";
+// [END: module]

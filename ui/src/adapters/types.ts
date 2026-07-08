@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/types.ts
+ * ABOUT: types.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ComponentType } from "react";
 import type { CreateConfigValues } from "@paperclipai/adapter-utils";
 
@@ -42,3 +56,4 @@ export interface UIAdapterModule extends TranscriptParserSource {
   ConfigFields: ComponentType<AdapterConfigFieldsProps>;
   buildAdapterConfig: (values: CreateConfigValues) => Record<string, unknown>;
 }
+// [END: module]

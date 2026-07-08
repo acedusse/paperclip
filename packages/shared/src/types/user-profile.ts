@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/user-profile.ts
+ * ABOUT: user-profile.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - user-profile.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: user-profile.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/user-profile.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssuePriority, IssueStatus } from "../constants.js";
 
 export interface UserProfileIdentity {
@@ -86,3 +100,4 @@ export interface UserProfileResponse {
   topAgents: UserProfileAgentUsage[];
   topProviders: UserProfileProviderUsage[];
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/adapters/adapter-display-registry.ts
+ * ABOUT: adapter-display-registry.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-display-registry.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-display-registry.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/adapter-display-registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Single source of truth for adapter display metadata.
  *
  * Built-in adapters have entries in `adapterDisplayMap`. External (plugin)
@@ -175,3 +189,4 @@ export function getAdapterDisplay(type: string): AdapterDisplayInfo {
 export function isKnownAdapterType(type: string): boolean {
   return type in adapterDisplayMap;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/project_workspaces.ts
+ * ABOUT: project_workspaces.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project_workspaces.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project_workspaces.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/project_workspaces.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   boolean,
   index,
@@ -43,3 +57,4 @@ export const projectWorkspaces = pgTable(
       .on(table.projectId, table.remoteProvider, table.remoteWorkspaceRef),
   }),
 );
+// [END: module]

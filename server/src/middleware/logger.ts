@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/logger.ts
+ * ABOUT: logger.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - logger.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: logger.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/logger.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import fs from "node:fs";
 import pino from "pino";
@@ -94,3 +108,4 @@ export const httpLogger = pinoHttp({
     return {};
   },
 });
+// [END: module]

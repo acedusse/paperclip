@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/task-watchdogs-scheduler.test.ts
+ * ABOUT: task-watchdogs-scheduler.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - task-watchdogs-scheduler.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: task-watchdogs-scheduler.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/task-watchdogs-scheduler.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -590,3 +604,4 @@ describeEmbeddedPostgres("task watchdog scheduler", () => {
     expect(watchdogIssues).toHaveLength(1);
   });
 });
+// [END: module]

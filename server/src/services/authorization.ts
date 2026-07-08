@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/authorization.ts
+ * ABOUT: authorization.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - authorization.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: authorization.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/authorization.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -1358,3 +1372,4 @@ export function authorizationService(db: Db) {
     decidePrincipalGrant,
   };
 }
+// [END: module]

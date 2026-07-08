@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/workspace-runtime.ts
+ * ABOUT: workspace-runtime.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-runtime.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-runtime.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { spawn, type ChildProcess } from "node:child_process";
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import fs from "node:fs/promises";
@@ -3348,3 +3362,4 @@ export function buildWorkspaceReadyComment(input: {
   }
   return lines.join("\n");
 }
+// [END: module]

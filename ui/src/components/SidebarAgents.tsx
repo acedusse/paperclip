@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarAgents.tsx
+ * ABOUT: SidebarAgents.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarAgents.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarAgents.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarAgents.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useLocation } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -508,3 +522,4 @@ export function SidebarAgents({ streamlined = false }: { streamlined?: boolean }
     </SidebarSection>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/pin-document-scroll.test.ts
+ * ABOUT: pin-document-scroll.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - pin-document-scroll.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: pin-document-scroll.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/pin-document-scroll.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -74,3 +88,4 @@ describe("pinDocumentScrollToZero", () => {
     expect(document.documentElement.scrollTop).toBe(75);
   });
 });
+// [END: module]

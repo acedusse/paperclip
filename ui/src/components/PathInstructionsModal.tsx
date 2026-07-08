@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/PathInstructionsModal.tsx
+ * ABOUT: PathInstructionsModal.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PathInstructionsModal.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PathInstructionsModal.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/PathInstructionsModal.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { Apple, Monitor, Terminal } from "lucide-react";
 import {
@@ -141,3 +155,4 @@ export function ChoosePathButton({ className }: { className?: string }) {
     </>
   );
 }
+// [END: module]

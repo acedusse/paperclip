@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/scripts/clean-poisoned-claude-sessions.test.ts
+ * ABOUT: clean-poisoned-claude-sessions.test.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - clean-poisoned-claude-sessions.test.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: clean-poisoned-claude-sessions.test.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/scripts/clean-poisoned-claude-sessions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -164,3 +178,4 @@ describe("classifyRow", () => {
     expect(result.kind).toBe("healthy");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/release-smoke/docker-auth-onboarding.spec.ts
+ * ABOUT: docker-auth-onboarding.spec.ts (release-smoke module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - docker-auth-onboarding.spec.ts (release-smoke module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: docker-auth-onboarding.spec.ts (release-smoke module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/release-smoke/docker-auth-onboarding.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { expect, test, type Page } from "@playwright/test";
 
 const ADMIN_EMAIL =
@@ -139,3 +153,4 @@ test.describe("Docker authenticated onboarding smoke", () => {
     );
   });
 });
+// [END: module]

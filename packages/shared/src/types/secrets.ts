@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/secrets.ts
+ * ABOUT: secrets.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   SecretAccessOutcome,
   SecretBindingTargetType,
@@ -279,3 +293,4 @@ export interface RemoteSecretImportResult {
   errorCount: number;
   results: RemoteSecretImportRowResult[];
 }
+// [END: module]

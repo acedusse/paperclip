@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/health.test.ts
+ * ABOUT: health.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - health.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: health.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/health.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import express from "express";
 import request from "supertest";
@@ -182,3 +196,4 @@ describe("GET /health", () => {
     });
   });
 });
+// [END: module]

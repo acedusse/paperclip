@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineActivityRow.tsx
+ * ABOUT: RoutineActivityRow.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineActivityRow.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineActivityRow.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineActivityRow.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import type { ActivityEvent } from "@paperclipai/shared";
@@ -76,3 +90,4 @@ export function RoutineActivityRow({ event }: { event: RoutineActivityEvent }) {
     </div>
   );
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-job-store.ts
+ * ABOUT: plugin-job-store.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-job-store.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-job-store.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-job-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Plugin Job Store — persistence layer for scheduled plugin jobs and their
  * execution history.
  *
@@ -463,3 +477,4 @@ export function pluginJobStore(db: Db) {
 
 /** Type alias for the return value of `pluginJobStore()`. */
 export type PluginJobStore = ReturnType<typeof pluginJobStore>;
+// [END: module]

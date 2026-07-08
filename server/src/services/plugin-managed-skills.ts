@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-managed-skills.ts
+ * ABOUT: plugin-managed-skills.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-managed-skills.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-managed-skills.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-managed-skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -357,3 +371,4 @@ export function pluginManagedSkillService(
     reset,
   };
 }
+// [END: module]

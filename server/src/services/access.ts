@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/access.ts
+ * ABOUT: access.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - access.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: access.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/access.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, inArray, ne, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -804,3 +818,4 @@ export function accessService(db: Db) {
     updateMember,
   };
 }
+// [END: module]

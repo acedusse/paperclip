@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/nux-phase4-screenshots.spec.ts
+ * ABOUT: nux-phase4-screenshots.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - nux-phase4-screenshots.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: nux-phase4-screenshots.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/nux-phase4-screenshots.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { test, expect } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
@@ -173,3 +187,4 @@ test.describe("NUX Phase 4 visual QA", () => {
     expect(hookErrors, hookErrors.join("\n")).toHaveLength(0);
   });
 });
+// [END: module]

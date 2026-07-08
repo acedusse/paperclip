@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/plugins/slots.tsx
+ * ABOUT: slots.tsx (plugins module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - slots.tsx (plugins module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: slots.tsx (plugins module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/plugins/slots.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Plugin UI slot system — dynamic loading, error isolation,
  * and rendering of plugin-contributed UI extensions.
  *
@@ -952,3 +966,4 @@ export const _applyJsxRuntimeKeyForTests = applyJsxRuntimeKey;
 export const _createReactShimSourceForTests = createReactShimSource;
 export const _rewriteBareSpecifiersForTests = rewriteBareSpecifiers;
 export const _collectRegisterableExportNamesForTests = collectRegisterableExportNames;
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/PropertiesPanel.tsx
+ * ABOUT: PropertiesPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PropertiesPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PropertiesPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/PropertiesPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { X } from "lucide-react";
 import { usePanel } from "../context/PanelContext";
 import { Button } from "@/components/ui/button";
@@ -27,3 +41,4 @@ export function PropertiesPanel() {
     </aside>
   );
 }
+// [END: module]

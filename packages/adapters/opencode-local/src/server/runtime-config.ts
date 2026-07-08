@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/runtime-config.ts
+ * ABOUT: runtime-config.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-config.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-config.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/runtime-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -206,3 +220,4 @@ export async function prepareOpenCodeRuntimeConfig(input: {
     },
   };
 }
+// [END: module]

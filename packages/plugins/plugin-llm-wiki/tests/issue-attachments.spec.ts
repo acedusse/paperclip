@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/tests/issue-attachments.spec.ts
+ * ABOUT: issue-attachments.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-attachments.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-attachments.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/tests/issue-attachments.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { readIngestOperationIssueId, uploadIssueAttachmentFile } from "../src/ui/issue-attachments.js";
 
@@ -58,3 +72,4 @@ describe("LLM Wiki issue attachment uploads", () => {
     })).rejects.toThrow("Attachment exceeds 10 bytes");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/telemetry/types.ts
+ * ABOUT: types.ts (telemetry module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (telemetry module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (telemetry module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/telemetry/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface TelemetryState {
   installId: string;
   salt: string;
@@ -42,3 +56,4 @@ export type TelemetryEventName =
   | "agent.task_completed"
   | "error.handler_crash"
   | `plugin.${string}`;
+// [END: module]

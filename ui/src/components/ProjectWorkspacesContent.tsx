@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ProjectWorkspacesContent.tsx
+ * ABOUT: ProjectWorkspacesContent.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectWorkspacesContent.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectWorkspacesContent.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ProjectWorkspacesContent.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ExecutionWorkspace } from "@paperclipai/shared";
@@ -117,3 +131,4 @@ export function ProjectWorkspacesContent({
     </>
   );
 }
+// [END: module]

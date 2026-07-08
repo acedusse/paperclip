@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/resource-memberships.ts
+ * ABOUT: resource-memberships.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - resource-memberships.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: resource-memberships.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/resource-memberships.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -316,3 +330,4 @@ export function resourceMembershipService(db: Db, options: ResourceMembershipSer
     },
   };
 }
+// [END: module]

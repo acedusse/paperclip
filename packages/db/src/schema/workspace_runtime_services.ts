@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/workspace_runtime_services.ts
+ * ABOUT: workspace_runtime_services.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace_runtime_services.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace_runtime_services.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/workspace_runtime_services.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   index,
   integer,
@@ -69,3 +83,4 @@ export const workspaceRuntimeServices = pgTable(
     ),
   }),
 );
+// [END: module]

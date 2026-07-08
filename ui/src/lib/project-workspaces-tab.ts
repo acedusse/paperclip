@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/project-workspaces-tab.ts
+ * ABOUT: project-workspaces-tab.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-workspaces-tab.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-workspaces-tab.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/project-workspaces-tab.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ExecutionWorkspace, Issue, Project } from "@paperclipai/shared";
 
 type ProjectWorkspaceLike = Pick<Project, "workspaces" | "primaryWorkspace">;
@@ -188,3 +202,4 @@ export function buildProjectWorkspaceSummaries(input: {
     return diff !== 0 ? diff : a.workspaceName.localeCompare(b.workspaceName);
   });
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/fixtures/paperclipData.ts
+ * ABOUT: paperclipData.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - paperclipData.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: paperclipData.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/fixtures/paperclipData.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ActivityEvent,
   Agent,
@@ -1637,3 +1651,4 @@ export const storybookSecretProviderHealth = {
     },
   ],
 };
+// [END: module]

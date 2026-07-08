@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/runtime-config.test.ts
+ * ABOUT: runtime-config.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-config.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-config.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/runtime-config.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -414,3 +428,4 @@ describe("prepareCodexRuntimeConfig", () => {
     expect(content).toBe("model = \"gpt-5.1-codex\"\n");
   });
 });
+// [END: module]

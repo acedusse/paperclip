@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ProjectTile.tsx
+ * ABOUT: ProjectTile.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectTile.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectTile.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ProjectTile.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "../lib/utils";
 import { getProjectIcon } from "../lib/project-icons";
 
@@ -50,3 +64,4 @@ export function ProjectTile({ color, icon, size = "md", className }: ProjectTile
     </span>
   );
 }
+// [END: module]

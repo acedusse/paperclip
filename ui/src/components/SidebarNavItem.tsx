@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarNavItem.tsx
+ * ABOUT: SidebarNavItem.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarNavItem.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarNavItem.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarNavItem.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useContext, type ReactNode } from "react";
 import { NavLink } from "@/lib/router";
 import { SIDEBAR_SCROLL_RESET_STATE } from "../lib/navigation-scroll";
@@ -182,3 +196,4 @@ export function SidebarNavItem({
     </Tooltip>
   );
 }
+// [END: module]

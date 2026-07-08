@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/adapter-types.test.ts
+ * ABOUT: adapter-types.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-types.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-types.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/adapter-types.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { AGENT_ROLE_LABELS, acceptInviteSchema, createAgentSchema, updateAgentSchema } from "./index.js";
 
@@ -62,3 +76,4 @@ describe("dynamic adapter type validation schemas", () => {
     expect(AGENT_ROLE_LABELS.security).toBe("Security");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/InstanceSettings.tsx
+ * ABOUT: InstanceSettings.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InstanceSettings.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InstanceSettings.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/InstanceSettings.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Clock3, ExternalLink, Settings } from "lucide-react";
@@ -282,3 +296,4 @@ export function InstanceSettings() {
     </div>
   );
 }
+// [END: module]

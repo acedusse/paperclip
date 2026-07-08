@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issue-monitor-scheduler.test.ts
+ * ABOUT: issue-monitor-scheduler.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-monitor-scheduler.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-monitor-scheduler.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issue-monitor-scheduler.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq, sql } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -448,3 +462,4 @@ describeEmbeddedPostgres("issue monitor scheduler", () => {
     expect(activity.find((row) => row.action === "issue.monitor_triggered")?.details).not.toHaveProperty("externalRef");
   });
 });
+// [END: module]

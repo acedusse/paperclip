@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/company.ts
+ * ABOUT: company.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/company.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -1778,3 +1792,4 @@ function addCompanyJsonPost(parent: Command, name: string, description: string, 
 function parseJson(value: string): unknown {
   return JSON.parse(value) as unknown;
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/shared/src/types/adapter-registry.ts
+ * ABOUT: adapter-registry.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-registry.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-registry.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/adapter-registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * One declarative agent-harness ("adapter") entry. The same shape is used for
  * local self-hosting and our operator/cloud: it governs both availability (the
  * picker) and, when the run is sandboxed on Kubernetes, the runtime wiring.
@@ -28,3 +42,4 @@ export interface AdapterRegistryEntry {
    */
   defaultEnv?: Record<string, string>;
 }
+// [END: module]

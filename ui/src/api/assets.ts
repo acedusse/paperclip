@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/assets.ts
+ * ABOUT: assets.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - assets.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: assets.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/assets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AssetImage } from "@paperclipai/shared";
 import { api } from "./client";
 
@@ -27,3 +41,4 @@ export const assetsApi = {
     return api.postForm<AssetImage>(`/companies/${companyId}/logo`, form);
   },
 };
+// [END: module]

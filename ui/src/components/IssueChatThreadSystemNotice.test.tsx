@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueChatThreadSystemNotice.test.tsx
+ * ABOUT: IssueChatThreadSystemNotice.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueChatThreadSystemNotice.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueChatThreadSystemNotice.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueChatThreadSystemNotice.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -481,3 +495,4 @@ describe("IssueChatThread system notice routing", () => {
     expect(container.textContent).toContain("run-stale");
   });
 });
+// [END: module]

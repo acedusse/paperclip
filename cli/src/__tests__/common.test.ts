@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/common.test.ts
+ * ABOUT: common.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - common.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: common.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/common.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -185,3 +199,4 @@ describe("inferContentTypeFromPath", () => {
     expect(inferContentTypeFromPath("noextension")).toBeUndefined();
   });
 });
+// [END: module]

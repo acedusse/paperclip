@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/project-icon-persistence.test.ts
+ * ABOUT: project-icon-persistence.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-icon-persistence.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-icon-persistence.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/project-icon-persistence.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { companies, createDb, projects as projectsTable } from "@paperclipai/db";
 import {
@@ -93,3 +107,4 @@ describeEmbeddedPostgres("project icon persistence", () => {
     expect(fetched?.color).toBe("#3b82f6");
   });
 });
+// [END: module]

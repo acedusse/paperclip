@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/storage-local-provider.test.ts
+ * ABOUT: storage-local-provider.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - storage-local-provider.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: storage-local-provider.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/storage-local-provider.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it } from "vitest";
 import os from "node:os";
 import path from "node:path";
@@ -96,3 +110,4 @@ describe("local disk storage provider", () => {
     await expect(service.getObject("company-1", stored.objectKey)).rejects.toMatchObject({ status: 404 });
   });
 });
+// [END: module]

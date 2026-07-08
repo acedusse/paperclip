@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/usePaperclipIssueRuntime.test.tsx
+ * ABOUT: usePaperclipIssueRuntime.test.tsx (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - usePaperclipIssueRuntime.test.tsx (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: usePaperclipIssueRuntime.test.tsx (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/usePaperclipIssueRuntime.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -177,3 +191,4 @@ describe("usePaperclipIssueRuntime", () => {
     container.remove();
   });
 });
+// [END: module]

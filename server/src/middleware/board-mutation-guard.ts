@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/board-mutation-guard.ts
+ * ABOUT: board-mutation-guard.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-mutation-guard.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-mutation-guard.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/board-mutation-guard.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Request, RequestHandler } from "express";
 
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
@@ -76,3 +90,4 @@ export function boardMutationGuard(): RequestHandler {
     next();
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/dev-runner-worktree.ts
+ * ABOUT: dev-runner-worktree.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner-worktree.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner-worktree.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/dev-runner-worktree.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, lstatSync, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -129,3 +143,4 @@ export function bootstrapDevRunnerWorktreeEnv(
     missingEnv: false,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/cron-readable.test.ts
+ * ABOUT: cron-readable.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cron-readable.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cron-readable.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/cron-readable.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { describeCron } from "./cron-readable";
 
@@ -29,3 +43,4 @@ describe("describeCron", () => {
     expect(describeCron("1 2 3")).toBeNull();
   });
 });
+// [END: module]

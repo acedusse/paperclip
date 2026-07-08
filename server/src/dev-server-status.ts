@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/dev-server-status.ts
+ * ABOUT: dev-server-status.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-server-status.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-server-status.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/dev-server-status.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
@@ -132,3 +146,4 @@ export function toDevServerHealthStatus(
     lastRestartAt: persisted.lastRestartAt,
   };
 }
+// [END: module]

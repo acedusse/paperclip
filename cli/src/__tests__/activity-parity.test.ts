@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/activity-parity.test.ts
+ * ABOUT: activity-parity.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - activity-parity.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: activity-parity.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/activity-parity.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerActivityCommands } from "../commands/client/activity.js";
@@ -51,3 +65,4 @@ describe("activity parity commands", () => {
 function jsonResponse(body: unknown = { ok: true }, init: ResponseInit = { status: 200 }): Response {
   return new Response(JSON.stringify(body), init);
 }
+// [END: module]

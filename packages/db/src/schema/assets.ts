@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/assets.ts
+ * ABOUT: assets.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - assets.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: assets.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/assets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, integer, timestamp, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -24,3 +38,4 @@ export const assets = pgTable(
     companyObjectKeyUq: uniqueIndex("assets_company_object_key_uq").on(table.companyId, table.objectKey),
   }),
 );
+// [END: module]

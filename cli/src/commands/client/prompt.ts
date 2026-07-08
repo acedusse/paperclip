@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/prompt.ts
+ * ABOUT: prompt.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - prompt.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: prompt.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/prompt.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type { Agent, Issue, IssueComment } from "@paperclipai/shared";
 import { addIssueCommentSchema, createIssueSchema } from "@paperclipai/shared";
@@ -274,3 +288,4 @@ function readApiKeyEnvOption(opts: PromptOptions): string | undefined {
   if (!value) throw new Error(`Environment variable ${opts.apiKeyEnv.trim()} is not set`);
   return value;
 }
+// [END: module]

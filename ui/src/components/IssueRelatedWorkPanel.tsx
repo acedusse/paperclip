@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueRelatedWorkPanel.tsx
+ * ABOUT: IssueRelatedWorkPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueRelatedWorkPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueRelatedWorkPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueRelatedWorkPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssueRelatedWorkItem, IssueRelatedWorkSummary } from "@paperclipai/shared";
 import { IssueReferencePill } from "./IssueReferencePill";
 
@@ -108,3 +122,4 @@ export function IssueRelatedWorkPanel({
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineSubSidebar.tsx
+ * ABOUT: RoutineSubSidebar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineSubSidebar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineSubSidebar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineSubSidebar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useRef } from "react";
 import {
   Activity as ActivityIcon,
@@ -212,3 +226,4 @@ export function RoutineSectionPicker({
 }
 
 export { ALL_ITEMS as ROUTINE_NAV_ITEMS };
+// [END: module]

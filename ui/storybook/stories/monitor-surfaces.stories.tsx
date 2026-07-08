@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/monitor-surfaces.stories.tsx
+ * ABOUT: monitor-surfaces.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - monitor-surfaces.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: monitor-surfaces.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/monitor-surfaces.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Issue } from "@paperclipai/shared";
 import { IssueMonitorActivityCard } from "@/components/IssueMonitorActivityCard";
@@ -233,3 +247,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const MonitorSurfaces: Story = {};
+// [END: module]

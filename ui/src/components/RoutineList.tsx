@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineList.tsx
+ * ABOUT: RoutineList.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineList.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineList.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineList.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import { MoreHorizontal, Play } from "lucide-react";
 import { Link } from "@/lib/router";
@@ -199,3 +213,4 @@ export function RoutineListRow<TRoutine extends RoutineListRowItem>({
     </Link>
   );
 }
+// [END: module]

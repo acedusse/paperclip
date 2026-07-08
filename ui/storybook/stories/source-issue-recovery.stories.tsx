@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/source-issue-recovery.stories.tsx
+ * ABOUT: source-issue-recovery.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - source-issue-recovery.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: source-issue-recovery.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/source-issue-recovery.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import type { IssueRecoveryAction, IssueRelationIssueSummary } from "@paperclipai/shared";
@@ -425,3 +439,4 @@ export const ActiveRunPanelRecoveryChips: Story = {
     </StoryFrame>
   ),
 };
+// [END: module]

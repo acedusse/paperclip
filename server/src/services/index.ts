@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/index.ts
+ * ABOUT: index.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export { companyService } from "./companies.js";
 export { companyArtifactsService } from "./company-artifacts.js";
 export { companySearchService } from "./company-search.js";
@@ -86,3 +100,4 @@ export {
 } from "./codex-auth-reconciliation.js";
 export { reconcilePersistedRuntimeServicesOnStartup, restartDesiredRuntimeServicesOnStartup } from "./workspace-runtime.js";
 export { createStorageServiceFromConfig, getStorageService } from "../storage/index.js";
+// [END: module]

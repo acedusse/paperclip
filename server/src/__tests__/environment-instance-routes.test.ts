@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-instance-routes.test.ts
+ * ABOUT: environment-instance-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-instance-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-instance-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-instance-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -278,3 +292,4 @@ describe("environment instance routes", () => {
     expect(res.body.config).toEqual({ shell: "zsh" });
   });
 });
+// [END: module]

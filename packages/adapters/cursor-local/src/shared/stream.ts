@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-local/src/shared/stream.ts
+ * ABOUT: stream.ts (shared module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - stream.ts (shared module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: stream.ts (shared module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-local/src/shared/stream.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export function normalizeCursorStreamLine(rawLine: string): {
   stream: "stdout" | "stderr" | null;
   line: string;
@@ -14,3 +28,4 @@ export function normalizeCursorStreamLine(rawLine: string): {
   const line = (prefixed[2] ?? "").trim();
   return { stream, line };
 }
+// [END: module]

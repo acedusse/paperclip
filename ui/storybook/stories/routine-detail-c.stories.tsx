@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/routine-detail-c.stories.tsx
+ * ABOUT: routine-detail-c.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-detail-c.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-detail-c.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/routine-detail-c.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useRef, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Sparkles } from "lucide-react";
@@ -339,3 +353,4 @@ export const Secrets: Story = { args: { initialSection: "secrets" } };
 export const Delivery: Story = { args: { initialSection: "delivery" } };
 export const Runs: Story = { args: { initialSection: "runs" } };
 export const Activity: Story = { args: { initialSection: "activity" } };
+// [END: module]

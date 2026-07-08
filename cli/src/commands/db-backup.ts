@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/db-backup.ts
+ * ABOUT: db-backup.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - db-backup.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: db-backup.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/db-backup.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
@@ -100,3 +114,4 @@ export async function dbBackupCommand(opts: DbBackupOptions): Promise<void> {
     throw err;
   }
 }
+// [END: module]

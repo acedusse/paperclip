@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/execution-policy-bootstrap.test.ts
+ * ABOUT: execution-policy-bootstrap.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-policy-bootstrap.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-policy-bootstrap.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/execution-policy-bootstrap.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const updateGeneral = vi.fn();
@@ -166,3 +180,4 @@ describe("applyExecutionPolicyBootstrap", () => {
     expect(ensureKubernetesEnvironment).toHaveBeenCalledTimes(3);
   });
 });
+// [END: module]

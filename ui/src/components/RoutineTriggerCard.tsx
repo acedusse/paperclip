@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineTriggerCard.tsx
+ * ABOUT: RoutineTriggerCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineTriggerCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineTriggerCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineTriggerCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { Clock3, RefreshCw, Save, Trash2, Webhook, Zap } from "lucide-react";
 import type { RoutineTrigger } from "@paperclipai/shared";
@@ -192,3 +206,4 @@ export function RoutineTriggerCard({
     </form>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/tenant-orchestrator.ts
+ * ABOUT: tenant-orchestrator.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - tenant-orchestrator.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: tenant-orchestrator.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/tenant-orchestrator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { KubeClients } from "./kube-client.js";
 import { buildNetworkPolicyManifests } from "./network-policy.js";
 import { buildCiliumNetworkPolicyManifest } from "./cilium-network-policy.js";
@@ -297,3 +311,4 @@ async function createIgnoringAlreadyExists(create: Promise<unknown>): Promise<vo
     if (!isAlreadyExists(err)) throw err;
   }
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/new-agent-hire-payload.ts
+ * ABOUT: new-agent-hire-payload.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - new-agent-hire-payload.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: new-agent-hire-payload.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/new-agent-hire-payload.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CreateConfigValues } from "../components/AgentConfigForm";
 import { buildNewAgentRuntimeConfig } from "./new-agent-runtime-config";
 import type { AgentPermissions } from "@paperclipai/shared";
@@ -42,3 +56,4 @@ export function buildNewAgentHirePayload(input: {
     ...(permissions ? { permissions } : {}),
   };
 }
+// [END: module]

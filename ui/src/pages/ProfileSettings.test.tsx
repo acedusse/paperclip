@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/ProfileSettings.test.tsx
+ * ABOUT: ProfileSettings.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProfileSettings.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProfileSettings.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/ProfileSettings.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -131,3 +145,4 @@ describe("ProfileSettings", () => {
     });
   });
 });
+// [END: module]

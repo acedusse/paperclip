@@ -1,5 +1,19 @@
 #!/usr/bin/env npx tsx
 /**
+ * FILE: scripts/generate-org-chart-images.ts
+ * ABOUT: generate-org-chart-images.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - generate-org-chart-images.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: generate-org-chart-images.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/generate-org-chart-images.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Standalone org chart image generator.
  *
  * Renders each of the 5 org chart styles to PNG using Playwright (headless Chromium).
@@ -692,3 +706,4 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
+// [END: module]

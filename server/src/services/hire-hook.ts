@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/hire-hook.ts
+ * ABOUT: hire-hook.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - hire-hook.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: hire-hook.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/hire-hook.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents } from "@paperclipai/db";
@@ -111,3 +125,4 @@ export async function notifyHireApproved(
     });
   }
 }
+// [END: module]

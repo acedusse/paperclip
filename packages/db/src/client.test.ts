@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/client.test.ts
+ * ABOUT: client.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - client.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: client.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/client.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import { afterEach, describe, expect, it } from "vitest";
@@ -542,3 +556,4 @@ describeEmbeddedPostgres("applyPendingMigrations", () => {
     20_000,
   );
 });
+// [END: module]

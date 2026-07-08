@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-tree.ts
+ * ABOUT: issue-tree.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-tree.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-tree.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-tree.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue } from "@paperclipai/shared";
 
 export interface IssueTree {
@@ -70,3 +84,4 @@ export function filterIssueDescendants(rootId: string, items: Issue[]): Issue[] 
 
   return descendants;
 }
+// [END: module]

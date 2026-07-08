@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/sandbox-cr-builder.ts
+ * ABOUT: sandbox-cr-builder.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-cr-builder.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-cr-builder.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/sandbox-cr-builder.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Builds a kubernetes-sigs/agent-sandbox Sandbox CR manifest.
  *
  * The Sandbox CR creates a long-lived pod (sleep infinity entrypoint) into
@@ -139,3 +153,4 @@ export function buildSandboxCrManifest(
     },
   };
 }
+// [END: module]

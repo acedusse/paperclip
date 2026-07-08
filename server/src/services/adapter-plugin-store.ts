@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/adapter-plugin-store.ts
+ * ABOUT: adapter-plugin-store.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-plugin-store.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-plugin-store.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/adapter-plugin-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * JSON-file-backed store for external adapter registrations.
  *
  * Stores metadata about externally installed adapter packages at
@@ -190,3 +204,4 @@ export function setAdapterDisabled(type: string, disabled: boolean): boolean {
   }
   return false;
 }
+// [END: module]

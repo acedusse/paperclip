@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-process-recovery.test.ts
+ * ABOUT: heartbeat-process-recovery.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-process-recovery.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-process-recovery.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-process-recovery.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { spawn, type ChildProcess } from "node:child_process";
 import { and, eq, or, inArray } from "drizzle-orm";
@@ -3825,3 +3839,4 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     expect(runs).toHaveLength(1);
   });
 });
+// [END: module]

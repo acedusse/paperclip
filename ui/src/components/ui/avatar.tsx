@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/avatar.tsx
+ * ABOUT: avatar.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - avatar.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: avatar.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/avatar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { Avatar as AvatarPrimitive } from "radix-ui"
 
@@ -105,3 +119,4 @@ export {
   AvatarGroup,
   AvatarGroupCount,
 }
+// [END: module]

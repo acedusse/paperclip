@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/output-inactivity-monitor.test.ts
+ * ABOUT: output-inactivity-monitor.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - output-inactivity-monitor.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: output-inactivity-monitor.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/output-inactivity-monitor.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   CODEX_OUTPUT_INACTIVITY_MONITOR_SIGTERM_GRACE_MS,
@@ -258,3 +272,4 @@ describe("CODEX_OUTPUT_INACTIVITY_MONITOR_SIGTERM_GRACE_MS", () => {
     expect(CODEX_OUTPUT_INACTIVITY_MONITOR_SIGTERM_GRACE_MS).toBe(5_000);
   });
 });
+// [END: module]

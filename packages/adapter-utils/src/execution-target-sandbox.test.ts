@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/execution-target-sandbox.test.ts
+ * ABOUT: execution-target-sandbox.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-target-sandbox.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-target-sandbox.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/execution-target-sandbox.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createServer } from "node:http";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
@@ -578,3 +592,4 @@ describe("sandbox adapter execution targets", () => {
     }
   });
 });
+// [END: module]

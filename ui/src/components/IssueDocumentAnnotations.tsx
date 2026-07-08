@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueDocumentAnnotations.tsx
+ * ABOUT: IssueDocumentAnnotations.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueDocumentAnnotations.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueDocumentAnnotations.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueDocumentAnnotations.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Agent, DocumentAnnotationThreadWithComments, IssueDocument } from "@paperclipai/shared";
@@ -380,3 +394,4 @@ export function DocumentAnnotationsCountChip({
     </Button>
   );
 }
+// [END: module]

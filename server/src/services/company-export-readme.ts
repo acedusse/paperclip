@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/company-export-readme.ts
+ * ABOUT: company-export-readme.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-export-readme.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-export-readme.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/company-export-readme.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Generates README.md with Mermaid org chart for company exports.
  */
 import type { CompanyPortabilityManifest } from "@paperclipai/shared";
@@ -170,3 +184,4 @@ export function generateReadme(
 
   return lines.join("\n");
 }
+// [END: module]

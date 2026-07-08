@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/process/build-config.ts
+ * ABOUT: build-config.ts (process module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - build-config.ts (process module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: build-config.ts (process module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/process/build-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CreateConfigValues } from "../../components/AgentConfigForm";
 
 function parseCommaArgs(value: string): string[] {
@@ -16,3 +30,4 @@ export function buildProcessConfig(v: CreateConfigValues): Record<string, unknow
   if (v.args) ac.args = parseCommaArgs(v.args);
   return ac;
 }
+// [END: module]

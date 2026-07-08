@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/StandaloneBrowserControls.tsx
+ * ABOUT: StandaloneBrowserControls.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - StandaloneBrowserControls.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: StandaloneBrowserControls.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/StandaloneBrowserControls.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { ExternalLink, RefreshCw, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -103,3 +117,4 @@ export function StandaloneBrowserControls({ mobile }: { mobile: boolean }) {
     </div>
   );
 }
+// [END: module]

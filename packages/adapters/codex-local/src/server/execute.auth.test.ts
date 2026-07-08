@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/execute.auth.test.ts
+ * ABOUT: execute.auth.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.auth.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.auth.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/execute.auth.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -75,3 +89,4 @@ describe("codex managed-home auth fail-fast", () => {
     await expect(fs.access(path.join(managedAgentHome, "auth.json"))).rejects.toBeTruthy();
   });
 });
+// [END: module]

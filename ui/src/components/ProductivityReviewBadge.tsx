@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ProductivityReviewBadge.tsx
+ * ABOUT: ProductivityReviewBadge.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProductivityReviewBadge.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProductivityReviewBadge.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ProductivityReviewBadge.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Eye } from "lucide-react";
 import type { IssueProductivityReview } from "@paperclipai/shared";
 import { Link } from "../lib/router";
@@ -75,3 +89,4 @@ export function ProductivityReviewBadge({
     </Tooltip>
   );
 }
+// [END: module]

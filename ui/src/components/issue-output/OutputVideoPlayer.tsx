@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/issue-output/OutputVideoPlayer.tsx
+ * ABOUT: OutputVideoPlayer.tsx (issue-output module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OutputVideoPlayer.tsx (issue-output module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OutputVideoPlayer.tsx (issue-output module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/issue-output/OutputVideoPlayer.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "@/lib/utils";
 
 interface OutputVideoPlayerProps {
@@ -31,3 +45,4 @@ export function OutputVideoPlayer({ src, poster, className, title }: OutputVideo
     </div>
   );
 }
+// [END: module]

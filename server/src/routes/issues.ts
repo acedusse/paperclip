@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/issues.ts
+ * ABOUT: issues.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issues.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issues.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/issues.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { Router, type Request, type Response } from "express";
 import multer from "multer";
@@ -8238,3 +8252,4 @@ export function issueRoutes(
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/approvals-service.test.ts
+ * ABOUT: approvals-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approvals-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approvals-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/approvals-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { approvalService } from "../services/approvals.ts";
 
@@ -167,3 +181,4 @@ describe("approvalService.findOpenHireApprovalForAgent", () => {
     expect(result).toBeNull();
   });
 });
+// [END: module]

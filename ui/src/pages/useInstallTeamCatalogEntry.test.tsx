@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/useInstallTeamCatalogEntry.test.tsx
+ * ABOUT: useInstallTeamCatalogEntry.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useInstallTeamCatalogEntry.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useInstallTeamCatalogEntry.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/useInstallTeamCatalogEntry.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -141,3 +155,4 @@ describe("useInstallTeamCatalogEntry", () => {
     cleanup();
   });
 });
+// [END: module]

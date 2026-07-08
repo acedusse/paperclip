@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/telemetry/client.ts
+ * ABOUT: client.ts (telemetry module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - client.ts (telemetry module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: client.ts (telemetry module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/telemetry/client.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import type {
   TelemetryConfig,
@@ -117,3 +131,4 @@ export class TelemetryClient {
     return configured ? [configured] : DEFAULT_ENDPOINTS;
   }
 }
+// [END: module]

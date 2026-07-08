@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/registry.ts
+ * ABOUT: registry.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - registry.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: registry.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { UIAdapterModule } from "./types";
 import { acpxLocalUIAdapter } from "./acpx-local";
 import { claudeLocalUIAdapter } from "./claude-local";
@@ -266,3 +280,4 @@ export function syncExternalAdapters(
 export function listUIAdapters(): UIAdapterModule[] {
   return [...uiAdapters];
 }
+// [END: module]

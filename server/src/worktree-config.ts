@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/worktree-config.ts
+ * ABOUT: worktree-config.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree-config.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree-config.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/worktree-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -475,3 +489,4 @@ export function maybePersistWorktreeRuntimePorts(input: {
     writeConfigFile(context.configPath, config);
   }
 }
+// [END: module]

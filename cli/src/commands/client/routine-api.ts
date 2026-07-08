@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/routine-api.ts
+ * ABOUT: routine-api.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-api.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-api.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/routine-api.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import {
   addCommonClientOptions,
@@ -152,3 +166,4 @@ function addIdDelete(parent: Command, name: string, description: string, resourc
 function parseJson(value: string): unknown {
   return JSON.parse(value) as unknown;
 }
+// [END: module]

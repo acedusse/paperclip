@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/project.ts
+ * ABOUT: project.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/project.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type { Project } from "@paperclipai/shared";
 import { createProjectSchema, updateProjectSchema } from "@paperclipai/shared";
@@ -226,3 +240,4 @@ function parseOptionalJson(value: string | undefined): unknown {
     throw new Error(`Invalid JSON: ${err instanceof Error ? err.message : String(err)}`);
   }
 }
+// [END: module]

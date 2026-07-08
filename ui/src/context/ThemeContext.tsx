@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/ThemeContext.tsx
+ * ABOUT: ThemeContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ThemeContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ThemeContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/ThemeContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   createContext,
   useCallback,
@@ -111,3 +125,4 @@ export function useTheme() {
   }
   return context;
 }
+// [END: module]

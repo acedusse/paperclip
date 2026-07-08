@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/agent-eligibility.test.ts
+ * ABOUT: agent-eligibility.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-eligibility.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-eligibility.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/agent-eligibility.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   getAgentOrgChainHealth,
@@ -156,3 +170,4 @@ describe("agent work eligibility", () => {
     expect(eligibility.invokabilityReason).toBe("invalid_org_chain");
   });
 });
+// [END: module]

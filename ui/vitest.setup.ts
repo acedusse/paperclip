@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/vitest.setup.ts
+ * ABOUT: vitest.setup.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vitest.setup.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vitest.setup.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/vitest.setup.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const storageEntries = new Map<string, string>();
 
 function installStorageMock(target: Record<string, unknown>) {
@@ -38,3 +52,4 @@ if (typeof window !== "undefined" && window.localStorage !== globalThis.localSto
 if (typeof Element !== "undefined" && typeof Element.prototype.scrollIntoView !== "function") {
   Element.prototype.scrollIntoView = function scrollIntoView() {};
 }
+// [END: module]

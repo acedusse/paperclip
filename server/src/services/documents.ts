@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/documents.ts
+ * ABOUT: documents.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - documents.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: documents.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/documents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, desc, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { documentRevisions, documents, issueDocuments, issues } from "@paperclipai/db";
@@ -743,3 +757,4 @@ export function documentService(db: Db) {
     },
   };
 }
+// [END: module]

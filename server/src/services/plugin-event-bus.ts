@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-event-bus.ts
+ * ABOUT: plugin-event-bus.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-event-bus.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-event-bus.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-event-bus.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginEventBus — typed in-process event bus for the Paperclip plugin system.
  *
  * Responsibilities:
@@ -410,3 +424,4 @@ export interface ScopedPluginEventBus {
    */
   clear(): void;
 }
+// [END: module]

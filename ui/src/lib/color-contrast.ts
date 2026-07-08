@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/lib/color-contrast.ts
+ * ABOUT: color-contrast.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - color-contrast.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: color-contrast.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/color-contrast.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Shared color-contrast utilities for pill / badge / chip components.
  *
  * Uses WCAG 2.1 relative-luminance contrast ratios so text is always
@@ -105,3 +119,4 @@ export function pickTextColorForPillBg(hexColor: string, alpha = 0.22): string {
     ? TEXT_LIGHT
     : TEXT_DARK;
 }
+// [END: module]

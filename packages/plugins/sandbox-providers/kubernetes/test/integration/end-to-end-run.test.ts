@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/integration/end-to-end-run.test.ts
+ * ABOUT: end-to-end-run.test.ts (integration module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - end-to-end-run.test.ts (integration module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: end-to-end-run.test.ts (integration module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/integration/end-to-end-run.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * End-to-end integration test against a local kind cluster.
  *
  * PREREQUISITES (operator must perform before running this test):
@@ -203,3 +217,4 @@ describe("plugin-kubernetes end-to-end", () => {
     300_000,
   );
 });
+// [END: module]

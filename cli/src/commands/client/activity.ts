@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/activity.ts
+ * ABOUT: activity.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - activity.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: activity.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/activity.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type { ActivityEvent } from "@paperclipai/shared";
 import {
@@ -108,3 +122,4 @@ export function registerActivityCommands(program: Command): void {
 function parseJson(value: string): unknown {
   return JSON.parse(value) as unknown;
 }
+// [END: module]

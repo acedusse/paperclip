@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/remote-managed-runtime.ts
+ * ABOUT: remote-managed-runtime.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - remote-managed-runtime.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: remote-managed-runtime.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/remote-managed-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { GIT_ARCHIVE_EXCLUDES } from "./git-workspace-sync.js";
 import {
@@ -141,3 +155,4 @@ export async function prepareRemoteManagedRuntime(input: {
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/log-check.ts
+ * ABOUT: log-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - log-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: log-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/log-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import type { PaperclipConfig } from "../config/schema.js";
 import type { CheckResult } from "./index.js";
@@ -28,3 +42,4 @@ export function logCheck(config: PaperclipConfig, configPath?: string): CheckRes
     };
   }
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/first-admin-claim.ts
+ * ABOUT: first-admin-claim.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - first-admin-claim.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: first-admin-claim.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/first-admin-claim.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { eq, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { instanceUserRoles } from "@paperclipai/db";
@@ -53,3 +67,4 @@ export async function claimFirstInstanceAdmin<T = unknown>(
     };
   });
 }
+// [END: module]

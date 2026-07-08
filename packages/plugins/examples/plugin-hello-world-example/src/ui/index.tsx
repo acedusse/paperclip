@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-hello-world-example/src/ui/index.tsx
+ * ABOUT: index.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-hello-world-example/src/ui/index.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PluginWidgetProps } from "@paperclipai/plugin-sdk/ui";
 
 const WIDGET_LABEL = "Hello world plugin widget";
@@ -15,3 +29,4 @@ export function HelloWorldDashboardWidget({ context }: PluginWidgetProps) {
     </section>
   );
 }
+// [END: module]

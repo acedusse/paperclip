@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-job-coordinator.ts
+ * ABOUT: plugin-job-coordinator.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-job-coordinator.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-job-coordinator.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-job-coordinator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginJobCoordinator — bridges the plugin lifecycle manager with the
  * job scheduler and job store.
  *
@@ -258,3 +272,4 @@ export function createPluginJobCoordinator(
     },
   };
 }
+// [END: module]

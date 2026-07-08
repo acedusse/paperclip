@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-environment-driver.ts
+ * ABOUT: plugin-environment-driver.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-environment-driver.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-environment-driver.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-environment-driver.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Db } from "@paperclipai/db";
 import type {
   EnvironmentProbeResult,
@@ -345,3 +359,4 @@ export function resolvePluginExecuteRpcTimeoutMs(input: {
   }
   return baseMs != null ? baseMs + RPC_OVERHEAD_BUFFER_MS : undefined;
 }
+// [END: module]

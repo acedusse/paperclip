@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/tests/contracts.spec.ts
+ * ABOUT: contracts.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - contracts.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: contracts.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/tests/contracts.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { workspaceDiffQuerySchema, workspaceDiffResponseSchema } from "../src/contracts.js";
 import { diffResponse } from "./fixtures.js";
@@ -24,3 +38,4 @@ describe("workspace diff plugin contracts", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/plugin.ts
+ * ABOUT: plugin.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/plugin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   PLUGIN_STATUSES,
@@ -1100,3 +1114,4 @@ export const listPluginStateSchema = z.object({
 });
 
 export type ListPluginState = z.infer<typeof listPluginStateSchema>;
+// [END: module]

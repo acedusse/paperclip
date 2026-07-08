@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/control-plane-surfaces.stories.tsx
+ * ABOUT: control-plane-surfaces.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - control-plane-surfaces.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: control-plane-surfaces.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/control-plane-surfaces.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertTriangle, CheckCircle2, Clock3, Eye, GitPullRequest, Inbox, WalletCards } from "lucide-react";
 import { ActivityRow } from "@/components/ActivityRow";
@@ -264,3 +278,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BoardStateMatrix: Story = {};
+// [END: module]

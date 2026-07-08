@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/router.tsx
+ * ABOUT: router.tsx (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - router.tsx (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: router.tsx (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/router.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react";
 import * as RouterDom from "react-router-dom";
 import type { NavigateOptions, To } from "react-router-dom";
@@ -109,3 +123,4 @@ export function useNavigate(): ReturnType<typeof RouterDom.useNavigate> {
     [navigate, companyPrefix],
   );
 }
+// [END: module]

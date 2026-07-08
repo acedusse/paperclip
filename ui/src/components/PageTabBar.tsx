@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/PageTabBar.tsx
+ * ABOUT: PageTabBar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PageTabBar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PageTabBar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/PageTabBar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSidebar } from "../context/SidebarContext";
@@ -43,3 +57,4 @@ export function PageTabBar({ items, value, onValueChange, align = "center" }: Pa
     </TabsList>
   );
 }
+// [END: module]

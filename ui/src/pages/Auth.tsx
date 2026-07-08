@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Auth.tsx
+ * ABOUT: Auth.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Auth.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Auth.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Auth.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "@/lib/router";
@@ -203,3 +217,4 @@ export function AuthPage() {
     </div>
   );
 }
+// [END: module]

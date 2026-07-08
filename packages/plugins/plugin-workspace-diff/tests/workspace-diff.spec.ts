@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/tests/workspace-diff.spec.ts
+ * ABOUT: workspace-diff.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-diff.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-diff.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/tests/workspace-diff.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
@@ -198,3 +212,4 @@ describe("plugin workspace diff service", () => {
       .rejects.toMatchObject({ status: 422, details: { code: "base_ref_invalid" } });
   }, 20_000);
 });
+// [END: module]

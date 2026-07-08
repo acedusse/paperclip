@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/claude-config.ts
+ * ABOUT: claude-config.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - claude-config.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: claude-config.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/claude-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -136,3 +150,4 @@ export async function prepareClaudeConfigSeed(
 
   return targetDir;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueSiblingNavigation.test.tsx
+ * ABOUT: IssueSiblingNavigation.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueSiblingNavigation.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueSiblingNavigation.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueSiblingNavigation.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act, type AnchorHTMLAttributes, type ReactNode } from "react";
@@ -128,3 +142,4 @@ describe("IssueSiblingNavigation", () => {
     expect(node.textContent).not.toContain("Previous");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/quota.ts
+ * ABOUT: quota.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - quota.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: quota.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/quota.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 /** a single rate-limit or usage window returned by a provider quota API */
 export interface QuotaWindow {
   /** human label, e.g. "5h", "7d", "Sonnet 7d", "Credits" */
@@ -24,3 +38,4 @@ export interface ProviderQuotaResult {
   error?: string;
   windows: QuotaWindow[];
 }
+// [END: module]

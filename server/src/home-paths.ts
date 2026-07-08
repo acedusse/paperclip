@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/home-paths.ts
+ * ABOUT: home-paths.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - home-paths.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: home-paths.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/home-paths.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 const PATH_SEGMENT_RE = /^[a-zA-Z0-9_-]+$/;
 const FRIENDLY_PATH_SEGMENT_RE = /[^a-zA-Z0-9._-]+/g;
@@ -82,3 +96,4 @@ export function resolveManagedProjectWorkspaceDir(input: {
     sanitizeFriendlyPathSegment(input.repoName, "_default"),
   );
 }
+// [END: module]

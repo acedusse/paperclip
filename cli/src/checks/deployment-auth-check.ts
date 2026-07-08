@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/deployment-auth-check.ts
+ * ABOUT: deployment-auth-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - deployment-auth-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: deployment-auth-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/deployment-auth-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { inferBindModeFromHost } from "@paperclipai/shared";
 import type { PaperclipConfig } from "../config/schema.js";
 import type { CheckResult } from "./index.js";
@@ -86,3 +100,4 @@ export function deploymentAuthCheck(config: PaperclipConfig): CheckResult {
     message: `Mode ${mode}/${exposure} with bind ${bind} and auth URL mode ${auth.baseUrlMode}`,
   };
 }
+// [END: module]

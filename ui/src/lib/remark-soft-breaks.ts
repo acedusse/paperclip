@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/remark-soft-breaks.ts
+ * ABOUT: remark-soft-breaks.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - remark-soft-breaks.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: remark-soft-breaks.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/remark-soft-breaks.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type MarkdownNode = {
   type?: unknown;
   value?: unknown;
@@ -61,3 +75,4 @@ export function remarkSoftBreaks() {
     transformNode(tree);
   };
 }
+// [END: module]

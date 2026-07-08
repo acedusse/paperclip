@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_plan_decompositions.ts
+ * ABOUT: issue_plan_decompositions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_plan_decompositions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_plan_decompositions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_plan_decompositions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import { pgTable, uuid, text, integer, timestamp, jsonb, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
@@ -46,3 +60,4 @@ export const issuePlanDecompositions = pgTable(
     ),
   }),
 );
+// [END: module]

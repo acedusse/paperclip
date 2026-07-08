@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/dev-runner-snapshot.test.ts
+ * ABOUT: dev-runner-snapshot.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner-snapshot.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner-snapshot.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/dev-runner-snapshot.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -99,3 +113,4 @@ describe("dev-runner watched snapshot", () => {
     expect(diffSnapshots(new Map([["server/deleted.ts", "1:1"]]), new Map())).toEqual(["server/deleted.ts"]);
   });
 });
+// [END: module]

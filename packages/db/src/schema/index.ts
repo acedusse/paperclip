@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/index.ts
+ * ABOUT: index.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export { companies } from "./companies.js";
 export { companyLogos } from "./company_logos.js";
 export { authUsers, authSessions, authAccounts, authVerifications } from "./auth.js";
@@ -84,3 +98,4 @@ export { pluginDatabaseNamespaces, pluginMigrations } from "./plugin_database.js
 export { pluginJobs, pluginJobRuns } from "./plugin_jobs.js";
 export { pluginWebhookDeliveries } from "./plugin_webhooks.js";
 export { pluginLogs } from "./plugin_logs.js";
+// [END: module]

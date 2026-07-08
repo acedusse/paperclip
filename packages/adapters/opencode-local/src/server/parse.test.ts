@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/parse.test.ts
+ * ABOUT: parse.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/parse.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parseOpenCodeJsonl, isOpenCodeUnknownSessionError } from "./parse.js";
 
@@ -75,3 +89,4 @@ describe("parseOpenCodeJsonl", () => {
     expect(isOpenCodeUnknownSessionError("all good", "")).toBe(false);
   });
 });
+// [END: module]

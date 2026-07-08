@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/src/ui/hooks.ts
+ * ABOUT: hooks.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - hooks.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: hooks.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/ui/hooks.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   PluginDataResult,
   PluginActionFn,
@@ -225,3 +239,4 @@ export function usePluginToast(): PluginToastFn {
   const impl = getSdkUiRuntimeValue<() => PluginToastFn>("usePluginToast");
   return impl();
 }
+// [END: module]

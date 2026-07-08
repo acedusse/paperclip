@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/cilium-network-policy.ts
+ * ABOUT: cilium-network-policy.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cilium-network-policy.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cilium-network-policy.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/cilium-network-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface BuildCiliumNetworkPolicyInput {
   namespace: string;
   paperclipServerNamespace: string;
@@ -66,3 +80,4 @@ export function buildCiliumNetworkPolicyManifest(input: BuildCiliumNetworkPolicy
     },
   };
 }
+// [END: module]

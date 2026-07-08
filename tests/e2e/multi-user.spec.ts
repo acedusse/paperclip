@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/multi-user.spec.ts
+ * ABOUT: multi-user.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - multi-user.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: multi-user.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/multi-user.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
 
 /**
@@ -516,3 +530,4 @@ test.describe("Multi-user: Health check integration", () => {
     expect(body.authReady).toBe(true);
   });
 });
+// [END: module]

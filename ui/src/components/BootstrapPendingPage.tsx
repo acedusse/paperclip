@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/BootstrapPendingPage.tsx
+ * ABOUT: BootstrapPendingPage.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BootstrapPendingPage.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BootstrapPendingPage.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/BootstrapPendingPage.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import { Loader2, ShieldCheck, Terminal, TriangleAlert } from "lucide-react";
 import { Link } from "@/lib/router";
@@ -174,3 +188,4 @@ export function BootstrapPendingPage({
     </StateChrome>
   );
 }
+// [END: module]

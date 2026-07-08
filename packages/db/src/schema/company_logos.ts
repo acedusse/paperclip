@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/company_logos.ts
+ * ABOUT: company_logos.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company_logos.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company_logos.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/company_logos.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { assets } from "./assets.js";
@@ -16,3 +30,4 @@ export const companyLogos = pgTable(
     assetUq: uniqueIndex("company_logos_asset_uq").on(table.assetId),
   }),
 );
+// [END: module]

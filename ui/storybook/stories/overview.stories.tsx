@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/overview.stories.tsx
+ * ABOUT: overview.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - overview.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: overview.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/overview.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BookOpen,
@@ -201,3 +215,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const CoverageGuide: Story = {};
+// [END: module]

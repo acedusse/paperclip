@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/paste-normalization.ts
+ * ABOUT: paste-normalization.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - paste-normalization.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: paste-normalization.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/paste-normalization.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createRootEditorSubscription$, realmPlugin } from "@mdxeditor/editor";
 import { COMMAND_PRIORITY_CRITICAL, PASTE_COMMAND } from "lexical";
 import { looksLikeMarkdownPaste } from "./markdownPaste";
@@ -64,3 +78,4 @@ export const pasteNormalizationPlugin = realmPlugin({
     ]);
   },
 });
+// [END: module]

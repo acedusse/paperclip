@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/instance-database-backups.ts
+ * ABOUT: instance-database-backups.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-database-backups.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-database-backups.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/instance-database-backups.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { BackupRetentionPolicy, RunDatabaseBackupResult } from "@paperclipai/db";
 import { assertInstanceAdmin } from "./authz.js";
@@ -28,3 +42,4 @@ export function instanceDatabaseBackupRoutes(service: InstanceDatabaseBackupServ
 
   return router;
 }
+// [END: module]

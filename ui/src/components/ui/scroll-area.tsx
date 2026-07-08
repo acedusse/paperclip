@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/scroll-area.tsx
+ * ABOUT: scroll-area.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - scroll-area.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: scroll-area.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/scroll-area.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
 
@@ -54,3 +68,4 @@ function ScrollBar({
 }
 
 export { ScrollArea, ScrollBar }
+// [END: module]

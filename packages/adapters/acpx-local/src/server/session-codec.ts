@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/acpx-local/src/server/session-codec.ts
+ * ABOUT: session-codec.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - session-codec.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: session-codec.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/acpx-local/src/server/session-codec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterSessionCodec } from "@paperclipai/adapter-utils";
 
 function readString(value: unknown): string | null {
@@ -48,3 +62,4 @@ export const sessionCodec: AdapterSessionCodec = {
     );
   },
 };
+// [END: module]

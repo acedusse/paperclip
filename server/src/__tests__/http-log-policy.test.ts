@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/http-log-policy.test.ts
+ * ABOUT: http-log-policy.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - http-log-policy.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: http-log-policy.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/http-log-policy.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { shouldSilenceHttpSuccessLog } from "../middleware/http-log-policy.js";
 
@@ -71,3 +85,4 @@ describe("shouldSilenceHttpSuccessLog", () => {
     expect(shouldSilenceHttpSuccessLog("GET", "/@fs/Users/dotta/paperclip/ui/src/main.tsx", 404)).toBe(false);
   });
 });
+// [END: module]

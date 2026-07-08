@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/trust-policy-ui.test.ts
+ * ABOUT: trust-policy-ui.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - trust-policy-ui.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: trust-policy-ui.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/trust-policy-ui.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import {
@@ -115,3 +129,4 @@ describe("trust-policy-ui low-trust boundary helpers", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/fixtures/issueThreadInteractionFixtures.ts
+ * ABOUT: issueThreadInteractionFixtures.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueThreadInteractionFixtures.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueThreadInteractionFixtures.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/fixtures/issueThreadInteractionFixtures.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { LiveRunForIssue } from "../api/heartbeats";
 import type {
   IssueChatComment,
@@ -737,3 +751,4 @@ export const mixedIssueThreadInteractions = [
   pendingRequestConfirmationInteraction,
   pendingAskUserQuestionsInteraction,
 ];
+// [END: module]

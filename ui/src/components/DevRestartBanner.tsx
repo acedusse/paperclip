@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/DevRestartBanner.tsx
+ * ABOUT: DevRestartBanner.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DevRestartBanner.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DevRestartBanner.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/DevRestartBanner.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { AlertTriangle, RotateCcw, TimerReset } from "lucide-react";
 import { healthApi, type DevServerHealthStatus } from "../api/health";
@@ -130,3 +144,4 @@ export function DevRestartBanner({ devServer }: { devServer?: DevServerHealthSta
     </div>
   );
 }
+// [END: module]

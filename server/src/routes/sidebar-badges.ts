@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/sidebar-badges.ts
+ * ABOUT: sidebar-badges.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sidebar-badges.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sidebar-badges.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/sidebar-badges.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import { and, eq } from "drizzle-orm";
@@ -81,3 +95,4 @@ export function sidebarBadgeRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

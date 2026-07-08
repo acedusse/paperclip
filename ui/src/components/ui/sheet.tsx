@@ -1,4 +1,18 @@
 "use client"
+/**
+ * FILE: ui/src/components/ui/sheet.tsx
+ * ABOUT: sheet.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sheet.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sheet.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/sheet.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 
 import * as React from "react"
 import { XIcon } from "lucide-react"
@@ -141,3 +155,4 @@ export {
   SheetTitle,
   SheetDescription,
 }
+// [END: module]

@@ -1,4 +1,18 @@
 #!/usr/bin/env -S node --import tsx
+/**
+ * FILE: scripts/dev-runner.ts
+ * ABOUT: dev-runner.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/dev-runner.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
@@ -695,3 +709,4 @@ if (mode === "watch") {
   }
   process.exit(exit.code ?? 0);
 }
+// [END: module]

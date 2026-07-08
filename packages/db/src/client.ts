@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/client.ts
+ * ABOUT: client.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - client.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: client.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/client.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import { drizzle as drizzlePg } from "drizzle-orm/postgres-js";
 import { migrate as migratePg } from "drizzle-orm/postgres-js/migrator";
@@ -777,3 +791,4 @@ export async function ensurePostgresDatabase(
 }
 
 export type Db = ReturnType<typeof createDb>;
+// [END: module]

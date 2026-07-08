@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/ProjectDetail.tsx
+ * ABOUT: ProjectDetail.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectDetail.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectDetail.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/ProjectDetail.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Link, useParams, useNavigate, useLocation, Navigate } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -920,3 +934,4 @@ export function ProjectDetail() {
     </div>
   );
 }
+// [END: module]

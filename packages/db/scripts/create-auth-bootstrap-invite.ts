@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/scripts/create-auth-bootstrap-invite.ts
+ * ABOUT: create-auth-bootstrap-invite.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - create-auth-bootstrap-invite.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: create-auth-bootstrap-invite.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/scripts/create-auth-bootstrap-invite.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -82,3 +96,4 @@ main().catch((error) => {
   process.stderr.write(`${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
   process.exit(1);
 });
+// [END: module]

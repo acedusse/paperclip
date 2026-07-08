@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/project-workspaces-tab.test.ts
+ * ABOUT: project-workspaces-tab.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-workspaces-tab.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-workspaces-tab.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/project-workspaces-tab.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { ExecutionWorkspace, Issue, Project, ProjectWorkspace, WorkspaceRuntimeService } from "@paperclipai/shared";
 import { buildProjectWorkspaceSummaries } from "./project-workspaces-tab";
@@ -321,3 +335,4 @@ describe("buildProjectWorkspaceSummaries", () => {
     });
   });
 });
+// [END: module]

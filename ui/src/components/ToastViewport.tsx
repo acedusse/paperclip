@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ToastViewport.tsx
+ * ABOUT: ToastViewport.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ToastViewport.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ToastViewport.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ToastViewport.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { Link } from "@/lib/router";
 import { X } from "lucide-react";
@@ -103,3 +117,4 @@ export function ToastViewport() {
     </aside>
   );
 }
+// [END: module]

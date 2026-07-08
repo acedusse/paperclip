@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/QuotaBar.tsx
+ * ABOUT: QuotaBar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - QuotaBar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: QuotaBar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/QuotaBar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "@/lib/utils";
 
 interface QuotaBarProps {
@@ -63,3 +77,4 @@ export function QuotaBar({
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/pi-local/src/server/parse.test.ts
+ * ABOUT: parse.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/pi-local/src/server/parse.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parsePiJsonl, isPiUnknownSessionError } from "./parse.js";
 
@@ -271,3 +285,4 @@ describe("isPiUnknownSessionError", () => {
     expect(isPiUnknownSessionError("working fine", "no errors")).toBe(false);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/NewIssueDialog.tsx
+ * ABOUT: NewIssueDialog.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - NewIssueDialog.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: NewIssueDialog.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/NewIssueDialog.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { memo, useState, useEffect, useRef, useCallback, useMemo, type ChangeEvent, type CSSProperties, type DragEvent, type RefObject } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { IssueWorkMode } from "@paperclipai/shared";
@@ -2251,3 +2265,4 @@ export function NewIssueDialog() {
     </Dialog>
   );
 }
+// [END: module]

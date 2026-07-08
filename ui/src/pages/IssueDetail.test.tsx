@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/IssueDetail.test.tsx
+ * ABOUT: IssueDetail.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueDetail.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueDetail.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/IssueDetail.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -2238,3 +2252,4 @@ describe("shouldScrollIssueDetailToTopOnNavigation", () => {
     })).toBe(false);
   });
 });
+// [END: module]

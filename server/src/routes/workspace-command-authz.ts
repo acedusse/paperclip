@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/workspace-command-authz.ts
+ * ABOUT: workspace-command-authz.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-command-authz.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-command-authz.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/workspace-command-authz.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Request } from "express";
 import { forbidden } from "../errors.js";
 
@@ -116,3 +130,4 @@ export function collectExecutionWorkspaceCommandPaths(input: {
   }
   return paths;
 }
+// [END: module]

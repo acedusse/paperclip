@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/model-utils.ts
+ * ABOUT: model-utils.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - model-utils.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: model-utils.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/model-utils.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export function extractProviderId(modelId: string): string | null {
   const trimmed = modelId.trim();
   if (!trimmed.includes("/")) return null;
@@ -14,3 +28,4 @@ export function extractModelName(modelId: string): string {
   if (!trimmed.includes("/")) return trimmed;
   return trimmed.slice(trimmed.indexOf("/") + 1).trim();
 }
+// [END: module]

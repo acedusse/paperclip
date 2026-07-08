@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issue-tree-control-service-unit.test.ts
+ * ABOUT: issue-tree-control-service-unit.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-tree-control-service-unit.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-tree-control-service-unit.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issue-tree-control-service-unit.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { issueTreeControlService } from "../services/issue-tree-control.js";
 
@@ -24,3 +38,4 @@ describe("issueTreeControlService unit guards", () => {
     expect(db.select).toHaveBeenCalledTimes(1);
   });
 });
+// [END: module]

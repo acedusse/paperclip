@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/workspace-runtime.test.ts
+ * ABOUT: workspace-runtime.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-runtime.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-runtime.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/workspace-runtime.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile, spawn } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
@@ -3909,3 +3923,4 @@ describe("normalizeAdapterManagedRuntimeServices", () => {
     });
   });
 });
+// [END: module]

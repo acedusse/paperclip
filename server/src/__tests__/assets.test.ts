@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/assets.test.ts
+ * ABOUT: assets.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - assets.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: assets.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/assets.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import express from "express";
 import request from "supertest";
@@ -330,3 +344,4 @@ describe("POST /api/companies/:companyId/logo", () => {
     expect(createAssetMock).not.toHaveBeenCalled();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/agent-auth-jwt.ts
+ * ABOUT: agent-auth-jwt.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-auth-jwt.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-auth-jwt.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/agent-auth-jwt.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 interface JwtHeader {
@@ -185,3 +199,4 @@ export function verifyLocalAgentJwt(token: string): LocalAgentJwtClaims | null {
     jti: typeof claims.jti === "string" ? claims.jti : undefined,
   };
 }
+// [END: module]

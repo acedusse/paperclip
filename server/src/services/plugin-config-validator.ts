@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-config-validator.ts
+ * ABOUT: plugin-config-validator.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-config-validator.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-config-validator.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-config-validator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Validates plugin instance configuration against its JSON Schema.
  *
  * Uses Ajv to validate `configJson` values against the `instanceConfigSchema`
@@ -52,3 +66,4 @@ export function validateInstanceConfig(
 
   return { valid: false, errors };
 }
+// [END: module]

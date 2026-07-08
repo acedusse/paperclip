@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/agent-start-lock.ts
+ * ABOUT: agent-start-lock.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-start-lock.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-start-lock.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/agent-start-lock.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { logger } from "../middleware/logger.js";
 
 const AGENT_START_LOCK_STALE_MS = 30_000;
@@ -46,3 +60,4 @@ export async function withAgentStartLock<T>(agentId: string, fn: () => Promise<T
     }
   }
 }
+// [END: module]

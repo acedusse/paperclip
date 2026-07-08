@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-run-log.test.ts
+ * ABOUT: heartbeat-run-log.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-run-log.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-run-log.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-run-log.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { compactRunLogChunk } from "../services/heartbeat.js";
 
@@ -39,3 +53,4 @@ describe("compactRunLogChunk", () => {
     expect(compacted).not.toContain("paperclip-flag-secret");
   });
 });
+// [END: module]

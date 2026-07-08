@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/issue-management.stories.tsx
+ * ABOUT: issue-management.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-management.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-management.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/issue-management.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Issue } from "@paperclipai/shared";
@@ -751,3 +765,4 @@ export const RunLedgerModelProfileBadges: Story = {
   name: "Run ledger - Model profile badges",
   render: () => <ModelProfileLedgerStandalone />,
 };
+// [END: module]

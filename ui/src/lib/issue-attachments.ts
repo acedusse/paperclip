@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-attachments.ts
+ * ABOUT: issue-attachments.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-attachments.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-attachments.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-attachments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssueAttachment } from "@paperclipai/shared";
 import { isVideoContentType } from "./issue-output";
 
@@ -68,3 +82,4 @@ export function isMarkdownAttachment(
   if (!filename.endsWith(".md") && !filename.endsWith(".markdown")) return false;
   return contentType === "text/plain" || GENERIC_ATTACHMENT_CONTENT_TYPES.has(contentType);
 }
+// [END: module]

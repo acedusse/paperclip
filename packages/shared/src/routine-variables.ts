@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/routine-variables.ts
+ * ABOUT: routine-variables.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-variables.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-variables.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/routine-variables.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { RoutineVariable } from "./types/routine.js";
 
 // Tolerate markdown-escaped underscores (`\_`) inside placeholders. WYSIWYG markdown
@@ -110,3 +124,4 @@ export function interpolateRoutineTemplate(
     return stringifyRoutineVariableValue(values[name]);
   });
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-timeline-events.ts
+ * ABOUT: issue-timeline-events.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-timeline-events.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-timeline-events.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-timeline-events.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ActivityEvent } from "@paperclipai/shared";
 
 export interface IssueTimelineAssignee {
@@ -180,3 +194,4 @@ export function extractIssueTimelineEvents(activity: ActivityEvent[] | null | un
 
   return sortTimelineEvents(events);
 }
+// [END: module]

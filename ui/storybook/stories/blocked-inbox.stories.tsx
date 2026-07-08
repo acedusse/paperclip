@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/blocked-inbox.stories.tsx
+ * ABOUT: blocked-inbox.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - blocked-inbox.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: blocked-inbox.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/blocked-inbox.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -301,3 +315,4 @@ export const ReasonChipCatalog: Story = {
 export const EmptyState: Story = {
   render: () => <BlockedTabEmptyState />,
 };
+// [END: module]

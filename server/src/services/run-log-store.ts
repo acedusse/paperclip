@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/run-log-store.ts
+ * ABOUT: run-log-store.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - run-log-store.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: run-log-store.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/run-log-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -155,3 +169,4 @@ export function getRunLogStore() {
   cachedStore = createLocalFileRunLogStore(basePath);
   return cachedStore;
 }
+// [END: module]

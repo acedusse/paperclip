@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-members.test.ts
+ * ABOUT: company-members.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-members.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-members.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-members.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { CompanyMember, CompanyUserDirectoryEntry } from "@/api/access";
 import {
@@ -146,3 +160,4 @@ describe("company-members helpers", () => {
     ]);
   });
 });
+// [END: module]

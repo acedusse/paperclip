@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/shared-telemetry-events.test.ts
+ * ABOUT: shared-telemetry-events.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - shared-telemetry-events.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: shared-telemetry-events.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/shared-telemetry-events.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import {
   trackAgentCreated,
@@ -71,3 +85,4 @@ describe("shared telemetry agent events", () => {
     );
   });
 });
+// [END: module]

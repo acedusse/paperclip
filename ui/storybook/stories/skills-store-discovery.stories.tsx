@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/skills-store-discovery.stories.tsx
+ * ABOUT: skills-store-discovery.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - skills-store-discovery.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: skills-store-discovery.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/skills-store-discovery.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DiscoveryGrid, type DiscoveryCard, type DiscoveryCategory } from "@/pages/CompanySkills";
@@ -330,3 +344,4 @@ export const AllSkills: Story = { args: { initialTab: "all" } };
 export const InstalledTab: Story = { args: { initialTab: "installed" } };
 export const BundledRequiredTab: Story = { args: { initialTab: "bundled" } };
 export const EmptyLibrary: Story = { args: { initialTab: "all", cards: [] } };
+// [END: module]

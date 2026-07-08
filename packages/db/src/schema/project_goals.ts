@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/project_goals.ts
+ * ABOUT: project_goals.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project_goals.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project_goals.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/project_goals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, timestamp, index, primaryKey } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { projects } from "./projects.js";
@@ -19,3 +33,4 @@ export const projectGoals = pgTable(
     companyIdx: index("project_goals_company_idx").on(table.companyId),
   }),
 );
+// [END: module]

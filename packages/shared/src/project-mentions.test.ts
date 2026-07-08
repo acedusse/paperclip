@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/project-mentions.test.ts
+ * ABOUT: project-mentions.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-mentions.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-mentions.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/project-mentions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildAgentMentionHref,
@@ -61,3 +75,4 @@ describe("project-mentions", () => {
     expect(extractRoutineMentionIds(`[/routine:Weekly review](${href})`)).toEqual(["routine-123"]);
   });
 });
+// [END: module]

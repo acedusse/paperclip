@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/document-annotation-hash.ts
+ * ABOUT: document-annotation-hash.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotation-hash.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotation-hash.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/document-annotation-hash.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface DocumentAnnotationHashTarget {
   documentKey: string;
   threadId: string | null;
@@ -30,3 +44,4 @@ export function buildDocumentAnnotationHash(target: DocumentAnnotationHashTarget
   const encodedKey = encodeURIComponent(target.documentKey);
   return qs ? `${DOCUMENT_HASH_PREFIX}${encodedKey}&${qs}` : `${DOCUMENT_HASH_PREFIX}${encodedKey}`;
 }
+// [END: module]

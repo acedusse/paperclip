@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/KanbanBoard.tsx
+ * ABOUT: KanbanBoard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - KanbanBoard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: KanbanBoard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/KanbanBoard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/lib/router";
 import {
@@ -397,3 +411,4 @@ export function KanbanBoard({
     </DndContext>
   );
 }
+// [END: module]

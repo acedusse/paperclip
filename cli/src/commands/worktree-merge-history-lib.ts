@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/worktree-merge-history-lib.ts
+ * ABOUT: worktree-merge-history-lib.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree-merge-history-lib.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree-merge-history-lib.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/worktree-merge-history-lib.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   agents,
   assets,
@@ -762,3 +776,4 @@ export function buildWorktreeMergePlan(input: {
     adjustments: adjustmentCounts,
   };
 }
+// [END: module]

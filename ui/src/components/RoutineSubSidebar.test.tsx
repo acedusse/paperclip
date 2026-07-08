@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineSubSidebar.test.tsx
+ * ABOUT: RoutineSubSidebar.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineSubSidebar.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineSubSidebar.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineSubSidebar.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { AnchorHTMLAttributes, ReactNode } from "react";
@@ -115,3 +129,4 @@ describe("RoutineSubSidebar", () => {
     expect(onNavigate).toHaveBeenCalledWith("triggers");
   });
 });
+// [END: module]

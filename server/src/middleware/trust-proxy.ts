@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/middleware/trust-proxy.ts
+ * ABOUT: trust-proxy.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - trust-proxy.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: trust-proxy.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/trust-proxy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Parser for the `TRUST_PROXY` env var, which mirrors Express 5's
  * `trust proxy` setting. The default is intentionally *unset* — Express
  * then trusts nothing and `req.ip` / `X-Forwarded-For` cannot be spoofed
@@ -115,3 +129,4 @@ export function applyTrustProxy(
   if (value === undefined) return;
   app.set("trust proxy", value);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/optimistic-issue-runs.test.ts
+ * ABOUT: optimistic-issue-runs.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - optimistic-issue-runs.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: optimistic-issue-runs.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/optimistic-issue-runs.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Issue } from "@paperclipai/shared";
 import type { RunForIssue } from "../api/activity";
@@ -121,3 +135,4 @@ describe("clearIssueExecutionRun", () => {
     expect(clearIssueExecutionRun(issue, "run-1")).toBe(issue);
   });
 });
+// [END: module]

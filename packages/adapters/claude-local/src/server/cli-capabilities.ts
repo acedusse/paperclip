@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/cli-capabilities.ts
+ * ABOUT: cli-capabilities.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cli-capabilities.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cli-capabilities.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/cli-capabilities.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterExecutionTarget } from "@paperclipai/adapter-utils/execution-target";
 import { runAdapterExecutionTargetProcess } from "@paperclipai/adapter-utils/execution-target";
 import path from "node:path";
@@ -92,3 +106,4 @@ export async function claudeCommandSupportsEffortFlag(input: {
 export function resetClaudeCliCapabilitiesCacheForTests() {
   effortFlagSupportCache.clear();
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/issue-tree-control.ts
+ * ABOUT: issue-tree-control.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-tree-control.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-tree-control.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/issue-tree-control.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   ISSUE_TREE_CONTROL_MODES,
@@ -42,3 +56,4 @@ export const releaseIssueTreeHoldSchema = z
   .strict();
 
 export type ReleaseIssueTreeHold = z.infer<typeof releaseIssueTreeHoldSchema>;
+// [END: module]

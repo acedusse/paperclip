@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/agent-eligibility.ts
+ * ABOUT: agent-eligibility.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-eligibility.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-eligibility.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/agent-eligibility.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AgentStatus } from "./constants.js";
 
 export type AgentEligibilityLifecycleReason =
@@ -243,3 +257,4 @@ export function isAgentInvokable(input: {
 }): boolean {
   return getAgentWorkEligibility(input).invokable;
 }
+// [END: module]

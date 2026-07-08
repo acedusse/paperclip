@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/routines.ts
+ * ABOUT: routines.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/routines.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ActivityEvent,
   Routine,
@@ -84,3 +98,4 @@ export const routinesApi = {
     );
   },
 };
+// [END: module]

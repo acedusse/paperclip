@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/vite-html-renderer.test.ts
+ * ABOUT: vite-html-renderer.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vite-html-renderer.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vite-html-renderer.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/vite-html-renderer.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -95,3 +109,4 @@ describe("createCachedViteHtmlRenderer", () => {
     expect(html.match(/\/@react-refresh/g)?.length).toBe(1);
   });
 });
+// [END: module]

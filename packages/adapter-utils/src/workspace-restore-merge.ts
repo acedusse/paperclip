@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/workspace-restore-merge.ts
+ * ABOUT: workspace-restore-merge.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-restore-merge.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-restore-merge.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/workspace-restore-merge.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { constants as fsConstants, promises as fs } from "node:fs";
@@ -254,3 +268,4 @@ export async function directoryEntryMatchesBaseline(
 ): Promise<boolean> {
   return entriesMatch(await readSnapshotEntry(rootDir, relative), baselineEntry);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/acpx-local/src/ui/parse-stdout.test.ts
+ * ABOUT: parse-stdout.test.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse-stdout.test.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse-stdout.test.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/acpx-local/src/ui/parse-stdout.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parseAcpxStdoutLine } from "./parse-stdout.js";
 
@@ -158,3 +172,4 @@ describe("parseAcpxStdoutLine", () => {
     expect(entries).toEqual([{ kind: "stdout", ts: TS, text: "not json" }]);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/auth.ts
+ * ABOUT: auth.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, timingSafeEqual } from "node:crypto";
 import type { Request, RequestHandler } from "express";
 import { and, eq, isNull } from "drizzle-orm";
@@ -354,3 +368,4 @@ function issuePrefixForCloudStack(stackId: string): string {
 export function requireBoard(req: Express.Request) {
   return req.actor.type === "board";
 }
+// [END: module]

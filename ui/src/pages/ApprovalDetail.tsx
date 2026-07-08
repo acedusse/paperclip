@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/ApprovalDetail.tsx
+ * ABOUT: ApprovalDetail.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ApprovalDetail.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ApprovalDetail.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/ApprovalDetail.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -366,3 +380,4 @@ export function ApprovalDetail() {
     </div>
   );
 }
+// [END: module]

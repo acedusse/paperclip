@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-database.test.ts
+ * ABOUT: plugin-database.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-database.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-database.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-database.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdtemp, rm, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -660,3 +674,4 @@ describeEmbeddedPostgres("plugin database namespaces", () => {
       .rejects.toThrow(/checksum mismatch/i);
   });
 });
+// [END: module]

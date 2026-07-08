@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/StatusBadge.tsx
+ * ABOUT: StatusBadge.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - StatusBadge.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: StatusBadge.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/StatusBadge.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "../lib/utils";
 import {
   statusBadge,
@@ -170,3 +184,4 @@ export function IssueStatusBadge({ status }: { status: string }) {
     </span>
   );
 }
+// [END: module]

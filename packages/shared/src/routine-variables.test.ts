@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/routine-variables.test.ts
+ * ABOUT: routine-variables.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-variables.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-variables.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/routine-variables.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   BUILTIN_ROUTINE_VARIABLE_NAMES,
@@ -109,3 +123,4 @@ describe("routine variable helpers", () => {
     ).toBe(`Report for ${builtins.date} (${builtins.timestamp}) on paperclip`);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/search/HighlightedText.tsx
+ * ABOUT: HighlightedText.tsx (search module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - HighlightedText.tsx (search module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: HighlightedText.tsx (search module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/search/HighlightedText.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanySearchHighlight } from "@paperclipai/shared";
 import { cn } from "@/lib/utils";
 
@@ -66,3 +80,4 @@ export function HighlightedText({ text, highlights, className, markClassName }: 
     </span>
   );
 }
+// [END: module]

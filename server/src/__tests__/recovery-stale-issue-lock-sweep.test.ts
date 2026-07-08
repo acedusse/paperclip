@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/recovery-stale-issue-lock-sweep.test.ts
+ * ABOUT: recovery-stale-issue-lock-sweep.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recovery-stale-issue-lock-sweep.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recovery-stale-issue-lock-sweep.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/recovery-stale-issue-lock-sweep.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -224,3 +238,4 @@ describeEmbeddedPostgres("recovery sweepStaleIssueLocks", () => {
     expect(second.cleared).toBe(0);
   });
 });
+// [END: module]

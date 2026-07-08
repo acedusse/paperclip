@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/test.remote.test.ts
+ * ABOUT: test.remote.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.remote.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.remote.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/test.remote.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -192,3 +206,4 @@ describe("codex remote environment diagnostics", () => {
     expect(probeCall?.[3]).toContain("--skip-git-repo-check");
   });
 });
+// [END: module]

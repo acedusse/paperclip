@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/server/parse.test.ts
+ * ABOUT: parse.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/server/parse.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { isGrokUnknownSessionError, parseGrokJsonl } from "./parse.js";
 
@@ -67,3 +81,4 @@ describe("isGrokUnknownSessionError", () => {
     expect(isGrokUnknownSessionError("", "everything fine")).toBe(false);
   });
 });
+// [END: module]

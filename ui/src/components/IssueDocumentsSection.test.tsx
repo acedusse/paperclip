@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueDocumentsSection.test.tsx
+ * ABOUT: IssueDocumentsSection.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueDocumentsSection.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueDocumentsSection.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueDocumentsSection.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -731,3 +745,4 @@ describe("IssueDocumentsSection", () => {
     queryClient.clear();
   });
 });
+// [END: module]

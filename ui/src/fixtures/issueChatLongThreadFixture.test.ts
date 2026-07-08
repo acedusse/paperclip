@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/fixtures/issueChatLongThreadFixture.test.ts
+ * ABOUT: issueChatLongThreadFixture.test.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueChatLongThreadFixture.test.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueChatLongThreadFixture.test.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/fixtures/issueChatLongThreadFixture.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   issueChatLongThreadAgentMap,
@@ -45,3 +59,4 @@ describe("issueChatLongThreadFixture", () => {
     }
   });
 });
+// [END: module]

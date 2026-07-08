@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/index.ts
+ * ABOUT: index.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export {
   RECOVERY_KEY_PREFIXES,
   RECOVERY_ORIGIN_KINDS,
@@ -62,3 +76,4 @@ export type {
   SuccessfulRunHandoffNotice,
   SuccessfulRunHandoffDecision,
 } from "./successful-run-handoff.js";
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/FileViewerContext.tsx
+ * ABOUT: FileViewerContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FileViewerContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FileViewerContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/FileViewerContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useContext, useCallback, useMemo, type ReactNode } from "react";
 import { useLocation, useNavigate, type NavigateOptions } from "@/lib/router";
 import type { WorkspaceFileSelector } from "@paperclipai/shared";
@@ -325,3 +339,4 @@ export function useRequiredFileViewer(): FileViewerContextValue {
   }
   return ctx;
 }
+// [END: module]

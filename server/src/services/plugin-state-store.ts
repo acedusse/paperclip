@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-state-store.ts
+ * ABOUT: plugin-state-store.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-state-store.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-state-store.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-state-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, isNull } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { plugins, pluginState } from "@paperclipai/db";
@@ -235,3 +249,4 @@ export function pluginStateStore(db: Db) {
 }
 
 export type PluginStateStore = ReturnType<typeof pluginStateStore>;
+// [END: module]

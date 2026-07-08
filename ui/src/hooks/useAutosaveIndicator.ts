@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useAutosaveIndicator.ts
+ * ABOUT: useAutosaveIndicator.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useAutosaveIndicator.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useAutosaveIndicator.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useAutosaveIndicator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export type AutosaveState = "idle" | "saving" | "saved" | "error";
@@ -70,3 +84,4 @@ export function useAutosaveIndicator() {
     runSave,
   };
 }
+// [END: module]

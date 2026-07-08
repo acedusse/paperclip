@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/server-utils.ts
+ * ABOUT: server-utils.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - server-utils.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: server-utils.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/server-utils.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { spawn, type ChildProcess } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { constants as fsConstants, promises as fs, type Dirent } from "node:fs";
@@ -2516,3 +2530,4 @@ export async function runChildProcess(
       .catch(reject);
   });
 }
+// [END: module]

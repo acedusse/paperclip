@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentCapsule.test.tsx
+ * ABOUT: AgentCapsule.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentCapsule.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentCapsule.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentCapsule.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -91,3 +105,4 @@ describe("AgentCapsule", () => {
     expect(render(<AgentCapsule state="online" gradient={-1} />).dataset.gradient).toBe("9");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/cursor-local-skill-injection.test.ts
+ * ABOUT: cursor-local-skill-injection.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cursor-local-skill-injection.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cursor-local-skill-injection.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/cursor-local-skill-injection.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -101,3 +115,4 @@ describe("cursor local adapter skill injection", () => {
     expect(logs.some((line) => line.includes('Failed to inject Cursor skill "fail-skill"'))).toBe(true);
   });
 });
+// [END: module]

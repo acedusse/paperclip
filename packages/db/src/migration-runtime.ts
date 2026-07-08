@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/migration-runtime.ts
+ * ABOUT: migration-runtime.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - migration-runtime.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: migration-runtime.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/migration-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, readFileSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
@@ -194,3 +208,4 @@ export async function resolveMigrationConnection(): Promise<MigrationConnection>
 
   return ensureEmbeddedPostgresConnection(target.dataDir, target.port);
 }
+// [END: module]

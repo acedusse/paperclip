@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-sdk-orchestration-contract.test.ts
+ * ABOUT: plugin-sdk-orchestration-contract.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-sdk-orchestration-contract.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-sdk-orchestration-contract.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-sdk-orchestration-contract.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import type { Issue, PaperclipPluginManifestV1 } from "@paperclipai/shared";
@@ -255,3 +269,4 @@ describe("plugin SDK orchestration contract", () => {
     ).rejects.toThrow("Issue is blocked by unresolved blockers");
   });
 });
+// [END: module]

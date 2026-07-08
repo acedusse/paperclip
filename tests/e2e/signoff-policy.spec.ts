@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/signoff-policy.spec.ts
+ * ABOUT: signoff-policy.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - signoff-policy.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: signoff-policy.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/signoff-policy.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { test, expect, request as pwRequest, type APIRequestContext } from "@playwright/test";
 
 /**
@@ -441,3 +455,4 @@ test.describe("Signoff execution policy", () => {
     expect(doneIssue.executionState.completedStageIds).toHaveLength(1);
   });
 });
+// [END: module]

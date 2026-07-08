@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/invite-accept-existing-member.test.ts
+ * ABOUT: invite-accept-existing-member.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-accept-existing-member.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-accept-existing-member.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/invite-accept-existing-member.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -437,3 +451,4 @@ describe("POST /invites/:token/accept", () => {
     );
   });
 });
+// [END: module]

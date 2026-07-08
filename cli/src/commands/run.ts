@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/run.ts
+ * ABOUT: run.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - run.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: run.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/run.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -214,3 +228,4 @@ async function startServerFromModule(mod: unknown, label: string): Promise<Start
   }
   return await startServer();
 }
+// [END: module]

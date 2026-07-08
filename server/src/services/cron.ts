@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/cron.ts
+ * ABOUT: cron.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cron.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cron.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/cron.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Lightweight cron expression parser and next-run calculator.
  *
  * Supports standard 5-field cron expressions:
@@ -371,3 +385,4 @@ function advanceToNextMonth(d: Date, months: number[]): void {
     }
   }
 }
+// [END: module]

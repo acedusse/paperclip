@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/onboarding-route.ts
+ * ABOUT: onboarding-route.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - onboarding-route.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: onboarding-route.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/onboarding-route.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type OnboardingRouteCompany = {
   id: string;
   issuePrefix: string;
@@ -64,3 +78,4 @@ export function isOnboardingWizardActive(params: {
 }): boolean {
   return params.onboardingOpen || !params.routeDismissed;
 }
+// [END: module]

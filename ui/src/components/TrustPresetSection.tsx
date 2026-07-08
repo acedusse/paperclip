@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/TrustPresetSection.tsx
+ * ABOUT: TrustPresetSection.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - TrustPresetSection.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: TrustPresetSection.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/TrustPresetSection.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import type { AgentPermissions, TrustPreset } from "@paperclipai/shared";
 import { Lock, ShieldAlert } from "lucide-react";
@@ -256,3 +270,4 @@ export function TrustPresetSection({
     </div>
   );
 }
+// [END: module]

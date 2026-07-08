@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/workspace-restore-merge.test.ts
+ * ABOUT: workspace-restore-merge.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-restore-merge.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-restore-merge.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/workspace-restore-merge.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import net from "node:net";
 import os from "node:os";
@@ -82,3 +96,4 @@ describe("workspace restore merge", () => {
     }
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/PageSkeleton.tsx
+ * ABOUT: PageSkeleton.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PageSkeleton.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PageSkeleton.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/PageSkeleton.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PageSkeletonProps {
@@ -178,3 +192,4 @@ export function PageSkeleton({ variant = "list" }: PageSkeletonProps) {
     </div>
   );
 }
+// [END: module]

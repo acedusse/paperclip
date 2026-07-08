@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-tool-registry.ts
+ * ABOUT: plugin-tool-registry.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-tool-registry.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-tool-registry.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-tool-registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * PluginToolRegistry — host-side registry for plugin-contributed agent tools.
  *
  * Responsibilities:
@@ -459,3 +473,4 @@ export function createPluginToolRegistry(
     },
   };
 }
+// [END: module]

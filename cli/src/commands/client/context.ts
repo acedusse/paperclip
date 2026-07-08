@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/context.ts
+ * ABOUT: context.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - context.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: context.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/context.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import pc from "picocolors";
 import {
@@ -156,3 +170,4 @@ function parsePersona(value: string | undefined): "board" | "agent" | undefined 
   if (value === "board" || value === "agent") return value;
   throw new Error("Invalid --persona value. Use board or agent.");
 }
+// [END: module]

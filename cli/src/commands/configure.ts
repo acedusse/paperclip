@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/configure.ts
+ * ABOUT: configure.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - configure.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: configure.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/configure.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import { readConfig, writeConfig, configExists, resolveConfigPath } from "../config/store.js";
@@ -201,3 +215,4 @@ export async function configure(opts: {
 
   p.outro("Configuration saved.");
 }
+// [END: module]

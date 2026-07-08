@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/doctor.ts
+ * ABOUT: doctor.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - doctor.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: doctor.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/doctor.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import type { PaperclipConfig } from "../config/schema.js";
@@ -201,3 +215,4 @@ function printSummary(results: CheckResult[]): { passed: number; warned: number;
 
   return { passed, warned, failed };
 }
+// [END: module]

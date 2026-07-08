@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FinanceBillerCard.tsx
+ * ABOUT: FinanceBillerCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FinanceBillerCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FinanceBillerCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FinanceBillerCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { FinanceByBiller } from "@paperclipai/shared";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCents, providerDisplayName } from "@/lib/utils";
@@ -42,3 +56,4 @@ export function FinanceBillerCard({ row }: FinanceBillerCardProps) {
     </Card>
   );
 }
+// [END: module]

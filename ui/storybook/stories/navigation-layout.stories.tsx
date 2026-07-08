@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/navigation-layout.stories.tsx
+ * ABOUT: navigation-layout.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - navigation-layout.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: navigation-layout.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/navigation-layout.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -377,3 +391,4 @@ function SidebarIconAlignmentHarness() {
 export const SidebarIconAlignment: Story = {
   render: () => <SidebarIconAlignmentHarness />,
 };
+// [END: module]

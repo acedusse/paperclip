@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/search.ts
+ * ABOUT: search.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - search.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: search.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/search.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanySearchResponse, CompanySearchScope } from "@paperclipai/shared";
 import { api } from "./client";
 
@@ -21,3 +35,4 @@ export const searchApi = {
     );
   },
 };
+// [END: module]

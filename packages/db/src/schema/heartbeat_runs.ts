@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/heartbeat_runs.ts
+ * ABOUT: heartbeat_runs.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat_runs.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat_runs.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/heartbeat_runs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { type AnyPgColumn, pgTable, uuid, text, timestamp, jsonb, index, integer, bigint, boolean } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -80,3 +94,4 @@ export const heartbeatRuns = pgTable(
     ),
   }),
 );
+// [END: module]

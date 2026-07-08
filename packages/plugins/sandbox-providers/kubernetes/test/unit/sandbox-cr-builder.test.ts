@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/sandbox-cr-builder.test.ts
+ * ABOUT: sandbox-cr-builder.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-cr-builder.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-cr-builder.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/sandbox-cr-builder.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { buildSandboxCrManifest } from "../../src/sandbox-cr-builder.js";
 
@@ -135,3 +149,4 @@ describe("buildSandboxCrManifest", () => {
     expect(cr.spec.podTemplate.spec.imagePullSecrets).toBeUndefined();
   });
 });
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/adapters/dynamic-loader.ts
+ * ABOUT: dynamic-loader.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dynamic-loader.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dynamic-loader.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/dynamic-loader.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Dynamic UI parser loading for external adapters — sandboxed execution.
  *
  * When the Paperclip UI encounters an adapter type that doesn't have a
@@ -283,3 +297,4 @@ export function invalidateDynamicParser(adapterType: string): boolean {
   }
   return wasCached;
 }
+// [END: module]

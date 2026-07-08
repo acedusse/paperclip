@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/status-language.stories.tsx
+ * ABOUT: status-language.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - status-language.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: status-language.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/status-language.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AGENT_STATUSES, ISSUE_PRIORITIES, ISSUE_STATUSES } from "@paperclipai/shared";
@@ -719,3 +733,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const FullMatrix: Story = {};
+// [END: module]
