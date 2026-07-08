@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Issues.test.tsx
+ * ABOUT: Issues.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Issues.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Issues.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Issues.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Issue } from "@paperclipai/shared";
 import { buildIssuesSearchUrl, getNextIssuesPageOffset, mergeIssuePagesStable } from "./Issues";
@@ -45,3 +59,4 @@ describe("issues page pagination helpers", () => {
     ]);
   });
 });
+// [END: module]

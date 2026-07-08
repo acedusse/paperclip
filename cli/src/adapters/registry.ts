@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/adapters/registry.ts
+ * ABOUT: registry.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - registry.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: registry.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/adapters/registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CLIAdapterModule } from "@paperclipai/adapter-utils";
 import { printAcpxStreamEvent } from "@paperclipai/adapter-acpx-local/cli";
 import { printClaudeStreamEvent } from "@paperclipai/adapter-claude-local/cli";
@@ -82,3 +96,4 @@ const adaptersByType = new Map<string, CLIAdapterModule>(
 export function getCLIAdapter(type: string): CLIAdapterModule {
   return adaptersByType.get(type) ?? processCLIAdapter;
 }
+// [END: module]

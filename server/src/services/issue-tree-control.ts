@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-tree-control.ts
+ * ABOUT: issue-tree-control.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-tree-control.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-tree-control.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-tree-control.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, eq, inArray, isNull, notInArray, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -1196,3 +1210,4 @@ export function issueTreeControlService(db: Db) {
     cancelUnclaimedWakeupsForTree,
   };
 }
+// [END: module]

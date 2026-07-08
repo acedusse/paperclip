@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/attachment-types.ts
+ * ABOUT: attachment-types.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - attachment-types.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: attachment-types.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/attachment-types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Shared attachment content-type configuration.
  *
  * By default a curated set of image/document/text/media types are allowed. Set the
@@ -112,3 +126,4 @@ export function normalizeIssueAttachmentMaxBytes(value: number | null | undefine
   }
   return Math.min(Math.floor(value), MAX_COMPANY_ATTACHMENT_MAX_BYTES, MAX_ATTACHMENT_BYTES);
 }
+// [END: module]

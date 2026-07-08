@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/fixtures/systemNoticeFixtures.ts
+ * ABOUT: systemNoticeFixtures.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - systemNoticeFixtures.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: systemNoticeFixtures.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/fixtures/systemNoticeFixtures.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   SystemNoticeMetadataSection,
   SystemNoticeProps,
@@ -202,3 +216,4 @@ export const systemNoticeFixtures: readonly SystemNoticeFixture[] = [
     body: "This run paused while waiting on board approval.",
   },
 ];
+// [END: module]

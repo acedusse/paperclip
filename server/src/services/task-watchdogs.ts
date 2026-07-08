@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/task-watchdogs.ts
+ * ABOUT: task-watchdogs.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - task-watchdogs.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: task-watchdogs.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/task-watchdogs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import { and, asc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -1563,3 +1577,4 @@ export function taskWatchdogService(db: Db, deps: TaskWatchdogServiceDeps = {}) 
     revalidateMutationScope,
   };
 }
+// [END: module]

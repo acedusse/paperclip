@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/agents.ts
+ * ABOUT: agents.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agents.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agents.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/agents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomBytes } from "node:crypto";
 import { and, desc, eq, gte, inArray, lt, ne, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -874,3 +888,4 @@ export function agentService(db: Db) {
     },
   };
 }
+// [END: module]

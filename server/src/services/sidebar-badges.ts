@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/sidebar-badges.ts
+ * ABOUT: sidebar-badges.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sidebar-badges.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sidebar-badges.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/sidebar-badges.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, inArray, not } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, approvals, heartbeatRuns } from "@paperclipai/db";
@@ -84,3 +98,4 @@ export function sidebarBadgeService(db: Db) {
     },
   };
 }
+// [END: module]

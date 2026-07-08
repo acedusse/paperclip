@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/default-agent-instructions.ts
+ * ABOUT: default-agent-instructions.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - default-agent-instructions.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: default-agent-instructions.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/default-agent-instructions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 
 const DEFAULT_AGENT_BUNDLE_FILES = {
@@ -25,3 +39,4 @@ export async function loadDefaultAgentInstructionsBundle(role: DefaultAgentBundl
 export function resolveDefaultAgentInstructionsBundleRole(role: string): DefaultAgentBundleRole {
   return role === "ceo" ? "ceo" : "default";
 }
+// [END: module]

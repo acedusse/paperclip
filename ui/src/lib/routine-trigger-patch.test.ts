@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/routine-trigger-patch.test.ts
+ * ABOUT: routine-trigger-patch.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-trigger-patch.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-trigger-patch.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/routine-trigger-patch.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { RoutineTrigger } from "@paperclipai/shared";
 import { buildRoutineTriggerPatch } from "./routine-trigger-patch";
@@ -69,3 +83,4 @@ describe("buildRoutineTriggerPatch", () => {
     });
   });
 });
+// [END: module]

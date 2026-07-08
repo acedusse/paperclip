@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/cost.ts
+ * ABOUT: cost.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cost.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cost.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/cost.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { BillingType } from "../constants.js";
 
 export interface CostEvent {
@@ -126,3 +140,4 @@ export interface CostByProject {
   cachedInputTokens: number;
   outputTokens: number;
 }
+// [END: module]

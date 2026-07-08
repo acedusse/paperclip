@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/secret_access_events.ts
+ * ABOUT: secret_access_events.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secret_access_events.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secret_access_events.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/secret_access_events.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { companySecrets } from "./company_secrets.js";
@@ -32,3 +46,4 @@ export const secretAccessEvents = pgTable(
     runIdx: index("secret_access_events_run_idx").on(table.heartbeatRunId),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/ToastContext.tsx
+ * ABOUT: ToastContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ToastContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ToastContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/ToastContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   createContext,
   useCallback,
@@ -195,3 +209,4 @@ export function useToast() {
   const actions = useToastActions();
   return useMemo<ToastContextValue>(() => ({ toasts, ...actions }), [toasts, actions]);
 }
+// [END: module]

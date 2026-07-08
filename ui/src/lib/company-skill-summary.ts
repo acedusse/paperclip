@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-skill-summary.ts
+ * ABOUT: company-skill-summary.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skill-summary.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skill-summary.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-skill-summary.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type SkillSummaryInput = {
   tagline?: string | null;
   description?: string | null;
@@ -29,3 +43,4 @@ export function resolveSkillSummaryText(
 
   return null;
 }
+// [END: module]

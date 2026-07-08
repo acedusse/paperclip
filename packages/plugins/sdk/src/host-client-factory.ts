@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/host-client-factory.ts
+ * ABOUT: host-client-factory.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - host-client-factory.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: host-client-factory.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/host-client-factory.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Host-side client factory — creates capability-gated handler maps for
  * servicing worker→host JSON-RPC calls.
  *
@@ -974,3 +988,4 @@ export function getRequiredCapability(
 ): PluginCapability | null {
   return METHOD_CAPABILITY_MAP[method];
 }
+// [END: module]

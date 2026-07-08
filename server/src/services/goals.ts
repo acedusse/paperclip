@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/goals.ts
+ * ABOUT: goals.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - goals.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: goals.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/goals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, eq, isNull } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { goals } from "@paperclipai/db";
@@ -78,3 +92,4 @@ export function goalService(db: Db) {
         .then((rows) => rows[0] ?? null),
   };
 }
+// [END: module]

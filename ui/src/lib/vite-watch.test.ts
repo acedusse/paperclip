@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/vite-watch.test.ts
+ * ABOUT: vite-watch.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vite-watch.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vite-watch.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/vite-watch.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { createUiDevWatchOptions, shouldIgnoreUiDevWatchPath } from "./vite-watch";
 
@@ -27,3 +41,4 @@ describe("createUiDevWatchOptions", () => {
     expect(createUiDevWatchOptions("/Users/dotta/paperclip")).toHaveProperty("ignored");
   });
 });
+// [END: module]

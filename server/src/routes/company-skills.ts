@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/company-skills.ts
+ * ABOUT: company-skills.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skills.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skills.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/company-skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request } from "express";
 import type { Db } from "@paperclipai/db";
 import {
@@ -736,3 +750,4 @@ export function companySkillRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

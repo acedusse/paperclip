@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/tests/screenshots/harness.tsx
+ * ABOUT: harness.tsx (screenshots module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - harness.tsx (screenshots module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: harness.tsx (screenshots module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/tests/screenshots/harness.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { SettingsPage, SidebarLink, WikiPage, WikiRouteSidebar } from "../../src/ui/index.js";
 import type {
@@ -1059,3 +1073,4 @@ export function App() {
     </div>
   );
 }
+// [END: module]

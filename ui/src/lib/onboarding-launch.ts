@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/onboarding-launch.ts
+ * ABOUT: onboarding-launch.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - onboarding-launch.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: onboarding-launch.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/onboarding-launch.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Goal } from "@paperclipai/shared";
 
 export const ONBOARDING_PROJECT_NAME = "Onboarding";
@@ -51,3 +65,4 @@ export function buildOnboardingIssuePayload(input: {
     status: "todo" as const,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/ssh.ts
+ * ABOUT: ssh.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ssh.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ssh.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/ssh.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import { constants as fsConstants, createReadStream, createWriteStream, promises as fs } from "node:fs";
@@ -1842,3 +1856,4 @@ export async function fileExists(filePath: string): Promise<boolean> {
     return false;
   }
 }
+// [END: module]

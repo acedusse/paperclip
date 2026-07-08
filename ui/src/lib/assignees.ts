@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/assignees.ts
+ * ABOUT: assignees.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - assignees.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: assignees.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/assignees.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface AssigneeSelection {
   assigneeAgentId: string | null;
   assigneeUserId: string | null;
@@ -87,3 +101,4 @@ export function formatAssigneeUserLabel(
   if (userId === "local-board") return "Board";
   return userId.slice(0, 5);
 }
+// [END: module]

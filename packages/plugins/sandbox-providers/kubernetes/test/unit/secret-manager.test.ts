@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/secret-manager.test.ts
+ * ABOUT: secret-manager.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secret-manager.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secret-manager.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/secret-manager.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi } from "vitest";
 import { createPerRunSecret } from "../../src/secret-manager.js";
 
@@ -66,3 +80,4 @@ describe("createPerRunSecret", () => {
     ).rejects.toThrow(/ownerUid/);
   });
 });
+// [END: module]

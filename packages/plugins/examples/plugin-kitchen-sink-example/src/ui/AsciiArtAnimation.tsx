@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-kitchen-sink-example/src/ui/AsciiArtAnimation.tsx
+ * ABOUT: AsciiArtAnimation.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AsciiArtAnimation.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AsciiArtAnimation.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-kitchen-sink-example/src/ui/AsciiArtAnimation.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useRef } from "react";
 
 const CHARS = [" ", ".", "·", "▪", "▫", "○"] as const;
@@ -361,3 +375,4 @@ export function AsciiArtAnimation() {
     </div>
   );
 }
+// [END: module]

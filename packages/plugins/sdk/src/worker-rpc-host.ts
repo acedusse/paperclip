@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/worker-rpc-host.ts
+ * ABOUT: worker-rpc-host.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worker-rpc-host.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worker-rpc-host.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/worker-rpc-host.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Worker-side RPC host — runs inside the child process spawned by the host.
  *
  * This module is the worker-side counterpart to the server's
@@ -1856,3 +1870,4 @@ export function startWorkerRpcHost(options: WorkerRpcHostOptions): WorkerRpcHost
     },
   };
 }
+// [END: module]

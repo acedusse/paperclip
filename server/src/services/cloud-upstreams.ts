@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/cloud-upstreams.ts
+ * ABOUT: cloud-upstreams.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-upstreams.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-upstreams.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/cloud-upstreams.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import crypto, { sign } from "node:crypto";
 import { and, count, desc, eq, sql } from "drizzle-orm";
 import type {
@@ -1307,3 +1321,4 @@ function cloudUpstreamStep(value: string): CloudUpstreamRun["activeStep"] {
     ? value
     : "push";
 }
+// [END: module]

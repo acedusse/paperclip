@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/chat-comments.stories.tsx
+ * ABOUT: chat-comments.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - chat-comments.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: chat-comments.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/chat-comments.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Agent, FeedbackVote, IssueComment } from "@paperclipai/shared";
 import type { TranscriptEntry } from "@/adapters";
@@ -880,3 +894,4 @@ export const IssueChatWithTimeline: Story = {
 export const IssueThreadNotices: Story = {
   render: () => <IssueThreadNoticeReview />,
 };
+// [END: module]

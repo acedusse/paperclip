@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/sub-issues-workflow.stories.tsx
+ * ABOUT: sub-issues-workflow.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sub-issues-workflow.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sub-issues-workflow.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/sub-issues-workflow.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import type { Issue } from "@paperclipai/shared";
@@ -279,3 +293,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+// [END: module]

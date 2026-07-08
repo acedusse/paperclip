@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/agent.ts
+ * ABOUT: agent.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/agent.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   AgentAdapterType,
   ModelProfileKey,
@@ -150,3 +164,4 @@ export interface AdapterEnvironmentTestResult {
   checks: AdapterEnvironmentCheck[];
   testedAt: string;
 }
+// [END: module]

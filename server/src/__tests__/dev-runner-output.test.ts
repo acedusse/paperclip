@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/dev-runner-output.test.ts
+ * ABOUT: dev-runner-output.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner-output.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner-output.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/dev-runner-output.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { createCapturedOutputBuffer, parseJsonResponseWithLimit } from "../../../scripts/dev-runner-output.mjs";
 
@@ -43,3 +57,4 @@ describe("createCapturedOutputBuffer", () => {
     await expect(parseJsonResponseWithLimit(response, 32)).rejects.toThrow("Response exceeds 32 bytes");
   });
 });
+// [END: module]

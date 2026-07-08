@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/StatusIcon.tsx
+ * ABOUT: StatusIcon.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - StatusIcon.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: StatusIcon.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/StatusIcon.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { IssueBlockerAttention } from "@paperclipai/shared";
 import { cn } from "../lib/utils";
@@ -146,3 +160,4 @@ export function StatusIcon({ status, blockerAttention, onChange, className, show
     </Popover>
   );
 }
+// [END: module]

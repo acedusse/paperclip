@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_relations.ts
+ * ABOUT: issue_relations.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_relations.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_relations.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_relations.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companies } from "./companies.js";
@@ -28,3 +42,4 @@ export const issueRelations = pgTable(
     ),
   }),
 );
+// [END: module]

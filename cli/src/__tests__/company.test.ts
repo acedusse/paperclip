@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/company.test.ts
+ * ABOUT: company.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/company.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CompanyPortabilityPreviewResult } from "@paperclipai/shared";
@@ -798,3 +812,4 @@ describe("default adapter overrides", () => {
     });
   });
 });
+// [END: module]

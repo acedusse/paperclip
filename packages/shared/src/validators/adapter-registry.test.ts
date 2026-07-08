@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/adapter-registry.test.ts
+ * ABOUT: adapter-registry.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-registry.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-registry.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/adapter-registry.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { adapterRegistrySchema } from "./adapter-registry.js";
 
@@ -32,3 +46,4 @@ describe("adapterRegistrySchema", () => {
     expect(() => adapterRegistrySchema.parse({ adapterType: "x" })).toThrow();
   });
 });
+// [END: module]

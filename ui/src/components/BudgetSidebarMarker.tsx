@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/BudgetSidebarMarker.tsx
+ * ABOUT: BudgetSidebarMarker.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BudgetSidebarMarker.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BudgetSidebarMarker.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/BudgetSidebarMarker.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { DollarSign } from "lucide-react";
 
 export type BudgetSidebarMarkerLevel = "healthy" | "warning" | "critical";
@@ -33,3 +47,4 @@ export function BudgetSidebarMarker({
     </span>
   );
 }
+// [END: module]

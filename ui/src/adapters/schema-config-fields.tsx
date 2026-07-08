@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/schema-config-fields.tsx
+ * ABOUT: schema-config-fields.tsx (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - schema-config-fields.tsx (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: schema-config-fields.tsx (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/schema-config-fields.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useEffect, useRef, useCallback } from "react";
 
 import type { AdapterConfigSchema, ConfigFieldSchema, CreateConfigValues } from "@paperclipai/adapter-utils";
@@ -539,3 +553,4 @@ export function buildSchemaAdapterConfig(
 
   return ac;
 }
+// [END: module]

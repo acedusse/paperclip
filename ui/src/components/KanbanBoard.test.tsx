@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/KanbanBoard.test.tsx
+ * ABOUT: KanbanBoard.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - KanbanBoard.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: KanbanBoard.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/KanbanBoard.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -196,3 +210,4 @@ describe("KanbanBoard", () => {
     expect(resolveKanbanTargetStatus("missing", issues)).toBeNull();
   });
 });
+// [END: module]

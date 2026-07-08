@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/access-validators.test.ts
+ * ABOUT: access-validators.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - access-validators.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: access-validators.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/access-validators.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   updateCompanyMemberWithPermissionsSchema,
@@ -31,3 +45,4 @@ describe("access validators", () => {
     expect(result.grants).toEqual([]);
   });
 });
+// [END: module]

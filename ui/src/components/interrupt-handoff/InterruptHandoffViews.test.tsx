@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/interrupt-handoff/InterruptHandoffViews.test.tsx
+ * ABOUT: InterruptHandoffViews.test.tsx (interrupt-handoff module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InterruptHandoffViews.test.tsx (interrupt-handoff module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InterruptHandoffViews.test.tsx (interrupt-handoff module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/interrupt-handoff/InterruptHandoffViews.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -256,3 +270,4 @@ describe("PauseAffectsSummaryView", () => {
     expect(note.textContent).toContain("Nothing live to pause");
   });
 });
+// [END: module]

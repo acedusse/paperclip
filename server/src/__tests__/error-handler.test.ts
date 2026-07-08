@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/error-handler.test.ts
+ * ABOUT: error-handler.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - error-handler.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: error-handler.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/error-handler.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { NextFunction, Request, Response } from "express";
 import { describe, expect, it, vi } from "vitest";
 import { HttpError } from "../errors.js";
@@ -76,3 +90,4 @@ describe("errorHandler", () => {
     expect(res.__errorContext?.error?.message).toBe("db exploded");
   });
 });
+// [END: module]

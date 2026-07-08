@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agent-shortname-collision.test.ts
+ * ABOUT: agent-shortname-collision.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-shortname-collision.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-shortname-collision.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agent-shortname-collision.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { hasAgentShortnameCollision, deduplicateAgentName } from "../services/agents.ts";
 
@@ -67,3 +81,4 @@ describe("deduplicateAgentName", () => {
     expect(name).toBe("OpenClaw");
   });
 });
+// [END: module]

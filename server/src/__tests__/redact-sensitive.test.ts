@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/redact-sensitive.test.ts
+ * ABOUT: redact-sensitive.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - redact-sensitive.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: redact-sensitive.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/redact-sensitive.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { redactSensitive } from "../middleware/redact-sensitive.js";
 
@@ -90,3 +104,4 @@ describe("redactSensitive", () => {
     expect(json).not.toContain("[1,2,3]");
   });
 });
+// [END: module]

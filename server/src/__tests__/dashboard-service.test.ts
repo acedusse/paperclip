@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/dashboard-service.test.ts
+ * ABOUT: dashboard-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dashboard-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dashboard-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/dashboard-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { agents, companies, createDb, heartbeatRuns } from "@paperclipai/db";
@@ -167,3 +181,4 @@ describeEmbeddedPostgres("dashboard service", () => {
     });
   });
 });
+// [END: module]

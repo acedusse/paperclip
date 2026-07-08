@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/paths.ts
+ * ABOUT: paths.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - paths.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: paths.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/paths.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { resolveDefaultConfigPath } from "./home-paths.js";
@@ -32,3 +46,4 @@ export function resolvePaperclipConfigPath(overridePath?: string): string {
 export function resolvePaperclipEnvPath(overrideConfigPath?: string): string {
   return path.resolve(path.dirname(resolvePaperclipConfigPath(overrideConfigPath)), PAPERCLIP_ENV_FILENAME);
 }
+// [END: module]

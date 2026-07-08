@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-accepted-plan-workspace-refresh.test.ts
+ * ABOUT: heartbeat-accepted-plan-workspace-refresh.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-accepted-plan-workspace-refresh.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-accepted-plan-workspace-refresh.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-accepted-plan-workspace-refresh.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
@@ -813,3 +827,4 @@ describeEmbeddedPostgres("accepted plan workspace refresh", () => {
     expect(adapterInput.context.paperclipTaskMarkdown).toContain("Create child issues from the approved plan only");
   }, 20_000);
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/WorkspaceFileMarkdownBody.test.tsx
+ * ABOUT: WorkspaceFileMarkdownBody.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - WorkspaceFileMarkdownBody.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: WorkspaceFileMarkdownBody.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/WorkspaceFileMarkdownBody.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -32,3 +46,4 @@ describe("linkWorkspaceFileInlineCode", () => {
     expect(markdown).toContain("path=content-os%2Fcases%2Factive%2F2026-06-06-pap-10199-bundled-skills%2F");
   });
 });
+// [END: module]

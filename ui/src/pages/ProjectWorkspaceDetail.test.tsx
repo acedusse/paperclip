@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/ProjectWorkspaceDetail.test.tsx
+ * ABOUT: ProjectWorkspaceDetail.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectWorkspaceDetail.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectWorkspaceDetail.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/ProjectWorkspaceDetail.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -340,3 +354,4 @@ describe("ProjectWorkspaceDetail plugin tabs", () => {
     expect(container.textContent).toContain("Plugin manifest failed");
   });
 });
+// [END: module]

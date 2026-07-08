@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/secrets/ImportFromVaultDialog.test.tsx
+ * ABOUT: ImportFromVaultDialog.test.tsx (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ImportFromVaultDialog.test.tsx (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ImportFromVaultDialog.test.tsx (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/secrets/ImportFromVaultDialog.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -818,3 +832,4 @@ describe("ImportFromVaultDialog", () => {
     });
   });
 });
+// [END: module]

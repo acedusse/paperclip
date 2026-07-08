@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/adapter-registry-bootstrap.reconcile.test.ts
+ * ABOUT: adapter-registry-bootstrap.reconcile.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-registry-bootstrap.reconcile.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-registry-bootstrap.reconcile.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/adapter-registry-bootstrap.reconcile.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 
 const setAdapterDisabled = vi.fn();
@@ -42,3 +56,4 @@ describe("reconcileAdapterAvailability", () => {
     ).toThrow(/no installed adapter: ghost_adapter/);
   });
 });
+// [END: module]

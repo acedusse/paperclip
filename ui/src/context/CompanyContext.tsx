@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/CompanyContext.tsx
+ * ABOUT: CompanyContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/CompanyContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   createContext,
   useCallback,
@@ -186,3 +200,4 @@ export function useCompany() {
 export function useOptionalCompany(): CompanyContextValue | null {
   return useContext(CompanyContext);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RequestCollapsedSidebar.tsx
+ * ABOUT: RequestCollapsedSidebar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RequestCollapsedSidebar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RequestCollapsedSidebar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RequestCollapsedSidebar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import { useSidebar } from "../context/SidebarContext";
 
@@ -34,3 +48,4 @@ export function RequestCollapsedSidebar() {
 
   return null;
 }
+// [END: module]

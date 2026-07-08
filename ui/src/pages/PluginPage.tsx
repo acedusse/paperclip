@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/PluginPage.tsx
+ * ABOUT: PluginPage.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PluginPage.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PluginPage.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/PluginPage.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo } from "react";
 import { Link, Navigate, useParams } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -223,3 +237,4 @@ function decodeRouteSegment(segment: string): string {
     return segment;
   }
 }
+// [END: module]

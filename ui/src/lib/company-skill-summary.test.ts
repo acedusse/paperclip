@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-skill-summary.test.ts
+ * ABOUT: company-skill-summary.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skill-summary.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skill-summary.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-skill-summary.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { resolveSkillSummaryText, sanitizeSkillSummaryText } from "./company-skill-summary";
 
@@ -32,3 +46,4 @@ describe("company skill summary text", () => {
     })).toBe("Cleans up rough AI prose.");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/company-skill.ts
+ * ABOUT: company-skill.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skill.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skill.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/company-skill.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type CompanySkillSourceType = "local_path" | "github" | "url" | "catalog" | "skills_sh";
 
 export type CompanySkillTrustLevel = "markdown_only" | "assets" | "scripts_executables";
@@ -397,3 +411,4 @@ export interface CompanySkillInstallCatalogResult {
   catalogSkill: CatalogSkill;
   warnings: string[];
 }
+// [END: module]

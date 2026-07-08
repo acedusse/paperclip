@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/ProjectWorkspaceDetail.tsx
+ * ABOUT: ProjectWorkspaceDetail.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectWorkspaceDetail.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectWorkspaceDetail.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/ProjectWorkspaceDetail.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -748,3 +762,4 @@ export function ProjectWorkspaceDetail() {
     </div>
   );
 }
+// [END: module]

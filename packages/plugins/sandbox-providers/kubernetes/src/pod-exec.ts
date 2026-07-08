@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/pod-exec.ts
+ * ABOUT: pod-exec.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - pod-exec.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: pod-exec.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/pod-exec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Exec a command inside a running pod container using the Kubernetes exec API.
  *
  * Uses @kubernetes/client-node's Exec class, which opens a WebSocket to the
@@ -196,3 +210,4 @@ export async function execInPod(
     },
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/company-artifacts-service.test.ts
+ * ABOUT: company-artifacts-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-artifacts-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-artifacts-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/company-artifacts-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Readable } from "node:stream";
 import express from "express";
 import { eq } from "drizzle-orm";
@@ -791,3 +805,4 @@ describe("company artifacts route authorization", () => {
     expect(res.body.error).toBe("Agent key cannot access another company");
   });
 });
+// [END: module]

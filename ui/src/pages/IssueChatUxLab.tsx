@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/IssueChatUxLab.tsx
+ * ABOUT: IssueChatUxLab.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueChatUxLab.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueChatUxLab.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/IssueChatUxLab.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -385,3 +399,4 @@ export function IssueChatUxLab() {
     </div>
   );
 }
+// [END: module]

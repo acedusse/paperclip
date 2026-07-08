@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/routine-sections/operate-sections.tsx
+ * ABOUT: operate-sections.tsx (routine-sections module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - operate-sections.tsx (routine-sections module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: operate-sections.tsx (routine-sections module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/routine-sections/operate-sections.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import { Activity as ActivityIcon, Play, SlidersHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -279,3 +293,4 @@ export function HistorySection() {
     />
   );
 }
+// [END: module]

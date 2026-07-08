@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/recent-assignees.ts
+ * ABOUT: recent-assignees.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recent-assignees.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recent-assignees.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/recent-assignees.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   RECENT_SELECTION_DISPLAY_LIMIT,
   readRecentSelectionIds,
@@ -55,3 +69,4 @@ export function sortAgentsByRecency<T extends { id: string; name: string }>(
     return a.name.localeCompare(b.name);
   });
 }
+// [END: module]

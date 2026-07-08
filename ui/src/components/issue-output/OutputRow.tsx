@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/issue-output/OutputRow.tsx
+ * ABOUT: OutputRow.tsx (issue-output module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OutputRow.tsx (issue-output module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OutputRow.tsx (issue-output module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/issue-output/OutputRow.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Download, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn, relativeTime } from "@/lib/utils";
@@ -55,3 +69,4 @@ export function OutputRow({ item, creatorName }: OutputRowProps) {
     </div>
   );
 }
+// [END: module]

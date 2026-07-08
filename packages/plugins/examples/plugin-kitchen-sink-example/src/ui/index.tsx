@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-kitchen-sink-example/src/ui/index.tsx
+ * ABOUT: index.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-kitchen-sink-example/src/ui/index.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import {
   AssigneePicker,
@@ -2473,3 +2487,4 @@ export function KitchenSinkLauncherModal() {
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Goals.tsx
+ * ABOUT: Goals.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Goals.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Goals.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Goals.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { goalsApi } from "../api/goals";
@@ -61,3 +75,4 @@ export function Goals() {
     </div>
   );
 }
+// [END: module]

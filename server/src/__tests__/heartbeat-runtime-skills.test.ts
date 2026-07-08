@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-runtime-skills.test.ts
+ * ABOUT: heartbeat-runtime-skills.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-runtime-skills.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-runtime-skills.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-runtime-skills.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
@@ -241,3 +255,4 @@ describeEmbeddedPostgres("heartbeat runtime skill version pins", () => {
     expect((await fs.stat(firstSkillFile)).mtime.toISOString()).toBe(oldMtime.toISOString());
   });
 });
+// [END: module]

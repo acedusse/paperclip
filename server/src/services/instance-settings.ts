@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/instance-settings.ts
+ * ABOUT: instance-settings.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-settings.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-settings.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/instance-settings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Db } from "@paperclipai/db";
 import { companies, instanceSettings } from "@paperclipai/db";
 import {
@@ -199,3 +213,4 @@ export function instanceSettingsService(db: Db) {
         .then((rows) => rows.map((row) => row.id)),
   };
 }
+// [END: module]

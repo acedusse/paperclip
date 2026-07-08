@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/routine-run-display.test.ts
+ * ABOUT: routine-run-display.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine-run-display.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine-run-display.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/routine-run-display.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { RoutineVariable } from "@paperclipai/shared";
 import { dedupedTriggerLabel, runRowSubtitle } from "./routine-run-display";
@@ -66,3 +80,4 @@ describe("dedupedTriggerLabel", () => {
     expect(dedupedTriggerLabel(null)).toBeNull();
   });
 });
+// [END: module]

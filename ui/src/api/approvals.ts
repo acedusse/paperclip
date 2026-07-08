@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/approvals.ts
+ * ABOUT: approvals.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approvals.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approvals.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/approvals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Approval, ApprovalComment, Issue } from "@paperclipai/shared";
 import { api } from "./client";
 
@@ -22,3 +36,4 @@ export const approvalsApi = {
     api.post<ApprovalComment>(`/approvals/${id}/comments`, { body }),
   listIssues: (id: string) => api.get<Issue[]>(`/approvals/${id}/issues`),
 };
+// [END: module]

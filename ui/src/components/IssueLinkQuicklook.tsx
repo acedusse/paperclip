@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueLinkQuicklook.tsx
+ * ABOUT: IssueLinkQuicklook.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueLinkQuicklook.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueLinkQuicklook.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueLinkQuicklook.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react";
 import { useMemo } from "react";
 import * as RouterDom from "react-router-dom";
@@ -277,3 +291,4 @@ export const IssueLinkQuicklook = React.forwardRef<
     </Popover>
   );
 });
+// [END: module]

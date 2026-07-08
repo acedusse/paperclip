@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanyInvites.tsx
+ * ABOUT: CompanyInvites.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyInvites.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyInvites.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanyInvites.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, Copy, ExternalLink, MailPlus } from "lucide-react";
@@ -429,3 +443,4 @@ function formatInviteAudience(invite: Awaited<ReturnType<typeof accessApi.listIn
   if (invite.allowedJoinTypes === "both") return invite.humanRole ? `Human or agent · ${invite.humanRole}` : "Human or agent";
   return invite.humanRole ?? "Human";
 }
+// [END: module]

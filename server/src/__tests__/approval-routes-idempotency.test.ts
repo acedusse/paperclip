@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/approval-routes-idempotency.test.ts
+ * ABOUT: approval-routes-idempotency.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approval-routes-idempotency.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approval-routes-idempotency.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/approval-routes-idempotency.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -445,3 +459,4 @@ describe("approval routes idempotent retries", () => {
     expect(mockApprovalService.addComment).not.toHaveBeenCalled();
   });
 });
+// [END: module]

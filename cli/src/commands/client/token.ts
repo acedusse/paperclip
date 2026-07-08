@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/token.ts
+ * ABOUT: token.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - token.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: token.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/token.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { createAgentKeySchema, createBoardApiKeySchema, type Agent } from "@paperclipai/shared";
 import {
@@ -242,3 +256,4 @@ function resolveBoardKeyExpiresAt(opts: BoardTokenOptions): Date | null | undefi
   }
   return undefined;
 }
+// [END: module]

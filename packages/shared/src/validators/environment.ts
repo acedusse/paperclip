@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/environment.ts
+ * ABOUT: environment.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/environment.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   ENVIRONMENT_DRIVERS,
@@ -45,3 +59,4 @@ export const probeEnvironmentConfigSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional().nullable(),
 }).strict();
 export type ProbeEnvironmentConfig = z.infer<typeof probeEnvironmentConfigSchema>;
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/cloud-tenant-actor.test.ts
+ * ABOUT: cloud-tenant-actor.test.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-tenant-actor.test.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-tenant-actor.test.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/cloud-tenant-actor.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Request } from "express";
 import type { Db } from "@paperclipai/db";
@@ -103,3 +117,4 @@ describe("resolveCloudTenantActor (shared-pool hardening)", () => {
     expect(actor?.memberships?.[0]?.membershipRole).toBe("member");
   });
 });
+// [END: module]

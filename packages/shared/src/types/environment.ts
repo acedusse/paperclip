@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/environment.ts
+ * ABOUT: environment.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/environment.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   EnvironmentDriver,
   EnvironmentLeaseCleanupStatus,
@@ -88,3 +102,4 @@ export interface EnvironmentLease {
   createdAt: Date;
   updatedAt: Date;
 }
+// [END: module]

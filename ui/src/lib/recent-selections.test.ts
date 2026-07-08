@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/recent-selections.test.ts
+ * ABOUT: recent-selections.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recent-selections.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recent-selections.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/recent-selections.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, it } from "vitest";
@@ -77,3 +91,4 @@ describe("recent selection ordering", () => {
     expect(getRecentAssigneeIds()).toEqual(["agent-1"]);
   });
 });
+// [END: module]

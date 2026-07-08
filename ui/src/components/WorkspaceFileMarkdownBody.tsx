@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/WorkspaceFileMarkdownBody.tsx
+ * ABOUT: WorkspaceFileMarkdownBody.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - WorkspaceFileMarkdownBody.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: WorkspaceFileMarkdownBody.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/WorkspaceFileMarkdownBody.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { MouseEvent } from "react";
 import { readFileViewerStateFromSearch, useFileViewer } from "@/context/FileViewerContext";
 import { parseWorkspaceFileRef } from "@/lib/workspace-file-parser";
@@ -47,3 +61,4 @@ export function WorkspaceFileMarkdownBody({
     </div>
   );
 }
+// [END: module]

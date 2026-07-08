@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/skills-store-detail.stories.tsx
+ * ABOUT: skills-store-detail.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - skills-store-detail.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: skills-store-detail.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/skills-store-detail.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type {
@@ -203,3 +217,4 @@ export const Overview: Story = { args: { initialTab: "overview" } };
 export const AgentsTab: Story = { args: { initialTab: "agents" } };
 export const FilesTab: Story = { args: { initialTab: "files" } };
 export const VersionsTab: Story = { args: { initialTab: "versions" } };
+// [END: module]

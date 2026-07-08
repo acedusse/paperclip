@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-skills-state.ts
+ * ABOUT: agent-skills-state.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-skills-state.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-skills-state.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-skills-state.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AgentSkillEntry } from "@paperclipai/shared";
 
 export interface AgentSkillDraftState {
@@ -38,3 +52,4 @@ export function isReadOnlyUnmanagedSkillEntry(
   if (entry.origin === "user_installed" || entry.origin === "external_unknown") return true;
   return entry.managed === false && entry.state === "external";
 }
+// [END: module]

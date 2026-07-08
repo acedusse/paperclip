@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agent-auth-jwt.test.ts
+ * ABOUT: agent-auth-jwt.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-auth-jwt.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-auth-jwt.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agent-auth-jwt.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHmac } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createLocalAgentJwt, verifyLocalAgentJwt } from "../agent-auth-jwt.js";
@@ -219,3 +233,4 @@ describe("agent local JWT", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useKeyboardShortcuts.ts
+ * ABOUT: useKeyboardShortcuts.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useKeyboardShortcuts.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useKeyboardShortcuts.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useKeyboardShortcuts.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import {
   focusPageSearchShortcutTarget,
@@ -86,3 +100,4 @@ export function useKeyboardShortcuts({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [enabled, onNewIssue, onSearch, onToggleSidebar, onToggleCollapse, onTogglePanel, onShowShortcuts]);
 }
+// [END: module]

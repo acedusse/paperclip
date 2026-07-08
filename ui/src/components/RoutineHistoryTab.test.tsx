@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineHistoryTab.test.tsx
+ * ABOUT: RoutineHistoryTab.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineHistoryTab.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineHistoryTab.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineHistoryTab.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -523,3 +537,4 @@ describe("RoutineHistoryTab", () => {
     expect(response.revision.id).toBe("revision-3");
   });
 });
+// [END: module]

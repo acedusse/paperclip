@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/WorkspaceRuntimeControls.tsx
+ * ABOUT: WorkspaceRuntimeControls.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - WorkspaceRuntimeControls.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: WorkspaceRuntimeControls.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/WorkspaceRuntimeControls.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   WorkspaceCommandDefinition,
   WorkspaceRuntimeControlTarget,
@@ -512,3 +526,4 @@ export function WorkspaceRuntimeQuickControls({
     </div>
   );
 }
+// [END: module]

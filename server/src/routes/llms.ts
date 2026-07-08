@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/llms.ts
+ * ABOUT: llms.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - llms.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: llms.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/llms.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request } from "express";
 import type { Db } from "@paperclipai/db";
 import { AGENT_ICON_NAMES } from "@paperclipai/shared";
@@ -85,3 +99,4 @@ export function llmRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

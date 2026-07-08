@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/feedback-share-client.test.ts
+ * ABOUT: feedback-share-client.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback-share-client.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback-share-client.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/feedback-share-client.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { gunzipSync } from "node:zlib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createFeedbackTraceShareClientFromConfig } from "../services/feedback-share-client.js";
@@ -99,3 +113,4 @@ describe("feedback trace share client", () => {
     expect(parsed.bundle.envelope).toEqual({ hello: "world" });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/index.ts
+ * ABOUT: index.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export {
   instanceSettingsSchema,
   instanceGeneralSettingsSchema,
@@ -574,3 +588,4 @@ export {
   type SetPluginState,
   type ListPluginState,
 } from "./plugin.js";
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/mention-deletion.ts
+ * ABOUT: mention-deletion.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - mention-deletion.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: mention-deletion.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/mention-deletion.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createRootEditorSubscription$, realmPlugin } from "@mdxeditor/editor";
 import { $isLinkNode, type LinkNode } from "@lexical/link";
 import {
@@ -141,3 +155,4 @@ export const mentionDeletionPlugin = realmPlugin({
     ]);
   },
 });
+// [END: module]

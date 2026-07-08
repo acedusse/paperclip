@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/llm-check.ts
+ * ABOUT: llm-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - llm-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: llm-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/llm-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PaperclipConfig } from "../config/schema.js";
 import type { CheckResult } from "./index.js";
 
@@ -80,3 +94,4 @@ export async function llmCheck(config: PaperclipConfig): Promise<CheckResult> {
     };
   }
 }
+// [END: module]

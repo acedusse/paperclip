@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/cilium-network-policy.test.ts
+ * ABOUT: cilium-network-policy.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cilium-network-policy.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cilium-network-policy.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/cilium-network-policy.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import { buildCiliumNetworkPolicyManifest } from "../../src/cilium-network-policy.js";
 
@@ -58,3 +72,4 @@ describe("buildCiliumNetworkPolicyManifest", () => {
     expect(cidrRule.toCIDRSet[0].cidr).toBe("10.0.0.0/8");
   });
 });
+// [END: module]

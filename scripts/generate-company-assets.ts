@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/generate-company-assets.ts
+ * ABOUT: generate-company-assets.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - generate-company-assets.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: generate-company-assets.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/generate-company-assets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 #!/usr/bin/env npx tsx
 /**
  * Generate org chart images and READMEs for agent company packages.
@@ -362,3 +376,4 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
+// [END: module]

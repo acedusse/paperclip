@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/issue-output/OutputPrimaryCard.tsx
+ * ABOUT: OutputPrimaryCard.tsx (issue-output module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OutputPrimaryCard.tsx (issue-output module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OutputPrimaryCard.tsx (issue-output module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/issue-output/OutputPrimaryCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Download, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -94,3 +108,4 @@ export function OutputPrimaryCard({ item, creatorName }: OutputPrimaryCardProps)
     </div>
   );
 }
+// [END: module]

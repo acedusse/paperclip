@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/service.ts
+ * ABOUT: service.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - service.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: service.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/service.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, desc, eq, gt, gte, inArray, isNull, notInArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -4011,3 +4025,4 @@ export function recoveryService(db: Db, deps: { enqueueWakeup: RecoveryWakeup })
     readRecoveryTimerIntervalMs,
   };
 }
+// [END: module]

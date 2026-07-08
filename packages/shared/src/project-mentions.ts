@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/project-mentions.ts
+ * ABOUT: project-mentions.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-mentions.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-mentions.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/project-mentions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const PROJECT_MENTION_SCHEME = "project://";
 export const AGENT_MENTION_SCHEME = "agent://";
 export const USER_MENTION_SCHEME = "user://";
@@ -270,3 +284,4 @@ function normalizeSkillSlug(input: string | null | undefined): string | null {
   if (!trimmed || !SKILL_SLUG_RE.test(trimmed)) return null;
   return trimmed;
 }
+// [END: module]

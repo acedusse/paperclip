@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/document_annotation_comments.ts
+ * ABOUT: document_annotation_comments.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document_annotation_comments.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document_annotation_comments.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/document_annotation_comments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssueCommentAuthorType } from "@paperclipai/shared";
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
@@ -45,3 +59,4 @@ export const documentAnnotationComments = pgTable(
     bodySearchIdx: index("document_annotation_comments_body_search_idx").using("gin", table.body.op("gin_trgm_ops")),
   }),
 );
+// [END: module]

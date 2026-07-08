@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/pi-local/src/ui/build-config.ts
+ * ABOUT: build-config.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - build-config.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: build-config.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/pi-local/src/ui/build-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CreateConfigValues } from "@paperclipai/adapter-utils";
 
 function parseEnvVars(text: string): Record<string, string> {
@@ -68,3 +82,4 @@ export function buildPiLocalConfig(v: CreateConfigValues): Record<string, unknow
 
   return ac;
 }
+// [END: module]

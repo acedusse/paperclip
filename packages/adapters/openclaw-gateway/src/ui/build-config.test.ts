@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/openclaw-gateway/src/ui/build-config.test.ts
+ * ABOUT: build-config.test.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - build-config.test.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: build-config.test.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/openclaw-gateway/src/ui/build-config.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { CreateConfigValues } from "@paperclipai/adapter-utils";
 import { buildOpenClawGatewayConfig } from "./build-config.js";
@@ -51,3 +65,4 @@ describe("buildOpenClawGatewayConfig", () => {
     expect(config.scopes).toEqual(["operator.admin"]);
   });
 });
+// [END: module]

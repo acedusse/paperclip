@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/documents.ts
+ * ABOUT: documents.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - documents.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: documents.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/documents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, integer, timestamp, index, jsonb } from "drizzle-orm/pg-core";
 import type { SourceTrustMetadata } from "@paperclipai/shared";
 import { companies } from "./companies.js";
@@ -31,3 +45,4 @@ export const documents = pgTable(
     bodySearchIdx: index("documents_latest_body_search_idx").using("gin", table.latestBody.op("gin_trgm_ops")),
   }),
 );
+// [END: module]

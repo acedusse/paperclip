@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/tabs.tsx
+ * ABOUT: tabs.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - tabs.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: tabs.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/tabs.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Tabs as TabsPrimitive } from "radix-ui"
@@ -87,3 +101,4 @@ function TabsContent({
 }
 
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+// [END: module]

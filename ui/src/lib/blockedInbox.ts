@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/blockedInbox.ts
+ * ABOUT: blockedInbox.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - blockedInbox.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: blockedInbox.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/blockedInbox.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   Issue,
   IssueBlockedInboxAttention,
@@ -273,3 +287,4 @@ export function formatStoppedAge(stoppedSinceAt: string | null, now: number = Da
   const mo = Math.floor(seconds / (86_400 * 30));
   return `stopped ${mo}mo`;
 }
+// [END: module]

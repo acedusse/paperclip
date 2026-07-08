@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-order.test.ts
+ * ABOUT: agent-order.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-order.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-order.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-order.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Agent } from "@paperclipai/shared";
 import { sortAgentsByDefaultSidebarOrder, sortAgentsByStoredOrder } from "./agent-order";
@@ -65,3 +79,4 @@ describe("sortAgentsByDefaultSidebarOrder", () => {
     expect(sorted.map((a) => a.id)).toEqual(["board", "ceo"]);
   });
 });
+// [END: module]

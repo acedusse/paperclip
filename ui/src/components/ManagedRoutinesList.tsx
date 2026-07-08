@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ManagedRoutinesList.tsx
+ * ABOUT: ManagedRoutinesList.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ManagedRoutinesList.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ManagedRoutinesList.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ManagedRoutinesList.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Button } from "@/components/ui/button";
 import {
   RoutineListRow,
@@ -185,3 +199,4 @@ export function ManagedRoutinesList({
     </div>
   );
 }
+// [END: module]

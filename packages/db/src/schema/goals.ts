@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/goals.ts
+ * ABOUT: goals.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - goals.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: goals.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/goals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   type AnyPgColumn,
   pgTable,
@@ -27,3 +41,4 @@ export const goals = pgTable(
     companyIdx: index("goals_company_idx").on(table.companyId),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentCapsule.tsx
+ * ABOUT: AgentCapsule.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentCapsule.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentCapsule.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentCapsule.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -130,3 +144,4 @@ export function AgentCapsule({
 }
 
 export default AgentCapsule;
+// [END: module]

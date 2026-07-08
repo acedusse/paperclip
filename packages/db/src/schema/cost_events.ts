@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/cost_events.ts
+ * ABOUT: cost_events.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cost_events.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cost_events.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/cost_events.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, integer, index } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -51,3 +65,4 @@ export const costEvents = pgTable(
     ),
   }),
 );
+// [END: module]

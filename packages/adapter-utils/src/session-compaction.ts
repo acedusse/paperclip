@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/session-compaction.ts
+ * ABOUT: session-compaction.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - session-compaction.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: session-compaction.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/session-compaction.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface SessionCompactionPolicy {
   enabled: boolean;
   maxSessionRuns: number;
@@ -191,3 +205,4 @@ export function hasSessionCompactionThresholds(policy: Pick<
 >) {
   return policy.maxSessionRuns > 0 || policy.maxRawInputTokens > 0 || policy.maxSessionAgeHours > 0;
 }
+// [END: module]

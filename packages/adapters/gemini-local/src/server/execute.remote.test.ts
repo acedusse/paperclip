@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/gemini-local/src/server/execute.remote.test.ts
+ * ABOUT: execute.remote.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.remote.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.remote.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/gemini-local/src/server/execute.remote.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -413,3 +427,4 @@ describe("gemini remote execution", () => {
     expect(runChildProcess).not.toHaveBeenCalled();
   });
 });
+// [END: module]

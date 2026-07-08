@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/scripts/clean-poisoned-claude-sessions.ts
+ * ABOUT: clean-poisoned-claude-sessions.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - clean-poisoned-claude-sessions.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: clean-poisoned-claude-sessions.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/scripts/clean-poisoned-claude-sessions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 #!/usr/bin/env tsx
 /**
  * One-shot cleaner for `agent_task_sessions` rows whose persisted `claude_local`
@@ -460,3 +474,4 @@ if (invokedDirectly) {
     process.exit(1);
   });
 }
+// [END: module]

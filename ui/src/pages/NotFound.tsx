@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/NotFound.tsx
+ * ABOUT: NotFound.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - NotFound.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: NotFound.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/NotFound.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import { Link, useLocation } from "@/lib/router";
 import { AlertTriangle, Compass } from "lucide-react";
@@ -64,3 +78,4 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
     </div>
   );
 }
+// [END: module]

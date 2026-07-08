@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-routes.ts
+ * ABOUT: company-routes.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-routes.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-routes.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-routes.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const BOARD_ROUTE_ROOTS = new Set([
   "dashboard",
   "companies",
@@ -95,3 +109,4 @@ export function toCompanyRelativePath(path: string): string {
 
   return `${pathname}${search}${hash}`;
 }
+// [END: module]

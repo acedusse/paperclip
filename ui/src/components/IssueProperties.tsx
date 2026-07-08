@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueProperties.tsx
+ * ABOUT: IssueProperties.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueProperties.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueProperties.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueProperties.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { pickTextColorForPillBg } from "@/lib/color-contrast";
 import { Link } from "@/lib/router";
@@ -2415,3 +2429,4 @@ export function IssueProperties({
     </div>
   );
 }
+// [END: module]

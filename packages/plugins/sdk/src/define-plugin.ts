@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/define-plugin.ts
+ * ABOUT: define-plugin.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - define-plugin.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: define-plugin.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/define-plugin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * `definePlugin` — the top-level helper for authoring a Paperclip plugin.
  *
  * Plugin authors call `definePlugin()` and export the result as the default
@@ -341,3 +355,4 @@ export interface PaperclipPlugin {
 export function definePlugin(definition: PluginDefinition): PaperclipPlugin {
   return Object.freeze({ definition });
 }
+// [END: module]

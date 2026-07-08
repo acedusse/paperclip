@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/interrupt-handoff.stories.tsx
+ * ABOUT: interrupt-handoff.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - interrupt-handoff.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: interrupt-handoff.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/interrupt-handoff.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowRight, User } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -233,3 +247,4 @@ export const PauseAffects: Story = {
     );
   },
 };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanySettingsPluginPage.tsx
+ * ABOUT: CompanySettingsPluginPage.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySettingsPluginPage.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySettingsPluginPage.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanySettingsPluginPage.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo } from "react";
 import { useParams } from "@/lib/router";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
@@ -86,3 +100,4 @@ export function CompanySettingsPluginPage() {
     />
   );
 }
+// [END: module]

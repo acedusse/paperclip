@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CompanySettingsSidebar.tsx
+ * ABOUT: CompanySettingsSidebar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySettingsSidebar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySettingsSidebar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CompanySettingsSidebar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useQuery } from "@tanstack/react-query";
 import {
   ChevronLeft,
@@ -209,3 +223,4 @@ export function CompanySettingsSidebar() {
     </aside>
   );
 }
+// [END: module]

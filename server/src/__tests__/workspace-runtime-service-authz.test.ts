@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/workspace-runtime-service-authz.test.ts
+ * ABOUT: workspace-runtime-service-authz.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-runtime-service-authz.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-runtime-service-authz.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/workspace-runtime-service-authz.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -419,3 +433,4 @@ describeEmbeddedPostgres("workspace runtime service authz helper", () => {
     });
   });
 });
+// [END: module]

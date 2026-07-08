@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/goals.ts
+ * ABOUT: goals.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - goals.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: goals.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/goals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import { createGoalSchema, updateGoalSchema } from "@paperclipai/shared";
@@ -110,3 +124,4 @@ export function goalRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

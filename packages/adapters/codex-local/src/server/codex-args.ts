@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/codex-args.ts
+ * ABOUT: codex-args.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - codex-args.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: codex-args.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/codex-args.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { asBoolean, asString, asStringArray } from "@paperclipai/adapter-utils/server-utils";
 import {
   CODEX_LOCAL_FAST_MODE_SUPPORTED_MODELS,
@@ -76,3 +90,4 @@ export function buildCodexExecArgs(
         : null,
   };
 }
+// [END: module]

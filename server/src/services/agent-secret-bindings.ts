@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/agent-secret-bindings.ts
+ * ABOUT: agent-secret-bindings.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-secret-bindings.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-secret-bindings.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/agent-secret-bindings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 interface AgentSecretBindingSyncService {
   syncEnvBindingsForTarget?: (
     companyId: string,
@@ -24,3 +38,4 @@ export async function syncAgentAdapterEnvBindings(input: {
     envValue,
   );
 }
+// [END: module]

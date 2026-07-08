@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/finance_events.ts
+ * ABOUT: finance_events.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - finance_events.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: finance_events.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/finance_events.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, integer, index, boolean, jsonb } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -65,3 +79,4 @@ export const financeEvents = pgTable(
     ),
   }),
 );
+// [END: module]

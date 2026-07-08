@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/WorkspaceFileBrowser.tsx
+ * ABOUT: WorkspaceFileBrowser.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - WorkspaceFileBrowser.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: WorkspaceFileBrowser.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/WorkspaceFileBrowser.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   useEffect,
   useId,
@@ -1060,3 +1074,4 @@ export function WorkspaceFileBrowser({
     </div>
   );
 }
+// [END: module]

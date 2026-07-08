@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentProperties.tsx
+ * ABOUT: AgentProperties.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentProperties.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentProperties.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentProperties.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@/lib/router";
 import { AGENT_ROLE_LABELS, type Agent, type AgentRuntimeState } from "@paperclipai/shared";
@@ -110,3 +124,4 @@ export function AgentProperties({ agent, runtimeState }: AgentPropertiesProps) {
     </div>
   );
 }
+// [END: module]

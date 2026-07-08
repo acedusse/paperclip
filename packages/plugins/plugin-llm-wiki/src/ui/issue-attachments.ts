@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/src/ui/issue-attachments.ts
+ * ABOUT: issue-attachments.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-attachments.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-attachments.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/src/ui/issue-attachments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 
 export type IngestSourceActionResult = {
@@ -47,3 +61,4 @@ export async function uploadIssueAttachmentFile(input: {
   }
   return response.json();
 }
+// [END: module]

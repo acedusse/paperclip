@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/cursor-local-adapter.test.ts
+ * ABOUT: cursor-local-adapter.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cursor-local-adapter.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cursor-local-adapter.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/cursor-local-adapter.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import { isCursorUnknownSessionError, parseCursorJsonl } from "@paperclipai/adapter-cursor-local/server";
 import { parseCursorStdoutLine } from "@paperclipai/adapter-cursor-local/ui";
@@ -403,3 +417,4 @@ describe("cursor cli formatter", () => {
     }
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/migration-status.ts
+ * ABOUT: migration-status.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - migration-status.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: migration-status.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/migration-status.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { inspectMigrations } from "./client.js";
 import { resolveMigrationConnection } from "./migration-runtime.js";
 
@@ -59,3 +73,4 @@ main().catch((error) => {
   process.stderr.write(`${err.stack ?? err.message}\n`);
   process.exit(1);
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/config-check.ts
+ * ABOUT: config-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/config-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readConfig, configExists, resolveConfigPath } from "../config/store.js";
 import type { CheckResult } from "./index.js";
 
@@ -31,3 +45,4 @@ export function configCheck(configPath?: string): CheckResult {
     };
   }
 }
+// [END: module]

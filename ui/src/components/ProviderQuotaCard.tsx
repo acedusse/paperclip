@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ProviderQuotaCard.tsx
+ * ABOUT: ProviderQuotaCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProviderQuotaCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProviderQuotaCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ProviderQuotaCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import type { CostByProviderModel, CostWindowSpendRow, QuotaWindow } from "@paperclipai/shared";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -414,3 +428,4 @@ function QuotaPanelSkeleton() {
     </div>
   );
 }
+// [END: module]

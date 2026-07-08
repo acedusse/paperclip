@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/adapter-registry-bootstrap.test.ts
+ * ABOUT: adapter-registry-bootstrap.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-registry-bootstrap.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-registry-bootstrap.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/adapter-registry-bootstrap.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parseAdapterRegistryEnv } from "./adapter-registry-bootstrap.js";
 
@@ -29,3 +43,4 @@ describe("parseAdapterRegistryEnv", () => {
     ).toThrow(/PAPERCLIP_ADAPTERS/);
   });
 });
+// [END: module]

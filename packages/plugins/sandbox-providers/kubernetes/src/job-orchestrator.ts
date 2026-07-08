@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/job-orchestrator.ts
+ * ABOUT: job-orchestrator.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - job-orchestrator.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: job-orchestrator.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/job-orchestrator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { KubeClients } from "./kube-client.js";
 import type { SandboxOrchestrator, SandboxStatus } from "./sandbox-orchestrator.js";
 
@@ -123,3 +137,4 @@ export const jobOrchestrator: SandboxOrchestrator = {
   release: deleteJob,
   waitForCompletion: waitForJobCompletion,
 };
+// [END: module]

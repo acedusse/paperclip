@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/FileViewerContext.test.ts
+ * ABOUT: FileViewerContext.test.ts (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FileViewerContext.test.ts (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FileViewerContext.test.ts (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/FileViewerContext.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -177,3 +191,4 @@ describe("folder browse search state", () => {
     expect(params.get("folder")).toBeNull();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/allowed-hostname.ts
+ * ABOUT: allowed-hostname.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - allowed-hostname.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: allowed-hostname.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/allowed-hostname.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import { normalizeHostnameInput } from "../config/hostnames.js";
@@ -37,4 +51,4 @@ export async function addAllowedHostname(host: string, opts: { config?: string }
     );
   }
 }
-
+// [END: module]

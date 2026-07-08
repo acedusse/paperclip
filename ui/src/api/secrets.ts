@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/secrets.ts
+ * ABOUT: secrets.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CompanySecret,
   CompanySecretUsageBinding,
@@ -155,3 +169,4 @@ export const secretsApi = {
   remoteImport: (companyId: string, data: RemoteImportInput) =>
     api.post<RemoteSecretImportResult>(`/companies/${companyId}/secrets/remote-import`, data),
 };
+// [END: module]

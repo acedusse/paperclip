@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/budget_incidents.ts
+ * ABOUT: budget_incidents.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budget_incidents.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budget_incidents.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/budget_incidents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import { index, integer, pgTable, text, timestamp, uuid, uniqueIndex } from "drizzle-orm/pg-core";
 import { approvals } from "./approvals.js";
@@ -40,3 +54,4 @@ export const budgetIncidents = pgTable(
     ).where(sql`${table.status} <> 'dismissed'`),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueGroupHeader.tsx
+ * ABOUT: IssueGroupHeader.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueGroupHeader.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueGroupHeader.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueGroupHeader.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -46,3 +60,4 @@ export function IssueGroupHeader({
     </div>
   );
 }
+// [END: module]

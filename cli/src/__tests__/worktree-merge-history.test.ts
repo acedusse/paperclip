@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/worktree-merge-history.test.ts
+ * ABOUT: worktree-merge-history.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree-merge-history.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree-merge-history.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/worktree-merge-history.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { buildWorktreeMergePlan, parseWorktreeMergeScopes } from "../commands/worktree-merge-history-lib.js";
 
@@ -490,3 +504,4 @@ describe("worktree merge history planner", () => {
     });
   });
 });
+// [END: module]

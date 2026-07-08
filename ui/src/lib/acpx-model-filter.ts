@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/acpx-model-filter.ts
+ * ABOUT: acpx-model-filter.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - acpx-model-filter.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: acpx-model-filter.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/acpx-model-filter.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterModel } from "../api/agents";
 import { models as CLAUDE_LOCAL_MODELS } from "@paperclipai/adapter-claude-local";
 import { models as CODEX_LOCAL_MODELS } from "@paperclipai/adapter-codex-local";
@@ -14,3 +28,4 @@ export function filterAcpxModelsByAgent(models: AdapterModel[], acpxAgent: strin
   }
   return [];
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/acpx-local/src/server/test.test.ts
+ * ABOUT: test.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/acpx-local/src/server/test.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it } from "vitest";
 import { testEnvironment } from "./test.js";
 
@@ -47,3 +61,4 @@ describe("acpx_local environment diagnostics", () => {
     );
   });
 });
+// [END: module]

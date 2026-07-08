@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/company-skill.ts
+ * ABOUT: company-skill.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skill.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skill.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/company-skill.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 
 export const companySkillSourceTypeSchema = z.enum(["local_path", "github", "url", "catalog", "skills_sh"]);
@@ -364,3 +378,4 @@ export type CatalogSkillListQuery = z.infer<typeof catalogSkillListQuerySchema>;
 export type CompanySkillInstallCatalog = z.infer<typeof companySkillInstallCatalogSchema>;
 export type CompanySkillInstallUpdate = z.infer<typeof companySkillInstallUpdateSchema>;
 export type CompanySkillReset = z.infer<typeof companySkillResetSchema>;
+// [END: module]

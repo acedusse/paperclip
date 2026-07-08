@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/SidebarContext.tsx
+ * ABOUT: SidebarContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/SidebarContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   createContext,
   useCallback,
@@ -193,3 +207,4 @@ export function useSidebar() {
   }
   return ctx;
 }
+// [END: module]

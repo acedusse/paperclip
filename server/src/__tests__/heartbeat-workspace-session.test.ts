@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-workspace-session.test.ts
+ * ABOUT: heartbeat-workspace-session.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-workspace-session.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-workspace-session.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-workspace-session.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile as execFileCallback } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -1598,3 +1612,4 @@ describe("parseSessionCompactionPolicy", () => {
     });
   });
 });
+// [END: module]

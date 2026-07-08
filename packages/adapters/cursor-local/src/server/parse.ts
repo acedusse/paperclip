@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-local/src/server/parse.ts
+ * ABOUT: parse.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-local/src/server/parse.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { asString, asNumber, parseObject, parseJson } from "@paperclipai/adapter-utils/server-utils";
 import { normalizeCursorStreamLine } from "../shared/stream.js";
 
@@ -160,3 +174,4 @@ export function isCursorUnknownSessionError(stdout: string, stderr: string): boo
     haystack,
   );
 }
+// [END: module]

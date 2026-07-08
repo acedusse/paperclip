@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/JsonSchemaForm.tsx
+ * ABOUT: JsonSchemaForm.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - JsonSchemaForm.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: JsonSchemaForm.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/JsonSchemaForm.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ChevronDown,
@@ -1358,3 +1372,4 @@ export function JsonSchemaForm({
     </div>
   );
 }
+// [END: module]

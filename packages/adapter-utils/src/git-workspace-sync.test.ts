@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/git-workspace-sync.test.ts
+ * ABOUT: git-workspace-sync.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - git-workspace-sync.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: git-workspace-sync.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/git-workspace-sync.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile as execFileCallback } from "node:child_process";
 import { lstat, mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -126,3 +140,4 @@ describe("git workspace sync", () => {
     });
   });
 });
+// [END: module]

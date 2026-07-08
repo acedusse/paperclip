@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-onboarding-prompt.ts
+ * ABOUT: agent-onboarding-prompt.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-onboarding-prompt.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-onboarding-prompt.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-onboarding-prompt.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type AgentOnboardingPromptInput = {
   onboardingTextUrl: string;
   connectionCandidates?: string[] | null;
@@ -109,3 +123,4 @@ function buildResolutionTestUrl(input: AgentOnboardingPromptInput): string | nul
     return null;
   }
 }
+// [END: module]

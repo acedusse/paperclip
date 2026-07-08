@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SourceResolvedFoldCallout.tsx
+ * ABOUT: SourceResolvedFoldCallout.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SourceResolvedFoldCallout.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SourceResolvedFoldCallout.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SourceResolvedFoldCallout.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Sparkles } from "lucide-react";
 import { Link } from "@/lib/router";
 import { cn, relativeTime } from "@/lib/utils";
@@ -175,3 +189,4 @@ export function SourceResolvedFoldCallout({
 }
 
 export default SourceResolvedFoldCallout;
+// [END: module]

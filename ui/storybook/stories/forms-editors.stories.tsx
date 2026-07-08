@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/forms-editors.stories.tsx
+ * ABOUT: forms-editors.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - forms-editors.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: forms-editors.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/forms-editors.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Agent, CompanySecret, EnvBinding, Project, RoutineVariable } from "@paperclipai/shared";
@@ -812,3 +826,4 @@ export const FoldCurtainShowcase: Story = {
   name: "Fold Curtain",
   render: () => <FoldCurtainStory />,
 };
+// [END: module]

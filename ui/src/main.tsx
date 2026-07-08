@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/main.tsx
+ * ABOUT: main.tsx (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - main.tsx (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: main.tsx (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/main.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react";
 import { StrictMode } from "react";
 import * as ReactDOM from "react-dom";
@@ -73,3 +87,4 @@ createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </StrictMode>
 );
+// [END: module]

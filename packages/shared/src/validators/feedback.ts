@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/feedback.ts
+ * ABOUT: feedback.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/feedback.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   FEEDBACK_DATA_SHARING_PREFERENCES,
@@ -20,3 +34,4 @@ export const upsertIssueFeedbackVoteSchema = z.object({
 });
 
 export type UpsertIssueFeedbackVote = z.infer<typeof upsertIssueFeedbackVoteSchema>;
+// [END: module]

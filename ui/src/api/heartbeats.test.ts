@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/heartbeats.test.ts
+ * ABOUT: heartbeats.test.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeats.test.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeats.test.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/heartbeats.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockApi = vi.hoisted(() => ({
@@ -28,3 +42,4 @@ describe("heartbeatsApi.liveRunsForCompany", () => {
     expect(mockApi.get).toHaveBeenCalledWith("/companies/company-1/live-runs?minCount=50&limit=50");
   });
 });
+// [END: module]

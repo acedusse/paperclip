@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueRunLedger.tsx
+ * ABOUT: IssueRunLedger.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueRunLedger.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueRunLedger.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueRunLedger.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState, type ReactNode } from "react";
 import type { ActivityEvent, Issue, Agent } from "@paperclipai/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -852,3 +866,4 @@ export function IssueRunLedgerContent({
     </section>
   );
 }
+// [END: module]

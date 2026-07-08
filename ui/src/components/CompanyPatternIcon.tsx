@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CompanyPatternIcon.tsx
+ * ABOUT: CompanyPatternIcon.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyPatternIcon.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyPatternIcon.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CompanyPatternIcon.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "../lib/utils";
 
@@ -215,3 +229,4 @@ export function CompanyPatternIcon({
     </div>
   );
 }
+// [END: module]

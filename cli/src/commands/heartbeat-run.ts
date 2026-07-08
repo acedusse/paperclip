@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/heartbeat-run.ts
+ * ABOUT: heartbeat-run.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-run.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-run.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/heartbeat-run.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { setTimeout as delay } from "node:timers/promises";
 import pc from "picocolors";
 import type { Agent, HeartbeatRun, HeartbeatRunEvent, HeartbeatRunStatus } from "@paperclipai/shared";
@@ -342,3 +356,4 @@ function safeParseLogLine(line: string): { stream: "stdout" | "stderr" | "system
     return null;
   }
 }
+// [END: module]

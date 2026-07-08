@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/tenant-orchestrator.test.ts
+ * ABOUT: tenant-orchestrator.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - tenant-orchestrator.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: tenant-orchestrator.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/tenant-orchestrator.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi } from "vitest";
 import { ensureTenant } from "../../src/tenant-orchestrator.js";
 
@@ -104,3 +118,4 @@ describe("ensureTenant", () => {
     await expect(ensureTenant(clients as never, baseInput)).resolves.not.toThrow();
   });
 });
+// [END: module]

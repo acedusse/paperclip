@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ArtifactFileChip.tsx
+ * ABOUT: ArtifactFileChip.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ArtifactFileChip.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ArtifactFileChip.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ArtifactFileChip.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { MouseEvent, ReactNode } from "react";
 import { FileCode2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -101,3 +115,4 @@ export function ArtifactFileChip({
     </button>
   );
 }
+// [END: module]

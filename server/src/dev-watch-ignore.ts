@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/dev-watch-ignore.ts
+ * ABOUT: dev-watch-ignore.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-watch-ignore.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-watch-ignore.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/dev-watch-ignore.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 
@@ -37,3 +51,4 @@ export function resolveServerDevWatchIgnorePaths(serverRoot: string): string[] {
 
   return [...ignorePaths];
 }
+// [END: module]

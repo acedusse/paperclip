@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/metadata.test.ts
+ * ABOUT: metadata.test.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - metadata.test.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: metadata.test.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/metadata.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   isEnabledAdapterType,
@@ -60,3 +74,4 @@ describe("adapter metadata", () => {
     ]);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/OnboardingWizard.tsx
+ * ABOUT: OnboardingWizard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OnboardingWizard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OnboardingWizard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/OnboardingWizard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AdapterEnvironmentTestResult } from "@paperclipai/shared";
@@ -1688,3 +1702,4 @@ function AdapterEnvironmentResult({
     </div>
   );
 }
+// [END: module]

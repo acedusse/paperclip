@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/recent-projects.ts
+ * ABOUT: recent-projects.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recent-projects.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recent-projects.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/recent-projects.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   readRecentSelectionIds,
   trackRecentSelectionId,
@@ -12,3 +26,4 @@ export function getRecentProjectIds(): string[] {
 export function trackRecentProject(projectId: string): void {
   trackRecentSelectionId(STORAGE_KEY, projectId);
 }
+// [END: module]

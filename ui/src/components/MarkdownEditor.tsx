@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MarkdownEditor.tsx
+ * ABOUT: MarkdownEditor.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MarkdownEditor.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MarkdownEditor.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MarkdownEditor.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   type ClipboardEvent,
   forwardRef,
@@ -1399,3 +1413,4 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     </div>
   );
 });
+// [END: module]

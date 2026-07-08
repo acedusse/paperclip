@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/auth-session-route.test.ts
+ * ABOUT: auth-session-route.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth-session-route.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth-session-route.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/auth-session-route.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -216,3 +230,4 @@ describe("actorMiddleware authenticated session profile", () => {
     });
   });
 });
+// [END: module]

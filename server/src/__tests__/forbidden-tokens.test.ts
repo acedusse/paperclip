@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/forbidden-tokens.test.ts
+ * ABOUT: forbidden-tokens.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - forbidden-tokens.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: forbidden-tokens.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/forbidden-tokens.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 
 const {
@@ -75,3 +89,4 @@ describe("forbidden token check", () => {
     expect(error).toHaveBeenCalledWith("\nBuild blocked. Remove the forbidden token(s) before publishing.");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/session-workspace-cwd.test.ts
+ * ABOUT: session-workspace-cwd.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - session-workspace-cwd.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: session-workspace-cwd.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/session-workspace-cwd.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 
 import { isUnsafeSessionWorkspaceCwd } from "./session-workspace-cwd.js";
@@ -25,3 +39,4 @@ describe("isUnsafeSessionWorkspaceCwd", () => {
     expect(isUnsafeSessionWorkspaceCwd(null)).toBe(false);
   });
 });
+// [END: module]

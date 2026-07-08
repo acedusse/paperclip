@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/issue-tree-control.ts
+ * ABOUT: issue-tree-control.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-tree-control.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-tree-control.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/issue-tree-control.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   IssueStatus,
   IssueTreeControlMode,
@@ -113,3 +127,4 @@ export interface IssueTreeHold {
   updatedAt: Date;
   members?: IssueTreeHoldMember[];
 }
+// [END: module]

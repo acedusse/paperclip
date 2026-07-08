@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/costs.ts
+ * ABOUT: costs.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - costs.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: costs.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/costs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { Db } from "@paperclipai/db";
 import {
@@ -410,3 +424,4 @@ export function costRoutes(
 
   return router;
 }
+// [END: module]

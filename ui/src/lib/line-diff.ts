@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/line-diff.ts
+ * ABOUT: line-diff.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - line-diff.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: line-diff.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/line-diff.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type DiffRowKind = "context" | "removed" | "added";
 
 export type DiffRow = {
@@ -89,3 +103,4 @@ export function buildLineDiff(oldText: string, newText: string): DiffRow[] {
 
   return rows;
 }
+// [END: module]

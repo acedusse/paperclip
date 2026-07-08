@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/open-url.test.ts
+ * ABOUT: open-url.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - open-url.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: open-url.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/open-url.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { EventEmitter } from "node:events";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -55,3 +69,4 @@ describe("openUrl", () => {
     await expect(openUrl("https://example.com")).resolves.toBe(false);
   });
 });
+// [END: module]

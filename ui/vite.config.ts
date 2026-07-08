@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/vite.config.ts
+ * ABOUT: vite.config.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vite.config.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vite.config.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/vite.config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -33,3 +47,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+// [END: module]

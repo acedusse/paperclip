@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CompanySwitcher.tsx
+ * ABOUT: CompanySwitcher.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySwitcher.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySwitcher.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CompanySwitcher.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { ChevronsUpDown, Plus, Settings } from "lucide-react";
 import { Link } from "@/lib/router";
 import { useCompany } from "../context/CompanyContext";
@@ -88,3 +102,4 @@ export function CompanySwitcher({ open: controlledOpen, onOpenChange }: CompanyS
     </DropdownMenu>
   );
 }
+// [END: module]

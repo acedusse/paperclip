@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ScheduleEditor.tsx
+ * ABOUT: ScheduleEditor.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ScheduleEditor.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ScheduleEditor.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ScheduleEditor.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -408,3 +422,4 @@ export function ScheduleEditor({
     </div>
   );
 }
+// [END: module]

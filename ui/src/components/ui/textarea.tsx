@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/textarea.tsx
+ * ABOUT: textarea.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - textarea.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: textarea.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/textarea.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -16,3 +30,4 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
 }
 
 export { Textarea }
+// [END: module]

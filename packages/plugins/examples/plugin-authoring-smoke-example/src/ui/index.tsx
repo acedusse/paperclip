@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-authoring-smoke-example/src/ui/index.tsx
+ * ABOUT: index.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-authoring-smoke-example/src/ui/index.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { usePluginAction, usePluginData, type PluginWidgetProps } from "@paperclipai/plugin-sdk/ui";
 
 type HealthData = {
@@ -21,3 +35,4 @@ export function DashboardWidget(_props: PluginWidgetProps) {
     </div>
   );
 }
+// [END: module]

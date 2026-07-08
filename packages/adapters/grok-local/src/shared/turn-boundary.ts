@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/shared/turn-boundary.ts
+ * ABOUT: turn-boundary.ts (shared module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - turn-boundary.ts (shared module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: turn-boundary.ts (shared module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/shared/turn-boundary.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Grok's `--output-format streaming-json` mode emits `thought` and `text` events
 // token-by-token. Between reasoning turns (around tool calls) it drops the `\n`
 // separator that the non-streaming `--output-format json` mode includes in the
@@ -52,3 +66,4 @@ export function applyTurnBoundary(state: TurnBoundaryState, incoming: string): s
   state.backtickParity = ((state.backtickParity + countBackticks(incoming)) % 2) as 0 | 1;
   return output;
 }
+// [END: module]

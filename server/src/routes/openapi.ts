@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/openapi.ts
+ * ABOUT: openapi.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - openapi.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: openapi.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/openapi.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import { z } from "zod";
 import {
@@ -4542,3 +4556,4 @@ export function openApiRoutes() {
   });
   return router;
 }
+// [END: module]

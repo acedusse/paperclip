@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/config/secrets-key.ts
+ * ABOUT: secrets-key.ts (config module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets-key.ts (config module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets-key.ts (config module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/config/secrets-key.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomBytes } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -46,3 +60,4 @@ export function ensureLocalSecretsKeyFile(
   }
   return { status: "created", path: keyFilePath };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/company-portability.ts
+ * ABOUT: company-portability.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-portability.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-portability.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/company-portability.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { MAX_COMPANY_ATTACHMENT_MAX_BYTES } from "../constants.js";
 import {
@@ -260,3 +274,4 @@ export const companyPortabilityImportSchema = companyPortabilityPreviewSchema.ex
 });
 
 export type CompanyPortabilityImport = z.infer<typeof companyPortabilityImportSchema>;
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/create-paperclip-plugin/src/entrypoints.test.ts
+ * ABOUT: entrypoints.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - entrypoints.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: entrypoints.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/create-paperclip-plugin/src/entrypoints.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -72,3 +86,4 @@ describe("create-paperclip-plugin entrypoints", () => {
     });
   });
 });
+// [END: module]

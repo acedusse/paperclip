@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/codex-auth-reconciliation.ts
+ * ABOUT: codex-auth-reconciliation.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - codex-auth-reconciliation.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: codex-auth-reconciliation.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/codex-auth-reconciliation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Db } from "@paperclipai/db";
 import { agents } from "@paperclipai/db";
 import { reconcileManagedCodexHome } from "@paperclipai/adapter-codex-local/server";
@@ -145,3 +159,4 @@ export async function reconcileCodexLocalManagedHomesOnStartup(
 
   return summary;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-live-ssh.test.ts
+ * ABOUT: environment-live-ssh.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-live-ssh.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-live-ssh.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-live-ssh.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
@@ -182,3 +196,4 @@ describeLiveSsh("live SSH environment smoke", () => {
     expect(result.stdout).toContain("tar");
   });
 });
+// [END: module]

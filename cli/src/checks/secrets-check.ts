@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/secrets-check.ts
+ * ABOUT: secrets-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/secrets-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomBytes } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -238,3 +252,4 @@ function detectedAwsCredentialSources(): string[] {
   }
   return sources;
 }
+// [END: module]

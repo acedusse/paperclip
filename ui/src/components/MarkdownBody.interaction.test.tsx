@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MarkdownBody.interaction.test.tsx
+ * ABOUT: MarkdownBody.interaction.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MarkdownBody.interaction.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MarkdownBody.interaction.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MarkdownBody.interaction.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -93,3 +107,4 @@ describe("MarkdownBody code block interactions", () => {
     expect(wrapButton?.getAttribute("aria-label")).toBe("Wrap lines");
   });
 });
+// [END: module]

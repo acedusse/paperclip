@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/DialogContext.tsx
+ * ABOUT: DialogContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DialogContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DialogContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/DialogContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import type { IssueWorkMode } from "@paperclipai/shared";
 
@@ -215,3 +229,4 @@ export function useDialog() {
     ...useDialogActions(),
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/kube-client.test.ts
+ * ABOUT: kube-client.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - kube-client.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: kube-client.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/kube-client.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi } from "vitest";
 import { KubeConfig } from "@kubernetes/client-node";
 import { createKubeConfig } from "../../src/kube-client.js";
@@ -45,3 +59,4 @@ users: [{name: in-cluster, user: {token: tok}}]`);
     expect(() => createKubeConfig({ inCluster: false })).toThrow(/requires/i);
   });
 });
+// [END: module]

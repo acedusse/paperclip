@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/skills-catalog.ts
+ * ABOUT: skills-catalog.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - skills-catalog.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: skills-catalog.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/skills-catalog.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { promises as fs } from "node:fs";
@@ -353,3 +367,4 @@ export function getCatalogPackageMetadata() {
     packageVersion: catalogManifest.packageVersion,
   };
 }
+// [END: module]

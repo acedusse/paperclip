@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/routes.ts
+ * ABOUT: routes.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routes.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routes.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/routes.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Sandbox as CloudflareSandbox } from "@cloudflare/sandbox";
 import { isAuthorizedRequest } from "./auth.js";
 import { executeInSandbox } from "./exec.js";
@@ -478,3 +492,4 @@ export async function handleBridgeRequest(request: Request, env: BridgeEnv): Pro
 
   return toErrorResponse(404, "not_found", `No bridge route matched ${request.method} ${pathname}.`);
 }
+// [END: module]

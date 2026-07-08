@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/company-import-url.test.ts
+ * ABOUT: company-import-url.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-import-url.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-import-url.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/company-import-url.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   isGithubShorthand,
@@ -72,3 +86,4 @@ describe("normalizeGithubImportSource", () => {
     );
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SourceTrustBadge.tsx
+ * ABOUT: SourceTrustBadge.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SourceTrustBadge.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SourceTrustBadge.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SourceTrustBadge.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { SourceTrustMetadata } from "@paperclipai/shared";
 import { BadgeCheck, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -46,3 +60,4 @@ export function SourceTrustBadge({
     </Tooltip>
   );
 }
+// [END: module]

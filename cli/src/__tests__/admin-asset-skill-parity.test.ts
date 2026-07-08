@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/admin-asset-skill-parity.test.ts
+ * ABOUT: admin-asset-skill-parity.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - admin-asset-skill-parity.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: admin-asset-skill-parity.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/admin-asset-skill-parity.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
@@ -175,3 +189,4 @@ describe("admin, asset, and skill parity commands", () => {
 function jsonResponse(body: unknown = { ok: true }, init: ResponseInit = { status: 200 }): Response {
   return new Response(JSON.stringify(body), init);
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/lib/cron-fires.ts
+ * ABOUT: cron-fires.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cron-fires.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cron-fires.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/cron-fires.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Client-side "next N schedule fires" helper for the routine Delivery preview (§3.5).
  *
  * Mirrors the server's timezone-aware cron tick (server/src/services/routines.ts
@@ -270,3 +284,4 @@ export function previewFirePolicies(
     };
   });
 }
+// [END: module]

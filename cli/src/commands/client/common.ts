@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/common.ts
+ * ABOUT: common.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - common.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: common.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/common.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import pc from "picocolors";
 import type { Command } from "commander";
 import { getStoredBoardCredential, loginBoardCli } from "../../client/board-auth.js";
@@ -296,3 +310,4 @@ export function handleCommandError(error: unknown): never {
   console.error(pc.red(message));
   process.exit(1);
 }
+// [END: module]

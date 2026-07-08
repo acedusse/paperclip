@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/environments.ts
+ * ABOUT: environments.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environments.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environments.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/environments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { environmentLeases, environments } from "@paperclipai/db";
@@ -563,3 +577,4 @@ export function environmentService(db: Db) {
     },
   };
 }
+// [END: module]

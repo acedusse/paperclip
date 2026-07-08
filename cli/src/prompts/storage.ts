@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/prompts/storage.ts
+ * ABOUT: storage.ts (prompts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - storage.ts (prompts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: storage.ts (prompts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/prompts/storage.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import type { StorageConfig } from "../config/schema.js";
 import { resolveDefaultStorageDir, resolvePaperclipInstanceId } from "../config/home.js";
@@ -143,4 +157,4 @@ export async function promptStorage(current?: StorageConfig): Promise<StorageCon
     },
   };
 }
-
+// [END: module]

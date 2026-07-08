@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanySettings.test.tsx
+ * ABOUT: CompanySettings.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySettings.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySettings.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanySettings.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -611,3 +625,4 @@ describe("CompanySettings — company cap + admission status", () => {
     });
   });
 });
+// [END: module]

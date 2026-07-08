@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanySettingsPluginPage.test.tsx
+ * ABOUT: CompanySettingsPluginPage.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanySettingsPluginPage.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanySettingsPluginPage.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanySettingsPluginPage.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -138,3 +152,4 @@ describe("CompanySettingsPluginPage", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/secrets.test.ts
+ * ABOUT: secrets.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/secrets.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Agent, CompanySecret } from "@paperclipai/shared";
@@ -330,3 +344,4 @@ async function runSecretCommand(args: string[]): Promise<void> {
 function jsonResponse(body: unknown = { ok: true }, init: ResponseInit = { status: 200 }): Response {
   return new Response(JSON.stringify(body), init);
 }
+// [END: module]

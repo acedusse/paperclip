@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/trust-preset-resolver.ts
+ * ABOUT: trust-preset-resolver.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - trust-preset-resolver.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: trust-preset-resolver.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/trust-preset-resolver.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   DEFAULT_TRUST_PRESET,
   LOW_TRUST_REVIEW_PRESET,
@@ -347,3 +361,4 @@ export function isIssueWithinLowTrustBoundary(
   if (issue.projectId && boundary.projectIds?.includes(issue.projectId)) return true;
   return false;
 }
+// [END: module]

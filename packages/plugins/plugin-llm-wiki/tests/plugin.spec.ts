@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/tests/plugin.spec.ts
+ * ABOUT: plugin.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/tests/plugin.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -3745,3 +3759,4 @@ Duplicate headings receive stable suffixes.
     expect(harness.dbExecutes.some((execute) => execute.sql.includes("filed_outputs"))).toBe(true);
   });
 });
+// [END: module]

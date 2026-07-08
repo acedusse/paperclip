@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/ui-branding.ts
+ * ABOUT: ui-branding.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ui-branding.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ui-branding.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/ui-branding.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const FAVICON_BLOCK_START = "<!-- PAPERCLIP_FAVICON_START -->";
 const FAVICON_BLOCK_END = "<!-- PAPERCLIP_FAVICON_END -->";
 const RUNTIME_BRANDING_BLOCK_START = "<!-- PAPERCLIP_RUNTIME_BRANDING_START -->";
@@ -215,3 +229,4 @@ export function applyUiBranding(html: string, env: NodeJS.ProcessEnv = process.e
     renderRuntimeBrandingMeta(branding),
   );
 }
+// [END: module]

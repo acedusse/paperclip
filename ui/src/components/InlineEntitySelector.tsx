@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/InlineEntitySelector.tsx
+ * ABOUT: InlineEntitySelector.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InlineEntitySelector.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InlineEntitySelector.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/InlineEntitySelector.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Check } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -218,3 +232,4 @@ export const InlineEntitySelector = forwardRef<HTMLButtonElement, InlineEntitySe
     );
   },
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/claude-local-skill-sync.test.ts
+ * ABOUT: claude-local-skill-sync.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - claude-local-skill-sync.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: claude-local-skill-sync.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/claude-local-skill-sync.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -107,3 +121,4 @@ describe("claude local skill sync", () => {
     }));
   });
 });
+// [END: module]

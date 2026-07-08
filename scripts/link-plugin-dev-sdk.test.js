@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/link-plugin-dev-sdk.test.js
+ * ABOUT: link-plugin-dev-sdk.test.js (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - link-plugin-dev-sdk.test.js (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: link-plugin-dev-sdk.test.js (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/link-plugin-dev-sdk.test.js", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import assert from "node:assert/strict";
 import { existsSync, lstatSync, mkdirSync, mkdtempSync, readlinkSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -87,3 +101,4 @@ test("linkSdkInto replaces a symlink that points somewhere else", () => {
   assert.notEqual(readlinkSync(join(scopeDir, "plugin-sdk")), "../somewhere-else");
   assert.ok(existsSync(scopeDir));
 });
+// [END: module]

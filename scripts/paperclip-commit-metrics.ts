@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/paperclip-commit-metrics.ts
+ * ABOUT: paperclip-commit-metrics.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - paperclip-commit-metrics.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: paperclip-commit-metrics.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/paperclip-commit-metrics.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 #!/usr/bin/env npx tsx
 
 import { execFile } from "node:child_process";
@@ -870,3 +884,4 @@ main().catch((error) => {
   console.error(error instanceof Error ? error.message : String(error));
   process.exit(1);
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/helpers.ts
+ * ABOUT: helpers.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - helpers.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: helpers.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/helpers.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export function normalizeLeaseIdPart(input: string): string {
   return input
     .trim()
@@ -37,3 +51,4 @@ export function isTimeoutError(error: unknown): boolean {
 export function shellQuote(value: string): string {
   return `'${value.replace(/'/g, `'"'"'`)}'`;
 }
+// [END: module]

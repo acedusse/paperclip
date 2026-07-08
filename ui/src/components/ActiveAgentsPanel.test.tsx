@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ActiveAgentsPanel.test.tsx
+ * ABOUT: ActiveAgentsPanel.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ActiveAgentsPanel.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ActiveAgentsPanel.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ActiveAgentsPanel.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act, type ReactNode } from "react";
@@ -233,3 +247,4 @@ describe("ActiveAgentsPanel", () => {
     });
   });
 });
+// [END: module]

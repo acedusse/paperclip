@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/paperclip-plugin-fake-sandbox/src/plugin.ts
+ * ABOUT: plugin.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/paperclip-plugin-fake-sandbox/src/plugin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
@@ -280,3 +294,4 @@ const plugin = definePlugin({
 });
 
 export default plugin;
+// [END: module]

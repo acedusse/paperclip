@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/interrupt-handoff.ts
+ * ABOUT: interrupt-handoff.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - interrupt-handoff.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: interrupt-handoff.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/interrupt-handoff.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { parseAgentMentionHref } from "@paperclipai/shared";
 
 /**
@@ -437,3 +451,4 @@ export function computePauseAffectsSummary(
     nothingLive: counts.live_runs === 0 && counts.queued_wakes === 0,
   };
 }
+// [END: module]

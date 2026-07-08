@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/openclaw-invite-prompt-route.test.ts
+ * ABOUT: openclaw-invite-prompt-route.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - openclaw-invite-prompt-route.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: openclaw-invite-prompt-route.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/openclaw-invite-prompt-route.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -275,3 +289,4 @@ describe.sequential("POST /companies/:companyId/openclaw/invite-prompt", () => {
     expect(res.body.error).toBe("Permission denied");
   });
 });
+// [END: module]

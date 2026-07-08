@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/run.test.ts
+ * ABOUT: run.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - run.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: run.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/run.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerAgentCommands } from "../commands/client/agent.js";
@@ -218,3 +232,4 @@ describe("run inspection commands", () => {
     expect(fetchMock.mock.calls[4]?.[0]).toBe("http://localhost:3100/api/issues/PC-1/active-run");
   });
 });
+// [END: module]

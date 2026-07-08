@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/config-schema.ts
+ * ABOUT: config-schema.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config-schema.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config-schema.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/config-schema.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   AUTH_BASE_URL_MODES,
@@ -197,3 +211,4 @@ export type AuthConfig = z.infer<typeof authConfigSchema>;
 export type TelemetryConfig = z.infer<typeof telemetryConfigSchema>;
 export type ConfigMeta = z.infer<typeof configMetaSchema>;
 export type DatabaseBackupConfig = z.infer<typeof databaseBackupConfigSchema>;
+// [END: module]

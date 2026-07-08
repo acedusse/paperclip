@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/process/test.ts
+ * ABOUT: test.ts (process module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - test.ts (process module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: test.ts (process module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/process/test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   AdapterEnvironmentCheck,
   AdapterEnvironmentTestContext,
@@ -87,3 +101,4 @@ export async function testEnvironment(
     testedAt: new Date().toISOString(),
   };
 }
+// [END: module]

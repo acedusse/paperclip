@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/system-notice-comment.test.ts
+ * ABOUT: system-notice-comment.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - system-notice-comment.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: system-notice-comment.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/system-notice-comment.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -141,3 +155,4 @@ describe("buildSystemNoticeProps", () => {
     expect(props.detailsDefaultOpen).toBe(true);
   });
 });
+// [END: module]

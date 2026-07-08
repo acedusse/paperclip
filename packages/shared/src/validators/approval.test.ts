@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/approval.test.ts
+ * ABOUT: approval.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approval.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approval.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/approval.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   addApprovalCommentSchema,
@@ -29,3 +43,4 @@ describe("approval validators", () => {
       .toBe("Decision\nRevise.");
   });
 });
+// [END: module]

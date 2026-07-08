@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/worktree-lib.ts
+ * ABOUT: worktree-lib.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree-lib.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree-lib.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/worktree-lib.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomInt } from "node:crypto";
 import path from "node:path";
 import type { PaperclipConfig } from "../config/schema.js";
@@ -273,3 +287,4 @@ export function formatShellExports(entries: Record<string, string>): string {
     .map(([key, value]) => `export ${key}=${shellEscape(value)}`)
     .join("\n");
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/config-schema.test.ts
+ * ABOUT: config-schema.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config-schema.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config-schema.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/config-schema.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { paperclipConfigSchema } from "./config-schema.js";
 
@@ -25,3 +39,4 @@ describe("paperclip config schema", () => {
     expect(parsed.secrets.localEncrypted.keyFilePath).toBe("~/.paperclip/instances/default/secrets/master.key");
   });
 });
+// [END: module]

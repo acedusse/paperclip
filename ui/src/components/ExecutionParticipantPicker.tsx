@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ExecutionParticipantPicker.tsx
+ * ABOUT: ExecutionParticipantPicker.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ExecutionParticipantPicker.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ExecutionParticipantPicker.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ExecutionParticipantPicker.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import type { Agent, Issue } from "@paperclipai/shared";
 import { useQuery } from "@tanstack/react-query";
@@ -199,3 +213,4 @@ export function ExecutionParticipantPicker({
     </Popover>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/InstanceSidebar.tsx
+ * ABOUT: InstanceSidebar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InstanceSidebar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InstanceSidebar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/InstanceSidebar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useQuery } from "@tanstack/react-query";
 import { Clock3, Cpu, FlaskConical, MonitorCog, Puzzle, Settings, Shield, SlidersHorizontal, UserRoundPen } from "lucide-react";
 import type { PluginRecord } from "@paperclipai/shared";
@@ -73,3 +87,4 @@ export function InstanceSidebar() {
     </aside>
   );
 }
+// [END: module]

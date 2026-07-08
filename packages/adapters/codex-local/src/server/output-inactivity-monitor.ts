@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/output-inactivity-monitor.ts
+ * ABOUT: output-inactivity-monitor.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - output-inactivity-monitor.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: output-inactivity-monitor.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/output-inactivity-monitor.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { parseJson } from "@paperclipai/adapter-utils/server-utils";
 
 export const DEFAULT_CODEX_OUTPUT_INACTIVITY_TIMEOUT_MS = 7 * 60 * 1000;
@@ -140,3 +154,4 @@ export function formatOutputInactivityMonitorErrorMessage(elapsedMs: number): st
   const seconds = total - minutes * 60;
   return `monitor: no codex output for ${minutes}m ${seconds}s`;
 }
+// [END: module]

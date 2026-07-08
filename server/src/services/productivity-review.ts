@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/productivity-review.ts
+ * ABOUT: productivity-review.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - productivity-review.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: productivity-review.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/productivity-review.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, desc, eq, gt, inArray, isNull, notInArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { clampIssueRequestDepth } from "@paperclipai/shared";
@@ -912,3 +926,4 @@ export function productivityReviewService(db: Db, deps?: { enqueueWakeup?: Enque
     recordContinuationHold,
   };
 }
+// [END: module]

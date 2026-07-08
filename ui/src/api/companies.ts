@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/companies.ts
+ * ABOUT: companies.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - companies.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: companies.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/companies.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   Company,
   CompanyPortabilityExportRequest,
@@ -64,3 +78,4 @@ export const companiesApi = {
   importBundle: (data: CompanyPortabilityImportRequest) =>
     api.post<CompanyPortabilityImportResult>("/companies/import", data),
 };
+// [END: module]

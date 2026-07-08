@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/document-annotation.ts
+ * ABOUT: document-annotation.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotation.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotation.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/document-annotation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   DocumentAnnotationAnchorConfidence,
   DocumentAnnotationAnchorState,
@@ -135,3 +149,4 @@ export interface CreateDocumentAnnotationCommentRequest {
 export interface UpdateDocumentAnnotationThreadRequest {
   status?: DocumentAnnotationThreadStatus;
 }
+// [END: module]

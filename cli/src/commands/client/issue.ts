@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/issue.ts
+ * ABOUT: issue.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/issue.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { readFile, writeFile } from "node:fs/promises";
 import {
@@ -1448,3 +1462,4 @@ function safeJson(text: string): unknown {
     return text;
   }
 }
+// [END: module]

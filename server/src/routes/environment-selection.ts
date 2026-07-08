@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/environment-selection.ts
+ * ABOUT: environment-selection.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-selection.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-selection.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/environment-selection.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { unprocessable } from "../errors.js";
 
 export async function assertEnvironmentSelectionForCompany(
@@ -50,3 +64,4 @@ export async function assertEnvironmentSelectionForCompany(
     }
   }
 }
+// [END: module]

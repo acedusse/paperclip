@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issueActiveRun.test.ts
+ * ABOUT: issueActiveRun.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueActiveRun.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueActiveRun.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issueActiveRun.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Issue } from "@paperclipai/shared";
 import type { ActiveRunForIssue } from "../api/heartbeats";
@@ -43,3 +57,4 @@ describe("issueActiveRun", () => {
     ).toBeNull();
   });
 });
+// [END: module]

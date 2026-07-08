@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueMonitorActivityCard.tsx
+ * ABOUT: IssueMonitorActivityCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueMonitorActivityCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueMonitorActivityCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueMonitorActivityCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue } from "@paperclipai/shared";
 import { Button } from "@/components/ui/button";
 import { formatMonitorOffset } from "@/lib/issue-monitor";
@@ -69,3 +83,4 @@ export function IssueMonitorActivityCard({
     </div>
   );
 }
+// [END: module]

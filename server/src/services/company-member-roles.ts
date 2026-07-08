@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/company-member-roles.ts
+ * ABOUT: company-member-roles.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-member-roles.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-member-roles.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/company-member-roles.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { PERMISSION_KEYS } from "@paperclipai/shared";
 import type { HumanCompanyMembershipRole } from "@paperclipai/shared";
 
@@ -59,3 +73,4 @@ export function resolveHumanInviteRole(
   }
   return normalizeHumanRole((scoped as Record<string, unknown>).role, "operator");
 }
+// [END: module]

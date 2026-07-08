@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/image-allowlist.ts
+ * ABOUT: image-allowlist.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - image-allowlist.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: image-allowlist.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/image-allowlist.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Glob matching for image references.
  * - `*` matches any sequence of characters EXCEPT `/` (so a wildcard doesn't span path segments)
  * - `?` matches exactly one character (excluding `/`)
@@ -57,3 +71,4 @@ function rewriteRegistry(image: string, registry: string): string {
   const imageName = segments.slice(2).join("/") || segments[segments.length - 1];
   return `${cleanRegistry}/${imageName}${tag}`;
 }
+// [END: module]

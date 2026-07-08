@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agent-instructions-routes.test.ts
+ * ABOUT: agent-instructions-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-instructions-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-instructions-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agent-instructions-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -398,3 +412,4 @@ describe("agent instructions bundle routes", () => {
     expect(res.body.adapterConfig.instructionsFilePath).toBeUndefined();
   });
 });
+// [END: module]

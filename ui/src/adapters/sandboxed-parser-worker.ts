@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/adapters/sandboxed-parser-worker.ts
+ * ABOUT: sandboxed-parser-worker.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandboxed-parser-worker.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandboxed-parser-worker.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/sandboxed-parser-worker.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Sandboxed Worker bootstrap for external adapter UI parsers.
  *
  * Security boundary: parser code runs inside a dedicated Web Worker with
@@ -180,3 +194,4 @@ export function createSandboxedWorker(): Worker {
     URL.revokeObjectURL(url);
   }
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/plugin.ts
+ * ABOUT: plugin.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/plugin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { Command, Option } from "commander";
@@ -814,3 +828,4 @@ function buildApiUrl(apiBase: string, path: string): string {
   url.pathname = `${url.pathname.replace(/\/+$/, "")}${path.startsWith("/") ? path : `/${path}`}`;
   return url.toString();
 }
+// [END: module]

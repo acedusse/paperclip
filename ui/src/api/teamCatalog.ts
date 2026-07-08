@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/teamCatalog.ts
+ * ABOUT: teamCatalog.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teamCatalog.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teamCatalog.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/teamCatalog.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CatalogTeam,
   CatalogTeamFileDetail,
@@ -55,3 +69,4 @@ export const teamCatalogApi = {
       options,
     ),
 };
+// [END: module]

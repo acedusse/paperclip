@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/data-dir.test.ts
+ * ABOUT: data-dir.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - data-dir.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: data-dir.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/data-dir.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -77,3 +91,4 @@ describe("applyDataDirOverride", () => {
     expect(process.env.PAPERCLIP_CONTEXT).toBeUndefined();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/environment_leases.ts
+ * ABOUT: environment_leases.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment_leases.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment_leases.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/environment_leases.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { environments } from "./environments.js";
@@ -44,3 +58,4 @@ export const environmentLeases = pgTable(
     providerLeaseIdx: index("environment_leases_provider_lease_idx").on(table.providerLeaseId),
   }),
 );
+// [END: module]

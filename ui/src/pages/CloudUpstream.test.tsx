@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CloudUpstream.test.tsx
+ * ABOUT: CloudUpstream.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CloudUpstream.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CloudUpstream.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CloudUpstream.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createRoot } from "react-dom/client";
@@ -411,3 +425,4 @@ function buildRun(input: {
     completedAt: input.status === "running" ? null : "2026-05-18T18:30:00.000Z",
   };
 }
+// [END: module]

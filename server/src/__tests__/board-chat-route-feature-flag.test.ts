@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/board-chat-route-feature-flag.test.ts
+ * ABOUT: board-chat-route-feature-flag.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-chat-route-feature-flag.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-chat-route-feature-flag.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/board-chat-route-feature-flag.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import { EventEmitter } from "node:events";
 import request from "supertest";
@@ -156,3 +170,4 @@ describe("board-chat history role classification", () => {
     ).toBe(false);
   });
 });
+// [END: module]

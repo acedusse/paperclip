@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/feedback_exports.ts
+ * ABOUT: feedback_exports.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback_exports.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback_exports.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/feedback_exports.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { feedbackVotes } from "./feedback_votes.js";
@@ -43,3 +57,4 @@ export const feedbackExports = pgTable(
     companyAuthorIdx: index("feedback_exports_company_author_idx").on(table.companyId, table.authorUserId, table.createdAt),
   }),
 );
+// [END: module]

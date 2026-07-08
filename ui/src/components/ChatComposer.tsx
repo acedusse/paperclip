@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ChatComposer.tsx
+ * ABOUT: ChatComposer.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ChatComposer.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ChatComposer.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ChatComposer.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   forwardRef,
   useImperativeHandle,
@@ -378,3 +392,4 @@ export const ChatComposer = forwardRef<ChatComposerHandle, ChatComposerProps>(fu
     </div>
   );
 });
+// [END: module]

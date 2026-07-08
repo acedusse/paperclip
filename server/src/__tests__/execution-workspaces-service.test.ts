@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/execution-workspaces-service.test.ts
+ * ABOUT: execution-workspaces-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspaces-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspaces-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/execution-workspaces-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -522,3 +536,4 @@ describeEmbeddedPostgres("executionWorkspaceService.getCloseReadiness", () => {
     ]));
   }, 20_000);
 });
+// [END: module]

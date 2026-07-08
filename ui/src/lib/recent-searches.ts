@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/recent-searches.ts
+ * ABOUT: recent-searches.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recent-searches.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recent-searches.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/recent-searches.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const STORAGE_PREFIX = "paperclip:recent-searches:";
 const MAX_RECENT_SEARCHES = 5;
 
@@ -55,3 +69,4 @@ export function clearRecentSearches(companyId: string): void {
 }
 
 export const RECENT_SEARCHES_LIMIT = MAX_RECENT_SEARCHES;
+// [END: module]

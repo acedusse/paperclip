@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-page-memory.ts
+ * ABOUT: company-page-memory.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-page-memory.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-page-memory.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-page-memory.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   extractCompanyPrefixFromPath,
   normalizeCompanyPrefix,
@@ -63,3 +77,4 @@ export function sanitizeRememberedPathForCompany(params: {
 
   return relativePath;
 }
+// [END: module]

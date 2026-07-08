@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SecretBindingPicker.tsx
+ * ABOUT: SecretBindingPicker.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SecretBindingPicker.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SecretBindingPicker.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SecretBindingPicker.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, KeyRound, Loader2, Plus, X } from "lucide-react";
@@ -280,3 +294,4 @@ export function SecretBindingPicker({
     </div>
   );
 }
+// [END: module]

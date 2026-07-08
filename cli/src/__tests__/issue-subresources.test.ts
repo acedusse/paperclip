@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/issue-subresources.test.ts
+ * ABOUT: issue-subresources.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-subresources.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-subresources.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/issue-subresources.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -260,3 +274,4 @@ describe("issue subresource commands", () => {
 function jsonResponse(body: unknown = { ok: true }, init: ResponseInit = { status: 200 }): Response {
   return new Response(JSON.stringify(body), init);
 }
+// [END: module]

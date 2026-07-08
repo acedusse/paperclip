@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/execution-allowlist.ts
+ * ABOUT: execution-allowlist.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-allowlist.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-allowlist.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/execution-allowlist.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Pure execution-allowlist guard.
  *
  * Decides whether a candidate execution environment is permitted to run an
@@ -101,3 +115,4 @@ export function evaluateExecutionAllowlist(
     deniedProvider: provider,
   };
 }
+// [END: module]

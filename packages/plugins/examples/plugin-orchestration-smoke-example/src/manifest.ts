@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-orchestration-smoke-example/src/manifest.ts
+ * ABOUT: manifest.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - manifest.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: manifest.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-orchestration-smoke-example/src/manifest.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PaperclipPluginManifestV1 } from "@paperclipai/plugin-sdk";
 
 const manifest: PaperclipPluginManifestV1 = {
@@ -80,3 +94,4 @@ const manifest: PaperclipPluginManifestV1 = {
 };
 
 export default manifest;
+// [END: module]

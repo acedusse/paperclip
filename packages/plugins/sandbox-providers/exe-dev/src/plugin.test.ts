@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/exe-dev/src/plugin.test.ts
+ * ABOUT: plugin.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/exe-dev/src/plugin.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { EventEmitter } from "node:events";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -838,3 +852,4 @@ describe("exe.dev sandbox provider plugin", () => {
     expect(result?.cwd).toBe("/srv/paperclip/no-vm");
   });
 });
+// [END: module]

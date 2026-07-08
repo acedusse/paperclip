@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CommandPalette.test.tsx
+ * ABOUT: CommandPalette.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CommandPalette.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CommandPalette.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CommandPalette.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { KeyboardEventHandler, ReactNode } from "react";
@@ -356,3 +370,4 @@ describe("CommandPalette", () => {
     });
   });
 });
+// [END: module]

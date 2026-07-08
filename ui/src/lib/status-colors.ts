@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/lib/status-colors.ts
+ * ABOUT: status-colors.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - status-colors.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: status-colors.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/status-colors.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Canonical status & priority color definitions.
  *
  * Every component that renders a status indicator (StatusIcon, StatusBadge,
@@ -217,3 +231,4 @@ export const priorityColor: Record<string, string> = {
 };
 
 export const priorityColorDefault = "text-yellow-600 dark:text-yellow-400";
+// [END: module]

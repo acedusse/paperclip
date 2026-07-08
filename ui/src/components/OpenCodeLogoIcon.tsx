@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/OpenCodeLogoIcon.tsx
+ * ABOUT: OpenCodeLogoIcon.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OpenCodeLogoIcon.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OpenCodeLogoIcon.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/OpenCodeLogoIcon.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "../lib/utils";
 
 interface OpenCodeLogoIconProps {
@@ -20,3 +34,4 @@ export function OpenCodeLogoIcon({ className }: OpenCodeLogoIconProps) {
     </>
   );
 }
+// [END: module]

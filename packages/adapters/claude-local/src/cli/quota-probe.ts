@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/cli/quota-probe.ts
+ * ABOUT: quota-probe.ts (cli module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - quota-probe.ts (cli module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: quota-probe.ts (cli module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/cli/quota-probe.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 #!/usr/bin/env node
 
 import {
@@ -122,3 +136,4 @@ async function main() {
 }
 
 await main();
+// [END: module]

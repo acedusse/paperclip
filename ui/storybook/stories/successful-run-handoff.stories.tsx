@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/successful-run-handoff.stories.tsx
+ * ABOUT: successful-run-handoff.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - successful-run-handoff.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: successful-run-handoff.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/successful-run-handoff.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
@@ -194,3 +208,4 @@ export const PinnedNotice: Story = { render: () => <SuccessfulRunHandoffPinnedNo
 export const ActivityEvents: Story = { render: () => <SuccessfulRunHandoffActivityEvents /> };
 export const IssueCardIndicator: Story = { render: () => <SuccessfulRunHandoffIssueCard /> };
 export const EscalationComment: Story = { render: () => <SuccessfulRunHandoffEscalationComment /> };
+// [END: module]

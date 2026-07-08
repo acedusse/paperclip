@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/artifact.test.ts
+ * ABOUT: artifact.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - artifact.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: artifact.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/artifact.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { companyArtifactsQuerySchema, companyArtifactsResponseSchema } from "./artifact.js";
 
@@ -84,3 +98,4 @@ describe("companyArtifactsResponseSchema", () => {
     });
   });
 });
+// [END: module]

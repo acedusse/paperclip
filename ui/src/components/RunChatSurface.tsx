@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RunChatSurface.tsx
+ * ABOUT: RunChatSurface.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RunChatSurface.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RunChatSurface.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RunChatSurface.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { memo, useMemo } from "react";
 import type { TranscriptEntry } from "../adapters";
 import type { LiveRunForIssue } from "../api/heartbeats";
@@ -74,3 +88,4 @@ export const RunChatSurface = memo(function RunChatSurface({
     />
   );
 });
+// [END: module]

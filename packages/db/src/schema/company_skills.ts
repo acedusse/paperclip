@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/company_skills.ts
+ * ABOUT: company_skills.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company_skills.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company_skills.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/company_skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   type AnyPgColumn,
   pgTable,
@@ -131,3 +145,4 @@ export const companySkillComments = pgTable(
     parentIdx: index("company_skill_comments_parent_idx").on(table.parentCommentId),
   }),
 );
+// [END: module]

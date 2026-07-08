@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/embedded-postgres-error.test.ts
+ * ABOUT: embedded-postgres-error.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - embedded-postgres-error.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: embedded-postgres-error.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/embedded-postgres-error.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { createEmbeddedPostgresLogBuffer, formatEmbeddedPostgresError } from "./embedded-postgres-error.js";
 
@@ -26,3 +40,4 @@ describe("formatEmbeddedPostgresError", () => {
     expect(buffer.getRecentLogs()).toEqual(["line two", "line three"]);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/HermesIcon.tsx
+ * ABOUT: HermesIcon.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - HermesIcon.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: HermesIcon.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/HermesIcon.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "../lib/utils";
 
 interface HermesIconProps {
@@ -41,3 +55,4 @@ export function HermesIcon({ className }: HermesIconProps) {
     </svg>
   );
 }
+// [END: module]

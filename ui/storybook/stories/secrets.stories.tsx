@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/secrets.stories.tsx
+ * ABOUT: secrets.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/secrets.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useQueryClient } from "@tanstack/react-query";
@@ -226,3 +240,4 @@ export const RunFailureCopy: Story = {
     </div>
   ),
 };
+// [END: module]

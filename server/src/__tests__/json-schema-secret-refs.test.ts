@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/json-schema-secret-refs.test.ts
+ * ABOUT: json-schema-secret-refs.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - json-schema-secret-refs.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: json-schema-secret-refs.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/json-schema-secret-refs.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { collectSecretRefPaths } from "../services/json-schema-secret-refs.ts";
 
@@ -42,3 +56,4 @@ describe("collectSecretRefPaths", () => {
     })).sort()).toEqual(["apiKey", "nested.token"]);
   });
 });
+// [END: module]

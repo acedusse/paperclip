@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/breadcrumb.tsx
+ * ABOUT: breadcrumb.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - breadcrumb.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: breadcrumb.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/breadcrumb.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 import { Slot } from "radix-ui"
@@ -107,3 +121,4 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 }
+// [END: module]

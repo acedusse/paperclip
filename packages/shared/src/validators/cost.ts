@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/cost.ts
+ * ABOUT: cost.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cost.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cost.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/cost.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { BILLING_TYPES } from "../constants.js";
 
@@ -29,3 +43,4 @@ export const updateBudgetSchema = z.object({
 });
 
 export type UpdateBudget = z.infer<typeof updateBudgetSchema>;
+// [END: module]

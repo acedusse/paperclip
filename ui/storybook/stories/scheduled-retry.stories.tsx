@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/scheduled-retry.stories.tsx
+ * ABOUT: scheduled-retry.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - scheduled-retry.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: scheduled-retry.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/scheduled-retry.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Issue, IssueScheduledRetry } from "@paperclipai/shared";
 import { IssueScheduledRetryCard } from "@/components/IssueScheduledRetryCard";
@@ -161,3 +175,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const ScheduledRetrySurfaces: Story = {};
+// [END: module]

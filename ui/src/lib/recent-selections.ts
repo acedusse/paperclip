@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/recent-selections.ts
+ * ABOUT: recent-selections.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - recent-selections.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: recent-selections.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/recent-selections.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const RECENT_SELECTION_DISPLAY_LIMIT = 3;
 const MAX_STORED_RECENT_SELECTIONS = 10;
 
@@ -48,3 +62,4 @@ export function orderItemsBySelectedAndRecent<T extends { id: string }>(
 
   return ordered;
 }
+// [END: module]

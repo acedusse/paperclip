@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/dialogs-modals.stories.tsx
+ * ABOUT: dialogs-modals.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dialogs-modals.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dialogs-modals.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/dialogs-modals.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type {
@@ -1062,3 +1076,4 @@ export const PathInstructionsOpen: Story = {
   name: "Path Instructions",
   render: () => <PathInstructionsModalStory />,
 };
+// [END: module]

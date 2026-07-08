@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ThemeToggle.tsx
+ * ABOUT: ThemeToggle.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ThemeToggle.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ThemeToggle.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ThemeToggle.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -78,3 +92,4 @@ export function ThemeToggle({ className, variant = "icon", onAfterToggle }: Them
     </Button>
   );
 }
+// [END: module]

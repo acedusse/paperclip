@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/authz.ts
+ * ABOUT: authz.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - authz.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: authz.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/authz.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Request } from "express";
 import { forbidden, unauthorized } from "../errors.js";
 
@@ -117,3 +131,4 @@ export function getActorInfo(req: Request): (
     actorSource,
   };
 }
+// [END: module]

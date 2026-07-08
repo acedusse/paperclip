@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/keyboardShortcuts.test.ts
+ * ABOUT: keyboardShortcuts.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - keyboardShortcuts.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: keyboardShortcuts.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/keyboardShortcuts.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { describe, expect, it, vi } from "vitest";
@@ -287,3 +301,4 @@ describe("keyboardShortcuts helpers", () => {
     })).toBe("disarm");
   });
 });
+// [END: module]

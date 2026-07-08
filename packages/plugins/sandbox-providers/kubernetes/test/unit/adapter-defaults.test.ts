@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/adapter-defaults.test.ts
+ * ABOUT: adapter-defaults.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-defaults.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-defaults.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/adapter-defaults.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect } from "vitest";
 import {
   getAdapterDefaults,
@@ -147,3 +161,4 @@ describe("resolveRunAdapterType", () => {
     expect(resolveRunAdapterType("  pi_local  ", "opencode_local")).toBe("pi_local");
   });
 });
+// [END: module]

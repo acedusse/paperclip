@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/opencode-local-skill-sync.test.ts
+ * ABOUT: opencode-local-skill-sync.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - opencode-local-skill-sync.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: opencode-local-skill-sync.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/opencode-local-skill-sync.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -49,3 +63,4 @@ describe("opencode local skill sync", () => {
     expect((await fs.lstat(path.join(home, ".claude", "skills", "paperclip"))).isSymbolicLink()).toBe(true);
   });
 });
+// [END: module]

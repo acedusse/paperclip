@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_comments.ts
+ * ABOUT: issue_comments.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_comments.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_comments.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_comments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   IssueCommentAuthorType,
   IssueCommentMetadata,
@@ -49,3 +63,4 @@ export const issueComments = pgTable(
     bodySearchIdx: index("issue_comments_body_search_idx").using("gin", table.body.op("gin_trgm_ops")),
   }),
 );
+// [END: module]

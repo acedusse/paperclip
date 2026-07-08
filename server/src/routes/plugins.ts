@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/routes/plugins.ts
+ * ABOUT: plugins.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugins.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugins.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/plugins.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Plugin management REST API routes
  *
  * This module provides Express routes for managing the complete plugin lifecycle:
@@ -2990,3 +3004,4 @@ export function pluginRoutes(
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/artifacts/ArtifactCard.tsx
+ * ABOUT: ArtifactCard.tsx (artifacts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ArtifactCard.tsx (artifacts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ArtifactCard.tsx (artifacts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/artifacts/ArtifactCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { type SyntheticEvent, useEffect, useRef, useState } from "react";
 import { Download, ExternalLink, Paperclip, Play } from "lucide-react";
 import type { CompanyArtifact } from "@/api/artifacts";
@@ -236,3 +250,4 @@ export function ArtifactCard({ artifact }: ArtifactCardProps) {
     </Link>
   );
 }
+// [END: module]

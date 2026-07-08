@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/company-portability.test.ts
+ * ABOUT: company-portability.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-portability.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-portability.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/company-portability.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFileSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import os from "node:os";
@@ -3719,3 +3733,4 @@ describe("company portability", () => {
     expect(preview.plan.issuePlans).toHaveLength(0);
   });
 });
+// [END: module]

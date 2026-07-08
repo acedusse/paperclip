@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/adapter-models-env.test.ts
+ * ABOUT: adapter-models-env.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-models-env.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-models-env.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/adapter-models-env.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parseAdapterModelsEnv } from "./adapter-models-env.js";
 
@@ -28,3 +42,4 @@ describe("parseAdapterModelsEnv", () => {
     expect(() => parseAdapterModelsEnv({ PAPERCLIP_ADAPTER_MODELS: JSON.stringify({ a: [{ label: "x" }] }) })).toThrow();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/process/execute.ts
+ * ABOUT: execute.ts (process module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.ts (process module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.ts (process module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/process/execute.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterExecutionContext, AdapterExecutionResult } from "../types.js";
 import {
   asString,
@@ -84,3 +98,4 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     },
   };
 }
+// [END: module]

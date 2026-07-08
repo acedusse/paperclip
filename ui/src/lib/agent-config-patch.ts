@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-config-patch.ts
+ * ABOUT: agent-config-patch.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-config-patch.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-config-patch.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-config-patch.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Agent } from "@paperclipai/shared";
 
 export interface AgentModelProfileOverlay {
@@ -116,3 +130,4 @@ export function buildAgentUpdatePatch(agent: Agent, overlay: AgentConfigOverlay)
 
   return patch;
 }
+// [END: module]

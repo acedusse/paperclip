@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/home-paths.test.ts
+ * ABOUT: home-paths.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - home-paths.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: home-paths.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/home-paths.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -44,3 +58,4 @@ describe("home path resolution", () => {
     expect(expandHomePrefix("~/x/y")).toBe(path.resolve(os.homedir(), "x/y"));
   });
 });
+// [END: module]

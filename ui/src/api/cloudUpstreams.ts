@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/cloudUpstreams.ts
+ * ABOUT: cloudUpstreams.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloudUpstreams.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloudUpstreams.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/cloudUpstreams.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CloudUpstreamActivationEntityType,
   CloudUpstreamConnectStartResponse,
@@ -38,3 +52,4 @@ export const cloudUpstreamsApi = {
       input,
     ),
 };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/finance.ts
+ * ABOUT: finance.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - finance.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: finance.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/finance.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, costEvents, financeEvents, goals, heartbeatRuns, issues, projects } from "@paperclipai/db";
@@ -132,3 +146,4 @@ export function financeService(db: Db) {
     },
   };
 }
+// [END: module]

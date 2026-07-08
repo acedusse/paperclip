@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/model-profile-hint.test.ts
+ * ABOUT: model-profile-hint.test.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - model-profile-hint.test.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: model-profile-hint.test.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/model-profile-hint.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   recoveryAssigneeAdapterOverrides,
@@ -42,3 +56,4 @@ describe("recovery model profile policy", () => {
     })).toEqual({ taskId: "source-task" });
   });
 });
+// [END: module]

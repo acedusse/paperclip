@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/markdownPaste.test.ts
+ * ABOUT: markdownPaste.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - markdownPaste.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: markdownPaste.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/markdownPaste.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { looksLikeMarkdownPaste, normalizePastedMarkdown } from "./markdownPaste";
 
@@ -48,3 +62,4 @@ describe("markdownPaste", () => {
     expect(looksLikeMarkdownPaste("just a sentence")).toBe(false);
   });
 });
+// [END: module]

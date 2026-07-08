@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/config/home.ts
+ * ABOUT: home.ts (config module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - home.ts (config module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: home.ts (config module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/config/home.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import {
   expandHomePrefix,
@@ -71,3 +85,4 @@ export function describeLocalInstancePaths(instanceId?: string) {
     storageDir: resolveDefaultStorageDir(resolvedInstanceId),
   };
 }
+// [END: module]

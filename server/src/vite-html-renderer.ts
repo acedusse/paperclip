@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/vite-html-renderer.ts
+ * ABOUT: vite-html-renderer.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vite-html-renderer.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vite-html-renderer.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/vite-html-renderer.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 
@@ -84,3 +98,4 @@ export function createCachedViteHtmlRenderer(opts: {
     },
   };
 }
+// [END: module]

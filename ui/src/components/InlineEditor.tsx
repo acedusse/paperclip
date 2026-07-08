@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/InlineEditor.tsx
+ * ABOUT: InlineEditor.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InlineEditor.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InlineEditor.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/InlineEditor.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../lib/utils";
 import { MarkdownBody } from "./MarkdownBody";
@@ -404,3 +418,4 @@ export function InlineEditor({
     </DisplayTag>
   );
 }
+// [END: module]

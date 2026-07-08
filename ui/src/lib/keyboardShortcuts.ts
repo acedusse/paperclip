@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/keyboardShortcuts.ts
+ * ABOUT: keyboardShortcuts.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - keyboardShortcuts.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: keyboardShortcuts.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/keyboardShortcuts.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const KEYBOARD_SHORTCUT_TEXT_INPUT_SELECTOR = [
   "input",
   "textarea",
@@ -172,3 +186,4 @@ export function resolveIssueDetailGoKeyAction({
   if (normalizedKey === "g") return "arm";
   return "disarm";
 }
+// [END: module]

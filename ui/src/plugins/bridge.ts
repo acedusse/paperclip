@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/plugins/bridge.ts
+ * ABOUT: bridge.ts (plugins module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bridge.ts (plugins module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bridge.ts (plugins module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/plugins/bridge.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Plugin UI bridge runtime — concrete implementations of the bridge hooks.
  *
  * Plugin UI bundles import `usePluginData`, `usePluginAction`, and
@@ -673,3 +687,4 @@ export function usePluginStream<T = unknown>(
 
   return { events, lastEvent, connecting, connected, error, close };
 }
+// [END: module]

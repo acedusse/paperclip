@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/auth.test.ts
+ * ABOUT: auth.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/auth.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { isAuthorizedRequest, readBearerToken } from "./auth.js";
 
@@ -28,3 +42,4 @@ describe("bridge auth", () => {
     await expect(isAuthorizedRequest(request, "expected-token")).resolves.toBe(false);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/plugin_company_settings.ts
+ * ABOUT: plugin_company_settings.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin_company_settings.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin_company_settings.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/plugin_company_settings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, index, uniqueIndex, boolean } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { plugins } from "./plugins.js";
@@ -39,3 +53,4 @@ export const pluginCompanySettings = pgTable(
     ),
   }),
 );
+// [END: module]

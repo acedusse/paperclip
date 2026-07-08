@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/issues.test.ts
+ * ABOUT: issues.test.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issues.test.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issues.test.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/issues.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockApi = vi.hoisted(() => ({
@@ -88,3 +102,4 @@ describe("issuesApi.list", () => {
     );
   });
 });
+// [END: module]

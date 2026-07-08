@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/public/sw.js
+ * ABOUT: sw.js (public module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sw.js (public module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sw.js (public module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/public/sw.js", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const CACHE_NAME = "paperclip-v2";
 
 self.addEventListener("install", () => {
@@ -40,3 +54,4 @@ self.addEventListener("fetch", (event) => {
       })
   );
 });
+// [END: module]

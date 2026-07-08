@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/src/testing.ts
+ * ABOUT: testing.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - testing.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: testing.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/testing.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { pluginOperationIssueOriginKind } from "@paperclipai/shared";
 import type {
@@ -2519,3 +2533,4 @@ export function createEnvironmentTestHarness(options: EnvironmentTestHarnessOpti
 
   return envHarness;
 }
+// [END: module]

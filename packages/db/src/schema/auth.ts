@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/auth.ts
+ * ABOUT: auth.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
 export const authUsers = pgTable("user", {
@@ -45,3 +59,4 @@ export const authVerifications = pgTable("verification", {
   createdAt: timestamp("created_at", { withTimezone: true }),
   updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
+// [END: module]

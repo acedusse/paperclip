@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/run.ts
+ * ABOUT: run.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - run.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: run.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/run.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import type { HeartbeatRun, HeartbeatRunEvent, Issue, WorkspaceOperation } from "@paperclipai/shared";
 import {
@@ -319,3 +333,4 @@ function printLogResult(result: unknown, opts: { json: boolean; text?: boolean }
 
   printOutput(result, { json: false });
 }
+// [END: module]

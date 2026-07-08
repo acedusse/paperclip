@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/execution-target.ts
+ * ABOUT: execution-target.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-target.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-target.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/execution-target.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import type { SshRemoteExecutionSpec } from "./ssh.js";
 import {
@@ -1204,3 +1218,4 @@ export async function startAdapterExecutionTargetPaperclipBridge(input: {
     },
   };
 }
+// [END: module]

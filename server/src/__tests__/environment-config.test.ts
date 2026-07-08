@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-config.test.ts
+ * ABOUT: environment-config.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-config.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-config.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-config.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { HttpError } from "../errors.js";
 import { normalizeEnvironmentConfig, parseEnvironmentDriverConfig } from "../services/environment-config.ts";
@@ -249,3 +263,4 @@ describe("environment config helpers", () => {
     });
   });
 });
+// [END: module]

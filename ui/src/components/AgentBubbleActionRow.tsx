@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentBubbleActionRow.tsx
+ * ABOUT: AgentBubbleActionRow.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentBubbleActionRow.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentBubbleActionRow.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentBubbleActionRow.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState, type ReactNode } from "react";
 import type {
   FeedbackDataSharingPreference,
@@ -371,3 +385,4 @@ export function IssueChatFeedbackButtons({
     </>
   );
 }
+// [END: module]

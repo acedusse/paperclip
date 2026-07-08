@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanyExport.tsx
+ * ABOUT: CompanyExport.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyExport.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyExport.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanyExport.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
@@ -1018,3 +1032,4 @@ export function CompanyExport() {
     </div>
   );
 }
+// [END: module]

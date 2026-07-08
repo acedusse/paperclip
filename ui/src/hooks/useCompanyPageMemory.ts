@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useCompanyPageMemory.ts
+ * ABOUT: useCompanyPageMemory.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useCompanyPageMemory.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useCompanyPageMemory.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useCompanyPageMemory.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "@/lib/router";
 import { useCompany } from "../context/CompanyContext";
@@ -77,3 +91,4 @@ export function useCompanyPageMemory() {
     prevCompanyId.current = selectedCompanyId;
   }, [selectedCompany, selectedCompanyId, selectionSource, navigate]);
 }
+// [END: module]

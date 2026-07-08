@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/company-skill-routes.ts
+ * ABOUT: company-skill-routes.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skill-routes.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skill-routes.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/company-skill-routes.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanySkill, CompanySkillDetail, CompanySkillListItem } from "@paperclipai/shared";
 
 export type CompanySkillRouteSubject = Pick<CompanySkill | CompanySkillDetail | CompanySkillListItem, "id" | "key" | "slug">;
@@ -190,3 +204,4 @@ export function withRouteSkill(
 ) {
   return skills.some((candidate) => candidate.id === skill.id) ? skills : [...skills, skill];
 }
+// [END: module]

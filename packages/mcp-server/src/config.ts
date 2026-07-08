@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/mcp-server/src/config.ts
+ * ABOUT: config.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - config.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: config.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/mcp-server/src/config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface PaperclipMcpConfig {
   apiUrl: string;
   apiKey: string;
@@ -37,3 +51,4 @@ export function readConfigFromEnv(env: NodeJS.ProcessEnv = process.env): Papercl
     runId: nonEmpty(env.PAPERCLIP_RUN_ID),
   };
 }
+// [END: module]

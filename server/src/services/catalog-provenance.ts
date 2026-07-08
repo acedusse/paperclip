@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/catalog-provenance.ts
+ * ABOUT: catalog-provenance.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - catalog-provenance.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: catalog-provenance.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/catalog-provenance.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const PORTABLE_CATALOG_PROVENANCE_STRING_KEYS = [
   "sourceRef",
   "originHash",
@@ -63,3 +77,4 @@ export function readPortableCatalogProvenance(
     metadata: normalized,
   };
 }
+// [END: module]

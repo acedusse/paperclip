@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/document-annotation-selection.test.ts
+ * ABOUT: document-annotation-selection.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotation-selection.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotation-selection.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/document-annotation-selection.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 import { describe, expect, it } from "vitest";
 import { verifyDocumentAnchorSelector } from "@paperclipai/shared";
@@ -116,3 +130,4 @@ describe("rangesForNormalizedSpan", () => {
     expect(ranges).toEqual([]);
   });
 });
+// [END: module]

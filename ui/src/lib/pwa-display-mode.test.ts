@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/pwa-display-mode.test.ts
+ * ABOUT: pwa-display-mode.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - pwa-display-mode.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: pwa-display-mode.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/pwa-display-mode.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { isChromelessDisplayMode } from "./pwa-display-mode";
 
@@ -26,3 +40,4 @@ describe("isChromelessDisplayMode", () => {
     expect(isChromelessDisplayMode(matchMode("browser"), false)).toBe(false);
   });
 });
+// [END: module]

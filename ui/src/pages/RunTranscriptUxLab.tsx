@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/RunTranscriptUxLab.tsx
+ * ABOUT: RunTranscriptUxLab.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RunTranscriptUxLab.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RunTranscriptUxLab.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/RunTranscriptUxLab.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -332,3 +346,4 @@ export function RunTranscriptUxLab() {
     </div>
   );
 }
+// [END: module]

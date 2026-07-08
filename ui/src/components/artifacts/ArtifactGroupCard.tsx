@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/artifacts/ArtifactGroupCard.tsx
+ * ABOUT: ArtifactGroupCard.tsx (artifacts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ArtifactGroupCard.tsx (artifacts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ArtifactGroupCard.tsx (artifacts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/artifacts/ArtifactGroupCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Layers } from "lucide-react";
 import type { To } from "react-router-dom";
 import type { CompanyArtifactGroup } from "@/api/artifacts";
@@ -85,3 +99,4 @@ export function ArtifactGroupCard({ group, to }: ArtifactGroupCardProps) {
     </div>
   );
 }
+// [END: module]

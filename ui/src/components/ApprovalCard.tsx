@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ApprovalCard.tsx
+ * ABOUT: ApprovalCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ApprovalCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ApprovalCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ApprovalCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { CheckCircle2, XCircle, Clock } from "lucide-react";
 import { Link } from "@/lib/router";
 import { Badge } from "@/components/ui/badge";
@@ -150,3 +164,4 @@ export function ApprovalCard({
     </div>
   );
 }
+// [END: module]

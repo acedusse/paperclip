@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/project-workspace-runtime-config.ts
+ * ABOUT: project-workspace-runtime-config.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-workspace-runtime-config.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-workspace-runtime-config.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/project-workspace-runtime-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ProjectWorkspaceRuntimeConfig } from "@paperclipai/shared";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -70,3 +84,4 @@ export function mergeProjectWorkspaceRuntimeConfig(
 
   return Object.keys(nextMetadata).length > 0 ? nextMetadata : null;
 }
+// [END: module]

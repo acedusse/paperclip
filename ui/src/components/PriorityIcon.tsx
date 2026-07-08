@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/PriorityIcon.tsx
+ * ABOUT: PriorityIcon.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - PriorityIcon.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: PriorityIcon.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/PriorityIcon.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { ArrowUp, ArrowDown, Minus, AlertTriangle } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -75,3 +89,4 @@ export function PriorityIcon({ priority, onChange, className, showLabel }: Prior
     </Popover>
   );
 }
+// [END: module]

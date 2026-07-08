@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/budget.ts
+ * ABOUT: budget.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budget.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budget.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/budget.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   BUDGET_INCIDENT_RESOLUTION_ACTIONS,
@@ -35,3 +49,4 @@ export const resolveBudgetIncidentSchema = z.object({
 });
 
 export type ResolveBudgetIncident = z.infer<typeof resolveBudgetIncidentSchema>;
+// [END: module]

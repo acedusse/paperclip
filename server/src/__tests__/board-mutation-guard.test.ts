@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/board-mutation-guard.test.ts
+ * ABOUT: board-mutation-guard.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-mutation-guard.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-mutation-guard.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/board-mutation-guard.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import express from "express";
 import request from "supertest";
@@ -147,3 +161,4 @@ describe("boardMutationGuard", () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 });
+// [END: module]

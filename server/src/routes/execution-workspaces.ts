@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/execution-workspaces.ts
+ * ABOUT: execution-workspaces.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspaces.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspaces.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/execution-workspaces.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import { Router, type Request, type Response } from "express";
 import type { Db } from "@paperclipai/db";
@@ -645,3 +659,4 @@ export function executionWorkspaceRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

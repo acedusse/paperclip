@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ProjectProperties.tsx
+ * ABOUT: ProjectProperties.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ProjectProperties.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ProjectProperties.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ProjectProperties.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { Link } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -1182,3 +1196,4 @@ export function ProjectProperties({ project, onUpdate, onFieldUpdate, getFieldSa
     </div>
   );
 }
+// [END: module]

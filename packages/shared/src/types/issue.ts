@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/issue.ts
+ * ABOUT: issue.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/issue.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   IssueCommentAuthorType,
   IssueCommentMetadataRowType,
@@ -930,3 +944,4 @@ export interface IssueAttachment {
   openPath?: string;
   downloadPath?: string;
 }
+// [END: module]

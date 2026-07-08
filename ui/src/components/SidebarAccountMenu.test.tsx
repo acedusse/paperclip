@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarAccountMenu.test.tsx
+ * ABOUT: SidebarAccountMenu.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarAccountMenu.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarAccountMenu.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarAccountMenu.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createRoot } from "react-dom/client";
@@ -138,3 +152,4 @@ describe("SidebarAccountMenu", () => {
     });
   });
 });
+// [END: module]

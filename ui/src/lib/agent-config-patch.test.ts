@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-config-patch.test.ts
+ * ABOUT: agent-config-patch.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-config-patch.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-config-patch.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-config-patch.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -221,3 +235,4 @@ describe("buildAgentUpdatePatch", () => {
     });
   });
 });
+// [END: module]

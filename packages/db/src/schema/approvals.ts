@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/approvals.ts
+ * ABOUT: approvals.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approvals.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approvals.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/approvals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, index } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -26,3 +40,4 @@ export const approvals = pgTable(
     ),
   }),
 );
+// [END: module]

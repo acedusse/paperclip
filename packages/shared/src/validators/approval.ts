@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/approval.ts
+ * ABOUT: approval.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - approval.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: approval.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/approval.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { APPROVAL_TYPES } from "../constants.js";
 import { multilineTextSchema } from "./text.js";
@@ -34,3 +48,4 @@ export const addApprovalCommentSchema = z.object({
 });
 
 export type AddApprovalComment = z.infer<typeof addApprovalCommentSchema>;
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issueDetailCache.test.ts
+ * ABOUT: issueDetailCache.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueDetailCache.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueDetailCache.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issueDetailCache.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { QueryClient } from "@tanstack/react-query";
 import type { Issue } from "@paperclipai/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -106,3 +120,4 @@ describe("issueDetailCache", () => {
     expect(queryClient.getQueryData(queryKeys.issues.detail(issue.id))).toEqual(issue);
   });
 });
+// [END: module]

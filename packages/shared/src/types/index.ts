@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/index.ts
+ * ABOUT: index.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type { Company } from "./company.js";
 export type {
   Environment,
@@ -568,3 +582,4 @@ export type {
   PluginDatabaseNamespaceMode,
   PluginDatabaseNamespaceStatus,
 } from "./plugin.js";
+// [END: module]

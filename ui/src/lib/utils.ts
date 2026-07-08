@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/utils.ts
+ * ABOUT: utils.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - utils.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: utils.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/utils.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { deriveAgentUrlKey, deriveProjectUrlKey, normalizeProjectUrlKey, hasNonAsciiContent } from "@paperclipai/shared";
@@ -243,3 +257,4 @@ export function projectWorkspaceUrl(
 ): string {
   return `${projectUrl(project)}/workspaces/${workspaceId}`;
 }
+// [END: module]

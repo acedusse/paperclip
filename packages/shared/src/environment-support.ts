@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/environment-support.ts
+ * ABOUT: environment-support.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-support.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-support.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/environment-support.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AgentAdapterType, EnvironmentDriver } from "./constants.js";
 import type { SandboxEnvironmentProvider } from "./types/environment.js";
 import type { JsonSchema } from "./types/plugin.js";
@@ -147,3 +161,4 @@ export function getEnvironmentCapabilities(
     sandboxProviders,
   };
 }
+// [END: module]

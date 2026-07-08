@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/ui/index.ts
+ * ABOUT: index.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/ui/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * `@paperclipai/plugin-sdk/ui` — Paperclip plugin UI SDK.
  *
  * Import this subpath from plugin UI bundles (React components that run in
@@ -156,3 +170,4 @@ export type {
   PluginCommentContextMenuItemProps,
   PluginSettingsPageProps,
 } from "./types.js";
+// [END: module]

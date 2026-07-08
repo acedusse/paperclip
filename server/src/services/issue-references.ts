@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-references.ts
+ * ABOUT: issue-references.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-references.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-references.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-references.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, eq, inArray, isNull } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -444,3 +458,4 @@ export function issueReferenceService(db: Db) {
     emptySummary,
   };
 }
+// [END: module]

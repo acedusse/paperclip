@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarNavItem.test.tsx
+ * ABOUT: SidebarNavItem.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarNavItem.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarNavItem.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarNavItem.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -140,3 +154,4 @@ describe("SidebarNavItem", () => {
     expect(link().getAttribute("aria-label")).toBe("Dashboard, 3 live");
   });
 });
+// [END: module]

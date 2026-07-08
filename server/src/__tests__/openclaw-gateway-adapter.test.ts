@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/openclaw-gateway-adapter.test.ts
+ * ABOUT: openclaw-gateway-adapter.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - openclaw-gateway-adapter.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: openclaw-gateway-adapter.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/openclaw-gateway-adapter.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it } from "vitest";
 import { createServer } from "node:http";
 import { WebSocketServer } from "ws";
@@ -675,3 +689,4 @@ describe("openclaw gateway testEnvironment", () => {
     expect(result.checks.some((check) => check.code === "openclaw_gateway_url_missing")).toBe(true);
   });
 });
+// [END: module]

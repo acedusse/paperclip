@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/src/templates.ts
+ * ABOUT: templates.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - templates.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: templates.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/src/templates.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readdirSync, readFileSync, statSync } from "node:fs";
 
 export const REQUIRED_WIKI_DIRECTORIES = [
@@ -71,3 +85,4 @@ export const BOOTSTRAP_FILES: ReadonlyArray<{ path: string; contents: string }> 
   { path: "wiki/concepts/.gitkeep", contents: "" },
   { path: "wiki/synthesis/.gitkeep", contents: "" },
 ];
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/dashboard.ts
+ * ABOUT: dashboard.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dashboard.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dashboard.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/dashboard.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, gte, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents, approvals, companies, costEvents, heartbeatRuns, issues } from "@paperclipai/db";
@@ -160,3 +174,4 @@ export function dashboardService(db: Db) {
     },
   };
 }
+// [END: module]

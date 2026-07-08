@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/navigation-scroll.ts
+ * ABOUT: navigation-scroll.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - navigation-scroll.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: navigation-scroll.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/navigation-scroll.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type NavigationType = "POP" | "PUSH" | "REPLACE";
 
 export const SIDEBAR_SCROLL_RESET_STATE = {
@@ -61,3 +75,4 @@ function readIssueDetailPathRef(pathname: string): string | null {
   }
   return null;
 }
+// [END: module]

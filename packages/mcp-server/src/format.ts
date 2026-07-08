@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/mcp-server/src/format.ts
+ * ABOUT: format.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - format.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: format.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/mcp-server/src/format.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { PaperclipApiError } from "./client.js";
 
 type McpTextResponse = {
@@ -29,3 +43,4 @@ export function formatErrorResponse(error: unknown): McpTextResponse {
     error: error instanceof Error ? error.message : String(error),
   });
 }
+// [END: module]

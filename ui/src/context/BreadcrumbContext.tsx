@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/BreadcrumbContext.tsx
+ * ABOUT: BreadcrumbContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BreadcrumbContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BreadcrumbContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/BreadcrumbContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 export interface Breadcrumb {
@@ -69,3 +83,4 @@ export function useBreadcrumbs() {
   }
   return ctx;
 }
+// [END: module]

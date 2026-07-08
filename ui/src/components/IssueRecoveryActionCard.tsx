@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueRecoveryActionCard.tsx
+ * ABOUT: IssueRecoveryActionCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueRecoveryActionCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueRecoveryActionCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueRecoveryActionCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import type {
   Agent,
@@ -548,3 +562,4 @@ export function IssueRecoveryActionCard({
 export type { IssueRecoveryActionStatus };
 
 export default IssueRecoveryActionCard;
+// [END: module]

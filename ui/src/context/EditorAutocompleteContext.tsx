@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/EditorAutocompleteContext.tsx
+ * ABOUT: EditorAutocompleteContext.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - EditorAutocompleteContext.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: EditorAutocompleteContext.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/EditorAutocompleteContext.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { buildRoutineMentionHref, buildSkillMentionHref } from "@paperclipai/shared";
@@ -93,3 +107,4 @@ export function EditorAutocompleteProvider({ children }: { children: ReactNode }
 export function useEditorAutocomplete() {
   return useContext(EditorAutocompleteContext);
 }
+// [END: module]

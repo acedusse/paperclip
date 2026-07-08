@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/teams-catalog.ts
+ * ABOUT: teams-catalog.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams-catalog.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams-catalog.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/teams-catalog.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request } from "express";
 import type { Db } from "@paperclipai/db";
 import {
@@ -123,3 +137,4 @@ export function teamsCatalogRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

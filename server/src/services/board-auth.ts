@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/board-auth.ts
+ * ABOUT: board-auth.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - board-auth.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: board-auth.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/board-auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { and, eq, gt, isNull, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -433,3 +447,4 @@ export function boardAuthService(db: Db) {
     resolveBoardActivityCompanyIds,
   };
 }
+// [END: module]

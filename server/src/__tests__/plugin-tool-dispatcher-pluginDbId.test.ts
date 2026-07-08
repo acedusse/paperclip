@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/__tests__/plugin-tool-dispatcher-pluginDbId.test.ts
+ * ABOUT: plugin-tool-dispatcher-pluginDbId.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-tool-dispatcher-pluginDbId.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-tool-dispatcher-pluginDbId.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-tool-dispatcher-pluginDbId.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Regression + lifecycle coverage for plugin-loader → plugin-tool-dispatcher
  * → plugin-tool-registry → plugin-worker-manager UUID-keyed routing.
  *
@@ -311,3 +325,4 @@ describe("dispatcher — worker re-spawn after container restart", () => {
     expect(isRunning).not.toHaveBeenCalledWith(PLUGIN_KEY);
   });
 });
+// [END: module]

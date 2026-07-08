@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/src/contracts.ts
+ * ABOUT: contracts.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - contracts.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: contracts.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/src/contracts.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "@paperclipai/plugin-sdk";
 
 export const workspaceDiffViewSchema = z.enum(["working-tree", "head"]);
@@ -142,3 +156,4 @@ export type WorkspaceDiffFilePatch = z.infer<typeof workspaceDiffFilePatchSchema
 export type WorkspaceDiffFile = z.infer<typeof workspaceDiffFileSchema>;
 export type WorkspaceDiffStats = z.infer<typeof workspaceDiffStatsSchema>;
 export type WorkspaceDiffResponse = z.infer<typeof workspaceDiffResponseSchema>;
+// [END: module]

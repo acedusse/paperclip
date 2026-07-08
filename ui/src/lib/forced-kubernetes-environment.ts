@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/forced-kubernetes-environment.ts
+ * ABOUT: forced-kubernetes-environment.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - forced-kubernetes-environment.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: forced-kubernetes-environment.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/forced-kubernetes-environment.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Environment, InstanceExecutionMode } from "@paperclipai/shared";
 
 /**
@@ -54,3 +68,4 @@ export function resolveForcedKubernetesEnvironment(
     environments.find((environment) => isKubernetesSandboxEnvironment(environment)) ?? null;
   return { forced: true, kubernetesEnvironment };
 }
+// [END: module]

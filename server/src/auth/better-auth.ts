@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/auth/better-auth.ts
+ * ABOUT: better-auth.ts (auth module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - better-auth.ts (auth module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: better-auth.ts (auth module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/auth/better-auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Request, RequestHandler } from "express";
 import type { IncomingHttpHeaders } from "node:http";
 import { betterAuth } from "better-auth";
@@ -202,3 +216,4 @@ export async function resolveBetterAuthSession(
 ): Promise<BetterAuthSessionResult | null> {
   return resolveBetterAuthSessionFromHeaders(auth, headersFromExpressRequest(req));
 }
+// [END: module]

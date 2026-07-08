@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-issue-liveness-escalation.test.ts
+ * ABOUT: heartbeat-issue-liveness-escalation.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-issue-liveness-escalation.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-issue-liveness-escalation.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-issue-liveness-escalation.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { and, eq, sql } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -840,3 +854,4 @@ describeEmbeddedPostgres("heartbeat issue graph liveness escalation", () => {
     expect(blockers.some((row) => row.blockerIssueId === escalations[0]!.id)).toBe(false);
   });
 });
+// [END: module]

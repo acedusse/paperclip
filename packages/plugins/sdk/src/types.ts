@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/types.ts
+ * ABOUT: types.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Core types for the Paperclip plugin worker-side SDK.
  *
  * These types define the stable public API surface that plugin workers import
@@ -1930,3 +1944,4 @@ export interface PluginContext {
   /** Structured logger. Output is captured and surfaced in the plugin health dashboard. */
   logger: PluginLogger;
 }
+// [END: module]

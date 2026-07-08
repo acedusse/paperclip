@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/types/express.d.ts
+ * ABOUT: express.d.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - express.d.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: express.d.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/types/express.d.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export {};
 
 declare global {
@@ -24,3 +38,4 @@ declare global {
     }
   }
 }
+// [END: module]

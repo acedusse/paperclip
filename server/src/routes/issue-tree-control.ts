@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/issue-tree-control.ts
+ * ABOUT: issue-tree-control.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-tree-control.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-tree-control.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/issue-tree-control.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import type { Request } from "express";
 import type { Db } from "@paperclipai/db";
@@ -407,3 +421,4 @@ export function issueTreeControlRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/project-goal.test.ts
+ * ABOUT: project-goal.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-goal.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-goal.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/project-goal.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerGoalCommands } from "../commands/client/goal.js";
@@ -154,3 +168,4 @@ describe("project and goal commands", () => {
     expect(fetchMock.mock.calls[3]?.[1]?.method).toBe("DELETE");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-assignment-wakeup.ts
+ * ABOUT: issue-assignment-wakeup.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-assignment-wakeup.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-assignment-wakeup.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-assignment-wakeup.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { logger } from "../middleware/logger.js";
 
 type WakeupTriggerDetail = "manual" | "ping" | "callback" | "system";
@@ -46,3 +60,4 @@ export function queueIssueAssignmentWakeup(input: {
       return null;
     });
 }
+// [END: module]

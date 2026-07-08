@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ActiveAgentsPanel.tsx
+ * ABOUT: ActiveAgentsPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ActiveAgentsPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ActiveAgentsPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ActiveAgentsPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { memo, useMemo } from "react";
 import { Link } from "@/lib/router";
 import { useQueries, useQuery } from "@tanstack/react-query";
@@ -236,3 +250,4 @@ const AgentRunCard = memo(function AgentRunCard({
     </div>
   );
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanyInvites.test.tsx
+ * ABOUT: CompanyInvites.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyInvites.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyInvites.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanyInvites.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -330,3 +344,4 @@ describe("CompanyInvites", () => {
     });
   });
 });
+// [END: module]

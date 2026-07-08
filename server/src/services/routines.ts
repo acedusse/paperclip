@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/routines.ts
+ * ABOUT: routines.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/routines.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import crypto from "node:crypto";
 import { and, asc, desc, eq, inArray, isNotNull, isNull, lte, ne, not, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -2492,3 +2506,4 @@ export function routineService(
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/better-auth.test.ts
+ * ABOUT: better-auth.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - better-auth.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: better-auth.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/better-auth.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it } from "vitest";
 import type { BetterAuthOptions } from "better-auth";
 import { getCookies } from "better-auth/cookies";
@@ -184,3 +198,4 @@ describe("Better Auth cookie scoping", () => {
     expect(trustedOrigins).not.toContain("http://board.example.test:3100");
   });
 });
+// [END: module]

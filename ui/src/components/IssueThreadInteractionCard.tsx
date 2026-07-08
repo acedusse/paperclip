@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueThreadInteractionCard.tsx
+ * ABOUT: IssueThreadInteractionCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueThreadInteractionCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueThreadInteractionCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueThreadInteractionCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Agent } from "@paperclipai/shared";
 import { AlertTriangle, CheckCircle2, ChevronRight, CircleDashed, FileText, GitBranch, ImagePlus, ListChecks, Loader2, MessageSquareQuote, X, XCircle } from "lucide-react";
@@ -2000,3 +2014,4 @@ export function IssueThreadInteractionCard({
     </div>
   );
 }
+// [END: module]

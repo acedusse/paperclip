@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FileViewerSheet.test.tsx
+ * ABOUT: FileViewerSheet.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FileViewerSheet.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FileViewerSheet.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FileViewerSheet.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { WorkspaceFileContent } from "@paperclipai/shared";
@@ -168,3 +182,4 @@ describe("FileViewerMetadataRow", () => {
     expect(markup).toContain("Loading file details");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/pi-local/src/server/models.test.ts
+ * ABOUT: models.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - models.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: models.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/pi-local/src/server/models.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it } from "vitest";
 import {
   ensurePiModelConfiguredAndAvailable,
@@ -31,3 +45,4 @@ describe("pi models", () => {
     ).rejects.toThrow();
   });
 });
+// [END: module]

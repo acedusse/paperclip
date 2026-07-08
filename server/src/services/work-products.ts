@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/work-products.ts
+ * ABOUT: work-products.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - work-products.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: work-products.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/work-products.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { issueWorkProducts } from "@paperclipai/db";
@@ -122,3 +136,4 @@ export function workProductService(db: Db) {
 }
 
 export { toIssueWorkProduct };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/workspace-operations.ts
+ * ABOUT: workspace-operations.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-operations.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-operations.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-operations.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import type { Db } from "@paperclipai/db";
 import { workspaceOperations } from "@paperclipai/db";
@@ -259,3 +273,4 @@ export function workspaceOperationService(db: Db) {
 }
 
 export { toWorkspaceOperation };
+// [END: module]

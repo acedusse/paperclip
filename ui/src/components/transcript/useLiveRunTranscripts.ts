@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/transcript/useLiveRunTranscripts.ts
+ * ABOUT: useLiveRunTranscripts.ts (transcript module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useLiveRunTranscripts.ts (transcript module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useLiveRunTranscripts.ts (transcript module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/transcript/useLiveRunTranscripts.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { LiveEvent } from "@paperclipai/shared";
@@ -426,3 +440,4 @@ export function useLiveRunTranscripts({
     },
   };
 }
+// [END: module]

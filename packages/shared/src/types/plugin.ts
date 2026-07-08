@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/plugin.ts
+ * ABOUT: plugin.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/plugin.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   PluginStatus,
   PluginCategory,
@@ -852,3 +866,4 @@ export interface PluginWebhookDeliveryRecord {
   /** ISO 8601 creation timestamp. */
   createdAt: Date;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/user-profiles.ts
+ * ABOUT: user-profiles.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - user-profiles.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: user-profiles.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/user-profiles.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router } from "express";
 import { and, desc, eq, gte, isNull, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -434,3 +448,4 @@ export function userProfileRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

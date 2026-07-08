@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/prompts/llm.ts
+ * ABOUT: llm.ts (prompts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - llm.ts (prompts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: llm.ts (prompts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/prompts/llm.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import type { LlmConfig } from "../config/schema.js";
 
@@ -41,3 +55,4 @@ export async function promptLlm(): Promise<LlmConfig | undefined> {
 
   return { provider, apiKey };
 }
+// [END: module]

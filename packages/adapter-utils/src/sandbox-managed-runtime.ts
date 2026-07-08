@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/sandbox-managed-runtime.ts
+ * ABOUT: sandbox-managed-runtime.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-managed-runtime.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-managed-runtime.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/sandbox-managed-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile as execFileCallback } from "node:child_process";
 import { constants as fsConstants, promises as fs } from "node:fs";
 import os from "node:os";
@@ -601,3 +615,4 @@ export async function prepareSandboxManagedRuntime(input: {
     },
   };
 }
+// [END: module]

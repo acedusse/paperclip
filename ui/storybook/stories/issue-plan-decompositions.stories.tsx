@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/issue-plan-decompositions.stories.tsx
+ * ABOUT: issue-plan-decompositions.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-plan-decompositions.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-plan-decompositions.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/issue-plan-decompositions.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useQueryClient } from "@tanstack/react-query";
@@ -127,3 +141,4 @@ export const Completed: Story = {
     ],
   },
 };
+// [END: module]

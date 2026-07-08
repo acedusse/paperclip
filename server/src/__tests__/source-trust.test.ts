@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/source-trust.test.ts
+ * ABOUT: source-trust.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - source-trust.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: source-trust.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/source-trust.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -296,3 +310,4 @@ describeEmbeddedPostgres("resolveActorSourceTrustForIssue", () => {
     });
   });
 });
+// [END: module]

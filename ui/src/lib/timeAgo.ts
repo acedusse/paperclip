@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/timeAgo.ts
+ * ABOUT: timeAgo.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - timeAgo.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: timeAgo.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/timeAgo.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const MINUTE = 60;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
@@ -29,3 +43,4 @@ export function timeAgo(date: Date | string): string {
   const mo = Math.floor(seconds / MONTH);
   return `${mo}mo ago`;
 }
+// [END: module]

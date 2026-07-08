@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/dev-server-status.test.ts
+ * ABOUT: dev-server-status.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-server-status.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-server-status.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/dev-server-status.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -101,3 +115,4 @@ describe("dev server status helpers", () => {
     });
   });
 });
+// [END: module]

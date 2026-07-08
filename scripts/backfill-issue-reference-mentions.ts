@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/backfill-issue-reference-mentions.ts
+ * ABOUT: backfill-issue-reference-mentions.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - backfill-issue-reference-mentions.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: backfill-issue-reference-mentions.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/backfill-issue-reference-mentions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { companies, createDb } from "../packages/db/src/index.js";
 import { loadConfig } from "../server/src/config.js";
 import { issueReferenceService } from "../server/src/services/issue-references.js";
@@ -41,3 +55,4 @@ void main().catch((error) => {
   console.error(`Issue reference backfill failed: ${message}`);
   process.exitCode = 1;
 });
+// [END: module]

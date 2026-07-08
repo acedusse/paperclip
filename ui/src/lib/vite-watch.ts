@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/vite-watch.ts
+ * ABOUT: vite-watch.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vite-watch.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vite-watch.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/vite-watch.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const TEST_DIRECTORY_NAMES = new Set([
   "__tests__",
   "_tests",
@@ -27,3 +41,4 @@ export function createUiDevWatchOptions(currentWorkingDirectory: string) {
       : {}),
   };
 }
+// [END: module]

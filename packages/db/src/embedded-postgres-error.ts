@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/embedded-postgres-error.ts
+ * ABOUT: embedded-postgres-error.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - embedded-postgres-error.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: embedded-postgres-error.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/embedded-postgres-error.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const DEFAULT_RECENT_LOG_LIMIT = 40;
 const RECENT_LOG_SUMMARY_LINES = 8;
 
@@ -87,3 +101,4 @@ export function formatEmbeddedPostgresError(
 
   return new Error(parts.join(" "));
 }
+// [END: module]

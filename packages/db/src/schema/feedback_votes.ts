@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/feedback_votes.ts
+ * ABOUT: feedback_votes.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback_votes.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback_votes.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/feedback_votes.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { boolean, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { issues } from "./issues.js";
@@ -32,3 +46,4 @@ export const feedbackVotes = pgTable(
     ),
   }),
 );
+// [END: module]

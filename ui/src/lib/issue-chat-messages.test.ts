@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-chat-messages.test.ts
+ * ABOUT: issue-chat-messages.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-chat-messages.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-chat-messages.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-chat-messages.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Agent } from "@paperclipai/shared";
 import {
@@ -1081,3 +1095,4 @@ describe("stabilizeThreadMessages", () => {
     expect(secondStable.messages).toBe(firstStable.messages);
   });
 });
+// [END: module]

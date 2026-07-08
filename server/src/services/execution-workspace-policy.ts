@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/execution-workspace-policy.ts
+ * ABOUT: execution-workspace-policy.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspace-policy.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspace-policy.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/execution-workspace-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ExecutionWorkspaceMode,
   ExecutionWorkspaceStrategy,
@@ -243,3 +257,4 @@ export function buildExecutionWorkspaceAdapterConfig(input: {
 
   return nextConfig;
 }
+// [END: module]

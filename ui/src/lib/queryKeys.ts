@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/queryKeys.ts
+ * ABOUT: queryKeys.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - queryKeys.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: queryKeys.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/queryKeys.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const queryKeys = {
   companies: {
     all: ["companies"] as const,
@@ -264,3 +278,4 @@ export const queryKeys = {
     all: ["adapters"] as const,
   },
 };
+// [END: module]

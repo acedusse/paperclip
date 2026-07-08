@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-orchestration-smoke-example/src/worker.ts
+ * ABOUT: worker.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worker.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worker.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-orchestration-smoke-example/src/worker.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { definePlugin, runWorker, type PluginApiRequestInput } from "@paperclipai/plugin-sdk";
 
@@ -251,3 +265,4 @@ const plugin = definePlugin({
 
 export default plugin;
 runWorker(plugin, import.meta.url);
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-worker-manager.test.ts
+ * ABOUT: plugin-worker-manager.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-worker-manager.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-worker-manager.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-worker-manager.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
@@ -418,3 +432,4 @@ describe("plugin-worker-manager stderr failure context", () => {
     }
   });
 });
+// [END: module]

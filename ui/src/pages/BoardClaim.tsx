@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/BoardClaim.tsx
+ * ABOUT: BoardClaim.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BoardClaim.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BoardClaim.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/BoardClaim.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "@/lib/router";
@@ -123,3 +137,4 @@ export function BoardClaimPage() {
     </div>
   );
 }
+// [END: module]

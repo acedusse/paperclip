@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/utils.ts
+ * ABOUT: utils.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - utils.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: utils.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/utils.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Re-export everything from the shared adapter-utils/server-utils package.
 // This file is kept as a convenience shim so existing in-tree
 // imports (process/, http/, heartbeat.ts) don't need rewriting.
@@ -92,3 +106,4 @@ export async function runChildProcess(
     onLogError: (err, id, msg) => logger.warn({ err, runId: id }, msg),
   });
 }
+// [END: module]

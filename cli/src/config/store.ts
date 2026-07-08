@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/config/store.ts
+ * ABOUT: store.ts (config module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - store.ts (config module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: store.ts (config module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/config/store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { paperclipConfigSchema, type PaperclipConfig } from "./schema.js";
@@ -118,3 +132,4 @@ export function writeConfig(
 export function configExists(configPath?: string): boolean {
   return fs.existsSync(resolveConfigPath(configPath));
 }
+// [END: module]

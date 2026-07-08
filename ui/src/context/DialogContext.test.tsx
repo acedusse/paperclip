@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/DialogContext.test.tsx
+ * ABOUT: DialogContext.test.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DialogContext.test.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DialogContext.test.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/DialogContext.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -56,3 +70,4 @@ describe("DialogContext", () => {
     act(() => root.unmount());
   });
 });
+// [END: module]

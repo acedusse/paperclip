@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ImageGalleryModal.tsx
+ * ABOUT: ImageGalleryModal.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ImageGalleryModal.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ImageGalleryModal.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ImageGalleryModal.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { ChevronLeft, ChevronRight, Download, X } from "lucide-react";
@@ -149,3 +163,4 @@ export function ImageGalleryModal({
     </DialogPrimitive.Root>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-thread-interactions.ts
+ * ABOUT: issue-thread-interactions.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-thread-interactions.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-thread-interactions.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-thread-interactions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type {
   AskUserQuestionsAnswer,
   AskUserQuestionsInteraction,
@@ -212,3 +226,4 @@ export function getQuestionAnswerLabels(args: {
   if (otherText) labels.push(`Other: ${otherText}`);
   return labels;
 }
+// [END: module]

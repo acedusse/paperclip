@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/command-managed-runtime.test.ts
+ * ABOUT: command-managed-runtime.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - command-managed-runtime.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: command-managed-runtime.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/command-managed-runtime.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -396,3 +410,4 @@ describe("command managed runtime", () => {
     expect(progress.at(-1)?.done).toBe(payload.length);
   });
 });
+// [END: module]

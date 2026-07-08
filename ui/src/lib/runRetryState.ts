@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/runRetryState.ts
+ * ABOUT: runRetryState.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runRetryState.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runRetryState.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/runRetryState.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { formatDateTime } from "./utils";
 
 type RetryAwareRun = {
@@ -97,3 +111,4 @@ export function describeRunRetryState(run: RetryAwareRun): RunRetryStateSummary 
     retryOfRunId,
   };
 }
+// [END: module]

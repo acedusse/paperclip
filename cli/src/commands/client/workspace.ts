@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/workspace.ts
+ * ABOUT: workspace.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/workspace.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import {
   addCommonClientOptions,
@@ -325,3 +339,4 @@ function buildApiUrl(apiBase: string, path: string): string {
 function parseJson(value: string): unknown {
   return JSON.parse(value) as unknown;
 }
+// [END: module]

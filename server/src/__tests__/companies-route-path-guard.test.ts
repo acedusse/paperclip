@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/companies-route-path-guard.test.ts
+ * ABOUT: companies-route-path-guard.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - companies-route-path-guard.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: companies-route-path-guard.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/companies-route-path-guard.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { describe, expect, it, vi } from "vitest";
@@ -63,3 +77,4 @@ describe("company routes malformed issue path guard", () => {
     });
   });
 });
+// [END: module]

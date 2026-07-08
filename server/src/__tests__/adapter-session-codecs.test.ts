@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/adapter-session-codecs.test.ts
+ * ABOUT: adapter-session-codecs.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-session-codecs.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-session-codecs.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/adapter-session-codecs.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { sessionCodec as claudeSessionCodec } from "@paperclipai/adapter-claude-local/server";
 import { sessionCodec as codexSessionCodec, isCodexUnknownSessionError } from "@paperclipai/adapter-codex-local/server";
@@ -239,3 +253,4 @@ describe("gemini resume recovery detection", () => {
     ).toBe(false);
   });
 });
+// [END: module]

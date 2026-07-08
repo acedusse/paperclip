@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/secrets/types.ts
+ * ABOUT: types.ts (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/secrets/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   SecretProvider,
   SecretProviderConfigDiscoveryPreviewResult,
@@ -189,3 +203,4 @@ export interface SecretProviderModule {
     providerConfig?: SecretProviderVaultRuntimeConfig | null;
   }): Promise<SecretProviderHealthCheck>;
 }
+// [END: module]

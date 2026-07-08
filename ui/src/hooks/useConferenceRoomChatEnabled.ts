@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useConferenceRoomChatEnabled.ts
+ * ABOUT: useConferenceRoomChatEnabled.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useConferenceRoomChatEnabled.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useConferenceRoomChatEnabled.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useConferenceRoomChatEnabled.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useContext } from "react";
 import { QueryClient, QueryClientContext, useQuery } from "@tanstack/react-query";
 import { instanceSettingsApi } from "@/api/instanceSettings";
@@ -43,3 +57,4 @@ export function useConferenceRoomChatEnabled(): { enabled: boolean; loaded: bool
   }
   return { enabled: data?.enableConferenceRoomChat === true, loaded: isFetched };
 }
+// [END: module]

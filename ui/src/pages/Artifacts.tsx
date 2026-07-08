@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Artifacts.tsx
+ * ABOUT: Artifacts.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Artifacts.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Artifacts.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Artifacts.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ArrowLeft, Check, Layers, Package, Search, X } from "lucide-react";
@@ -374,3 +388,4 @@ export function Artifacts() {
     </div>
   );
 }
+// [END: module]

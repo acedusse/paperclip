@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/secrets/aws-secrets-manager-provider.ts
+ * ABOUT: aws-secrets-manager-provider.ts (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - aws-secrets-manager-provider.ts (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: aws-secrets-manager-provider.ts (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/secrets/aws-secrets-manager-provider.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, createHmac } from "node:crypto";
 import { S3Client } from "@aws-sdk/client-s3";
 import type { DeploymentMode, SecretProviderConfigDiscoveryPreviewResult } from "@paperclipai/shared";
@@ -1311,3 +1325,4 @@ export function createAwsSecretsManagerProvider(
 }
 
 export const awsSecretsManagerProvider = createAwsSecretsManagerProvider();
+// [END: module]

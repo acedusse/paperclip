@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MissingPluginTabPlaceholder.tsx
+ * ABOUT: MissingPluginTabPlaceholder.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MissingPluginTabPlaceholder.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MissingPluginTabPlaceholder.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MissingPluginTabPlaceholder.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Link } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 
@@ -21,3 +35,4 @@ export function MissingPluginTabPlaceholder({
     </div>
   );
 }
+// [END: module]

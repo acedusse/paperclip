@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/planning-mode-visual-verification.spec.ts
+ * ABOUT: planning-mode-visual-verification.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - planning-mode-visual-verification.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: planning-mode-visual-verification.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/planning-mode-visual-verification.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { expect, test } from "@playwright/test";
 
 const SKIP_LLM = process.env.PAPERCLIP_E2E_SKIP_LLM !== "false";
@@ -165,3 +179,4 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
     fullPage: true,
   });
 });
+// [END: module]

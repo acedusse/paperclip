@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/environment-probe.test.ts
+ * ABOUT: environment-probe.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-probe.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-probe.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/environment-probe.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockEnsureSshWorkspaceReady = vi.hoisted(() => vi.fn());
@@ -246,3 +260,4 @@ describe("probeEnvironment", () => {
     );
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/http/index.ts
+ * ABOUT: index.ts (http module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (http module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (http module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/http/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ServerAdapterModule } from "../types.js";
 import { execute } from "./execute.js";
 import { testEnvironment } from "./test.js";
@@ -19,3 +33,4 @@ Core fields:
 - timeoutSec (number, optional): request timeout in seconds
 `,
 };
+// [END: module]

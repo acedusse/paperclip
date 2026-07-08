@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/agent-config-primitives.tsx
+ * ABOUT: agent-config-primitives.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-config-primitives.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-config-primitives.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/agent-config-primitives.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
   Tooltip,
@@ -464,3 +478,4 @@ export function InlineField({ label, hint, children }: { label: string; hint?: s
     </div>
   );
 }
+// [END: module]

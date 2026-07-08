@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MetricCard.tsx
+ * ABOUT: MetricCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MetricCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MetricCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MetricCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "@/lib/router";
@@ -51,3 +65,4 @@ export function MetricCard({ icon: Icon, value, label, description, to, onClick 
 
   return inner;
 }
+// [END: module]

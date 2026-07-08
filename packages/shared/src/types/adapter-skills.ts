@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/adapter-skills.ts
+ * ABOUT: adapter-skills.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-skills.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-skills.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/adapter-skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type AgentSkillSyncMode = "unsupported" | "persistent" | "ephemeral";
 
 export type AgentSkillState =
@@ -48,3 +62,4 @@ export interface AgentSkillSnapshot {
 export interface AgentSkillSyncRequest {
   desiredSkills: Array<string | AgentDesiredSkillEntry>;
 }
+// [END: module]

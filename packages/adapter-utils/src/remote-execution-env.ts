@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/remote-execution-env.ts
+ * ABOUT: remote-execution-env.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - remote-execution-env.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: remote-execution-env.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/remote-execution-env.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const REMOTE_EXECUTION_ENV_IDENTITY_KEYS = new Set([
   "PATH",
   "HOME",
@@ -47,3 +61,4 @@ export function sanitizeRemoteExecutionEnv(
   }
   return sanitized;
 }
+// [END: module]

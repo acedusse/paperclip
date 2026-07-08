@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/routes/adapters.ts
+ * ABOUT: adapters.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapters.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapters.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/adapters.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Adapter management REST API routes
  *
  * This module provides Express routes for managing external adapter plugins:
@@ -691,3 +705,4 @@ export function adapterRoutes() {
 
   return router;
 }
+// [END: module]

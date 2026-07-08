@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-approvals.ts
+ * ABOUT: issue-approvals.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-approvals.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-approvals.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-approvals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { approvals, issueApprovals, issues } from "@paperclipai/db";
@@ -172,3 +186,4 @@ export function issueApprovalService(db: Db) {
     },
   };
 }
+// [END: module]

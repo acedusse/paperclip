@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/file-resources.test.ts
+ * ABOUT: file-resources.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - file-resources.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: file-resources.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/file-resources.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import type { Request } from "express";
 import { execFile } from "node:child_process";
@@ -1375,3 +1389,4 @@ describeEmbeddedPostgres("file resource route guards", () => {
     expect(third.status).toBe(429);
   });
 });
+// [END: module]

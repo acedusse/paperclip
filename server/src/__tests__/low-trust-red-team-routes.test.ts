@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/low-trust-red-team-routes.test.ts
+ * ABOUT: low-trust-red-team-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - low-trust-red-team-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: low-trust-red-team-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/low-trust-red-team-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { createServer } from "node:http";
 import express from "express";
@@ -1133,3 +1147,4 @@ describeEmbeddedPostgres("low-trust red-team HTTP route regression suite", () =>
     expect(productsForSource).toHaveLength(1);
   });
 });
+// [END: module]

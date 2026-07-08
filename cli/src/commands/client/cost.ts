@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/cost.ts
+ * ABOUT: cost.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cost.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cost.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/cost.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import {
   addCommonClientOptions,
@@ -165,3 +179,4 @@ function addCompanyPostJson(parent: Command, name: string, description: string, 
 function parseJson(value: string): unknown {
   return JSON.parse(value) as unknown;
 }
+// [END: module]

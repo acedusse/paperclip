@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-reference.ts
+ * ABOUT: issue-reference.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-reference.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-reference.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-reference.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 type MarkdownNode = {
   type: string;
   value?: string;
@@ -177,3 +191,4 @@ export function remarkLinkIssueReferences(options?: RemarkLinkIssueReferencesOpt
     rewriteMarkdownTree(tree, knownPrefixes);
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/execute.test.ts
+ * ABOUT: execute.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it } from "vitest";
 
 import { ensureRemoteOpenCodeModelConfiguredAndAvailable } from "./execute.js";
@@ -60,3 +74,4 @@ describe("ensureRemoteOpenCodeModelConfiguredAndAvailable", () => {
     ).rejects.toThrow();
   });
 });
+// [END: module]

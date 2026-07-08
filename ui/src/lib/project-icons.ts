@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/project-icons.ts
+ * ABOUT: project-icons.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project-icons.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project-icons.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/project-icons.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   Atom,
   Box,
@@ -92,3 +106,4 @@ export function getProjectIcon(iconName: string | null | undefined): LucideIcon 
   }
   return PROJECT_ICONS[DEFAULT_ICON];
 }
+// [END: module]

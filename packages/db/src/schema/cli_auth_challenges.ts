@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/cli_auth_challenges.ts
+ * ABOUT: cli_auth_challenges.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cli_auth_challenges.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cli_auth_challenges.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/cli_auth_challenges.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, index } from "drizzle-orm/pg-core";
 import { authUsers } from "./auth.js";
 import { companies } from "./companies.js";
@@ -28,3 +42,4 @@ export const cliAuthChallenges = pgTable(
     requestedCompanyIdx: index("cli_auth_challenges_requested_company_idx").on(table.requestedCompanyId),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/InstanceExperimentalSettings.test.tsx
+ * ABOUT: InstanceExperimentalSettings.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InstanceExperimentalSettings.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InstanceExperimentalSettings.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/InstanceExperimentalSettings.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -173,3 +187,4 @@ describe("InstanceExperimentalSettings — Conference Room Chat card (PAP-11233)
     });
   });
 });
+// [END: module]

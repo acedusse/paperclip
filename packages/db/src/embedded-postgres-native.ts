@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/embedded-postgres-native.ts
+ * ABOUT: embedded-postgres-native.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - embedded-postgres-native.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: embedded-postgres-native.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/embedded-postgres-native.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { promises as fs } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -83,3 +97,4 @@ export async function prepareEmbeddedPostgresNativeRuntime(): Promise<void> {
   prependPathEnv("LD_LIBRARY_PATH", libDir);
   await ensureLinuxSharedLibraryAliases(libDir);
 }
+// [END: module]

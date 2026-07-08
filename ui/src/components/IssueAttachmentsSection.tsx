@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueAttachmentsSection.tsx
+ * ABOUT: IssueAttachmentsSection.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueAttachmentsSection.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueAttachmentsSection.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueAttachmentsSection.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState, type DragEvent, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { IssueAttachment } from "@paperclipai/shared";
@@ -371,3 +385,4 @@ export function IssueAttachmentsSection({
     </div>
   );
 }
+// [END: module]

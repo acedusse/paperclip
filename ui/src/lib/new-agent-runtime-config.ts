@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/new-agent-runtime-config.ts
+ * ABOUT: new-agent-runtime-config.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - new-agent-runtime-config.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: new-agent-runtime-config.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/new-agent-runtime-config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { AGENT_DEFAULT_MAX_CONCURRENT_RUNS } from "@paperclipai/shared";
 import { defaultCreateValues } from "../components/agent-config-defaults";
 
@@ -30,3 +44,4 @@ export function buildNewAgentRuntimeConfig(input?: {
 
   return config;
 }
+// [END: module]

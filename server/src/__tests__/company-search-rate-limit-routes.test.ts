@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/company-search-rate-limit-routes.test.ts
+ * ABOUT: company-search-rate-limit-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-search-rate-limit-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-search-rate-limit-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/company-search-rate-limit-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { describe, expect, it, vi } from "vitest";
@@ -52,3 +66,4 @@ describe("company search route rate limiting", () => {
     expect(limited.headers["retry-after"]).toBe("60");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/server/execute.test.ts
+ * ABOUT: execute.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/server/execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -185,3 +199,4 @@ describe("grok_local execute", () => {
     expect(await pathExists(path.join(root, ".claude", "skills", "paperclip"))).toBe(false);
   });
 });
+// [END: module]

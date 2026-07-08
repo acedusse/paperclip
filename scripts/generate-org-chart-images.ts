@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/generate-org-chart-images.ts
+ * ABOUT: generate-org-chart-images.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - generate-org-chart-images.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: generate-org-chart-images.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/generate-org-chart-images.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 #!/usr/bin/env npx tsx
 /**
  * Standalone org chart image generator.
@@ -692,3 +706,4 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
+// [END: module]

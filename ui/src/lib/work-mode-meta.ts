@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/work-mode-meta.ts
+ * ABOUT: work-mode-meta.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - work-mode-meta.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: work-mode-meta.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/work-mode-meta.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { IssueWorkMode } from "@paperclipai/shared";
 import { ClipboardList, Hammer, MessageCircleQuestion, type LucideIcon } from "lucide-react";
 
@@ -91,3 +105,4 @@ export function titleForPendingWorkMode(mode: IssueWorkMode, conferenceRoomChat:
   }
   return `${conferenceRoomChat ? "Agent" : "Standard"} mode for this submission. Click to change.`;
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/pages/AdapterManager.tsx
+ * ABOUT: AdapterManager.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AdapterManager.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AdapterManager.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/AdapterManager.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Adapter Manager page — install, view, and manage external adapters.
  *
  * Adapters are simpler than plugins: no workers, no events, no manifests.
@@ -682,3 +696,4 @@ export function AdapterManager() {
     </div>
   );
 }
+// [END: module]

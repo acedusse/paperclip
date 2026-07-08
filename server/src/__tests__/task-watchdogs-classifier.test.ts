@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/task-watchdogs-classifier.test.ts
+ * ABOUT: task-watchdogs-classifier.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - task-watchdogs-classifier.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: task-watchdogs-classifier.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/task-watchdogs-classifier.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { classifyTaskWatchdogSubtree, type TaskWatchdogClassifierIssue } from "../services/task-watchdogs.ts";
 
@@ -203,3 +217,4 @@ describe("task watchdog subtree classifier", () => {
     expect(result.state).toBe("not_applicable");
   });
 });
+// [END: module]

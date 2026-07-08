@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/artifacts/ArtifactGroupCard.test.tsx
+ * ABOUT: ArtifactGroupCard.test.tsx (artifacts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ArtifactGroupCard.test.tsx (artifacts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ArtifactGroupCard.test.tsx (artifacts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/artifacts/ArtifactGroupCard.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -119,3 +133,4 @@ describe("ArtifactGroupCard", () => {
     expect(card).not.toBeNull();
   });
 });
+// [END: module]

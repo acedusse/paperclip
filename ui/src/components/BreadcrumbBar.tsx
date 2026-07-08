@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/BreadcrumbBar.tsx
+ * ABOUT: BreadcrumbBar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BreadcrumbBar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BreadcrumbBar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/BreadcrumbBar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Link } from "@/lib/router";
 import { Menu } from "lucide-react";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -119,3 +133,4 @@ export function BreadcrumbBar() {
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/invite-accept-gateway-defaults.test.ts
+ * ABOUT: invite-accept-gateway-defaults.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-accept-gateway-defaults.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-accept-gateway-defaults.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/invite-accept-gateway-defaults.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildJoinDefaultsPayloadForAccept,
@@ -117,3 +131,4 @@ describe("normalizeAgentDefaultsForJoin (openclaw_gateway)", () => {
     expect(normalized.normalized?.devicePrivateKeyPem).toBeUndefined();
   });
 });
+// [END: module]

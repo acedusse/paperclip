@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/frontmatter.test.ts
+ * ABOUT: frontmatter.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - frontmatter.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: frontmatter.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/frontmatter.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parseFrontmatterMarkdown } from "./frontmatter.js";
 
@@ -99,3 +113,4 @@ describe("parseFrontmatterMarkdown", () => {
     expect(parsed.frontmatter.version).toBe("1.");
   });
 });
+// [END: module]

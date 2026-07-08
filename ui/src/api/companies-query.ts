@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/companies-query.ts
+ * ABOUT: companies-query.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - companies-query.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: companies-query.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/companies-query.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Company } from "@paperclipai/shared";
 import { companiesApi } from "./companies";
 import { ApiError } from "./client";
@@ -23,3 +37,4 @@ export const companiesListQueryOptions = {
   },
   retry: false,
 } as const;
+// [END: module]

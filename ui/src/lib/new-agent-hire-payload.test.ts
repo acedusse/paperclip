@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/new-agent-hire-payload.test.ts
+ * ABOUT: new-agent-hire-payload.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - new-agent-hire-payload.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: new-agent-hire-payload.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/new-agent-hire-payload.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { buildNewAgentHirePayload } from "./new-agent-hire-payload";
@@ -91,3 +105,4 @@ describe("buildNewAgentHirePayload", () => {
     });
   });
 });
+// [END: module]

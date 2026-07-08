@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/teams-catalog.ts
+ * ABOUT: teams-catalog.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams-catalog.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams-catalog.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/teams-catalog.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   portabilityAdapterOverrideSchema,
@@ -169,3 +183,4 @@ export const catalogTeamSkillPreparationSchema = z.object({
 export type CatalogTeamListQuery = z.infer<typeof catalogTeamListQuerySchema>;
 export type CatalogTeamPreview = z.infer<typeof catalogTeamPreviewSchema>;
 export type CatalogTeamInstall = z.infer<typeof catalogTeamInstallSchema>;
+// [END: module]

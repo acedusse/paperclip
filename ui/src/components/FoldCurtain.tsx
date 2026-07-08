@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FoldCurtain.tsx
+ * ABOUT: FoldCurtain.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FoldCurtain.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FoldCurtain.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FoldCurtain.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   useEffect,
   useLayoutEffect,
@@ -143,3 +157,4 @@ export function FoldCurtain({
     </div>
   );
 }
+// [END: module]

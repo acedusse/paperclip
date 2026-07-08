@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/plugins/launchers.tsx
+ * ABOUT: launchers.tsx (plugins module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - launchers.tsx (plugins module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: launchers.tsx (plugins module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/plugins/launchers.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   Component,
   createContext,
@@ -860,3 +874,4 @@ export function PluginLauncherButton({
     </div>
   );
 }
+// [END: module]

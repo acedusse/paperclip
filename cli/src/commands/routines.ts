@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/routines.ts
+ * ABOUT: routines.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/routines.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import net from "node:net";
 import path from "node:path";
@@ -352,3 +366,4 @@ export function registerRoutineCommands(program: Command): void {
       }
     });
 }
+// [END: module]

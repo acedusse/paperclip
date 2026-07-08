@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/runtime-progress.ts
+ * ABOUT: runtime-progress.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-progress.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-progress.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/runtime-progress.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Shared, throttled progress reporting for execution-target sync/restore.
 //
 // Transports (sandbox / SSH) own the byte counting and call `report()` as bytes
@@ -150,3 +164,4 @@ export function createRuntimeProgressReporter(
     },
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/teams-catalog/src/catalog-builder.test.ts
+ * ABOUT: catalog-builder.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - catalog-builder.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: catalog-builder.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/teams-catalog/src/catalog-builder.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -282,3 +296,4 @@ async function writeTeam(
     await fs.writeFile(filePath, content, "utf8");
   }
 }
+// [END: module]

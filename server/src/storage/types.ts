@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/storage/types.ts
+ * ABOUT: types.ts (storage module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (storage module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (storage module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/storage/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { StorageProvider as StorageProviderId } from "@paperclipai/shared";
 import type { Readable } from "node:stream";
 
@@ -64,3 +78,4 @@ export interface StorageService {
   headObject(companyId: string, objectKey: string): Promise<HeadObjectResult>;
   deleteObject(companyId: string, objectKey: string): Promise<void>;
 }
+// [END: module]

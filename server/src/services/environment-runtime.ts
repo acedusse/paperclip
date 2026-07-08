@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/environment-runtime.ts
+ * ABOUT: environment-runtime.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environment-runtime.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environment-runtime.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/environment-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { and, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
@@ -1295,3 +1309,4 @@ export function environmentRuntimeService(
 }
 
 export type EnvironmentRuntimeService = ReturnType<typeof environmentRuntimeService>;
+// [END: module]

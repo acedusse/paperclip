@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/card.tsx
+ * ABOUT: card.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - card.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: card.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/card.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -90,3 +104,4 @@ export {
   CardDescription,
   CardContent,
 }
+// [END: module]

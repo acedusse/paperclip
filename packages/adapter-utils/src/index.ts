@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type {
   AdapterAgent,
   AdapterRuntime,
@@ -83,3 +97,4 @@ export type {
   SandboxCallbackBridgeWorkerHandle,
   StartedSandboxCallbackBridgeServer,
 } from "./sandbox-callback-bridge.js";
+// [END: module]

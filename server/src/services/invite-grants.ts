@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/invite-grants.ts
+ * ABOUT: invite-grants.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-grants.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-grants.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/invite-grants.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { PERMISSION_KEYS } from "@paperclipai/shared";
 import type { HumanCompanyMembershipRole } from "@paperclipai/shared";
 import { grantsForHumanRole } from "./company-member-roles.js";
@@ -66,3 +80,4 @@ export function humanJoinGrantsFromDefaults(
   const grants = grantsFromDefaults(defaultsPayload, "human");
   return grants.length > 0 ? grants : grantsForHumanRole(membershipRole);
 }
+// [END: module]

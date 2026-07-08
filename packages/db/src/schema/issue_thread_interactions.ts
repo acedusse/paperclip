@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_thread_interactions.ts
+ * ABOUT: issue_thread_interactions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_thread_interactions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_thread_interactions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_thread_interactions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   IssueThreadInteractionPayload,
   IssueThreadInteractionResult,
@@ -52,3 +66,4 @@ export const issueThreadInteractions = pgTable(
     sourceCommentIdx: index("issue_thread_interactions_source_comment_idx").on(table.sourceCommentId),
   }),
 );
+// [END: module]

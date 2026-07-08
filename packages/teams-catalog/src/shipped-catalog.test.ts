@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/teams-catalog/src/shipped-catalog.test.ts
+ * ABOUT: shipped-catalog.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - shipped-catalog.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: shipped-catalog.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/teams-catalog/src/shipped-catalog.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -118,3 +132,4 @@ function formatViolations(label: string, teams: CatalogTeam[]) {
   const detail = teams.map((team) => `${team.key} (${team.trustLevel})`).join(", ");
   return `${label}: ${detail}`;
 }
+// [END: module]

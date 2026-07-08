@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/source-resolved-watchdog-fold.ts
+ * ABOUT: source-resolved-watchdog-fold.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - source-resolved-watchdog-fold.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: source-resolved-watchdog-fold.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/source-resolved-watchdog-fold.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { HeartbeatRun } from "@paperclipai/shared";
 
 export type SourceResolvedFoldCleanupOutcome =
@@ -132,3 +146,4 @@ export function shortenEvidenceId(id: string): string {
   if (id.length <= 12) return id;
   return id.slice(0, 8);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/document-annotation.ts
+ * ABOUT: document-annotation.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotation.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotation.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/document-annotation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   DOCUMENT_ANNOTATION_ANCHOR_CONFIDENCES,
@@ -65,3 +79,4 @@ export const updateDocumentAnnotationThreadSchema = z.object({
 export type CreateDocumentAnnotationThread = z.infer<typeof createDocumentAnnotationThreadSchema>;
 export type CreateDocumentAnnotationComment = z.infer<typeof createDocumentAnnotationCommentSchema>;
 export type UpdateDocumentAnnotationThread = z.infer<typeof updateDocumentAnnotationThreadSchema>;
+// [END: module]

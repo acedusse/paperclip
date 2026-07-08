@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/clipboard.ts
+ * ABOUT: clipboard.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - clipboard.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: clipboard.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/clipboard.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export async function copyTextToClipboard(text: string): Promise<void> {
   if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
     try {
@@ -29,3 +43,4 @@ export async function copyTextToClipboard(text: string): Promise<void> {
     document.body.removeChild(textarea);
   }
 }
+// [END: module]

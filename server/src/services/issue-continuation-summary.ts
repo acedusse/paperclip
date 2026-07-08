@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issue-continuation-summary.ts
+ * ABOUT: issue-continuation-summary.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-continuation-summary.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-continuation-summary.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issue-continuation-summary.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { documents, issueDocuments, issues } from "@paperclipai/db";
@@ -282,3 +296,4 @@ export async function refreshIssueContinuationSummary(input: {
   });
   return result.document;
 }
+// [END: module]

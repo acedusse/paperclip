@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ArtifactsPanel.tsx
+ * ABOUT: ArtifactsPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ArtifactsPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ArtifactsPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ArtifactsPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { IssueWorkProduct } from "@paperclipai/shared";
@@ -335,3 +349,4 @@ function DocumentViewer({
     </div>
   );
 }
+// [END: module]

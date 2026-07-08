@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Secrets.render.test.tsx
+ * ABOUT: Secrets.render.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Secrets.render.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Secrets.render.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Secrets.render.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -654,3 +668,4 @@ describe("Secrets page layout", () => {
     });
   });
 });
+// [END: module]

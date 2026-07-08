@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/plugins/bridge.test.ts
+ * ABOUT: bridge.test.ts (plugins module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - bridge.test.ts (plugins module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: bridge.test.ts (plugins module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/plugins/bridge.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -333,3 +347,4 @@ describe("plugin React shim", () => {
     expect(source).toContain("export const startTransition = R.startTransition;");
   });
 });
+// [END: module]

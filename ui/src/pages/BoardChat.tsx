@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/BoardChat.tsx
+ * ABOUT: BoardChat.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BoardChat.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BoardChat.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/BoardChat.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   useEffect,
   useLayoutEffect,
@@ -1018,3 +1032,4 @@ export function BoardChat() {
     </div>
   );
 }
+// [END: module]

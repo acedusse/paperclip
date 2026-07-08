@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/resource-memberships.ts
+ * ABOUT: resource-memberships.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - resource-memberships.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: resource-memberships.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/resource-memberships.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request, type Response } from "express";
 import type { Db } from "@paperclipai/db";
 import { updateResourceMembershipSchema } from "@paperclipai/shared";
@@ -118,3 +132,4 @@ export function resourceMembershipRoutes(db: Db) {
 
   return router;
 }
+// [END: module]

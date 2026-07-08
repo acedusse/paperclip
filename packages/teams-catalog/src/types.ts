@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/teams-catalog/src/types.ts
+ * ABOUT: types.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/teams-catalog/src/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type CatalogTeamKind = "bundled" | "optional";
 
 export type CatalogTeamTrustLevel =
@@ -112,3 +126,4 @@ export interface CatalogValidationResult {
   errors: string[];
   manifest: CatalogManifest;
 }
+// [END: module]

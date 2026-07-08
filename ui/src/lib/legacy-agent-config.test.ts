@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/legacy-agent-config.test.ts
+ * ABOUT: legacy-agent-config.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - legacy-agent-config.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: legacy-agent-config.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/legacy-agent-config.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   hasLegacyWorkingDirectory,
@@ -38,3 +52,4 @@ describe("legacy agent config helpers", () => {
     ).toBe(true);
   });
 });
+// [END: module]

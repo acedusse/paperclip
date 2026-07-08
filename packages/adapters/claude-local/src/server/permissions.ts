@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/permissions.ts
+ * ABOUT: permissions.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - permissions.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: permissions.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/permissions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Explicit allowlist of Claude Code tools we permit when running inside a
 // sandbox. We use this instead of `--dangerously-skip-permissions` for sandbox
 // targets because the permission-approval prompts can't be answered by a
@@ -41,3 +55,4 @@ export function buildClaudeExecutionPermissionArgs(input: {
   }
   return ["--dangerously-skip-permissions"];
 }
+// [END: module]

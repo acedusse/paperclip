@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/execution-workspace-guards.ts
+ * ABOUT: execution-workspace-guards.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspace-guards.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspace-guards.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/execution-workspace-guards.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ExecutionWorkspace } from "./types/workspace-runtime.js";
 
 type ExecutionWorkspaceGuardTarget = Pick<ExecutionWorkspace, "closedAt" | "mode" | "name" | "status">;
@@ -17,3 +31,4 @@ export function getClosedIsolatedExecutionWorkspaceMessage(
 ): string {
   return `This issue is linked to the closed workspace "${workspace.name}". Move it to an open workspace before adding comments or resuming work.`;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/successful-run-handoff.test.ts
+ * ABOUT: successful-run-handoff.test.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - successful-run-handoff.test.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: successful-run-handoff.test.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/successful-run-handoff.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   FINISH_SUCCESSFUL_RUN_HANDOFF_REASON,
@@ -346,3 +360,4 @@ describe("successful run handoff decision", () => {
     expect(isSuccessfulRunHandoffRequiredNoticeBody("Unrelated comment")).toBe(false);
   });
 });
+// [END: module]

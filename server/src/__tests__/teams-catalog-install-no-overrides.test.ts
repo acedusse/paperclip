@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/teams-catalog-install-no-overrides.test.ts
+ * ABOUT: teams-catalog-install-no-overrides.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams-catalog-install-no-overrides.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams-catalog-install-no-overrides.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/teams-catalog-install-no-overrides.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import os from "node:os";
@@ -138,3 +152,4 @@ describeEmbeddedPostgres("teams catalog install with no caller adapter overrides
     expect(otherAdapters).toEqual(["claude_local", "claude_local"]);
   });
 });
+// [END: module]

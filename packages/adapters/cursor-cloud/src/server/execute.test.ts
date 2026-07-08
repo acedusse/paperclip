@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-cloud/src/server/execute.test.ts
+ * ABOUT: execute.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-cloud/src/server/execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AdapterExecutionContext } from "@paperclipai/adapter-utils";
 import { execute } from "./execute.js";
@@ -346,3 +360,4 @@ describe("cursor_cloud execute", () => {
     });
   });
 });
+// [END: module]

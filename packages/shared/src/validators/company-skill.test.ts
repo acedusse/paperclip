@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/company-skill.test.ts
+ * ABOUT: company-skill.test.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skill.test.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skill.test.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/company-skill.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   catalogSkillFileDetailSchema,
@@ -181,3 +195,4 @@ describe("company skill catalog validators", () => {
     expect(companySkillResetSchema.parse({ force: true })).toEqual({ force: true });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/e2b/src/plugin.test.ts
+ * ABOUT: plugin.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/e2b/src/plugin.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockCreate = vi.hoisted(() => vi.fn());
@@ -667,3 +681,4 @@ describe("E2B sandbox provider plugin", () => {
     expect(warnSpy).toHaveBeenCalled();
   });
 });
+// [END: module]

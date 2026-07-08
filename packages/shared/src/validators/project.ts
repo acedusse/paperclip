@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/project.ts
+ * ABOUT: project.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/project.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { PROJECT_STATUSES, PROJECT_ICON_NAMES } from "../constants.js";
 import { envConfigSchema } from "./secret.js";
@@ -125,3 +139,4 @@ export const updateProjectSchema = z.object(projectFields).partial();
 export type UpdateProject = z.infer<typeof updateProjectSchema>;
 
 export type ProjectExecutionWorkspacePolicy = z.infer<typeof projectExecutionWorkspacePolicySchema>;
+// [END: module]

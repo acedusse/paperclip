@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issue-comment-redaction.test.ts
+ * ABOUT: issue-comment-redaction.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-comment-redaction.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-comment-redaction.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issue-comment-redaction.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import express from "express";
 import request from "supertest";
@@ -258,3 +272,4 @@ describeEmbeddedPostgres("deleted issue comment redaction", () => {
     expect((await refs.listIssueReferenceSummary(sourceIssueId)).outbound).toEqual([]);
   });
 });
+// [END: module]

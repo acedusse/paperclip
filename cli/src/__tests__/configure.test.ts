@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/configure.test.ts
+ * ABOUT: configure.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - configure.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: configure.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/configure.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -97,3 +111,4 @@ describe("configure command", () => {
     }
   });
 });
+// [END: module]

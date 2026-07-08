@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/ui/types.ts
+ * ABOUT: types.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/ui/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Paperclip plugin UI SDK — types for plugin frontend components.
  *
  * Plugin UI bundles import from `@paperclipai/plugin-sdk/ui`.  This subpath
@@ -486,3 +500,4 @@ export interface PluginStreamResult<T = unknown> {
  * ```
  */
 export type PluginActionFn = (params?: Record<string, unknown>) => Promise<unknown>;
+// [END: module]

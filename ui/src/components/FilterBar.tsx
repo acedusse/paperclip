@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/FilterBar.tsx
+ * ABOUT: FilterBar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - FilterBar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: FilterBar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/FilterBar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,3 +51,4 @@ export function FilterBar({ filters, onRemove, onClear }: FilterBarProps) {
     </div>
   );
 }
+// [END: module]

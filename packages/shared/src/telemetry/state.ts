@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/telemetry/state.ts
+ * ABOUT: state.ts (telemetry module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - state.ts (telemetry module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: state.ts (telemetry module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/telemetry/state.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID, randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -29,3 +43,4 @@ export function loadOrCreateState(stateDir: string, version: string): TelemetryS
   writeFileSync(filePath, JSON.stringify(state, null, 2) + "\n", "utf-8");
   return state;
 }
+// [END: module]

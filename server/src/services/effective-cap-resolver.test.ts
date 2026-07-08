@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/effective-cap-resolver.test.ts
+ * ABOUT: effective-cap-resolver.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - effective-cap-resolver.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: effective-cap-resolver.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/effective-cap-resolver.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   CAP_WRITER_PRECEDENCE,
@@ -55,3 +69,4 @@ describe("effective-cap-resolver", () => {
     expect(configuredDefaultWriter.resolve({ configuredMax: null })).toBeNull();
   });
 });
+// [END: module]

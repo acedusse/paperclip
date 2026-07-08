@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/sessions.ts
+ * ABOUT: sessions.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sessions.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sessions.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/sessions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Sandbox as CloudflareSandbox } from "@cloudflare/sandbox";
 import { DEFAULT_SESSION_ID } from "./sandboxes.js";
 
@@ -82,3 +96,4 @@ export async function cleanupTimedOutExecution(
   }
   await sandbox.deleteSession(options.sessionId?.trim() || DEFAULT_SESSION_ID).catch(() => undefined);
 }
+// [END: module]

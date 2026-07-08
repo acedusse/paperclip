@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/http-log-policy.ts
+ * ABOUT: http-log-policy.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - http-log-policy.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: http-log-policy.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/http-log-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 const SILENCED_SUCCESS_METHODS = new Set(["GET", "HEAD"]);
 
 const SILENCED_SUCCESS_API_PATHS = [
@@ -48,3 +62,4 @@ export function shouldSilenceHttpSuccessLog(method: string | undefined, url: str
   if (SILENCED_SUCCESS_STATIC_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return true;
   return SILENCED_SUCCESS_API_PATHS.some((pattern) => pattern.test(pathname));
 }
+// [END: module]

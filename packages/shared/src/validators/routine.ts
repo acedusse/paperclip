@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/routine.ts
+ * ABOUT: routine.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routine.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routine.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/routine.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   ISSUE_PRIORITIES,
@@ -161,3 +175,4 @@ export type RunRoutine = z.infer<typeof runRoutineSchema>;
 
 export const rotateRoutineTriggerSecretSchema = z.object({});
 export type RotateRoutineTriggerSecret = z.infer<typeof rotateRoutineTriggerSecretSchema>;
+// [END: module]

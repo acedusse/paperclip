@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/TeamCatalog.fixtures.ts
+ * ABOUT: TeamCatalog.fixtures.ts (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - TeamCatalog.fixtures.ts (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: TeamCatalog.fixtures.ts (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/TeamCatalog.fixtures.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CatalogTeam,
   CatalogTeamSkillPreparation,
@@ -164,3 +178,4 @@ export const onboardingTeams: CatalogTeam[] = [
     requiredSkills: [],
   },
 ];
+// [END: module]

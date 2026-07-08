@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/backup.ts
+ * ABOUT: backup.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - backup.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: backup.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/backup.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { formatDatabaseBackupResult, runDatabaseBackup } from "./backup-lib.js";
@@ -96,3 +110,4 @@ async function main() {
 }
 
 await main();
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ActivityCharts.tsx
+ * ABOUT: ActivityCharts.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ActivityCharts.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ActivityCharts.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ActivityCharts.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { DashboardRunActivityDay, HeartbeatRun } from "@paperclipai/shared";
 
 /* ---- Utilities ---- */
@@ -271,3 +285,4 @@ export function SuccessRateChart(props: RunChartProps) {
     </div>
   );
 }
+// [END: module]

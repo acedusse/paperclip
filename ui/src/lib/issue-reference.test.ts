@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-reference.test.ts
+ * ABOUT: issue-reference.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-reference.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-reference.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-reference.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { parseIssuePathIdFromPath, parseIssueReferenceFromHref, remarkLinkIssueReferences } from "./issue-reference";
 
@@ -147,3 +161,4 @@ describe("issue-reference", () => {
     });
   });
 });
+// [END: module]

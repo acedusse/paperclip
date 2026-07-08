@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/SystemNoticeUxLab.tsx
+ * ABOUT: SystemNoticeUxLab.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SystemNoticeUxLab.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SystemNoticeUxLab.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/SystemNoticeUxLab.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -401,3 +415,4 @@ export function SystemNoticeUxLab() {
 }
 
 export default SystemNoticeUxLab;
+// [END: module]

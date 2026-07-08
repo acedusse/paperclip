@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/project.ts
+ * ABOUT: project.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - project.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: project.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/project.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { BudgetWindowKind, PauseReason, ProjectStatus } from "../constants.js";
 import type {
   ProjectExecutionWorkspacePolicy,
@@ -112,3 +126,4 @@ export interface Project {
   createdAt: Date;
   updatedAt: Date;
 }
+// [END: module]

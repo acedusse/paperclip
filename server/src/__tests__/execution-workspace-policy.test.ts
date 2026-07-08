@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/execution-workspace-policy.test.ts
+ * ABOUT: execution-workspace-policy.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspace-policy.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspace-policy.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/execution-workspace-policy.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildExecutionWorkspaceAdapterConfig,
@@ -225,3 +239,4 @@ describe("execution workspace policy helpers", () => {
     ).toEqual({ enabled: true, defaultMode: "isolated_workspace" });
   });
 });
+// [END: module]

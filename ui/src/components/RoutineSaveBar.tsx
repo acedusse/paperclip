@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineSaveBar.tsx
+ * ABOUT: RoutineSaveBar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineSaveBar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineSaveBar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineSaveBar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -201,3 +215,4 @@ export function RoutineReadOnlyStrip() {
     </div>
   );
 }
+// [END: module]

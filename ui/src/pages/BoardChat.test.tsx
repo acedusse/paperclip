@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/BoardChat.test.tsx
+ * ABOUT: BoardChat.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BoardChat.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BoardChat.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/BoardChat.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { existsSync, readFileSync } from "node:fs";
@@ -307,3 +321,4 @@ describe("typing-dots CSS animation guard (PAP-54 failure mode)", () => {
     expect(css).toMatch(/@keyframes typing-bounce\s*\{/);
   });
 });
+// [END: module]

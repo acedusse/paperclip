@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SwipeToArchive.tsx
+ * ABOUT: SwipeToArchive.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SwipeToArchive.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SwipeToArchive.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SwipeToArchive.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Archive } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -165,3 +179,4 @@ export function SwipeToArchive({
     </div>
   );
 }
+// [END: module]

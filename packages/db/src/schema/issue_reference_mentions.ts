@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_reference_mentions.ts
+ * ABOUT: issue_reference_mentions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_reference_mentions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_reference_mentions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_reference_mentions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import { index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
@@ -46,3 +60,4 @@ export const issueReferenceMentions = pgTable(
     ).where(sql`${table.sourceRecordId} is null`),
   }),
 );
+// [END: module]

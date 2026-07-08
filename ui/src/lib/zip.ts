@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/zip.ts
+ * ABOUT: zip.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - zip.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: zip.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/zip.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanyPortabilityFileEntry } from "@paperclipai/shared";
 
 const textEncoder = new TextEncoder();
@@ -281,3 +295,4 @@ export function createZipArchive(files: Record<string, CompanyPortabilityFileEnt
 
   return concatChunks([...localChunks, centralDirectory, endOfCentralDirectory]);
 }
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/api/adapters.ts
+ * ABOUT: adapters.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapters.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapters.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/adapters.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Frontend API client for external adapter management.
  */
 
@@ -66,3 +80,4 @@ export const adaptersApi = {
   reinstall: (type: string) =>
     api.post<{ type: string; version?: string; reinstalled: boolean }>(`/adapters/${type}/reinstall`, {}),
 };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/budgets-service.test.ts
+ * ABOUT: budgets-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - budgets-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: budgets-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/budgets-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { budgetService } from "../services/budgets.ts";
 
@@ -309,3 +323,4 @@ describe("budgetService", () => {
     );
   });
 });
+// [END: module]

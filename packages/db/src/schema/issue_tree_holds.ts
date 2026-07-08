@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_tree_holds.ts
+ * ABOUT: issue_tree_holds.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_tree_holds.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_tree_holds.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_tree_holds.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companies } from "./companies.js";
@@ -37,3 +51,4 @@ export const issueTreeHolds = pgTable(
     companyStatusModeIdx: index("issue_tree_holds_company_status_mode_idx").on(table.companyId, table.status, table.mode),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/test/unit/sandbox-cr-orchestrator.test.ts
+ * ABOUT: sandbox-cr-orchestrator.test.ts (unit module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-cr-orchestrator.test.ts (unit module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-cr-orchestrator.test.ts (unit module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/test/unit/sandbox-cr-orchestrator.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, it, expect, vi } from "vitest";
 import {
   createSandboxCr,
@@ -268,3 +282,4 @@ describe("waitForSandboxReady", () => {
     ).rejects.toThrow(/failed.*OOMKilled/i);
   });
 });
+// [END: module]

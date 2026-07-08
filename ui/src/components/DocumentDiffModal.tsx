@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/DocumentDiffModal.tsx
+ * ABOUT: DocumentDiffModal.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DocumentDiffModal.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DocumentDiffModal.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/DocumentDiffModal.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { DocumentRevision } from "@paperclipai/shared";
@@ -174,3 +188,4 @@ export function DocumentDiffModal({
     </Dialog>
   );
 }
+// [END: module]

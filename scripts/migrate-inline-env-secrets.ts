@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/migrate-inline-env-secrets.ts
+ * ABOUT: migrate-inline-env-secrets.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - migrate-inline-env-secrets.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: migrate-inline-env-secrets.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/migrate-inline-env-secrets.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { eq } from "drizzle-orm";
 import { agents, createDb } from "@paperclipai/db";
 import { secretService } from "../server/src/services/secrets.js";
@@ -123,3 +137,4 @@ async function main() {
 }
 
 void main();
+// [END: module]

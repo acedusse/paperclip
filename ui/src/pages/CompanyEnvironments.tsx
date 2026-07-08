@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanyEnvironments.tsx
+ * ABOUT: CompanyEnvironments.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyEnvironments.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyEnvironments.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanyEnvironments.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -867,3 +881,4 @@ export function CompanyEnvironments() {
     </div>
   );
 }
+// [END: module]

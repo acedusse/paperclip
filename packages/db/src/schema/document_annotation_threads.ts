@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/document_annotation_threads.ts
+ * ABOUT: document_annotation_threads.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document_annotation_threads.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document_annotation_threads.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/document_annotation_threads.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   DocumentAnnotationAnchorConfidence,
   DocumentAnnotationAnchorSelector,
@@ -68,3 +82,4 @@ export const documentAnnotationThreads = pgTable(
     ),
   }),
 );
+// [END: module]

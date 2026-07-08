@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/dialog.tsx
+ * ABOUT: dialog.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dialog.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dialog.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/dialog.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react"
 import { XIcon } from "lucide-react"
 import { Dialog as DialogPrimitive } from "radix-ui"
@@ -154,3 +168,4 @@ export {
   DialogTitle,
   DialogTrigger,
 }
+// [END: module]

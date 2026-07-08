@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/search/MatchSourceChip.tsx
+ * ABOUT: MatchSourceChip.tsx (search module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MatchSourceChip.tsx (search module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MatchSourceChip.tsx (search module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/search/MatchSourceChip.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { cn } from "@/lib/utils";
 
 export type MatchSourceChipKind = "title" | "identifier" | "comment" | "document";
@@ -44,3 +58,4 @@ export function MatchSourceChip({ kind, count, label, className }: MatchSourceCh
     </span>
   );
 }
+// [END: module]

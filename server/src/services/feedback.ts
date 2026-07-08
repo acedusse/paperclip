@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/feedback.ts
+ * ABOUT: feedback.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/feedback.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { and, asc, desc, eq, getTableColumns, gte, isNull, lte, ne, or } from "drizzle-orm";
@@ -2115,3 +2129,4 @@ export function feedbackService(db: Db, options: FeedbackServiceOptions = {}) {
       }),
   };
 }
+// [END: module]

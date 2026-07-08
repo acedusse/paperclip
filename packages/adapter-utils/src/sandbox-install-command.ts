@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/sandbox-install-command.ts
+ * ABOUT: sandbox-install-command.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-install-command.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-install-command.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/sandbox-install-command.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 function shellSingleQuote(value: string): string {
   return `'${value.replaceAll("'", `'\"'\"'`)}'`;
 }
@@ -44,3 +58,4 @@ export function buildSandboxNpmInstallCommand(packageName: string): string {
     "fi",
   ].join(" ");
 }
+// [END: module]

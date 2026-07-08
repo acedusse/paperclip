@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/user-profile-routes.test.ts
+ * ABOUT: user-profile-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - user-profile-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: user-profile-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/user-profile-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import express from "express";
 import request from "supertest";
@@ -216,3 +230,4 @@ describeEmbeddedPostgres("GET /companies/:companyId/users/:userSlug/profile", ()
     expect(response.body.topProviders[0]).toMatchObject({ provider: "openai", model: "gpt-test", costCents: 42 });
   });
 });
+// [END: module]

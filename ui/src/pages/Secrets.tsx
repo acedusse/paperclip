@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Secrets.tsx
+ * ABOUT: Secrets.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Secrets.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Secrets.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Secrets.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -2442,3 +2456,4 @@ function SecretEventsTab({ loading, events }: { loading: boolean; events: Secret
     </div>
   );
 }
+// [END: module]

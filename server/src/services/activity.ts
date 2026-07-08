@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/activity.ts
+ * ABOUT: activity.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - activity.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: activity.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/activity.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -586,3 +600,4 @@ export function activityService(db: Db) {
         .then((rows) => rows[0]),
   };
 }
+// [END: module]

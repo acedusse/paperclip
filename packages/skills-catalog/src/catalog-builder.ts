@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/skills-catalog/src/catalog-builder.ts
+ * ABOUT: catalog-builder.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - catalog-builder.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: catalog-builder.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/skills-catalog/src/catalog-builder.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
@@ -871,3 +885,4 @@ function isPathInside(parent: string, child: string) {
 function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
+// [END: module]

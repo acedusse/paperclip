@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Inbox.tsx
+ * ABOUT: Inbox.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Inbox.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Inbox.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Inbox.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -2788,3 +2802,4 @@ export function Inbox() {
     </div>
   );
 }
+// [END: module]

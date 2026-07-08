@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/src/types.ts
+ * ABOUT: types.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - types.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: types.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/src/types.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface CloudflareDriverConfig {
   bridgeBaseUrl: string;
   bridgeAuthToken: string;
@@ -97,3 +111,4 @@ export interface CloudflareBridgeExecuteResponse {
   stderr: string;
   metadata?: Record<string, unknown>;
 }
+// [END: module]

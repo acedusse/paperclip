@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CopyText.tsx
+ * ABOUT: CopyText.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CopyText.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CopyText.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CopyText.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -85,3 +99,4 @@ export function CopyText({
     </span>
   );
 }
+// [END: module]

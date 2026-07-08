@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/secrets/ImportFromVaultDialog.tsx
+ * ABOUT: ImportFromVaultDialog.tsx (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ImportFromVaultDialog.tsx (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ImportFromVaultDialog.tsx (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/secrets/ImportFromVaultDialog.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -1475,3 +1489,4 @@ function FooterStatus({
   }
   return null;
 }
+// [END: module]

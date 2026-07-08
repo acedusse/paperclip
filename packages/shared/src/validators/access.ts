@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/access.ts
+ * ABOUT: access.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - access.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: access.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/access.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   AGENT_ADAPTER_TYPES,
@@ -205,3 +219,4 @@ export const updateCurrentUserProfileSchema = z.object({
 });
 
 export type UpdateCurrentUserProfile = z.infer<typeof updateCurrentUserProfileSchema>;
+// [END: module]

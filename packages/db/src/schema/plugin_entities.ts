@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/plugin_entities.ts
+ * ABOUT: plugin_entities.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin_entities.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin_entities.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/plugin_entities.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   pgTable,
   uuid,
@@ -68,3 +82,4 @@ export const pluginEntities = pgTable(
       .nullsNotDistinct(),
   }),
 );
+// [END: module]

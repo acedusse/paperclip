@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarProjects.test.tsx
+ * ABOUT: SidebarProjects.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarProjects.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarProjects.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarProjects.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -474,3 +488,4 @@ describe("SidebarProjects", () => {
     expect(projectLinkLabels(container)).toEqual(["Bravo", "Charlie"]);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/auth.ts
+ * ABOUT: auth.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/auth.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   authSessionSchema,
   currentUserProfileSchema,
@@ -132,3 +146,4 @@ export const authApi = {
     await authPost("/sign-out", {});
   },
 };
+// [END: module]

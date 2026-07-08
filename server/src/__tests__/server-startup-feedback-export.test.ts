@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/server-startup-feedback-export.test.ts
+ * ABOUT: server-startup-feedback-export.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - server-startup-feedback-export.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: server-startup-feedback-export.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/server-startup-feedback-export.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const ORIGINAL_PAPERCLIP_API_URL = process.env.PAPERCLIP_API_URL;
@@ -402,3 +416,4 @@ describe("startServer PAPERCLIP_API_URL handling", () => {
     expect(process.env.PAPERCLIP_RUNTIME_API_URL).toBe("https://paperclip.example");
   });
 });
+// [END: module]

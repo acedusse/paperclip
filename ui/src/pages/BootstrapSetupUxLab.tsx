@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/BootstrapSetupUxLab.tsx
+ * ABOUT: BootstrapSetupUxLab.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BootstrapSetupUxLab.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BootstrapSetupUxLab.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/BootstrapSetupUxLab.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactElement, ReactNode } from "react";
 import { Loader2, ShieldCheck, Terminal, TriangleAlert } from "lucide-react";
 import { BOOTSTRAP_FALLBACK_COMMAND } from "@/bootstrapSetup";
@@ -245,3 +259,4 @@ export function BootstrapSetupUxLab() {
     </div>
   );
 }
+// [END: module]

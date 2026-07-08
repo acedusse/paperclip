@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-tenant-isolation.test.ts
+ * ABOUT: plugin-tenant-isolation.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-tenant-isolation.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-tenant-isolation.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-tenant-isolation.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -526,3 +540,4 @@ describeEmbeddedPostgres("plugin tenant isolation (company_id FK)", () => {
     expect((err as { cause?: { code?: string } }).cause?.code).toBe("23505");
   });
 });
+// [END: module]

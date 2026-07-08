@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/client/http.ts
+ * ABOUT: http.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - http.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: http.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/client/http.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { URL } from "node:url";
 
 export class ApiRequestError extends Error {
@@ -260,3 +274,4 @@ function toStringRecord(headers: HeadersInit | undefined): Record<string, string
     Object.entries(headers).map(([key, value]) => [key, String(value)]),
   );
 }
+// [END: module]

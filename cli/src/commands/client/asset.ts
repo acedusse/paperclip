@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/asset.ts
+ * ABOUT: asset.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - asset.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: asset.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/asset.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { readFile, writeFile } from "node:fs/promises";
 import { Command } from "commander";
 import { ApiRequestError } from "../../client/http.js";
@@ -145,3 +159,4 @@ function safeJson(text: string): unknown {
     return text;
   }
 }
+// [END: module]

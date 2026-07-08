@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/routes/org-chart-svg.ts
+ * ABOUT: org-chart-svg.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - org-chart-svg.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: org-chart-svg.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/org-chart-svg.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Server-side SVG renderer for Paperclip org charts.
  * Supports 5 visual styles: monochrome, nebula, circuit, warmth, schematic.
  * Pure SVG output — no browser/Playwright needed. PNG via sharp.
@@ -775,3 +789,4 @@ export async function renderOrgChartPng(orgTree: OrgNode[], style: OrgChartStyle
     .png()
     .toBuffer();
 }
+// [END: module]

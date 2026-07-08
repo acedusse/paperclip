@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/grok-local/src/server/parse.ts
+ * ABOUT: parse.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/grok-local/src/server/parse.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { asString, parseJson, parseObject } from "@paperclipai/adapter-utils/server-utils";
 import { applyTurnBoundary, createTurnBoundaryState } from "../shared/turn-boundary.js";
 
@@ -87,3 +101,4 @@ export function isGrokUnknownSessionError(stdout: string, stderr: string): boole
 
   return /unknown\s+session|session(?:\s+.*)?\s+not\s+found|resume\s+.*\s+not\s+found|invalid\s+session/i.test(haystack);
 }
+// [END: module]

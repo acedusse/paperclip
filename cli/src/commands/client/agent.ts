@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/agent.ts
+ * ABOUT: agent.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/agent.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import {
   agentSkillSyncSchema,
@@ -868,3 +882,4 @@ function parseCsv(value: string | undefined): string[] {
   if (!value) return [];
   return value.split(",").map((part) => part.trim()).filter(Boolean);
 }
+// [END: module]

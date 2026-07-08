@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/sandbox-cr-orchestrator.ts
+ * ABOUT: sandbox-cr-orchestrator.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - sandbox-cr-orchestrator.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: sandbox-cr-orchestrator.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/sandbox-cr-orchestrator.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * SandboxOrchestrator implementation backed by the kubernetes-sigs/agent-sandbox
  * Sandbox CRD (agents.x-k8s.io/v1alpha1).
  *
@@ -314,3 +328,4 @@ export const sandboxCrOrchestrator: SandboxOrchestrator = {
   release: deleteSandboxCr,
   waitForCompletion: waitForSandboxReady,
 };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/network-policy.ts
+ * ABOUT: network-policy.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - network-policy.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: network-policy.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/network-policy.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface BuildNetworkPolicyInput {
   namespace: string;
   paperclipServerNamespace: string;
@@ -130,3 +144,4 @@ export function buildNetworkPolicyManifests(input: BuildNetworkPolicyInput): Rec
 
   return [denyAll, egressAllow];
 }
+// [END: module]

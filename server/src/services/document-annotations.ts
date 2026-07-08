@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/document-annotations.ts
+ * ABOUT: document-annotations.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotations.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotations.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/document-annotations.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
@@ -503,3 +517,4 @@ export function documentAnnotationService(db: Db) {
     selectorToAnchorSnapshot,
   };
 }
+// [END: module]

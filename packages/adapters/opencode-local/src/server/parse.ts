@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/opencode-local/src/server/parse.ts
+ * ABOUT: parse.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/opencode-local/src/server/parse.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { asNumber, asString, parseJson, parseObject } from "@paperclipai/adapter-utils/server-utils";
 
 function errorText(value: unknown): string {
@@ -99,3 +113,4 @@ export function isOpenCodeUnknownSessionError(stdout: string, stderr: string): b
     haystack,
   );
 }
+// [END: module]

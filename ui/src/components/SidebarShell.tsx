@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarShell.tsx
+ * ABOUT: SidebarShell.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarShell.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarShell.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarShell.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   useCallback,
   useEffect,
@@ -242,3 +256,4 @@ export function SidebarShell({
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/prompts/server.ts
+ * ABOUT: server.ts (prompts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - server.ts (prompts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: server.ts (prompts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/prompts/server.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import { isLoopbackHost, type BindMode } from "@paperclipai/shared";
 import type { AuthConfig, ServerConfig } from "../config/schema.js";
@@ -219,3 +233,4 @@ export async function promptServer(opts?: {
     publicBaseUrl,
   });
 }
+// [END: module]

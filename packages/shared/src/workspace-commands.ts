@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/workspace-commands.ts
+ * ABOUT: workspace-commands.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-commands.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-commands.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/workspace-commands.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { WorkspaceCommandDefinition, WorkspaceRuntimeService } from "./types/workspace-runtime.js";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -206,3 +220,4 @@ export function matchWorkspaceRuntimeServiceToCommand<
 
   return bestScore > 0 ? bestMatch : null;
 }
+// [END: module]

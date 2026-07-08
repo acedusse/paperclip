@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/prompts/logging.ts
+ * ABOUT: logging.ts (prompts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - logging.ts (prompts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: logging.ts (prompts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/prompts/logging.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import type { LoggingConfig } from "../config/schema.js";
 import { resolveDefaultLogsDir, resolvePaperclipInstanceId } from "../config/home.js";
@@ -35,3 +49,4 @@ export async function promptLogging(): Promise<LoggingConfig> {
   p.note("Cloud logging is coming soon. Using file-based logging for now.");
   return { mode: "file", logDir: defaultLogDir };
 }
+// [END: module]

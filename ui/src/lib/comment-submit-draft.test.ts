@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/comment-submit-draft.test.ts
+ * ABOUT: comment-submit-draft.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - comment-submit-draft.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: comment-submit-draft.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/comment-submit-draft.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { restoreSubmittedCommentDraft } from "./comment-submit-draft";
 
@@ -29,3 +43,4 @@ describe("restoreSubmittedCommentDraft", () => {
     ).toBe("new draft");
   });
 });
+// [END: module]

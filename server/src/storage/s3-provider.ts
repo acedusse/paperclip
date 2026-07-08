@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/storage/s3-provider.ts
+ * ABOUT: s3-provider.ts (storage module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - s3-provider.ts (storage module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: s3-provider.ts (storage module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/storage/s3-provider.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   S3Client,
   DeleteObjectCommand,
@@ -152,3 +166,4 @@ export function createS3StorageProvider(config: S3ProviderConfig): StorageProvid
     },
   };
 }
+// [END: module]

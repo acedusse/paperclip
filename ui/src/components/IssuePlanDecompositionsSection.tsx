@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssuePlanDecompositionsSection.tsx
+ * ABOUT: IssuePlanDecompositionsSection.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssuePlanDecompositionsSection.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssuePlanDecompositionsSection.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssuePlanDecompositionsSection.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Agent, AcceptedPlanDecompositionSummary } from "@paperclipai/shared";
@@ -158,3 +172,4 @@ export function IssuePlanDecompositionsSection({
     </div>
   );
 }
+// [END: module]

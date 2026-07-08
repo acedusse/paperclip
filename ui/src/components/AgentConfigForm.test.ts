@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentConfigForm.test.ts
+ * ABOUT: AgentConfigForm.test.ts (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentConfigForm.test.ts (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentConfigForm.test.ts (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentConfigForm.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Environment } from "@paperclipai/shared";
 import { supportsAdapterModelRefresh } from "./AgentConfigForm";
@@ -70,3 +84,4 @@ describe("resolveForcedKubernetesEnvironment", () => {
     expect(result.kubernetesEnvironment).toBeNull();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/InstanceGeneralSettings.tsx
+ * ABOUT: InstanceGeneralSettings.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InstanceGeneralSettings.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InstanceGeneralSettings.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/InstanceGeneralSettings.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PatchInstanceGeneralSettings, BackupRetentionPolicy } from "@paperclipai/shared";
@@ -447,3 +461,4 @@ function StatusBox({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+// [END: module]

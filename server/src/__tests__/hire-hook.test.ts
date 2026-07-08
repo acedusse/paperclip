@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/hire-hook.test.ts
+ * ABOUT: hire-hook.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - hire-hook.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: hire-hook.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/hire-hook.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Db } from "@paperclipai/db";
 import { notifyHireApproved } from "../services/hire-hook.js";
@@ -178,3 +192,4 @@ describe("notifyHireApproved", () => {
     );
   });
 });
+// [END: module]

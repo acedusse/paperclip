@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/execution-workspaces.ts
+ * ABOUT: execution-workspaces.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-workspaces.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-workspaces.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/execution-workspaces.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ExecutionWorkspace,
   ExecutionWorkspaceSummary,
@@ -75,3 +89,4 @@ export const executionWorkspacesApi = {
     ),
   update: (id: string, data: Record<string, unknown>) => api.patch<ExecutionWorkspace>(`/execution-workspaces/${id}`, data),
 };
+// [END: module]

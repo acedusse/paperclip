@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/transcript/useLiveRunTranscripts.test.tsx
+ * ABOUT: useLiveRunTranscripts.test.tsx (transcript module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useLiveRunTranscripts.test.tsx (transcript module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useLiveRunTranscripts.test.tsx (transcript module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/transcript/useLiveRunTranscripts.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -344,3 +358,4 @@ describe("useLiveRunTranscripts", () => {
     container.remove();
   });
 });
+// [END: module]

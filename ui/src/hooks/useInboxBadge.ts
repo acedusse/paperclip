@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useInboxBadge.ts
+ * ABOUT: useInboxBadge.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useInboxBadge.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useInboxBadge.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useInboxBadge.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { accessApi } from "../api/access";
@@ -210,3 +224,4 @@ export function useInboxBadge(companyId: string | null | undefined) {
     [approvals, joinRequests, dashboard, heartbeatRuns, mineIssues, dismissedAlerts, dismissedAtByKey, currentUserId],
   );
 }
+// [END: module]

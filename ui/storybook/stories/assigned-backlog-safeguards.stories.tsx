@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/assigned-backlog-safeguards.stories.tsx
+ * ABOUT: assigned-backlog-safeguards.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - assigned-backlog-safeguards.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: assigned-backlog-safeguards.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/assigned-backlog-safeguards.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { CircleDot, Flag, MoreHorizontal, Paperclip } from "lucide-react";
@@ -243,3 +257,4 @@ export const ListRows: Story = {
     </StoryFrame>
   ),
 };
+// [END: module]

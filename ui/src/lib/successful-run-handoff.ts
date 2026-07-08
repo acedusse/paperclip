@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/successful-run-handoff.ts
+ * ABOUT: successful-run-handoff.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - successful-run-handoff.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: successful-run-handoff.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/successful-run-handoff.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ActivityEvent, Issue, SuccessfulRunHandoffState } from "@paperclipai/shared";
 
 export const SUCCESSFUL_RUN_HANDOFF_REQUIRED_ACTION = "issue.successful_run_handoff_required";
@@ -88,3 +102,4 @@ export function successfulRunHandoffActivityTone(action: string) {
     iconClassName: "text-muted-foreground",
   };
 }
+// [END: module]

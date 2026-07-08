@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-chat-messages.ts
+ * ABOUT: issue-chat-messages.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-chat-messages.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-chat-messages.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-chat-messages.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   ReasoningMessagePart,
   TextMessagePart,
@@ -1007,3 +1021,4 @@ export function buildIssueChatMessages(args: {
     })
     .map((entry) => entry.message);
 }
+// [END: module]

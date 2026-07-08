@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-runtime-sandbox.ts
+ * ABOUT: plugin-runtime-sandbox.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-runtime-sandbox.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-runtime-sandbox.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-runtime-sandbox.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
@@ -219,3 +233,4 @@ function normalizeModuleExports(exportsValue: unknown): Record<string, unknown> 
 function looksLikeEsm(code: string): boolean {
   return /(^|\n)\s*import\s+/m.test(code) || /(^|\n)\s*export\s+/m.test(code);
 }
+// [END: module]

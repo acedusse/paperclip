@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/optimistic-issue-comments.test.ts
+ * ABOUT: optimistic-issue-comments.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - optimistic-issue-comments.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: optimistic-issue-comments.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/optimistic-issue-comments.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Issue } from "@paperclipai/shared";
 import {
@@ -946,3 +960,4 @@ describe("optimistic issue comments", () => {
     expect(result).toBe(comment);
   });
 });
+// [END: module]

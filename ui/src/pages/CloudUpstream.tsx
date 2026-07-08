@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CloudUpstream.tsx
+ * ABOUT: CloudUpstream.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CloudUpstream.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CloudUpstream.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CloudUpstream.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -647,3 +661,4 @@ function previewErrorMessage(error: unknown): string {
   }
   return code ?? "Failed to preview push.";
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/codex-home.ts
+ * ABOUT: codex-home.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - codex-home.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: codex-home.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/codex-home.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -346,3 +360,4 @@ export async function reconcileManagedCodexHome(
     !apiKey && hadUsableAuth ? "already_seeded" : "seeded";
   return { status, home: resolved };
 }
+// [END: module]

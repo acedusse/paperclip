@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/access.ts
+ * ABOUT: access.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - access.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: access.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/access.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   createHash,
   generateKeyPairSync,
@@ -4623,3 +4637,4 @@ export function accessRoutes(
 
   return router;
 }
+// [END: module]

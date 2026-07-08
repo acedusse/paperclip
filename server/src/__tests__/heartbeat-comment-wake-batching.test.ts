@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-comment-wake-batching.test.ts
+ * ABOUT: heartbeat-comment-wake-batching.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-comment-wake-batching.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-comment-wake-batching.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-comment-wake-batching.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { createServer } from "node:http";
 import { and, asc, eq } from "drizzle-orm";
@@ -2047,3 +2061,4 @@ describe("heartbeat comment wake batching", () => {
     }
   }, 20_000);
 });
+// [END: module]

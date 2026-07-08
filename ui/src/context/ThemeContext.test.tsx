@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/ThemeContext.test.tsx
+ * ABOUT: ThemeContext.test.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ThemeContext.test.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ThemeContext.test.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/ThemeContext.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -177,3 +191,4 @@ describe("ThemeContext", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/NewAgent.tsx
+ * ABOUT: NewAgent.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - NewAgent.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: NewAgent.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/NewAgent.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "@/lib/router";
@@ -388,3 +402,4 @@ export function NewAgent() {
     </div>
   );
 }
+// [END: module]

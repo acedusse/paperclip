@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/feedback.ts
+ * ABOUT: feedback.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - feedback.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: feedback.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/feedback.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import pc from "picocolors";
@@ -674,3 +688,4 @@ function createStoredZipArchive(files: Record<string, string>, rootPath: string)
   writeUint32(archive, offset + 16, centralDirectoryOffset);
   return archive;
 }
+// [END: module]

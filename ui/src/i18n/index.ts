@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/i18n/index.ts
+ * ABOUT: index.ts (i18n module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (i18n module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (i18n module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/i18n/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import i18n, { type InitOptions, type TOptions } from "i18next";
 import { initReactI18next, useTranslation as useReactI18nextTranslation } from "react-i18next";
 
@@ -24,3 +38,4 @@ export function t(key: string, options: TOptions = {}) {
 
 export const useTranslation = useReactI18nextTranslation;
 export { i18n };
+// [END: module]

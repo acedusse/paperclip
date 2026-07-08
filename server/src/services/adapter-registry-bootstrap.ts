@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/adapter-registry-bootstrap.ts
+ * ABOUT: adapter-registry-bootstrap.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-registry-bootstrap.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-registry-bootstrap.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/adapter-registry-bootstrap.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Declarative adapter-registry bootstrap.
  *
  * One source (`PAPERCLIP_ADAPTERS` inline JSON, or `PAPERCLIP_ADAPTERS_FILE` a
@@ -95,3 +109,4 @@ export function reconcileAdapterAvailability(
   logger.info({ enabled, disabled }, "reconciled adapter availability from PAPERCLIP_ADAPTERS");
   return { enabled, disabled };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/multi-user-authenticated.spec.ts
+ * ABOUT: multi-user-authenticated.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - multi-user-authenticated.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: multi-user-authenticated.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/multi-user-authenticated.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -324,3 +338,4 @@ test.describe("Multi-user: authenticated mode", () => {
     }
   });
 });
+// [END: module]

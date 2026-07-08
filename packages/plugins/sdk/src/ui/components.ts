@@ -1,4 +1,18 @@
 /**
+ * FILE: packages/plugins/sdk/src/ui/components.ts
+ * ABOUT: components.ts (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - components.ts (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: components.ts (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/ui/components.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Shared UI component declarations for plugin frontends.
  *
  * These components are exported from `@paperclipai/plugin-sdk/ui` and are
@@ -594,3 +608,4 @@ export const ProjectPicker = createSdkUiComponent<ProjectPickerProps>("ProjectPi
  * Renders Paperclip's native managed routines list for plugin settings pages.
  */
 export const ManagedRoutinesList = createSdkUiComponent<ManagedRoutinesListProps>("ManagedRoutinesList");
+// [END: module]

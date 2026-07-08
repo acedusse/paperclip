@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/src/ui/app.tsx
+ * ABOUT: app.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - app.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: app.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/src/ui/app.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   AssigneePicker,
   FileTree,
@@ -7123,3 +7137,4 @@ function SpaceFolderHealthChecklist({ folder }: { folder: FolderStatus }) {
     </div>
   );
 }
+// [END: module]

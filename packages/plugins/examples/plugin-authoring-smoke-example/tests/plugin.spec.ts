@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-authoring-smoke-example/tests/plugin.spec.ts
+ * ABOUT: plugin.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-authoring-smoke-example/tests/plugin.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { createTestHarness } from "@paperclipai/plugin-sdk/testing";
 import manifest from "../src/manifest.js";
@@ -23,3 +37,4 @@ describe("plugin scaffold", () => {
     expect(action.pong).toBe(true);
   });
 });
+// [END: module]

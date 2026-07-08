@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/seed.ts
+ * ABOUT: seed.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - seed.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: seed.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/seed.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createDb } from "./client.js";
 import { companies, agents, goals, projects, issues } from "./schema/index.js";
 
@@ -97,3 +111,4 @@ await db.insert(issues).values([
 
 console.log("Seed complete");
 process.exit(0);
+// [END: module]

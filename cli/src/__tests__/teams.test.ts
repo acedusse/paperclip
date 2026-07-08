@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/teams.test.ts
+ * ABOUT: teams.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - teams.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: teams.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/teams.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerTeamCommands } from "../commands/client/teams.js";
@@ -579,3 +593,4 @@ describe("teams CLI commands", () => {
     expect(String(errorSpy.mock.calls[0]?.[0])).toContain("development-only");
   });
 });
+// [END: module]

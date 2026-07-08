@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/.storybook/preview.tsx
+ * ABOUT: preview.tsx (.storybook module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - preview.tsx (.storybook module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: preview.tsx (.storybook module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/.storybook/preview.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState, type ReactNode } from "react";
 import type { Preview } from "@storybook/react-vite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -404,3 +418,4 @@ const preview: Preview = {
 };
 
 export default preview;
+// [END: module]

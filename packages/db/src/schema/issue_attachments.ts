@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_attachments.ts
+ * ABOUT: issue_attachments.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_attachments.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_attachments.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_attachments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, timestamp, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { issues } from "./issues.js";
@@ -21,3 +35,4 @@ export const issueAttachments = pgTable(
     assetUq: uniqueIndex("issue_attachments_asset_uq").on(table.assetId),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/CommentThread.tsx
+ * ABOUT: CommentThread.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CommentThread.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CommentThread.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/CommentThread.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { memo, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
 import type {
@@ -1097,3 +1111,4 @@ export function CommentThread({
     </div>
   );
 }
+// [END: module]

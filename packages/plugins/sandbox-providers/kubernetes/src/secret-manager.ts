@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/kubernetes/src/secret-manager.ts
+ * ABOUT: secret-manager.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secret-manager.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secret-manager.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/kubernetes/src/secret-manager.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { KubeClients } from "./kube-client.js";
 
 export interface CreatePerRunSecretInput {
@@ -50,3 +64,4 @@ export async function createPerRunSecret(clients: KubeClients, input: CreatePerR
     },
   });
 }
+// [END: module]

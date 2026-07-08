@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/cursor-models.ts
+ * ABOUT: cursor-models.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cursor-models.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cursor-models.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/cursor-models.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { spawnSync } from "node:child_process";
 import { models as cursorFallbackModels } from "@paperclipai/adapter-cursor-local";
 import type { AdapterModel } from "./types.js";
@@ -168,3 +182,4 @@ export function resetCursorModelsCacheForTests() {
 export function setCursorModelsRunnerForTests(runner: (() => CursorModelsCommandResult) | null) {
   cursorModelsRunner = runner ?? defaultCursorModelsRunner;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/document-annotations.ts
+ * ABOUT: document-annotations.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotations.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotations.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/document-annotations.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   CreateDocumentAnnotationCommentRequest,
   CreateDocumentAnnotationThreadRequest,
@@ -57,3 +71,4 @@ export const documentAnnotationsApi = {
     );
   },
 };
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/codex-models.ts
+ * ABOUT: codex-models.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - codex-models.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: codex-models.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/codex-models.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterModel } from "./types.js";
 import { models as codexFallbackModels } from "@paperclipai/adapter-codex-local";
 import { readConfigFile } from "../config-file.js";
@@ -111,3 +125,4 @@ export async function refreshCodexModels(): Promise<AdapterModel[]> {
 export function resetCodexModelsCacheForTests() {
   cached = null;
 }
+// [END: module]

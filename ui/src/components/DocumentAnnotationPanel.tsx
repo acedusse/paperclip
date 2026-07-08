@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/DocumentAnnotationPanel.tsx
+ * ABOUT: DocumentAnnotationPanel.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DocumentAnnotationPanel.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DocumentAnnotationPanel.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/DocumentAnnotationPanel.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -572,3 +586,4 @@ async function copyAnnotationLink(documentKey: string, threadId: string) {
     /* swallow */
   }
 }
+// [END: module]

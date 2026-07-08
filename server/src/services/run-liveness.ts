@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/run-liveness.ts
+ * ABOUT: run-liveness.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - run-liveness.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: run-liveness.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/run-liveness.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { HeartbeatRunStatus, IssueStatus, RunLivenessState } from "@paperclipai/shared";
 
 export type RunLivenessActionability =
@@ -346,3 +360,4 @@ export function classifyRunLiveness(input: RunLivenessClassificationInput): RunL
 
   return output("empty_response", "Run succeeded without useful output");
 }
+// [END: module]

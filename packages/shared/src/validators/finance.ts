@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/finance.ts
+ * ABOUT: finance.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - finance.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: finance.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/finance.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { AGENT_ADAPTER_TYPES, FINANCE_DIRECTIONS, FINANCE_EVENT_KINDS, FINANCE_UNITS } from "../constants.js";
 
@@ -32,3 +46,4 @@ export const createFinanceEventSchema = z.object({
 }));
 
 export type CreateFinanceEvent = z.infer<typeof createFinanceEventSchema>;
+// [END: module]

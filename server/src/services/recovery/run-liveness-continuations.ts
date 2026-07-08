@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/run-liveness-continuations.ts
+ * ABOUT: run-liveness-continuations.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - run-liveness-continuations.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: run-liveness-continuations.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/run-liveness-continuations.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agentWakeupRequests, agents, heartbeatRuns, issues } from "@paperclipai/db";
@@ -187,3 +201,4 @@ export function decideRunLivenessContinuation(input: {
     }, "normal_model"),
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Org.tsx
+ * ABOUT: Org.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Org.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Org.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Org.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -130,3 +144,4 @@ export function Org() {
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/agent-icons.ts
+ * ABOUT: agent-icons.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-icons.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-icons.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/agent-icons.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   Atom,
   Bot,
@@ -96,3 +110,4 @@ export function getAgentIcon(iconName: string | null | undefined): LucideIcon {
   }
   return AGENT_ICONS[DEFAULT_ICON];
 }
+// [END: module]

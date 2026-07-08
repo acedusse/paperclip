@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/WorkspaceFileLink.tsx
+ * ABOUT: WorkspaceFileLink.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - WorkspaceFileLink.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: WorkspaceFileLink.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/WorkspaceFileLink.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { MouseEvent, ReactNode } from "react";
 import { FileCode2, FolderOpen } from "lucide-react";
 import { useLocation } from "@/lib/router";
@@ -97,3 +111,4 @@ export function WorkspaceFileLink({
     </a>
   );
 }
+// [END: module]

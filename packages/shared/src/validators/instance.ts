@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/instance.ts
+ * ABOUT: instance.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/instance.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import { DEFAULT_FEEDBACK_DATA_SHARING_PREFERENCE } from "../types/feedback.js";
 import {
@@ -90,3 +104,4 @@ export const instanceSettingsSchema = z.object({
   createdAt: z.union([z.date(), z.string().datetime()]),
   updatedAt: z.union([z.date(), z.string().datetime()]),
 }).strict();
+// [END: module]

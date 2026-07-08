@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/SidebarSection.tsx
+ * ABOUT: SidebarSection.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SidebarSection.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SidebarSection.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/SidebarSection.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, type ComponentType, type ReactNode } from "react";
 import { Link } from "@/lib/router";
 import { ChevronRight } from "lucide-react";
@@ -239,3 +253,4 @@ export function SidebarSection({
     </div>
   );
 }
+// [END: module]

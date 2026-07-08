@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/issue-document-restore-routes.test.ts
+ * ABOUT: issue-document-restore-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-document-restore-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-document-restore-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/issue-document-restore-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -388,3 +402,4 @@ describe("issue document revision routes", () => {
     expect(mockDocumentsService.restoreIssueDocumentRevision).not.toHaveBeenCalled();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sdk/src/dev-server.ts
+ * ABOUT: dev-server.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-server.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-server.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sdk/src/dev-server.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createReadStream, existsSync, statSync, watch } from "node:fs";
 import { mkdir, readdir, stat } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
@@ -226,3 +240,4 @@ export async function getUiBuildSnapshot(rootDir: string, uiDir = "dist/ui"): Pr
   }));
   return rows.sort((a, b) => a.file.localeCompare(b.file));
 }
+// [END: module]

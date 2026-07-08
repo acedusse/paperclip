@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/issue-output/IssueOutputSection.tsx
+ * ABOUT: IssueOutputSection.tsx (issue-output module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueOutputSection.tsx (issue-output module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueOutputSection.tsx (issue-output module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/issue-output/IssueOutputSection.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Play } from "lucide-react";
 import type { IssueWorkProduct } from "@paperclipai/shared";
 import { getIssueOutputs, type IssueOutputItem } from "@/lib/issue-output";
@@ -53,3 +67,4 @@ export function IssueOutputSection({ workProducts, resolveCreatorName }: IssueOu
     </section>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/document-annotation-selection.ts
+ * ABOUT: document-annotation-selection.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-annotation-selection.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-annotation-selection.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/document-annotation-selection.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   createDocumentAnchorSelector,
   normalizeAnchorText,
@@ -200,3 +214,4 @@ function buildRangesForRawSpan(container: HTMLElement, rawStart: number, rawEnd:
   }
   return ranges;
 }
+// [END: module]

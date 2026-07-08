@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/realtime/live-events-ws.ts
+ * ABOUT: live-events-ws.ts (realtime module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - live-events-ws.ts (realtime module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: live-events-ws.ts (realtime module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/realtime/live-events-ws.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 import type { IncomingMessage, Server as HttpServer } from "node:http";
 import { createRequire } from "node:module";
@@ -309,3 +323,4 @@ export function setupLiveEventsWebSocketServer(
 
   return wss;
 }
+// [END: module]

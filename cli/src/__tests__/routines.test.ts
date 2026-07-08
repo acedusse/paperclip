@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/routines.test.ts
+ * ABOUT: routines.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routines.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routines.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/routines.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
@@ -247,3 +261,4 @@ describeEmbeddedPostgres("disableAllRoutinesInConfig", () => {
     expect(otherCompanyRoutine[0]?.status).toBe("active");
   });
 });
+// [END: module]

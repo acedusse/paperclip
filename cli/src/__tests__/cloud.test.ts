@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/cloud.test.ts
+ * ABOUT: cloud.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/cloud.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -241,3 +255,4 @@ function jsonResponse(body: unknown, status = 200): Response {
     headers: { "Content-Type": "application/json" },
   });
 }
+// [END: module]

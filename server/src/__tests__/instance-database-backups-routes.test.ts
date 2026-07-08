@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/instance-database-backups-routes.test.ts
+ * ABOUT: instance-database-backups-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-database-backups-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-database-backups-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/instance-database-backups-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { describe, expect, it, vi } from "vitest";
@@ -147,3 +161,4 @@ describe("instance database backup routes", () => {
     expect(res.body).toEqual({ error: "Database backup already in progress" });
   });
 });
+// [END: module]

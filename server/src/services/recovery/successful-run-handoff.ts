@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/recovery/successful-run-handoff.ts
+ * ABOUT: successful-run-handoff.ts (recovery module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - successful-run-handoff.ts (recovery module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: successful-run-handoff.ts (recovery module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/recovery/successful-run-handoff.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agentWakeupRequests, agents, heartbeatRuns, issues } from "@paperclipai/db";
@@ -434,3 +448,4 @@ export function decideSuccessfulRunHandoff(input: {
     }, "status_only"),
   };
 }
+// [END: module]

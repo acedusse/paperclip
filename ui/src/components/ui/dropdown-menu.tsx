@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/dropdown-menu.tsx
+ * ABOUT: dropdown-menu.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dropdown-menu.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dropdown-menu.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/dropdown-menu.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 "use client"
 
 import * as React from "react"
@@ -255,3 +269,4 @@ export {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 }
+// [END: module]

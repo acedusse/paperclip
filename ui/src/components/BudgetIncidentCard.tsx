@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/BudgetIncidentCard.tsx
+ * ABOUT: BudgetIncidentCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - BudgetIncidentCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: BudgetIncidentCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/BudgetIncidentCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { BudgetIncident } from "@paperclipai/shared";
 import { AlertOctagon, ArrowUpRight, PauseCircle } from "lucide-react";
@@ -113,3 +127,4 @@ export function BudgetIncidentCard({
     </Card>
   );
 }
+// [END: module]

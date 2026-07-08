@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/dev-ops-surfaces.stories.tsx
+ * ABOUT: dev-ops-surfaces.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-ops-surfaces.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-ops-surfaces.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/dev-ops-surfaces.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DevRestartBanner } from "@/components/DevRestartBanner";
 import type { DevServerHealthStatus } from "@/api/health";
@@ -71,3 +85,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const DevOpsSurfaces: Story = {};
+// [END: module]

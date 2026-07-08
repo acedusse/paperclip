@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/interrupt-handoff.test.ts
+ * ABOUT: interrupt-handoff.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - interrupt-handoff.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: interrupt-handoff.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/interrupt-handoff.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { buildAgentMentionHref } from "@paperclipai/shared";
 import {
@@ -249,3 +263,4 @@ describe("computePauseAffectsSummary", () => {
     expect(bucket(summary, "agent_owned").count).toBe(0);
   });
 });
+// [END: module]

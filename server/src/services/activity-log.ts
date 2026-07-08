@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/activity-log.ts
+ * ABOUT: activity-log.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - activity-log.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: activity-log.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/activity-log.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import type { Db } from "@paperclipai/db";
 import { activityLog } from "@paperclipai/db";
@@ -117,3 +131,4 @@ export async function logActivity(db: Db, input: LogActivityInput) {
     publishPluginDomainEvent(event);
   }
 }
+// [END: module]

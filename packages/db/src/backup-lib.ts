@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/backup-lib.ts
+ * ABOUT: backup-lib.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - backup-lib.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: backup-lib.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/backup-lib.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import { createInterface } from "node:readline";
@@ -1023,3 +1037,4 @@ export function formatDatabaseBackupResult(result: RunDatabaseBackupResult): str
   const pruned = result.prunedCount > 0 ? `; pruned ${result.prunedCount} old backup(s)` : "";
   return `${result.backupFile} (${size}${pruned})`;
 }
+// [END: module]

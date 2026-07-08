@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/Layout.tsx
+ * ABOUT: Layout.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Layout.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Layout.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/Layout.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Outlet, useLocation, useNavigate, useNavigationType, useParams } from "@/lib/router";
@@ -592,3 +606,4 @@ export function Layout() {
     </GeneralSettingsProvider>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: tests/e2e/conference-room-typing-intro.spec.ts
+ * ABOUT: conference-room-typing-intro.spec.ts (e2e module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - conference-room-typing-intro.spec.ts (e2e module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: conference-room-typing-intro.spec.ts (e2e module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "tests/e2e/conference-room-typing-intro.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { test, expect } from "@playwright/test";
 
 /**
@@ -140,3 +154,4 @@ test.describe("Conference Room typing intro after onboarding wizard", () => {
     await expect(dots).toHaveCount(0);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/utils/net.ts
+ * ABOUT: net.ts (utils module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - net.ts (utils module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: net.ts (utils module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/utils/net.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import net from "node:net";
 
 export function checkPort(port: number): Promise<{ available: boolean; error?: string }> {
@@ -16,3 +30,4 @@ export function checkPort(port: number): Promise<{ available: boolean; error?: s
     server.listen(port, "127.0.0.1");
   });
 }
+// [END: module]

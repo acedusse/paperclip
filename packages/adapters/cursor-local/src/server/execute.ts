@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/cursor-local/src/server/execute.ts
+ * ABOUT: execute.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/cursor-local/src/server/execute.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -757,3 +771,4 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     }
   }
 }
+// [END: module]

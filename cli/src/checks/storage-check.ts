@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/checks/storage-check.ts
+ * ABOUT: storage-check.ts (checks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - storage-check.ts (checks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: storage-check.ts (checks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/checks/storage-check.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import type { PaperclipConfig } from "../config/schema.js";
 import type { CheckResult } from "./index.js";
@@ -48,4 +62,4 @@ export function storageCheck(config: PaperclipConfig, configPath?: string): Chec
     repairHint: "Verify credentials and endpoint in deployment environment",
   };
 }
-
+// [END: module]

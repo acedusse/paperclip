@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/parse.ts
+ * ABOUT: parse.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - parse.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: parse.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/parse.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { UsageSummary } from "@paperclipai/adapter-utils";
 import {
   asString,
@@ -431,3 +445,4 @@ export function isClaudeTransientUpstreamError(input: {
   if (!haystack) return false;
   return CLAUDE_TRANSIENT_UPSTREAM_RE.test(haystack);
 }
+// [END: module]

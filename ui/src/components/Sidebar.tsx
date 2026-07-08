@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/Sidebar.tsx
+ * ABOUT: Sidebar.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Sidebar.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Sidebar.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/Sidebar.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   Inbox,
   CircleDot,
@@ -221,3 +235,4 @@ export function Sidebar() {
     </aside>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/instance-settings.ts
+ * ABOUT: instance-settings.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-settings.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-settings.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/instance-settings.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const INSTANCE_SETTINGS_PATH_PREFIX = "/company/settings/instance";
 export const DEFAULT_INSTANCE_SETTINGS_PATH = `${INSTANCE_SETTINGS_PATH_PREFIX}/general`;
 
@@ -79,3 +93,4 @@ export function normalizeRememberedInstanceSettingsPath(rawPath: string | null):
 
   return DEFAULT_INSTANCE_SETTINGS_PATH;
 }
+// [END: module]

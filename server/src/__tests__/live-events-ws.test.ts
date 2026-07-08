@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/live-events-ws.test.ts
+ * ABOUT: live-events-ws.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - live-events-ws.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: live-events-ws.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/live-events-ws.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { EventEmitter } from "node:events";
 import type { IncomingMessage } from "node:http";
 import type { Duplex } from "node:stream";
@@ -121,3 +135,4 @@ describe("setupLiveEventsWebSocketServer", () => {
     expect(socket.listenerCount("finish")).toBe(0);
   });
 });
+// [END: module]

@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/adapters/plugin-loader.ts
+ * ABOUT: plugin-loader.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-loader.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-loader.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/plugin-loader.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * External adapter plugin loader.
  *
  * Loads external adapter packages from the adapter-plugin-store and returns
@@ -275,3 +289,4 @@ export async function buildExternalAdapters(): Promise<ServerAdapterModule[]> {
 
   return results;
 }
+// [END: module]

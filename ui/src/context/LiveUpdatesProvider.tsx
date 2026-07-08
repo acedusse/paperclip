@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/LiveUpdatesProvider.tsx
+ * ABOUT: LiveUpdatesProvider.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - LiveUpdatesProvider.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: LiveUpdatesProvider.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/LiveUpdatesProvider.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useRef, type ReactNode } from "react";
 import { useQuery, useQueryClient, type InfiniteData, type QueryClient } from "@tanstack/react-query";
 import type { Agent, Issue, IssueComment, LiveEvent } from "@paperclipai/shared";
@@ -1049,3 +1063,4 @@ export function LiveUpdatesProvider({ children }: { children: ReactNode }) {
 
   return <>{children}</>;
 }
+// [END: module]

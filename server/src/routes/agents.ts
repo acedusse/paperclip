@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/agents.ts
+ * ABOUT: agents.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agents.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agents.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/agents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request, type Response } from "express";
 import { generateKeyPairSync, randomUUID } from "node:crypto";
 import path from "node:path";
@@ -3787,3 +3801,4 @@ export function agentRoutes(
 
   return router;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/plugin-telemetry-bridge.test.ts
+ * ABOUT: plugin-telemetry-bridge.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-telemetry-bridge.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-telemetry-bridge.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/plugin-telemetry-bridge.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createHostClientHandlers } from "../../../packages/plugins/sdk/src/host-client-factory.js";
 import { PLUGIN_RPC_ERROR_CODES } from "../../../packages/plugins/sdk/src/protocol.js";
@@ -112,3 +126,4 @@ describe("plugin telemetry bridge", () => {
     expect(mockGetTelemetryClient).toHaveBeenCalledTimes(1);
   });
 });
+// [END: module]

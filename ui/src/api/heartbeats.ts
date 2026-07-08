@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/heartbeats.ts
+ * ABOUT: heartbeats.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeats.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeats.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/heartbeats.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   HeartbeatRun,
   HeartbeatRunEvent,
@@ -122,3 +136,4 @@ export const heartbeatsApi = {
   listInstanceSchedulerAgents: () =>
     api.get<InstanceSchedulerHeartbeatAgent[]>("/instance/scheduler-heartbeats"),
 };
+// [END: module]

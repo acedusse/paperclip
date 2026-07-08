@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/src/workspace-diff.ts
+ * ABOUT: workspace-diff.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-diff.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-diff.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/src/workspace-diff.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
@@ -843,3 +857,4 @@ export function workspaceDiffService() {
     },
   };
 }
+// [END: module]

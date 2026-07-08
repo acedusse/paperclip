@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agents-service-secret-bindings.test.ts
+ * ABOUT: agents-service-secret-bindings.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agents-service-secret-bindings.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agents-service-secret-bindings.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agents-service-secret-bindings.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdirSync, rmSync } from "node:fs";
 import os from "node:os";
@@ -329,3 +343,4 @@ describeEmbeddedPostgres("agent service secret binding sync", () => {
     expect(reloaded?.status).toBe("pending_approval");
   });
 });
+// [END: module]

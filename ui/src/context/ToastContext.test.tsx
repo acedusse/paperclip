@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/ToastContext.test.tsx
+ * ABOUT: ToastContext.test.tsx (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ToastContext.test.tsx (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ToastContext.test.tsx (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/ToastContext.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -70,3 +84,4 @@ describe("ToastContext", () => {
     });
   });
 });
+// [END: module]

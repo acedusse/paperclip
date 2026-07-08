@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/paperclip-plugin-fake-sandbox/src/manifest.ts
+ * ABOUT: manifest.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - manifest.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: manifest.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/paperclip-plugin-fake-sandbox/src/manifest.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PaperclipPluginManifestV1 } from "@paperclipai/plugin-sdk";
 
 const PLUGIN_ID = "paperclip.fake-sandbox-provider";
@@ -48,3 +62,4 @@ const manifest: PaperclipPluginManifestV1 = {
 };
 
 export default manifest;
+// [END: module]

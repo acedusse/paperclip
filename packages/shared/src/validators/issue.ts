@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/issue.ts
+ * ABOUT: issue.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/issue.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   ISSUE_EXECUTION_DECISION_OUTCOMES,
@@ -995,3 +1009,4 @@ export const restoreIssueDocumentRevisionSchema = z.object({});
 export type IssueDocumentFormat = z.infer<typeof issueDocumentFormatSchema>;
 export type UpsertIssueDocument = z.infer<typeof upsertIssueDocumentSchema>;
 export type RestoreIssueDocumentRevision = z.infer<typeof restoreIssueDocumentRevisionSchema>;
+// [END: module]

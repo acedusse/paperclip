@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/secret-provider-registry.test.ts
+ * ABOUT: secret-provider-registry.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secret-provider-registry.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secret-provider-registry.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/secret-provider-registry.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomBytes } from "node:crypto";
 import { chmodSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
@@ -68,3 +82,4 @@ describe("secret provider registry", () => {
     expect(local?.backupGuidance?.join("\n")).toContain("database");
   });
 });
+// [END: module]

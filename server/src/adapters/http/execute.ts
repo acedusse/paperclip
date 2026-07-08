@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/http/execute.ts
+ * ABOUT: execute.ts (http module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execute.ts (http module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execute.ts (http module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/http/execute.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AdapterExecutionContext, AdapterExecutionResult } from "../types.js";
 import { asString, asNumber, parseObject } from "../utils.js";
 
@@ -51,3 +65,4 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     if (timer) clearTimeout(timer);
   }
 }
+// [END: module]

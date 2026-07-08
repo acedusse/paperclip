@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/authz-company-access.test.ts
+ * ABOUT: authz-company-access.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - authz-company-access.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: authz-company-access.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/authz-company-access.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { assertBoardOrgAccess, assertCompanyAccess, hasBoardOrgAccess } from "../routes/authz.js";
 
@@ -155,3 +169,4 @@ describe("assertBoardOrgAccess", () => {
     expect(() => assertBoardOrgAccess(req)).toThrow("Company membership or instance admin access required");
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/routes/environments.ts
+ * ABOUT: environments.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - environments.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: environments.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/environments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Router, type Request } from "express";
 import type { Db } from "@paperclipai/db";
 import {
@@ -529,3 +543,4 @@ export function environmentRoutes(
 
   return router;
 }
+// [END: module]

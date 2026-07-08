@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/company-skills.ts
+ * ABOUT: company-skills.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company-skills.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company-skills.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/company-skills.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
@@ -4446,3 +4460,4 @@ export function companySkillService(db: Db) {
     listRuntimeSkillEntries,
   };
 }
+// [END: module]

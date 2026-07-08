@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/InlineEditor.test.tsx
+ * ABOUT: InlineEditor.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InlineEditor.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InlineEditor.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/InlineEditor.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act, forwardRef, useImperativeHandle, useRef, type ReactNode } from "react";
@@ -370,3 +384,4 @@ describe("queueContainedBlurCommit", () => {
     cancel();
   });
 });
+// [END: module]

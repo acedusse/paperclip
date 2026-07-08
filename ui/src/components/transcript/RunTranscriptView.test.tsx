@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/transcript/RunTranscriptView.test.tsx
+ * ABOUT: RunTranscriptView.test.tsx (transcript module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RunTranscriptView.test.tsx (transcript module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RunTranscriptView.test.tsx (transcript module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/transcript/RunTranscriptView.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
@@ -130,3 +144,4 @@ describe("RunTranscriptView", () => {
     expect(html).not.toContain("line-499");
   });
 });
+// [END: module]

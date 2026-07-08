@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/command-managed-runtime.ts
+ * ABOUT: command-managed-runtime.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - command-managed-runtime.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: command-managed-runtime.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/command-managed-runtime.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import {
   prepareSandboxManagedRuntime,
@@ -327,3 +341,4 @@ export async function prepareCommandManagedRuntime(input: {
     onProgress: input.onProgress,
   });
 }
+// [END: module]

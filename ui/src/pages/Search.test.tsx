@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Search.test.tsx
+ * ABOUT: Search.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Search.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Search.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Search.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import type { ReactNode } from "react";
@@ -420,3 +434,4 @@ describe("Search page", () => {
     });
   });
 });
+// [END: module]

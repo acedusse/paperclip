@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/subIssueDefaults.test.ts
+ * ABOUT: subIssueDefaults.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - subIssueDefaults.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: subIssueDefaults.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/subIssueDefaults.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { ExecutionWorkspace, Issue } from "@paperclipai/shared";
 import { buildSubIssueDefaults, buildSubIssueDefaultsForViewer } from "./subIssueDefaults";
@@ -135,3 +149,4 @@ describe("buildSubIssueDefaults", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/Agents.tsx
+ * ABOUT: Agents.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - Agents.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: Agents.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/Agents.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -523,3 +537,4 @@ function LiveRunIndicator({
     </Link>
   );
 }
+// [END: module]

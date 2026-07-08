@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/liveIssueIds.ts
+ * ABOUT: liveIssueIds.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - liveIssueIds.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: liveIssueIds.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/liveIssueIds.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { LiveRunForIssue } from "../api/heartbeats";
 
 function isLiveRunStatus(status: string): boolean {
@@ -56,3 +70,4 @@ export function collectSubtreeLiveCounts(
   }
   return counts;
 }
+// [END: module]

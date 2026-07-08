@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/OnboardingWizardVariant.test.tsx
+ * ABOUT: OnboardingWizardVariant.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - OnboardingWizardVariant.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: OnboardingWizardVariant.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/OnboardingWizardVariant.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -97,3 +111,4 @@ describe("OnboardingWizardVariant (PAP-138)", () => {
     expect(container.querySelector('[data-testid="wizard-capsule"]')).toBeNull();
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/secrets-service.test.ts
+ * ABOUT: secrets-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - secrets-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: secrets-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/secrets-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { mkdirSync, rmSync } from "node:fs";
 import os from "node:os";
@@ -2120,3 +2134,4 @@ describeEmbeddedPostgres("secretService", () => {
     ).rejects.toThrow(/active member|secrets:read|forbidden/i);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/adapters/registry.test.ts
+ * ABOUT: registry.test.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - registry.test.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: registry.test.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/registry.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
 import type { UIAdapterModule } from "./types";
 import {
@@ -49,3 +63,4 @@ describe("ui adapter registry", () => {
     expect(fallback.ConfigFields).toBe(SchemaConfigFields);
   });
 });
+// [END: module]

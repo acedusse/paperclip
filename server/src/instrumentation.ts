@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/instrumentation.ts
+ * ABOUT: instrumentation.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instrumentation.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instrumentation.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/instrumentation.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // Optional OpenTelemetry auto-instrumentation for HTTP / Express / PG / …
 //
 // Activated only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. When unset, no
@@ -206,3 +220,4 @@ async function bootstrapOtel(endpoint: string): Promise<void> {
     );
   }
 }
+// [END: module]

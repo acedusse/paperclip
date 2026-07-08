@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/inbox-dismissals.ts
+ * ABOUT: inbox-dismissals.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - inbox-dismissals.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: inbox-dismissals.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/inbox-dismissals.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { and, desc, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { inboxDismissals } from "@paperclipai/db";
@@ -39,3 +53,4 @@ export function inboxDismissalService(db: Db) {
     },
   };
 }
+// [END: module]

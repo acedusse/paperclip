@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/MyIssues.tsx
+ * ABOUT: MyIssues.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MyIssues.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MyIssues.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/MyIssues.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { issuesApi } from "../api/issues";
@@ -70,3 +84,4 @@ export function MyIssues() {
     </div>
   );
 }
+// [END: module]

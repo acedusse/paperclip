@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/heartbeat-stop-metadata.ts
+ * ABOUT: heartbeat-stop-metadata.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-stop-metadata.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-stop-metadata.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/heartbeat-stop-metadata.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type HeartbeatRunOutcome = "succeeded" | "failed" | "cancelled" | "timed_out";
 
 export type HeartbeatRunStopReason =
@@ -127,3 +141,4 @@ export function mergeHeartbeatRunStopMetadata(
     ...(metadata.effectiveTimeoutMs != null ? { effectiveTimeoutMs: metadata.effectiveTimeoutMs } : {}),
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/cloud_upstreams.ts
+ * ABOUT: cloud_upstreams.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud_upstreams.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud_upstreams.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/cloud_upstreams.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { boolean, index, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 
@@ -73,3 +87,4 @@ export const cloudUpstreamRuns = pgTable(
     index("cloud_upstream_runs_connection_idx").on(table.connectionId),
   ],
 );
+// [END: module]

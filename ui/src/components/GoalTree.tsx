@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/GoalTree.tsx
+ * ABOUT: GoalTree.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - GoalTree.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: GoalTree.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/GoalTree.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Goal } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
 import { StatusBadge } from "./StatusBadge";
@@ -115,3 +129,4 @@ export function GoalTree({ goals, goalLink, onSelect }: GoalTreeProps) {
     </div>
   );
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/inbox.test.ts
+ * ABOUT: inbox.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - inbox.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: inbox.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/inbox.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import { beforeEach, describe, expect, it } from "vitest";
@@ -1474,3 +1488,4 @@ describe("inbox helpers", () => {
     expect(shouldResetInboxWorkspaceGrouping("none", false, true)).toBe(false);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AgentIconPicker.tsx
+ * ABOUT: AgentIconPicker.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AgentIconPicker.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AgentIconPicker.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AgentIconPicker.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState, useMemo } from "react";
 import {
   type LucideIcon,
@@ -78,3 +92,4 @@ export function AgentIconPicker({ value, onChange, children }: AgentIconPickerPr
     </Popover>
   );
 }
+// [END: module]

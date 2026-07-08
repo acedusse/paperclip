@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/auth-routes.test.ts
+ * ABOUT: auth-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/auth-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
@@ -162,3 +176,4 @@ describe.sequential("auth routes", () => {
     expect(res.status).toBe(400);
   });
 });
+// [END: module]

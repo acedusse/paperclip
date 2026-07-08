@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/worktree-config.test.ts
+ * ABOUT: worktree-config.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree-config.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree-config.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/worktree-config.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -691,3 +705,4 @@ describe("worktree config repair", () => {
     expect(config.auth.publicBaseUrl).toBe("https://paperclip.example");
   });
 });
+// [END: module]

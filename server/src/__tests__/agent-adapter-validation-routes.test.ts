@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agent-adapter-validation-routes.test.ts
+ * ABOUT: agent-adapter-validation-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-adapter-validation-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-adapter-validation-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agent-adapter-validation-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import os from "node:os";
 import path from "node:path";
@@ -422,3 +436,4 @@ describe("agent routes adapter validation", () => {
     expect(String(res.body.error ?? res.body.message ?? "")).toContain(`Unknown adapter type: ${missingAdapterType}`);
   });
 });
+// [END: module]

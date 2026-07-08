@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/constants.ts
+ * ABOUT: constants.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - constants.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: constants.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/constants.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export const COMPANY_STATUSES = ["active", "paused", "archived"] as const;
 export type CompanyStatus = (typeof COMPANY_STATUSES)[number];
 
@@ -1180,3 +1194,4 @@ export const PLUGIN_BRIDGE_ERROR_CODES = [
   "UNKNOWN",
 ] as const;
 export type PluginBridgeErrorCode = (typeof PLUGIN_BRIDGE_ERROR_CODES)[number];
+// [END: module]

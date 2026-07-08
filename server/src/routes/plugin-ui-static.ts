@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/routes/plugin-ui-static.ts
+ * ABOUT: plugin-ui-static.ts (routes module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-ui-static.ts (routes module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-ui-static.ts (routes module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/routes/plugin-ui-static.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * @fileoverview Plugin UI static file serving route
  *
  * Serves plugin UI bundles from the plugin's dist/ui/ directory under the
@@ -494,3 +508,4 @@ export function pluginUiStaticRoutes(db: Db, options: PluginUiStaticRouteOptions
 
   return router;
 }
+// [END: module]

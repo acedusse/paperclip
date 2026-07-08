@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/activity.ts
+ * ABOUT: activity.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - activity.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: activity.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/activity.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ActivityEvent, RunLivenessState } from "@paperclipai/shared";
 import { api } from "./client";
 
@@ -69,3 +83,4 @@ export const activityApi = {
   runsForIssue: (issueId: string) => api.get<RunForIssue[]>(`/issues/${issueId}/runs`),
   issuesForRun: (runId: string) => api.get<IssueForRun[]>(`/heartbeat-runs/${runId}/issues`),
 };
+// [END: module]

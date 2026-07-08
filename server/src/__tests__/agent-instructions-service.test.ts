@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/agent-instructions-service.test.ts
+ * ABOUT: agent-instructions-service.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-instructions-service.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-instructions-service.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/agent-instructions-service.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -359,3 +373,4 @@ describe("agent instructions service", () => {
     expect(exported.files).toEqual({ "AGENTS.md": "# Managed Agent\n" });
   });
 });
+// [END: module]

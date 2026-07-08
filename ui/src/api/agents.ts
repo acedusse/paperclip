@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/api/agents.ts
+ * ABOUT: agents.ts (api module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agents.ts (api module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agents.ts (api module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/api/agents.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   Agent,
   AgentDesiredSkillEntry,
@@ -238,3 +252,4 @@ export interface AvailableSkill {
   description: string;
   isPaperclipManaged: boolean;
 }
+// [END: module]

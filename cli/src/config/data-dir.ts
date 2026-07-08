@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/config/data-dir.ts
+ * ABOUT: data-dir.ts (config module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - data-dir.ts (config module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: data-dir.ts (config module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/config/data-dir.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import {
   expandHomePrefix,
@@ -46,3 +60,4 @@ export function applyDataDirOverride(
 
   return resolvedDataDir;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/client/cloud-transfer.ts
+ * ABOUT: cloud-transfer.ts (client module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-transfer.ts (client module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-transfer.ts (client module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/client/cloud-transfer.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash } from "node:crypto";
 
 export const upstreamTransferSchema = {
@@ -295,3 +309,4 @@ function safeParseJson(text: string): unknown {
     return text;
   }
 }
+// [END: module]

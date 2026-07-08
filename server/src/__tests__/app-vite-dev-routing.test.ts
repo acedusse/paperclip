@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/app-vite-dev-routing.test.ts
+ * ABOUT: app-vite-dev-routing.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - app-vite-dev-routing.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: app-vite-dev-routing.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/app-vite-dev-routing.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import type { Request } from "express";
 import { shouldServeViteDevHtml } from "../app.js";
@@ -25,3 +39,4 @@ describe("shouldServeViteDevHtml", () => {
     expect(shouldServeViteDevHtml(createRequest("/src/main.tsx", "html"))).toBe(false);
   });
 });
+// [END: module]

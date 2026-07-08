@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapter-utils/src/server-utils.test.ts
+ * ABOUT: server-utils.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - server-utils.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: server-utils.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapter-utils/src/server-utils.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -1466,3 +1480,4 @@ describe("appendWithByteCap", () => {
     expect(Buffer.byteLength(output, "utf8")).toBeLessThanOrEqual(7);
   });
 });
+// [END: module]

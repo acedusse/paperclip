@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CloudUpstreamUxLab.tsx
+ * ABOUT: CloudUpstreamUxLab.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CloudUpstreamUxLab.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CloudUpstreamUxLab.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CloudUpstreamUxLab.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMemo } from "react";
 import {
   AlertTriangle,
@@ -820,3 +834,4 @@ function buildFixture(state: FixtureStateKey): Fixture {
       };
   }
 }
+// [END: module]

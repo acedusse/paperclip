@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/__tests__/operations-parity.test.ts
+ * ABOUT: operations-parity.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - operations-parity.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: operations-parity.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/__tests__/operations-parity.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerCostCommands } from "../commands/client/cost.js";
@@ -134,3 +148,4 @@ describe("operations parity commands", () => {
 function jsonResponse(body: unknown = { ok: true }, init: ResponseInit = { status: 200 }): Response {
   return new Response(JSON.stringify(body), init);
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/runtime-api.ts
+ * ABOUT: runtime-api.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - runtime-api.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: runtime-api.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/runtime-api.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import os from "node:os";
 
 function normalizeHost(value: string | null | undefined): string {
@@ -169,3 +183,4 @@ export function buildRuntimeApiCandidateUrls(input: {
 
   return candidates;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issueDetailQuery.test.tsx
+ * ABOUT: issueDetailQuery.test.tsx (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueDetailQuery.test.tsx (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueDetailQuery.test.tsx (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issueDetailQuery.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -128,3 +142,4 @@ describe("getIssueDetailQueryOptions", () => {
     container.remove();
   });
 });
+// [END: module]

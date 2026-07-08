@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/mention-aware-link-node.ts
+ * ABOUT: mention-aware-link-node.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - mention-aware-link-node.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: mention-aware-link-node.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/mention-aware-link-node.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   LinkNode,
   type LinkAttributes,
@@ -65,3 +79,4 @@ export const mentionAwareLinkNodeReplacement = {
   },
   withKlass: MentionAwareLinkNode,
 } as const;
+// [END: module]

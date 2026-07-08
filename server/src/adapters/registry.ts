@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/adapters/registry.ts
+ * ABOUT: registry.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - registry.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: registry.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/adapters/registry.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   AdapterModel,
   AdapterModelProfileDefinition,
@@ -834,3 +848,4 @@ export function findActiveServerAdapter(type: string): ServerAdapterModule | nul
   }
   return adaptersByType.get(type) ?? null;
 }
+// [END: module]

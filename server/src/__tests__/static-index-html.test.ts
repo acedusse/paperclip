@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/static-index-html.test.ts
+ * ABOUT: static-index-html.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - static-index-html.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: static-index-html.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/static-index-html.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -47,3 +61,4 @@ describe("static SPA fallback HTML", () => {
     expect(res.text).not.toContain("/assets/index-old.js");
   });
 });
+// [END: module]

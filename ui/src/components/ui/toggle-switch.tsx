@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ui/toggle-switch.tsx
+ * ABOUT: toggle-switch.tsx (ui module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - toggle-switch.tsx (ui module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: toggle-switch.tsx (ui module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ui/toggle-switch.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -57,3 +71,4 @@ export const ToggleSwitch = React.forwardRef<
 );
 
 ToggleSwitch.displayName = "ToggleSwitch";
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/company_memberships.ts
+ * ABOUT: company_memberships.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company_memberships.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company_memberships.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/company_memberships.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 
@@ -27,3 +41,4 @@ export const companyMemberships = pgTable(
     companyStatusIdx: index("company_memberships_company_status_idx").on(table.companyId, table.status),
   }),
 );
+// [END: module]

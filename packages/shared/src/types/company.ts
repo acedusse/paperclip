@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/company.ts
+ * ABOUT: company.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/company.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { CompanyStatus, PauseReason } from "../constants.js";
 
 export interface Company {
@@ -24,3 +38,4 @@ export interface Company {
   createdAt: Date;
   updatedAt: Date;
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/gemini-local-adapter-environment.test.ts
+ * ABOUT: gemini-local-adapter-environment.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - gemini-local-adapter-environment.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: gemini-local-adapter-environment.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/gemini-local-adapter-environment.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -185,3 +199,4 @@ describe("gemini_local environment diagnostics", () => {
     expect(probeEnv?.GEMINI_CLI_TRUST_WORKSPACE).toBe("true");
   });
 });
+// [END: module]

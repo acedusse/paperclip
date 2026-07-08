@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueRow.tsx
+ * ABOUT: IssueRow.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueRow.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueRow.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueRow.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ReactNode } from "react";
 import type { Issue, IssueRecoveryAction } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -257,3 +271,4 @@ function renderRecoveryChip(action: IssueRecoveryAction, selected: boolean): Rea
     </span>
   );
 }
+// [END: module]

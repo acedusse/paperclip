@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/DashboardLive.tsx
+ * ABOUT: DashboardLive.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - DashboardLive.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: DashboardLive.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/DashboardLive.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect } from "react";
 import { ArrowLeft, RadioTower } from "lucide-react";
 import { Link } from "@/lib/router";
@@ -62,3 +76,4 @@ export function DashboardLive() {
     </div>
   );
 }
+// [END: module]

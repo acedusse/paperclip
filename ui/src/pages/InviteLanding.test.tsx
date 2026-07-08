@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/InviteLanding.test.tsx
+ * ABOUT: InviteLanding.test.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - InviteLanding.test.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: InviteLanding.test.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/InviteLanding.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { flushSync } from "react-dom";
@@ -961,3 +975,4 @@ describe("InviteLandingPage", () => {
     });
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/codex-local-execute.test.ts
+ * ABOUT: codex-local-execute.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - codex-local-execute.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: codex-local-execute.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/codex-local-execute.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -1256,3 +1270,4 @@ describe("codex execute", () => {
     }
   });
 });
+// [END: module]

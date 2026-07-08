@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/query-placeholder-data.test.tsx
+ * ABOUT: query-placeholder-data.test.tsx (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - query-placeholder-data.test.tsx (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: query-placeholder-data.test.tsx (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/query-placeholder-data.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -109,3 +123,4 @@ describe("keepPreviousDataForSameQueryTail", () => {
     queryClient.clear();
   });
 });
+// [END: module]

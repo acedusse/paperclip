@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/local-service-supervisor.ts
+ * ABOUT: local-service-supervisor.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - local-service-supervisor.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: local-service-supervisor.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/local-service-supervisor.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
@@ -402,3 +416,4 @@ export async function readLocalServicePortOwner(port: number) {
     return null;
   }
 }
+// [END: module]

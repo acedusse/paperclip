@@ -1,3 +1,17 @@
+/**
+ * FILE: scripts/ensure-workspace-package-links.ts
+ * ABOUT: ensure-workspace-package-links.ts (scripts module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ensure-workspace-package-links.ts (scripts module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ensure-workspace-package-links.ts (scripts module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "scripts/ensure-workspace-package-links.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 #!/usr/bin/env -S node --import tsx
 import fs from "node:fs/promises";
 import { existsSync, readdirSync, readFileSync, realpathSync } from "node:fs";
@@ -115,3 +129,4 @@ async function ensureWorkspaceLinksCurrent(workspaceDir: string) {
 for (const workspaceDir of workspaceDirs) {
   await ensureWorkspaceLinksCurrent(workspaceDir);
 }
+// [END: module]

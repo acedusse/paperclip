@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/examples/plugin-kitchen-sink-example/src/constants.ts
+ * ABOUT: constants.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - constants.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: constants.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/examples/plugin-kitchen-sink-example/src/constants.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { PluginLauncherRegistration } from "@paperclipai/plugin-sdk";
 
 export const PLUGIN_ID = "paperclip-kitchen-sink-example";
@@ -113,3 +127,4 @@ export const RUNTIME_LAUNCHER: PluginLauncherRegistration = {
     bounds: "wide",
   },
 };
+// [END: module]

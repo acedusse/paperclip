@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/remark-workspace-file-refs.ts
+ * ABOUT: remark-workspace-file-refs.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - remark-workspace-file-refs.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: remark-workspace-file-refs.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/remark-workspace-file-refs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { parseWorkspaceFileRef, type ParsedWorkspaceFileRef } from "./workspace-file-parser";
 
 const WORKSPACE_FILE_HREF_SCHEME = "workspace-file:";
@@ -103,3 +117,4 @@ export function remarkWorkspaceFileRefs() {
 }
 
 export const WORKSPACE_FILE_HREF_PREFIX = WORKSPACE_FILE_HREF_SCHEME;
+// [END: module]

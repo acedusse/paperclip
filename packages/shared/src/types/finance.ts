@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/finance.ts
+ * ABOUT: finance.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - finance.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: finance.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/finance.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { AgentAdapterType, FinanceDirection, FinanceEventKind, FinanceUnit } from "../constants.js";
 
 export interface FinanceEvent {
@@ -58,3 +72,4 @@ export interface FinanceByKind {
   eventCount: number;
   billerCount: number;
 }
+// [END: module]

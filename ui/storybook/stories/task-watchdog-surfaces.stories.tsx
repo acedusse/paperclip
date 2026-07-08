@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/storybook/stories/task-watchdog-surfaces.stories.tsx
+ * ABOUT: task-watchdog-surfaces.stories.tsx (stories module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - task-watchdog-surfaces.stories.tsx (stories module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: task-watchdog-surfaces.stories.tsx (stories module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/storybook/stories/task-watchdog-surfaces.stories.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Issue, IssueWatchdogSummary } from "@paperclipai/shared";
 import { IssueProperties } from "@/components/IssueProperties";
@@ -119,3 +133,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WatchdogSurfaces: Story = {};
+// [END: module]

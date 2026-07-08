@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/issues.ts
+ * ABOUT: issues.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issues.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issues.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/issues.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Buffer } from "node:buffer";
 import { createHash } from "node:crypto";
 import { and, asc, desc, eq, gt, inArray, isNull, like, lt, ne, notInArray, or, sql, type SQL } from "drizzle-orm";
@@ -6462,3 +6476,4 @@ export function issueService(db: Db) {
     },
   };
 }
+// [END: module]

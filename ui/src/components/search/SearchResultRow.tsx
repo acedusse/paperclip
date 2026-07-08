@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/search/SearchResultRow.tsx
+ * ABOUT: SearchResultRow.tsx (search module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - SearchResultRow.tsx (search module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: SearchResultRow.tsx (search module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/search/SearchResultRow.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { memo, type ComponentType, type SVGProps } from "react";
 import { Bot, FileText, Hexagon, MessageSquare, Paperclip, Quote } from "lucide-react";
 import type { Agent, CompanySearchResult } from "@paperclipai/shared";
@@ -265,3 +279,4 @@ function SnippetLine({ text, highlights, field, fallbackLabel, multiline = false
     </div>
   );
 }
+// [END: module]

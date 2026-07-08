@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/EntityRow.test.tsx
+ * ABOUT: EntityRow.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - EntityRow.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: EntityRow.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/EntityRow.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { EntityRow } from "./EntityRow";
@@ -47,3 +61,4 @@ describe("EntityRow", () => {
     expect(markup).toContain("min-w-0 flex-1");
   });
 });
+// [END: module]

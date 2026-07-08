@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/execution-policy-bootstrap.ts
+ * ABOUT: execution-policy-bootstrap.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - execution-policy-bootstrap.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: execution-policy-bootstrap.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/execution-policy-bootstrap.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Cloud execution-policy bootstrap.
  *
  * Lets an operator / gitops deployment force the instance onto the Kubernetes
@@ -192,3 +206,4 @@ export async function bootstrapExecutionPolicyFromEnv(
   if (!bootstrap) return null;
   return applyExecutionPolicyBootstrap(db, bootstrap);
 }
+// [END: module]

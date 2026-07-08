@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/MarkdownBody.test.tsx
+ * ABOUT: MarkdownBody.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - MarkdownBody.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: MarkdownBody.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/MarkdownBody.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 import type { ComponentProps, ReactNode } from "react";
@@ -555,3 +569,4 @@ describe("MarkdownBody", () => {
   });
 
 });
+// [END: module]

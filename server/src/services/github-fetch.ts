@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/github-fetch.ts
+ * ABOUT: github-fetch.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - github-fetch.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: github-fetch.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/github-fetch.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { unprocessable } from "../errors.js";
 
 function isGitHubDotCom(hostname: string) {
@@ -23,3 +37,4 @@ export async function ghFetch(url: string, init?: RequestInit): Promise<Response
     throw unprocessable(`Could not connect to ${new URL(url).hostname} — ensure the URL points to a GitHub or GitHub Enterprise instance`);
   }
 }
+// [END: module]

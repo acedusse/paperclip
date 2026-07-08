@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/invite-create-route.test.ts
+ * ABOUT: invite-create-route.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-create-route.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-create-route.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/invite-create-route.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -135,3 +149,4 @@ describe("POST /companies/:companyId/invites", () => {
     expect(res.body.inviteUrl).toMatch(/^https:\/\/paperclip\.example\/invite\/pcp_invite_/);
   });
 });
+// [END: module]

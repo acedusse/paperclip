@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/adapter-models-env.ts
+ * ABOUT: adapter-models-env.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - adapter-models-env.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: adapter-models-env.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/adapter-models-env.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export interface AdapterModelEntry {
   id: string;
   label?: string;
@@ -38,3 +52,4 @@ export function parseAdapterModelsEnv(
   }
   return out;
 }
+// [END: module]

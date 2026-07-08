@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/CompanyAccess.tsx
+ * ABOUT: CompanyAccess.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - CompanyAccess.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: CompanyAccess.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/CompanyAccess.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -643,3 +657,4 @@ function PendingJoinRequestCard({
     </div>
   );
 }
+// [END: module]

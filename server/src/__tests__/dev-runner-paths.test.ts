@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/dev-runner-paths.test.ts
+ * ABOUT: dev-runner-paths.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - dev-runner-paths.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: dev-runner-paths.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/dev-runner-paths.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { shouldTrackDevServerPath } from "../../../scripts/dev-runner-paths.mjs";
 
@@ -26,3 +40,4 @@ describe("shouldTrackDevServerPath", () => {
     expect(shouldTrackDevServerPath("server/src/testing/runtime.ts")).toBe(true);
   });
 });
+// [END: module]

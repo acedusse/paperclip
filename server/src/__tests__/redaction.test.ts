@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/redaction.test.ts
+ * ABOUT: redaction.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - redaction.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: redaction.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/redaction.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { REDACTED_EVENT_VALUE, redactEventPayload, redactSensitiveText, sanitizeRecord } from "../redaction.js";
 
@@ -136,3 +150,4 @@ describe("redaction", () => {
     expect(result?.argv).toEqual(["--api-key", REDACTED_EVENT_VALUE]);
   });
 });
+// [END: module]

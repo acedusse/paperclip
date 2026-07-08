@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issues.ts
+ * ABOUT: issues.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issues.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issues.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issues.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
@@ -151,3 +165,4 @@ export const issues = pgTable(
       ),
   }),
 );
+// [END: module]

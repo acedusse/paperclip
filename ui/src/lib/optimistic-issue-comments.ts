@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/optimistic-issue-comments.ts
+ * ABOUT: optimistic-issue-comments.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - optimistic-issue-comments.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: optimistic-issue-comments.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/optimistic-issue-comments.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Issue, IssueComment } from "@paperclipai/shared";
 
 export interface IssueCommentReassignment {
@@ -375,3 +389,4 @@ export function removeIssueCommentFromPages(
     .map((page) => page.filter((comment) => comment.id !== commentId))
     .filter((page) => page.length > 0);
 }
+// [END: module]

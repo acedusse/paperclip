@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/agent_config_revisions.ts
+ * ABOUT: agent_config_revisions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent_config_revisions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent_config_revisions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/agent_config_revisions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { pgTable, uuid, text, timestamp, jsonb, index } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { agents } from "./agents.js";
@@ -26,3 +40,4 @@ export const agentConfigRevisions = pgTable(
     agentCreatedIdx: index("agent_config_revisions_agent_created_idx").on(table.agentId, table.createdAt),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/cloud-upstreams.test.ts
+ * ABOUT: cloud-upstreams.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - cloud-upstreams.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: cloud-upstreams.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/cloud-upstreams.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { generateKeyPairSync, randomUUID } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { companies, cloudUpstreamConnections, cloudUpstreamRuns, companySkills, createDb } from "@paperclipai/db";
@@ -332,3 +346,4 @@ function cloudRunRow(input: {
     completedAt: input.completedAt,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/instance-admission-status-routes.test.ts
+ * ABOUT: instance-admission-status-routes.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-admission-status-routes.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-admission-status-routes.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/instance-admission-status-routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import express from "express";
 import request from "supertest";
@@ -182,3 +196,4 @@ describeEmbeddedPostgres("admission-status routes", () => {
     expect(afterClearStatus.body.cap).toBeNull();
   });
 });
+// [END: module]

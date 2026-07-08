@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ReportsToPicker.tsx
+ * ABOUT: ReportsToPicker.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ReportsToPicker.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ReportsToPicker.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ReportsToPicker.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useState } from "react";
 import type { Agent } from "@paperclipai/shared";
 import {
@@ -124,3 +138,4 @@ export function ReportsToPicker({
     </Popover>
   );
 }
+// [END: module]

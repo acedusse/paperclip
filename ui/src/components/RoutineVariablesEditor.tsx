@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/RoutineVariablesEditor.tsx
+ * ABOUT: RoutineVariablesEditor.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineVariablesEditor.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineVariablesEditor.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/RoutineVariablesEditor.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, HelpCircle } from "lucide-react";
 import { syncRoutineVariablesWithTemplate, type RoutineVariable } from "@paperclipai/shared";
@@ -337,3 +351,4 @@ export function RoutineVariablesHint() {
     </>
   );
 }
+// [END: module]

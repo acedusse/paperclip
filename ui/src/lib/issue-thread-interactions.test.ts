@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/issue-thread-interactions.test.ts
+ * ABOUT: issue-thread-interactions.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-thread-interactions.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-thread-interactions.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/issue-thread-interactions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   buildIssueThreadInteractionSummary,
@@ -256,3 +270,4 @@ describe("issue thread interaction helpers", () => {
     expect(labels).toEqual(["Option 2", "Option 1", "Other: A written answer"]);
   });
 });
+// [END: module]

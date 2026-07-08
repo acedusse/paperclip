@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/worktree.ts
+ * ABOUT: worktree.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - worktree.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: worktree.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/worktree.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   chmodSync,
   copyFileSync,
@@ -3367,3 +3381,4 @@ export function registerWorktreeCommands(program: Command): void {
     .option("--force", "Bypass safety checks (uncommitted changes, unique commits)", false)
     .action(worktreeCleanupCommand);
 }
+// [END: module]

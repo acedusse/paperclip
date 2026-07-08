@@ -1,4 +1,18 @@
 /**
+ * FILE: server/src/services/plugin-stream-bus.ts
+ * ABOUT: plugin-stream-bus.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-stream-bus.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-stream-bus.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-stream-bus.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * In-memory pub/sub bus for plugin SSE streams.
  *
  * Workers emit stream events via JSON-RPC notifications. The bus fans out
@@ -79,3 +93,4 @@ export function createPluginStreamBus(): PluginStreamBus {
     },
   };
 }
+// [END: module]

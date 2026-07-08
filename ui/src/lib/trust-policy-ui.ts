@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/trust-policy-ui.ts
+ * ABOUT: trust-policy-ui.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - trust-policy-ui.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: trust-policy-ui.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/trust-policy-ui.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import {
   DEFAULT_TRUST_PRESET,
   LOW_TRUST_REVIEW_PRESET,
@@ -175,3 +189,4 @@ export function sourceTrustLabel(sourceTrust: SourceTrustMetadata | null | undef
   if (sourceTrust.disposition === "promoted") return "Promoted from low-trust";
   return "Low-trust source";
 }
+// [END: module]

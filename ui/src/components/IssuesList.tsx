@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssuesList.tsx
+ * ABOUT: IssuesList.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssuesList.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssuesList.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssuesList.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { startTransition, useDeferredValue, useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { accessApi } from "../api/access";
@@ -1977,3 +1991,4 @@ export function IssuesList({
     </div>
   );
 }
+// [END: module]

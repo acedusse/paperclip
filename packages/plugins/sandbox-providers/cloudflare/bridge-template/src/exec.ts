@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/exec.ts
+ * ABOUT: exec.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - exec.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: exec.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/exec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Sandbox as CloudflareSandbox } from "@cloudflare/sandbox";
 import { shellQuote } from "./helpers.js";
 import { isTimeoutError } from "./sandboxes.js";
@@ -145,3 +159,4 @@ export async function executeInSandbox(params: BridgeExecuteParams) {
     }
   }
 }
+// [END: module]

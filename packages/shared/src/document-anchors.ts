@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/document-anchors.ts
+ * ABOUT: document-anchors.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-anchors.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-anchors.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/document-anchors.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type {
   DocumentAnnotationAnchorConfidence,
   DocumentAnnotationAnchorState,
@@ -462,3 +476,4 @@ class ProjectionBuilder {
     };
   }
 }
+// [END: module]

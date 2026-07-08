@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/heartbeat-local-environment.test.ts
+ * ABOUT: heartbeat-local-environment.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat-local-environment.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat-local-environment.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/heartbeat-local-environment.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { randomUUID } from "node:crypto";
 import { and, eq, sql } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -144,3 +158,4 @@ describeEmbeddedPostgres("heartbeat local environment lifecycle", () => {
     });
   });
 });
+// [END: module]

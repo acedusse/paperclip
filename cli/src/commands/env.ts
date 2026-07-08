@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/env.ts
+ * ABOUT: env.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - env.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: env.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/env.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import type { PaperclipConfig } from "../config/schema.js";
@@ -409,3 +423,4 @@ function quoteShellValue(value: string): string {
   if (value === "") return "\"\"";
   return `'${value.replaceAll("'", "'\\''")}'`;
 }
+// [END: module]

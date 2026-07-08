@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-llm-wiki/tests/wiki-route-sidebar-ui.spec.ts
+ * ABOUT: wiki-route-sidebar-ui.spec.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - wiki-route-sidebar-ui.spec.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: wiki-route-sidebar-ui.spec.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-llm-wiki/tests/wiki-route-sidebar-ui.spec.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { createElement } from "react";
@@ -779,3 +793,4 @@ describe("WikiPage", () => {
     expect(navigatedTo).toBe("/wiki/settings/distillation");
   });
 });
+// [END: module]

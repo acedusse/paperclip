@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/heartbeat_run_watchdog_decisions.ts
+ * ABOUT: heartbeat_run_watchdog_decisions.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - heartbeat_run_watchdog_decisions.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: heartbeat_run_watchdog_decisions.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/heartbeat_run_watchdog_decisions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
 import { companies } from "./companies.js";
@@ -32,3 +46,4 @@ export const heartbeatRunWatchdogDecisions = pgTable(
     ),
   }),
 );
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/agent-instructions.ts
+ * ABOUT: agent-instructions.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - agent-instructions.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: agent-instructions.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/agent-instructions.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import fs from "node:fs/promises";
 import path from "node:path";
 import { notFound, unprocessable } from "../errors.js";
@@ -733,3 +747,4 @@ export function agentInstructionsService() {
     materializeManagedBundle,
   };
 }
+// [END: module]

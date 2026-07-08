@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/__tests__/invite-join-manager.test.ts
+ * ABOUT: invite-join-manager.test.ts (__tests__ module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - invite-join-manager.test.ts (__tests__ module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: invite-join-manager.test.ts (__tests__ module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/__tests__/invite-join-manager.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { resolveJoinRequestAgentManagerId } from "../routes/access.js";
 
@@ -31,3 +45,4 @@ describe("resolveJoinRequestAgentManagerId", () => {
     expect(managerId).toBe("ceo-1");
   });
 });
+// [END: module]

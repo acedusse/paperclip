@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/plugin-workspace-diff/tests/fixtures.ts
+ * ABOUT: fixtures.ts (tests module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - fixtures.ts (tests module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: fixtures.ts (tests module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/plugin-workspace-diff/tests/fixtures.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { WorkspaceDiffFile, WorkspaceDiffResponse } from "../src/contracts.js";
 
 export function changedFile(overrides: Partial<WorkspaceDiffFile> = {}): WorkspaceDiffFile {
@@ -76,3 +90,4 @@ export function diffResponse(overrides: Partial<WorkspaceDiffResponse> = {}): Wo
     ...overrides,
   };
 }
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/hooks/useResourceMemberships.ts
+ * ABOUT: useResourceMemberships.ts (hooks module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - useResourceMemberships.ts (hooks module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: useResourceMemberships.ts (hooks module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/hooks/useResourceMemberships.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   ResourceMembershipResourceType,
@@ -112,3 +126,4 @@ export function useResourceMembershipMutation(companyId: string | null | undefin
     },
   });
 }
+// [END: module]

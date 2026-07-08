@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/codex-local/src/server/output-inactivity-monitor.integration.test.ts
+ * ABOUT: output-inactivity-monitor.integration.test.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - output-inactivity-monitor.integration.test.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: output-inactivity-monitor.integration.test.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/codex-local/src/server/output-inactivity-monitor.integration.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import { runChildProcess } from "@paperclipai/adapter-utils/server-utils";
 import {
@@ -98,3 +112,4 @@ describe("codex inactivity monitor (integration: real subprocess)", () => {
     15_000,
   );
 });
+// [END: module]

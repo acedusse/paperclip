@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/log-redaction.ts
+ * ABOUT: log-redaction.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - log-redaction.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: log-redaction.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/log-redaction.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import os from "node:os";
 
 export const CURRENT_USER_REDACTION_TOKEN = "*";
@@ -146,3 +160,4 @@ export function redactCurrentUserValue<T>(value: T, opts?: CurrentUserRedactionO
   }
   return redacted as T;
 }
+// [END: module]

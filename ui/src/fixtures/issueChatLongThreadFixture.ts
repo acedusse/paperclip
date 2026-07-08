@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/fixtures/issueChatLongThreadFixture.ts
+ * ABOUT: issueChatLongThreadFixture.ts (fixtures module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issueChatLongThreadFixture.ts (fixtures module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issueChatLongThreadFixture.ts (fixtures module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/fixtures/issueChatLongThreadFixture.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Agent } from "@paperclipai/shared";
 import type { LiveRunForIssue } from "../api/heartbeats";
 import type {
@@ -215,3 +229,4 @@ export const issueChatLongThreadFixtureContext = {
     ["Linked runs", String(LONG_THREAD_LINKED_RUN_COUNT)],
   ],
 } as const;
+// [END: module]

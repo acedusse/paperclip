@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/claude-local/src/server/prompt-cache.ts
+ * ABOUT: prompt-cache.ts (server module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - prompt-cache.ts (server module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: prompt-cache.ts (server module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/claude-local/src/server/prompt-cache.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -172,3 +186,4 @@ export async function prepareClaudePromptBundle(input: {
     instructionsFilePath,
   };
 }
+// [END: module]

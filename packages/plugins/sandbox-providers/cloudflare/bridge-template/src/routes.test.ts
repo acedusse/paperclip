@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/plugins/sandbox-providers/cloudflare/bridge-template/src/routes.test.ts
+ * ABOUT: routes.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - routes.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: routes.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/plugins/sandbox-providers/cloudflare/bridge-template/src/routes.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@cloudflare/sandbox", () => ({
@@ -141,3 +155,4 @@ describe("bridge routes", () => {
     expect(body).toContain("event: complete");
   });
 });
+// [END: module]

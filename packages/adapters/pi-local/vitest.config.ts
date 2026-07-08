@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/adapters/pi-local/vitest.config.ts
+ * ABOUT: vitest.config.ts (pi-local module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - vitest.config.ts (pi-local module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: vitest.config.ts (pi-local module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/adapters/pi-local/vitest.config.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -5,3 +19,4 @@ export default defineConfig({
     environment: "node",
   },
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueChatThread.test.tsx
+ * ABOUT: IssueChatThread.test.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueChatThread.test.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueChatThread.test.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueChatThread.test.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment jsdom
 
 import { act, createRef, forwardRef, useImperativeHandle, useState } from "react";
@@ -3310,3 +3324,4 @@ describe("IssueChatThread", () => {
     });
   });
 });
+// [END: module]

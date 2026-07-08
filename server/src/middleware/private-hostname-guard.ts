@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/middleware/private-hostname-guard.ts
+ * ABOUT: private-hostname-guard.ts (middleware module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - private-hostname-guard.ts (middleware module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: private-hostname-guard.ts (middleware module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/middleware/private-hostname-guard.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { Request, RequestHandler } from "express";
 
 function isLoopbackHostname(hostname: string): boolean {
@@ -90,3 +104,4 @@ export function privateHostnameGuard(opts: {
     }
   };
 }
+// [END: module]

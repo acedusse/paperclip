@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/ApprovalPayload.tsx
+ * ABOUT: ApprovalPayload.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - ApprovalPayload.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: ApprovalPayload.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/ApprovalPayload.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { UserPlus, Lightbulb, ShieldAlert, ShieldCheck } from "lucide-react";
 import { formatCents } from "../lib/utils";
 
@@ -245,3 +259,4 @@ export function ApprovalPayloadRenderer({
   }
   return <CeoStrategyPayload payload={payload} />;
 }
+// [END: module]

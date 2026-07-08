@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/validators/company.ts
+ * ABOUT: company.ts (validators module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - company.ts (validators module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: company.ts (validators module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/validators/company.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { z } from "zod";
 import {
   COMPANY_STATUSES,
@@ -58,3 +72,4 @@ export const updateCompanyBrandingSchema = z
   );
 
 export type UpdateCompanyBranding = z.infer<typeof updateCompanyBrandingSchema>;
+// [END: module]

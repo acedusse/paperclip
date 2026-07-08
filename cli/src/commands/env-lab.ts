@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/env-lab.ts
+ * ABOUT: env-lab.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - env-lab.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: env-lab.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/env-lab.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import path from "node:path";
 import type { Command } from "commander";
 import * as p from "@clack/prompts";
@@ -172,3 +186,4 @@ export function registerEnvLabCommands(program: Command) {
     .option("--json", "Print machine-readable diagnostic details")
     .action(envLabDoctorCommand);
 }
+// [END: module]

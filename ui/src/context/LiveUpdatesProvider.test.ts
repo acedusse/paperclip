@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/context/LiveUpdatesProvider.test.ts
+ * ABOUT: LiveUpdatesProvider.test.ts (context module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - LiveUpdatesProvider.test.ts (context module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: LiveUpdatesProvider.test.ts (context module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/context/LiveUpdatesProvider.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 // @vitest-environment node
 
 const { getCommentMock } = vi.hoisted(() => ({
@@ -791,3 +805,4 @@ describe("LiveUpdatesProvider run lifecycle toasts", () => {
     });
   });
 });
+// [END: module]

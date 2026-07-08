@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/commands/auth-bootstrap-ceo.ts
+ * ABOUT: auth-bootstrap-ceo.ts (commands module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - auth-bootstrap-ceo.ts (commands module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: auth-bootstrap-ceo.ts (commands module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/commands/auth-bootstrap-ceo.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createHash, randomBytes } from "node:crypto";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
@@ -136,3 +150,4 @@ export async function bootstrapCeoInvite(opts: {
     await closableDb.$client?.end?.({ timeout: 5 }).catch(() => undefined);
   }
 }
+// [END: module]

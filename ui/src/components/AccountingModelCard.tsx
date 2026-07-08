@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/AccountingModelCard.tsx
+ * ABOUT: AccountingModelCard.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - AccountingModelCard.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: AccountingModelCard.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/AccountingModelCard.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { Database, Gauge, ReceiptText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
@@ -67,3 +81,4 @@ export function AccountingModelCard() {
     </Card>
   );
 }
+// [END: module]

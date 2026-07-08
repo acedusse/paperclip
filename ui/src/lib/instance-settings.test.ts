@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/instance-settings.test.ts
+ * ABOUT: instance-settings.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - instance-settings.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: instance-settings.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/instance-settings.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_INSTANCE_SETTINGS_PATH,
@@ -45,3 +59,4 @@ describe("normalizeRememberedInstanceSettingsPath", () => {
     expect(normalizeRememberedInstanceSettingsPath(null)).toBe(DEFAULT_INSTANCE_SETTINGS_PATH);
   });
 });
+// [END: module]

@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/components/IssueReferenceActivitySummary.tsx
+ * ABOUT: IssueReferenceActivitySummary.tsx (components module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - IssueReferenceActivitySummary.tsx (components module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: IssueReferenceActivitySummary.tsx (components module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/components/IssueReferenceActivitySummary.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { ActivityEvent } from "@paperclipai/shared";
 import { Plus, Minus } from "lucide-react";
 import { IssueReferencePill } from "./IssueReferencePill";
@@ -71,3 +85,4 @@ export function IssueReferenceActivitySummary({ event }: { event: Pick<ActivityE
     </div>
   );
 }
+// [END: module]

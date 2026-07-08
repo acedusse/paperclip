@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/pages/RoutineDetail.tsx
+ * ABOUT: RoutineDetail.tsx (pages module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - RoutineDetail.tsx (pages module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: RoutineDetail.tsx (pages module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/pages/RoutineDetail.tsx", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -897,3 +911,4 @@ export function RoutineDetail() {
     </RoutineDetailContext.Provider>
   );
 }
+// [END: module]

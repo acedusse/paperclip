@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/plugin-local-folders.ts
+ * ABOUT: plugin-local-folders.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - plugin-local-folders.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: plugin-local-folders.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/plugin-local-folders.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { constants as fsConstants, promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -615,3 +629,4 @@ export function assertWritableConfiguredLocalFolder(status: PluginLocalFolderSta
     throw badRequest("Local folder is not healthy");
   }
 }
+// [END: module]

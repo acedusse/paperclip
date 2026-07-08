@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/successful-run-handoff.test.ts
+ * ABOUT: successful-run-handoff.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - successful-run-handoff.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: successful-run-handoff.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/successful-run-handoff.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   SUCCESSFUL_RUN_HANDOFF_ESCALATED_ACTION,
@@ -35,3 +49,4 @@ describe("successful run handoff UI helpers", () => {
     expect(successfulRunHandoffActivityTone(SUCCESSFUL_RUN_HANDOFF_RESOLVED_ACTION).className).toContain("border");
   });
 });
+// [END: module]

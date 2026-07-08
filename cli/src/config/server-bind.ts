@@ -1,3 +1,17 @@
+/**
+ * FILE: cli/src/config/server-bind.ts
+ * ABOUT: server-bind.ts (config module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - server-bind.ts (config module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: server-bind.ts (config module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "cli/src/config/server-bind.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { execFileSync } from "node:child_process";
 import {
   ALL_INTERFACES_BIND_HOST,
@@ -181,3 +195,4 @@ export function resolveQuickstartServerConfig(input: {
     serveUi: input.serveUi,
   });
 }
+// [END: module]

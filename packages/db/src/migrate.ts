@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/migrate.ts
+ * ABOUT: migrate.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - migrate.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: migrate.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/migrate.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { applyPendingMigrations, inspectMigrations } from "./client.js";
 import { resolveMigrationConnection } from "./migration-runtime.js";
 
@@ -27,3 +41,4 @@ async function main(): Promise<void> {
 }
 
 await main();
+// [END: module]

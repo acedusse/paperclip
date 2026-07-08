@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/types/workspace-file-resource.ts
+ * ABOUT: workspace-file-resource.ts (types module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-file-resource.ts (types module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-file-resource.ts (types module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/types/workspace-file-resource.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 export type WorkspaceFileWorkspaceKind = "execution_workspace" | "project_workspace";
 export type WorkspaceFileSelector = "auto" | "execution" | "project";
 export type WorkspaceFileListMode = "all" | "recent" | "changed";
@@ -117,3 +131,4 @@ export interface WorkspaceFileListResponse {
   scannedCount: number;
   truncated: boolean;
 }
+// [END: module]

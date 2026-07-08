@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/shared/src/issue-thread-interactions.test.ts
+ * ABOUT: issue-thread-interactions.test.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue-thread-interactions.test.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue-thread-interactions.test.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/shared/src/issue-thread-interactions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it } from "vitest";
 import {
   acceptIssueThreadInteractionSchema,
@@ -268,3 +282,4 @@ describe("issue thread interaction schemas", () => {
     })).toThrow("selectedOptionIds must be unique");
   });
 });
+// [END: module]

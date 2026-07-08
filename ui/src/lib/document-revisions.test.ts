@@ -1,3 +1,17 @@
+/**
+ * FILE: ui/src/lib/document-revisions.test.ts
+ * ABOUT: document-revisions.test.ts (lib module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - document-revisions.test.ts (lib module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: document-revisions.test.ts (lib module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/lib/document-revisions.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import type { DocumentRevision, IssueDocument } from "@paperclipai/shared";
 import { describe, expect, it } from "vitest";
 import { deriveDocumentRevisionState } from "./document-revisions";
@@ -96,3 +110,4 @@ describe("deriveDocumentRevisionState", () => {
     expect(state.revisions.map((revision) => revision.id)).toEqual(["revision-2", "revision-1"]);
   });
 });
+// [END: module]

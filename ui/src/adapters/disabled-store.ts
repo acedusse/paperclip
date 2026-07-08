@@ -1,4 +1,18 @@
 /**
+ * FILE: ui/src/adapters/disabled-store.ts
+ * ABOUT: disabled-store.ts (adapters module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - disabled-store.ts (adapters module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: disabled-store.ts (adapters module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "ui/src/adapters/disabled-store.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+/**
  * Client-side store for disabled adapter types.
  *
  * Hydrated from the server's GET /api/adapters response.
@@ -31,3 +45,4 @@ export function getHiddenAdapterTypes(): Set<string> {
 export function setDisabledAdapterTypes(types: string[]): void {
   disabledTypes = new Set(types);
 }
+// [END: module]

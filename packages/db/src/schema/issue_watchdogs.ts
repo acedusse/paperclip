@@ -1,3 +1,17 @@
+/**
+ * FILE: packages/db/src/schema/issue_watchdogs.ts
+ * ABOUT: issue_watchdogs.ts (schema module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - issue_watchdogs.ts (schema module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: issue_watchdogs.ts (schema module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "packages/db/src/schema/issue_watchdogs.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { sql } from "drizzle-orm";
 import { index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { agents } from "./agents.js";
@@ -38,3 +52,4 @@ export const issueWatchdogs = pgTable(
       .where(sql`${table.watchdogIssueId} is not null`),
   }),
 );
+// [END: module]

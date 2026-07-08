@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/secrets/local-encrypted-provider.ts
+ * ABOUT: local-encrypted-provider.ts (secrets module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - local-encrypted-provider.ts (secrets module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: local-encrypted-provider.ts (secrets module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/secrets/local-encrypted-provider.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
 import { chmodSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -282,3 +296,4 @@ export const localEncryptedProvider: SecretProviderModule = {
     return inspectLocalEncryptedHealth();
   },
 };
+// [END: module]
