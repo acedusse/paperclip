@@ -281,6 +281,24 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     expect(after.max).toBe(3);
   });
 
+  // ---- Task 4 read-side test ---------------------------------------------------
+
+  it("companyService.getById returns the configured maxConcurrentRuns", async () => {
+    const companyId = await createCompany();
+    const svc = companyService(db);
+
+    const beforeSet = await svc.getById(companyId);
+    expect(beforeSet?.maxConcurrentRuns ?? null).toBeNull();
+
+    await svc.update(companyId, { maxConcurrentRuns: 5 } as any);
+    const afterSet = await svc.getById(companyId);
+    expect(afterSet?.maxConcurrentRuns).toBe(5);
+
+    await svc.update(companyId, { maxConcurrentRuns: null } as any);
+    const afterClear = await svc.getById(companyId);
+    expect(afterClear?.maxConcurrentRuns ?? null).toBeNull();
+  });
+
   // ---- Task 3 per-company count test -----------------------------------------
 
   async function createAgentInCompany(companyId: string): Promise<string> {
