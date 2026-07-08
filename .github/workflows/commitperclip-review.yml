@@ -23,7 +23,11 @@ jobs:
         with:
           ref: master
 
+      # Dependency Review needs the repository Dependency Graph, which is disabled
+      # by default on forks. Skip it there (it hard-errors "not supported on this
+      # repository") so the check stays green on forks; it runs normally upstream.
       - name: Dependency Review
+        if: ${{ !github.event.repository.fork }}
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
         with:
           base-ref: ${{ github.event.pull_request.base.sha }}
@@ -34,8 +38,13 @@ jobs:
         with:
           node-version: '20'
 
+      # The commitperclip gates below authenticate as a GitHub App via
+      # COMMITPERCLIP_KEY, which is not available on forks (get-bot-token.mjs exits
+      # non-zero when the secret is unset). Skip them on forks so the check stays
+      # green; they run normally on the upstream repository where the App is installed.
       - name: Generate commitperclip token
         id: token
+        if: ${{ !github.event.repository.fork }}
         run: |
           TOKEN=$(node .github/scripts/get-bot-token.mjs)
           echo "::add-mask::$TOKEN"
@@ -45,7 +54,7 @@ jobs:
 
       - name: Run quality gates
         id: quality
-        if: github.event.pull_request.user.login != 'dependabot[bot]'
+        if: ${{ !github.event.repository.fork && github.event.pull_request.user.login != 'dependabot[bot]' }}
         run: node .github/scripts/run-quality-gates.mjs
         continue-on-error: true
         env:
@@ -56,6 +65,7 @@ jobs:
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
 
       - name: Run security gates
+        if: ${{ !github.event.repository.fork }}
         run: node .github/scripts/check-pr-security.mjs
         continue-on-error: true
         timeout-minutes: 3
