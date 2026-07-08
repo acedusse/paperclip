@@ -38,6 +38,9 @@ vi.mock("../context/BreadcrumbContext", () => ({
   useBreadcrumbs: () => ({ setBreadcrumbs: vi.fn() }),
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+
 async function act(callback: () => void | Promise<void>) {
   let result: void | Promise<void> = undefined;
   flushSync(() => {

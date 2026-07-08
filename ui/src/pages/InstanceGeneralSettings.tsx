@@ -61,6 +61,7 @@ export function InstanceGeneralSettings() {
     onSuccess: async () => {
       setActionError(null);
       await queryClient.invalidateQueries({ queryKey: queryKeys.instance.generalSettings });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.instance.admissionStatus });
     },
     onError: (error) => {
       setActionError(error instanceof Error ? error.message : "Failed to update general settings.");
@@ -68,7 +69,7 @@ export function InstanceGeneralSettings() {
   });
 
   const admissionStatusQuery = useQuery({
-    queryKey: ["instance-admission-status"],
+    queryKey: queryKeys.instance.admissionStatus,
     queryFn: instanceSettingsApi.getAdmissionStatus,
     refetchInterval: 10_000,
   });

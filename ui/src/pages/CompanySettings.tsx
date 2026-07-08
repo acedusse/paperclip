@@ -68,7 +68,7 @@ export function CompanySettings() {
   const cloudSyncEnabled = experimentalSettings?.enableCloudSync === true;
 
   const admissionStatusQuery = useQuery({
-    queryKey: ["company-admission-status", selectedCompanyId],
+    queryKey: queryKeys.companies.admissionStatus(selectedCompanyId ?? ""),
     queryFn: () => companiesApi.getAdmissionStatus(selectedCompanyId!),
     enabled: !!selectedCompanyId,
     refetchInterval: 10_000,
@@ -92,6 +92,9 @@ export function CompanySettings() {
     }) => companiesApi.update(selectedCompanyId!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
+      if (selectedCompanyId) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.companies.admissionStatus(selectedCompanyId) });
+      }
     }
   });
 
