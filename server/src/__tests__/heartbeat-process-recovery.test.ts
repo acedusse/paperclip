@@ -113,6 +113,7 @@ import {
   redactDetectedSuccessfulRunProgressSummaryForBoard,
 } from "../services/heartbeat.ts";
 import { secretService } from "../services/secrets.ts";
+import { phase1ReconcileSources, runReconcile } from "../services/admission-reconciler.ts";
 import {
   SUCCESSFUL_RUN_HANDOFF_EXHAUSTED_NOTICE_BODY,
   SUCCESSFUL_RUN_HANDOFF_REQUIRED_NOTICE_BODY,
@@ -988,6 +989,37 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
       .where(eq(agentWakeupRequests.id, wakeupRequestId))
       .then((rows) => rows[0] ?? null);
     expect(wakeup?.status).toBe("claimed");
+  });
+
+  it("reclaims a run whose real process died, driven through the reconciler seam", async () => {
+    // Real detached process backing a running run, then killed so it looks
+    // crash-leaked — the same setup the neighboring reaper cases use.
+    const child = spawnAliveProcess();
+    childProcesses.add(child);
+    const pid = child.pid;
+    expect(pid).toBeTypeOf("number");
+
+    const { runId } = await seedRunFixture({
+      agentStatus: "idle",
+      processPid: pid ?? null,
+      includeIssue: false,
+    });
+    const heartbeat = heartbeatService(db);
+
+    child.kill("SIGKILL");
+    expect(await waitForPidExit(pid!, 2_000)).toBe(true);
+    runningProcesses.clear();
+
+    // Drive reclaim through the reconciler seam instead of calling reapOrphanedRuns directly.
+    const results = await runReconcile(
+      phase1ReconcileSources({ reapOrphanedRuns: heartbeat.reapOrphanedRuns }),
+      new Date(),
+    );
+    expect(results).toEqual([{ source: "run-liveness", drifted: 1, repaired: 1 }]);
+
+    // The seam reports the reclaim, and the row is now failed (slot freed).
+    const run = await heartbeat.getRun(runId);
+    expect(run?.status).toBe("failed");
   });
 
   it("queues exactly one retry when the recorded local pid is dead", async () => {

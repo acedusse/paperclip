@@ -66,6 +66,7 @@ import {
 import { createFeedbackTraceShareClientFromConfig } from "./services/feedback-share-client.js";
 import { buildRuntimeApiCandidateUrls, choosePrimaryRuntimeApiUrl } from "./runtime-api.js";
 import { createPluginWorkerManager } from "./services/plugin-worker-manager.js";
+import { phase1ReconcileSources, runReconcile } from "./services/admission-reconciler.js";
 import { createStorageServiceFromConfig } from "./storage/index.js";
 import { printStartupBanner } from "./startup-banner.js";
 import { getBoardClaimWarningUrl, initializeBoardClaimChallenge } from "./board-claim.js";
@@ -888,10 +889,17 @@ export async function startServer(): Promise<StartedServer> {
           logger.error({ err }, "routine scheduler tick failed");
         });
   
-      // Periodically reap orphaned runs (5-min staleness threshold) and make sure
+      // Periodically reconcile leaked admission state (Phase-1 source: run-liveness,
+      // which reaps orphaned runs at the 5-min staleness threshold) and make sure
       // persisted queued work is still being driven forward.
-      void heartbeat
-        .reapOrphanedRuns({ staleThresholdMs: 5 * 60 * 1000 })
+      void runReconcile(
+        phase1ReconcileSources({ reapOrphanedRuns: heartbeat.reapOrphanedRuns }),
+        new Date(),
+      )
+        .then((results) => {
+          const changed = results.filter((r) => r.repaired > 0);
+          if (changed.length > 0) logger.warn({ results: changed }, "admission reconciler repaired drift");
+        })
         .then(() => heartbeat.promoteDueScheduledRetries())
         .then(async (promotion) => {
           await heartbeat.resumeQueuedRuns();
