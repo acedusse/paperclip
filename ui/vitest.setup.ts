@@ -1,3 +1,5 @@
+import "@testing-library/jest-dom/vitest";
+
 const storageEntries = new Map<string, string>();
 
 function installStorageMock(target: Record<string, unknown>) {
