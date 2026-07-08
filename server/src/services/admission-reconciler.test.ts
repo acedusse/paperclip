@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/services/admission-reconciler.test.ts
+ * ABOUT: admission-reconciler.test.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - admission-reconciler.test.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: admission-reconciler.test.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/admission-reconciler.test.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 import { describe, expect, it, vi } from "vitest";
 import {
   makeRunLivenessSource,
@@ -76,3 +90,4 @@ describe("run-liveness source", () => {
     expect(sources.map((s) => s.name)).toEqual(["run-liveness"]);
   });
 });
+// [END: module]

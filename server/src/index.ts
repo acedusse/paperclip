@@ -1,3 +1,17 @@
+/**
+ * FILE: server/src/index.ts
+ * ABOUT: index.ts (src module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - index.ts (src module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: index.ts (src module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/index.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
 /// <reference path="./types/express.d.ts" />
 // Kicks off the OTel bootstrap as early as possible (no-op unless
 // OTEL_EXPORTER_OTLP_ENDPOINT is set). startServer() awaits
@@ -1097,3 +1111,4 @@ if (isMainModule(import.meta.url)) {
     process.exit(1);
   });
 }
+// [END: module]
