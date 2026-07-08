@@ -58,6 +58,7 @@ const mockFeedbackService = vi.hoisted(() => ({
 }));
 
 vi.mock("../services/index.js", () => ({
+  heartbeatService: () => ({ getCompanyAdmissionStatus: vi.fn() }),
   accessService: () => mockAccessService,
   agentService: () => mockAgentService,
   budgetService: () => mockBudgetService,

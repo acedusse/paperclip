@@ -86,6 +86,7 @@ vi.mock("../services/feedback.js", () => ({
 }));
 
 vi.mock("../services/index.js", () => ({
+  heartbeatService: () => ({ getCompanyAdmissionStatus: vi.fn() }),
   accessService: () => mockAccessService,
   agentService: () => mockAgentService,
   budgetService: () => mockBudgetService,
@@ -98,6 +99,7 @@ vi.mock("../services/index.js", () => ({
 
 function registerCompanyRouteMocks() {
   vi.doMock("../services/index.js", () => ({
+    heartbeatService: () => ({ getCompanyAdmissionStatus: vi.fn() }),
     accessService: () => mockAccessService,
     agentService: () => mockAgentService,
     budgetService: () => mockBudgetService,

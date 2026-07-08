@@ -867,6 +867,15 @@ registry.registerPath({
 });
 
 registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/admission-status",
+  tags: ["companies"],
+  summary: "Get company admission status",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
   method: "post",
   path: "/api/companies/{companyId}/archive",
   tags: ["companies"],
@@ -2472,6 +2481,14 @@ registry.registerPath({
 });
 
 // ─── Instance settings ────────────────────────────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/instance/admission-status",
+  tags: ["instance"],
+  summary: "Get instance admission status",
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
 
 registry.registerPath({
   method: "get",
