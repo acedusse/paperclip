@@ -111,8 +111,56 @@ def test_is_source_file_extension_filter() -> None:
     assert scm.is_source_file("cli/src/version.ts")
     assert scm.is_source_file("ui/App.tsx")
     assert scm.is_source_file("a/b.html")
+    assert scm.is_source_file("scripts/start-dev.sh")
     assert not scm.is_source_file("README.md")
     assert not scm.is_source_file("nav/ledger.db")
+
+
+def test_ensure_tags_injects_into_untagged_sh_file(tmp_path: Path) -> None:
+    src = tmp_path / "scripts" / "hello.sh"
+    src.parent.mkdir(parents=True)
+    src.write_text("#!/usr/bin/env bash\necho hi\n")
+
+    changed = scm.ensure_tags(src, "scripts/hello.sh")
+
+    assert changed is True
+    text = src.read_text()
+    assert text.startswith("#!/usr/bin/env bash\n")
+    assert "# [META: module]" in text
+    assert scm.extract_module_section(src) == "echo hi\n"
+    assert scm.ensure_tags(src, "scripts/hello.sh") is False
+
+
+def test_write_index_uses_ledger_when_provided(tmp_path: Path) -> None:
+    import sqlite3
+
+    root = _tmp_git_repo(
+        tmp_path,
+        {
+            "cli/src/a.ts": (
+                "// [START: module]\nexport const a = 1;\n// [END: module]\n"
+            ),
+            "scripts/skip.sh": "#!/bin/bash\ntrue\n",
+        },
+    )
+    (root / "nav" / "tests").mkdir(parents=True)
+    ledger = root / "nav" / "ledger.db"
+    conn = sqlite3.connect(ledger)
+    conn.execute(
+        "CREATE TABLE sections ("
+        "file_path TEXT NOT NULL, section_tag TEXT NOT NULL, "
+        "UNIQUE(file_path, section_tag))"
+    )
+    conn.execute(
+        "INSERT INTO sections (file_path, section_tag) VALUES ('cli/src/a.ts', 'module')"
+    )
+    conn.commit()
+    conn.close()
+
+    scm.write_index(root, ledger)
+    idx = json.loads((root / "nav" / "index.json").read_text())
+    assert idx["file_count"] == 1
+    assert idx["files"] == [{"path": "cli/src/a.ts", "tags": ["module"]}]
 
 
 def test_ensure_tags_injects_into_untagged_ts_file(tmp_path: Path) -> None:

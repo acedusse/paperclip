@@ -32,6 +32,15 @@ pnpm install
 pnpm dev
 ```
 
+Or use the no-CLI helpers (start stops any existing managed runner for this repo, installs if needed, then starts):
+
+```sh
+./start.sh
+./stop.sh            # managed runner for this repo
+./stop.sh --all      # also kill leftover Paperclip node/pg/browser processes
+# equivalent: ./scripts/start-dev.sh | ./scripts/stop-dev.sh   or   pnpm start:dev | pnpm stop:dev
+```
+
 This starts:
 
 - API server: `http://localhost:3100`
@@ -61,6 +70,7 @@ Inspect or stop the current repo's managed dev runner:
 ```sh
 pnpm dev:list
 pnpm dev:stop
+# or: ./stop.sh
 ```
 
 `pnpm dev:once` now tracks backend-relevant file changes and pending migrations. When the current boot is stale, the board UI shows a `Restart required` banner. You can also enable guarded auto-restart in `Instance Settings > Experimental`, which waits for queued/running local agent runs to finish before restarting the dev server.

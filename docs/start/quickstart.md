@@ -30,13 +30,20 @@ For contributors working on Paperclip itself. Prerequisites: Node.js 20+ and pnp
 Clone the repository, then:
 
 ```sh
-pnpm install
-pnpm dev
+./start.sh
+# equivalent: pnpm install && pnpm dev
 ```
 
 This starts the API server and UI at [http://localhost:3100](http://localhost:3100).
 
 No external database required — Paperclip uses an embedded PostgreSQL instance by default.
+
+Stop the managed runner with:
+
+```sh
+./stop.sh
+# ./stop.sh --all   # also kill leftover Paperclip node/pg/browser processes
+```
 
 When working from the cloned repo, you can also use:
 
