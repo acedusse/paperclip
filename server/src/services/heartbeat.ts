@@ -178,6 +178,16 @@ import { withAgentStartLock } from "./agent-start-lock.js";
 import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
 import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
 import {
+  shouldSuppressContinuationOnFinish,
+  windDownRun as windDownRunCore,
+  type OrphanedWoundDownRun,
+  type ResumePolicy,
+  type WindDownMode,
+  type WindDownOutcome,
+  type WindDownReason,
+  type WindDownRunRow,
+} from "./run-wind-down.js";
+import {
   evaluateAgentInvokability,
   evaluateAgentInvokabilityFromDb,
   shouldCancelRunsForNonInvokableAgent,
@@ -8117,7 +8127,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
           retriedRun = await enqueueProcessLossRetry(finalizedRun, agent, now);
         }
       } else {
-        await releaseIssueExecutionAndPromote(finalizedRun);
+        await releaseIssueExecutionAndPromote(
+          finalizedRun,
+          shouldSuppressContinuationOnFinish(finalizedRun) ? { suppressImmediateRecovery: true } : {},
+        );
       }
 
       await appendRunEvent(finalizedRun, await nextRunEventSeq(finalizedRun.id), {
@@ -12015,6 +12028,109 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return runs.length;
   }
 
+  // Combo-01 Phase 2.0: concrete deps wiring the pure windDownRun primitive onto
+  // heartbeat internals. See services/run-wind-down.ts for the orchestration.
+  function toWindDownRow(run: typeof heartbeatRuns.$inferSelect): WindDownRunRow {
+    return { id: run.id, status: run.status, agentId: run.agentId };
+  }
+
+  const windDownDeps = {
+    getRun: async (runId: string): Promise<WindDownRunRow | null> => {
+      const run = await getRun(runId);
+      return run ? toWindDownRow(run) : null;
+    },
+    captureContinuation: async (row: WindDownRunRow): Promise<void> => {
+      const run = await getRun(row.id);
+      if (!run) return;
+      const agent = await getAgent(run.agentId);
+      if (!agent) return; // nothing to resume against; continuation is best-effort
+      await refreshContinuationSummaryForRun(run, agent);
+    },
+    terminateProcess: async (row: WindDownRunRow): Promise<void> => {
+      const run = await getRun(row.id);
+      if (!run) return;
+      const running = runningProcesses.get(run.id);
+      try {
+        if (running) {
+          await terminateHeartbeatRunProcess({
+            pid: running.child.pid ?? run.processPid,
+            processGroupId: running.processGroupId ?? run.processGroupId,
+            graceMs: Math.max(1, running.graceSec) * 1000,
+          });
+        } else if (run.processPid || run.processGroupId) {
+          await terminateHeartbeatRunProcess({ pid: run.processPid, processGroupId: run.processGroupId });
+        }
+      } finally {
+        runningProcesses.delete(run.id);
+      }
+    },
+    markWoundDown: async (runId: string, reason: WindDownReason, resume: ResumePolicy): Promise<void> => {
+      const finishedAt = new Date();
+      const updated = await setRunStatus(runId, "wound_down", {
+        finishedAt,
+        error: `Wound down: ${reason}`,
+        errorCode: "wound_down",
+        windDownReason: reason,
+        resumePolicy: resume,
+      });
+      if (updated) {
+        await setWakeupStatus(updated.wakeupRequestId, "cancelled", { finishedAt, error: `Wound down: ${reason}` });
+        await appendRunEvent(updated, 1, {
+          eventType: "lifecycle",
+          stream: "system",
+          level: "warn",
+          message: "run wound down",
+          payload: { reason, resume },
+        });
+      }
+    },
+    markSoftIntent: async (runId: string, reason: WindDownReason, resume: ResumePolicy): Promise<void> => {
+      await db
+        .update(heartbeatRuns)
+        .set({ windDownReason: reason, resumePolicy: resume, updatedAt: new Date() })
+        .where(eq(heartbeatRuns.id, runId));
+    },
+    releaseIssue: async (row: WindDownRunRow, opts: { reenqueue: boolean }): Promise<void> => {
+      const run = await getRun(row.id);
+      if (!run) return;
+      await releaseIssueExecutionAndPromote(run, opts.reenqueue ? {} : { suppressImmediateRecovery: true });
+    },
+  };
+
+  async function windDownRun(
+    runId: string,
+    opts: { mode: WindDownMode; resume: ResumePolicy; reason: WindDownReason },
+  ): Promise<{ outcome: WindDownOutcome }> {
+    return windDownRunCore(windDownDeps, runId, opts);
+  }
+
+  // Ground-truth query for the wound-down-resume reconcile source: wound_down +
+  // resumePolicy="when-allowed" rows whose issue has no active/queued continuation.
+  async function findResumableWoundDownOrphans(_now: Date): Promise<OrphanedWoundDownRun[]> {
+    const rows = await db
+      .select({ id: heartbeatRuns.id, agentId: heartbeatRuns.agentId })
+      .from(heartbeatRuns)
+      .where(
+        and(
+          eq(heartbeatRuns.status, "wound_down"),
+          eq(heartbeatRuns.resumePolicy, "when-allowed"),
+          sql`not exists (
+            select 1 from ${heartbeatRuns} live
+            where live.company_id = ${heartbeatRuns.companyId}
+              and live.status in ('queued', 'running', 'scheduled_retry')
+              and live.context_snapshot->>'issueId' = ${heartbeatRuns.contextSnapshot}->>'issueId'
+          )`,
+        ),
+      );
+    return rows;
+  }
+
+  async function reenqueueWoundDownOrphan(orphan: OrphanedWoundDownRun): Promise<void> {
+    const run = await getRun(orphan.id);
+    if (!run) return;
+    await releaseIssueExecutionAndPromote(run);
+  }
+
   async function cancelPendingWakeupsForAgentsInternal(agentIds: string[], reason: string) {
     const uniqueAgentIds = [...new Set(agentIds)].filter((agentId) => agentId.length > 0);
     if (uniqueAgentIds.length === 0) return 0;
@@ -12408,6 +12524,11 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     },
 
     cancelRun: (runId: string, reason?: string, options?: CancelRunOptions) => cancelRunInternal(runId, reason, options),
+
+    // Combo-01 Phase 2.0 wind-down substrate (no product caller yet; 2a/2c consume these).
+    windDownRun,
+    findResumableWoundDownOrphans,
+    reenqueueWoundDownOrphan,
 
     /**
      * Pause-only. Emits errorCode "agent_paused" unconditionally; its sole caller is the
