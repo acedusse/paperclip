@@ -747,6 +747,6 @@ git commit -m "feat(ui): per-run turn cap inputs on company + instance settings"
 ## Final verification
 
 - [ ] **Full typecheck:** `cd server && pnpm typecheck` and `cd ui && pnpm typecheck` — both clean.
-- [ ] **Run-caps suites:** `cd server && npx vitest run src/services/run-caps.test.ts src/__tests__/run-caps-stamp.integration.test.ts src/services/__tests__/instance-settings-run-caps.test.ts` — all PASS (stamp integration may skip without embedded Postgres).
+- [ ] **Run-caps suites:** `cd server && npx vitest run src/services/run-caps.test.ts src/__tests__/run-caps-stamp.integration.test.ts src/__tests__/instance-settings-service.test.ts` — all PASS (stamp/service integration may skip without embedded Postgres).
 - [ ] **db build:** `pnpm --filter @paperclipai/db build` — clean.
 - [ ] **Manual sanity (optional):** set a company `maxRunTurns` of e.g. 5, run a `claude_local` agent, confirm the spawned CLI receives `--max-turns 5` (or the agent's own lower value if smaller), and that a run hitting the limit continues rather than hard-fails.
