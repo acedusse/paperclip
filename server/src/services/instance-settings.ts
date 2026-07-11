@@ -49,6 +49,7 @@ function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
       // Absent => unlimited; only carry through an explicit cap.
       ...(parsed.data.maxRunWallClockMs ? { maxRunWallClockMs: parsed.data.maxRunWallClockMs } : {}),
       ...(parsed.data.maxRunCostCents ? { maxRunCostCents: parsed.data.maxRunCostCents } : {}),
+      ...(parsed.data.maxRunTurns ? { maxRunTurns: parsed.data.maxRunTurns } : {}),
     };
   }
   return {

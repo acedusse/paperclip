@@ -170,5 +170,25 @@ describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns",
     expect(cleared.maxRunWallClockMs).toBeUndefined();
     expect(cleared.maxRunCostCents).toBeUndefined();
   });
+
+  it("persists and reads back maxRunTurns", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunTurns: 42 });
+    expect((await svc.getGeneral()).maxRunTurns).toBe(42);
+  });
+
+  it("omits maxRunTurns when unset (unlimited)", async () => {
+    const svc = instanceSettingsService(db);
+    expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
+  });
+
+  it("clears maxRunTurns when set to null", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunTurns: 42 });
+    expect((await svc.getGeneral()).maxRunTurns).toBe(42);
+
+    await svc.updateGeneral({ maxRunTurns: null });
+    expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
+  });
 });
 // [END: module]
