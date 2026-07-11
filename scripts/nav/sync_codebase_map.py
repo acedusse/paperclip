@@ -14,7 +14,7 @@ import json
 import re
 from pathlib import Path
 
-SOURCE_EXTS = (".ts", ".tsx", ".js", ".jsx", ".html")
+SOURCE_EXTS = (".ts", ".tsx", ".js", ".jsx", ".html", ".sh")
 TEST_DIR_SEGMENTS = {"__tests__", "tests", "test"}
 TEST_NAME_RE = re.compile(r"\.(test|spec)\.(ts|tsx|js|jsx)$")
 INTENT_MAX = 80
@@ -59,8 +59,8 @@ def build_summary(file_path: str) -> str:
 
 
 def derive_intent(file_path: str, header_text: str) -> str:
-    """HTML stores the bare summary; other styles store the flattened header."""
-    if file_path.endswith(".html"):
+    """HTML/shell store the bare summary; other styles store the flattened header."""
+    if file_path.endswith((".html", ".sh")):
         return build_summary(file_path)
     return build_intent(header_text)
 
@@ -114,6 +114,27 @@ def _render_tags(file_path: str, body: str) -> str:
     # only takes effect as the first statement — same reasoning as the <!doctype>
     # preamble above.
     preamble, body = _split_leading_directives(body)
+    if file_path.endswith(".sh"):
+        # Shell: keep shebang on line 1; use `#` comment tags for the module wrap.
+        return (
+            preamble
+            + "#\n"
+            f"# FILE: {file_path}\n"
+            f"# ABOUT: {summary}\n"
+            "#\n"
+            "# SECTIONS:\n"
+            f"#   [TAG: module] - {summary}\n"
+            "#\n"
+            "# ==========================================\n"
+            "# [META: module]\n"
+            f"# INTENT: {summary}\n"
+            f"# PSEUDOCODE: {PSEUDOCODE}\n"
+            f"# JSON_FLOW: {rich_flow}\n"
+            "# ==========================================\n"
+            "# [START: module]\n"
+            f"{body}\n"
+            "# [END: module]\n"
+        )
     return (
         preamble
         + "/**\n"
@@ -300,8 +321,30 @@ def _now_z() -> str:
     )
 
 
-def write_index(root: Path) -> int:
-    sources = sorted(list_source_files(root))
+def _ledger_paths(ledger_path: Path) -> list[str]:
+    import sqlite3
+
+    conn = sqlite3.connect(ledger_path)
+    rows = [
+        r[0]
+        for r in conn.execute(
+            "SELECT DISTINCT file_path FROM sections ORDER BY file_path"
+        )
+    ]
+    conn.close()
+    return rows
+
+
+def write_index(root: Path, ledger_path: Path | None = None) -> int:
+    """Write nav/index.json from the ledger when present, else from source walk.
+
+    Ledger-backed inventory keeps untagged extensions (e.g. .sh under --no-inject)
+    out of the index while still allowing tagged shell scripts to appear.
+    """
+    if ledger_path is not None and ledger_path.is_file():
+        sources = _ledger_paths(ledger_path)
+    else:
+        sources = sorted(list_source_files(root))
     payload = {
         "schema": "v3-shim",
         "generated_at": _now_z(),
@@ -316,8 +359,11 @@ def write_index(root: Path) -> int:
     return len(sources)
 
 
-def write_tests_index(root: Path) -> int:
-    tests = sorted(p for p in list_source_files(root) if is_test_file(p))
+def write_tests_index(root: Path, ledger_path: Path | None = None) -> int:
+    if ledger_path is not None and ledger_path.is_file():
+        tests = [p for p in _ledger_paths(ledger_path) if is_test_file(p)]
+    else:
+        tests = sorted(p for p in list_source_files(root) if is_test_file(p))
     payload = {
         "schema": "v3-shim",
         "generated_at": _now_z(),
@@ -351,8 +397,8 @@ def main(argv: list[str] | None = None) -> int:
     (root / "nav" / "tests").mkdir(parents=True, exist_ok=True)
 
     stats = reconcile_ledger(root, ledger, inject=not args.no_inject)
-    file_count = write_index(root)
-    test_count = write_tests_index(root)
+    file_count = write_index(root, ledger)
+    test_count = write_tests_index(root, ledger)
 
     print("codebase-map sync complete")
     print(

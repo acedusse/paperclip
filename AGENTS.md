@@ -40,6 +40,8 @@ pnpm install
 pnpm dev
 ```
 
+Convenience (no `paperclipai` CLI): `./start.sh` — stops an existing managed runner for this repo, installs if `node_modules` is missing, then runs `pnpm dev`. `./stop.sh` stops the managed runner; `./stop.sh --all` also runs `scripts/kill-dev.sh` for leftover processes.
+
 This starts:
 
 - API: `http://localhost:3100`

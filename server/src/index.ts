@@ -67,6 +67,7 @@ import { createFeedbackTraceShareClientFromConfig } from "./services/feedback-sh
 import { buildRuntimeApiCandidateUrls, choosePrimaryRuntimeApiUrl } from "./runtime-api.js";
 import { createPluginWorkerManager } from "./services/plugin-worker-manager.js";
 import { phase1ReconcileSources, runReconcile } from "./services/admission-reconciler.js";
+import { makeWoundDownResumeSource } from "./services/run-wind-down.js";
 import { createStorageServiceFromConfig } from "./storage/index.js";
 import { printStartupBanner } from "./startup-banner.js";
 import { getBoardClaimWarningUrl, initializeBoardClaimChallenge } from "./board-claim.js";
@@ -893,7 +894,13 @@ export async function startServer(): Promise<StartedServer> {
       // which reaps orphaned runs at the 5-min staleness threshold) and make sure
       // persisted queued work is still being driven forward.
       void runReconcile(
-        phase1ReconcileSources({ reapOrphanedRuns: heartbeat.reapOrphanedRuns }),
+        [
+          ...phase1ReconcileSources({ reapOrphanedRuns: heartbeat.reapOrphanedRuns }),
+          makeWoundDownResumeSource({
+            findResumableOrphans: heartbeat.findResumableWoundDownOrphans,
+            reenqueueOrphan: heartbeat.reenqueueWoundDownOrphan,
+          }),
+        ],
         new Date(),
       )
         .then((results) => {

@@ -750,6 +750,13 @@
       "when": 1781902100000,
       "tag": "0106_company_max_concurrent_runs",
       "breakpoints": true
+    },
+    {
+      "idx": 107,
+      "version": "7",
+      "when": 1781902200000,
+      "tag": "0107_wind_down_run_fields",
+      "breakpoints": true
     }
   ]
 }

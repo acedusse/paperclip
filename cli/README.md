@@ -350,6 +350,11 @@ paperclipai cloud push --company <local-company-id>
 ## Development
 
 ```bash
+./start.sh            # Stop existing runner if needed, install if missing, then pnpm dev
+./stop.sh             # Stop managed runner for this repo
+./stop.sh --all       # Also kill leftover Paperclip node/pg/browser processes
+pnpm start:dev        # Same as ./start.sh
+pnpm stop:dev         # Same as ./stop.sh
 pnpm dev              # Full dev (API + UI, watch mode)
 pnpm dev:once         # Full dev without file watching
 pnpm dev:server       # Server only

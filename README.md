@@ -315,11 +315,11 @@ Or manually:
 ```bash
 git clone https://github.com/paperclipai/paperclip.git
 cd paperclip
-pnpm install
-pnpm dev
+./start.sh
+# equivalent: pnpm install && pnpm dev
 ```
 
-This starts the API server at `http://localhost:3100`. An embedded PostgreSQL database is created automatically — no setup required.
+This starts the API server at `http://localhost:3100`. An embedded PostgreSQL database is created automatically — no setup required. Use `./stop.sh` (or `./stop.sh --all`) to stop the managed runner.
 
 > **Requirements:** Node.js 20+, pnpm 9.15+
 
@@ -351,6 +351,11 @@ By default, agents run on scheduled heartbeats and event-based triggers (task as
 ## Development
 
 ```bash
+./start.sh            # Stop existing runner if needed, install if missing, then pnpm dev
+./stop.sh             # Stop managed runner for this repo
+./stop.sh --all       # Also kill leftover Paperclip node/pg/browser processes
+pnpm start:dev        # Same as ./start.sh
+pnpm stop:dev         # Same as ./stop.sh
 pnpm dev              # Full dev (API + UI, watch mode)
 pnpm dev:once         # Full dev without file watching
 pnpm dev:server       # Server only
