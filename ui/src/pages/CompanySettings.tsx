@@ -58,6 +58,7 @@ export function CompanySettings() {
   const [maxRuns, setMaxRuns] = useState("");
   const [maxRunWallClockMs, setMaxRunWallClockMs] = useState("");
   const [maxRunCostCents, setMaxRunCostCents] = useState("");
+  const [maxRunTurns, setMaxRunTurns] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [logoUploadError, setLogoUploadError] = useState<string | null>(null);
 
@@ -71,6 +72,7 @@ export function CompanySettings() {
     setMaxRuns(String(selectedCompany.maxConcurrentRuns ?? ""));
     setMaxRunWallClockMs(String(selectedCompany.maxRunWallClockMs ?? ""));
     setMaxRunCostCents(String(selectedCompany.maxRunCostCents ?? ""));
+    setMaxRunTurns(String(selectedCompany.maxRunTurns ?? ""));
     setLogoUrl(selectedCompany.logoUrl ?? "");
   }, [selectedCompany]);
 
@@ -95,6 +97,11 @@ export function CompanySettings() {
     (Number.isInteger(Number(trimmedMaxRunCostCents)) && Number(trimmedMaxRunCostCents) > 0);
   const maxRunCostCentsPayload =
     trimmedMaxRunCostCents === "" ? null : Number(trimmedMaxRunCostCents);
+  const trimmedMaxRunTurns = maxRunTurns.trim();
+  const maxRunTurnsValid =
+    trimmedMaxRunTurns === "" ||
+    (Number.isInteger(Number(trimmedMaxRunTurns)) && Number(trimmedMaxRunTurns) > 0);
+  const maxRunTurnsPayload = trimmedMaxRunTurns === "" ? null : Number(trimmedMaxRunTurns);
   const cloudSyncEnabled = experimentalSettings?.enableCloudSync === true;
 
   const admissionStatusQuery = useQuery({
@@ -112,7 +119,8 @@ export function CompanySettings() {
       attachmentMaxBytes !== (selectedCompany.attachmentMaxBytes ?? DEFAULT_COMPANY_ATTACHMENT_MAX_BYTES) ||
       maxRunsPayload !== (selectedCompany.maxConcurrentRuns ?? null) ||
       maxRunWallClockMsPayload !== (selectedCompany.maxRunWallClockMs ?? null) ||
-      maxRunCostCentsPayload !== (selectedCompany.maxRunCostCents ?? null));
+      maxRunCostCentsPayload !== (selectedCompany.maxRunCostCents ?? null) ||
+      maxRunTurnsPayload !== (selectedCompany.maxRunTurns ?? null));
 
   const generalMutation = useMutation({
     mutationFn: (data: {
@@ -123,6 +131,7 @@ export function CompanySettings() {
       maxConcurrentRuns: number | null;
       maxRunWallClockMs: number | null;
       maxRunCostCents: number | null;
+      maxRunTurns: number | null;
     }) => companiesApi.update(selectedCompanyId!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
@@ -222,7 +231,8 @@ export function CompanySettings() {
       attachmentMaxBytes,
       maxConcurrentRuns: maxRunsPayload,
       maxRunWallClockMs: maxRunWallClockMsPayload,
-      maxRunCostCents: maxRunCostCentsPayload
+      maxRunCostCents: maxRunCostCentsPayload,
+      maxRunTurns: maxRunTurnsPayload
     });
   }
 
@@ -445,6 +455,27 @@ export function CompanySettings() {
                   )}
                 </div>
               </Field>
+              <Field
+                label="Max run turns"
+                hint="Cap on agent turns for a single run. Only enforced for adapters that support turn limits (Claude, Grok). Empty = unlimited."
+              >
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    type="number"
+                    min={1}
+                    value={maxRunTurns}
+                    onChange={(e) => setMaxRunTurns(e.target.value)}
+                    aria-invalid={!maxRunTurnsValid}
+                    data-testid="company-max-run-turns-input"
+                    className="w-28"
+                  />
+                  {!maxRunTurnsValid && (
+                    <span className="text-xs text-destructive">
+                      Enter a positive whole number, or leave empty for unlimited.
+                    </span>
+                  )}
+                </div>
+              </Field>
             </div>
           </div>
         </div>
@@ -462,7 +493,8 @@ export function CompanySettings() {
               !attachmentMaxValid ||
               !maxRunsValid ||
               !maxRunWallClockMsValid ||
-              !maxRunCostCentsValid
+              !maxRunCostCentsValid ||
+              !maxRunTurnsValid
             }
           >
             {generalMutation.isPending ? "Saving..." : "Save changes"}

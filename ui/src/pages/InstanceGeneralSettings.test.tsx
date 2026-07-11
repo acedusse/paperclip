@@ -176,6 +176,7 @@ describe("InstanceGeneralSettings — instance cap + admission status", () => {
       maxConcurrentRuns: 10,
       maxRunWallClockMs: null,
       maxRunCostCents: null,
+      maxRunTurns: null,
     });
 
     const refreshedInput = maxRunsInput();
@@ -193,6 +194,7 @@ describe("InstanceGeneralSettings — instance cap + admission status", () => {
       maxConcurrentRuns: null,
       maxRunWallClockMs: null,
       maxRunCostCents: null,
+      maxRunTurns: null,
     });
   });
 

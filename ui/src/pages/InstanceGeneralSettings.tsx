@@ -103,6 +103,11 @@ export function InstanceGeneralSettings() {
     setMaxRunCostCents(String(generalQuery.data?.maxRunCostCents ?? ""));
   }, [generalQuery.data?.maxRunCostCents]);
 
+  const [maxRunTurns, setMaxRunTurns] = useState("");
+  useEffect(() => {
+    setMaxRunTurns(String(generalQuery.data?.maxRunTurns ?? ""));
+  }, [generalQuery.data?.maxRunTurns]);
+
   if (generalQuery.isLoading) {
     return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
   }
@@ -134,11 +139,16 @@ export function InstanceGeneralSettings() {
   const maxRunCostCentsValid =
     trimmedCost === "" || (Number.isInteger(Number(trimmedCost)) && Number(trimmedCost) > 0);
 
+  const trimmedTurns = maxRunTurns.trim();
+  const maxRunTurnsValid =
+    trimmedTurns === "" || (Number.isInteger(Number(trimmedTurns)) && Number(trimmedTurns) > 0);
+
   function saveMaxRuns() {
     updateGeneralMutation.mutate({
       maxConcurrentRuns: trimmedMaxRuns === "" ? null : Number(trimmedMaxRuns),
       maxRunWallClockMs: trimmedWallClock === "" ? null : Number(trimmedWallClock),
       maxRunCostCents: trimmedCost === "" ? null : Number(trimmedCost),
+      maxRunTurns: trimmedTurns === "" ? null : Number(trimmedTurns),
     });
   }
 
@@ -248,6 +258,21 @@ export function InstanceGeneralSettings() {
                 />
               </Field>
             </div>
+            <div className="w-40">
+              <Field
+                label="Max run turns"
+                hint="Instance-wide cap on agent turns per run. Only enforced for adapters that support turn limits (Claude, Grok). Empty = unlimited."
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  value={maxRunTurns}
+                  onChange={(e) => setMaxRunTurns(e.target.value)}
+                  aria-invalid={!maxRunTurnsValid}
+                  data-testid="instance-max-run-turns-input"
+                />
+              </Field>
+            </div>
             <Button
               size="sm"
               onClick={saveMaxRuns}
@@ -255,6 +280,7 @@ export function InstanceGeneralSettings() {
                 !maxRunsValid ||
                 !maxRunWallClockMsValid ||
                 !maxRunCostCentsValid ||
+                !maxRunTurnsValid ||
                 updateGeneralMutation.isPending
               }
             >
@@ -274,6 +300,11 @@ export function InstanceGeneralSettings() {
           {!maxRunCostCentsValid && (
             <span className="text-xs text-destructive">
               Enter a positive whole number of cents, or leave empty for unlimited.
+            </span>
+          )}
+          {!maxRunTurnsValid && (
+            <span className="text-xs text-destructive">
+              Enter a positive whole number of turns, or leave empty for unlimited.
             </span>
           )}
           <AdmissionStatusLine status={admissionStatusQuery.data} isError={admissionStatusQuery.isError} />
