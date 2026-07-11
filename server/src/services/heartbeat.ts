@@ -7312,23 +7312,24 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
   // Resolve the effective per-run ceilings for a company at claim time. Fail
   // open: any lookup error yields unlimited (null) rather than blocking claims.
   async function resolveStampedRunCaps(companyId: string): Promise<RunCaps> {
-    let instance: RunCaps = { maxRunWallClockMs: null, maxRunCostCents: null };
-    let company: RunCaps = { maxRunWallClockMs: null, maxRunCostCents: null };
+    let instance: RunCaps = { maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null };
+    let company: RunCaps = { maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null };
     try {
       const general = await instanceSettingsService(db).getGeneral();
       instance = {
         maxRunWallClockMs: general.maxRunWallClockMs ?? null,
         maxRunCostCents: general.maxRunCostCents ?? null,
+        maxRunTurns: general.maxRunTurns ?? null,
       };
     } catch (err) {
       logger.warn({ err }, "instance run-cap lookup failed; treating as unlimited");
     }
     try {
       const [row] = await db
-        .select({ wc: companies.maxRunWallClockMs, cost: companies.maxRunCostCents })
+        .select({ wc: companies.maxRunWallClockMs, cost: companies.maxRunCostCents, turns: companies.maxRunTurns })
         .from(companies)
         .where(eq(companies.id, companyId));
-      company = { maxRunWallClockMs: row?.wc ?? null, maxRunCostCents: row?.cost ?? null };
+      company = { maxRunWallClockMs: row?.wc ?? null, maxRunCostCents: row?.cost ?? null, maxRunTurns: row?.turns ?? null };
     } catch (err) {
       logger.warn({ err }, "company run-cap lookup failed; treating as unlimited");
     }
@@ -7490,6 +7491,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         updatedAt: claimedAt,
         maxRunWallClockMs: stampedCaps.maxRunWallClockMs,
         maxRunCostCents: stampedCaps.maxRunCostCents,
+        maxRunTurns: stampedCaps.maxRunTurns,
       })
       .where(and(eq(heartbeatRuns.id, run.id), eq(heartbeatRuns.status, "queued")))
       .returning()

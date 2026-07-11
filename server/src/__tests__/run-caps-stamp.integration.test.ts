@@ -173,4 +173,31 @@ describeEmbeddedPostgres("claimQueuedRun stamps per-run caps (integration)", () 
     expect(row.wc).toBe(600000);
     expect(row.cost).toBe(250);
   });
+
+  it("stamps the resolved company turn cap onto the run at claim", async () => {
+    const companyId = await createCompany();
+    await db
+      .update(companies)
+      .set({ maxRunTurns: 42 })
+      .where(eq(companies.id, companyId));
+    const agentId = await createAgent(companyId);
+
+    const runId = randomUUID();
+    await db.insert(heartbeatRuns).values({
+      id: runId,
+      companyId,
+      agentId,
+      invocationSource: "assignment",
+      triggerDetail: "system",
+      status: "queued",
+    });
+    await heartbeat.startNextQueuedRunForAgent(agentId);
+
+    const [row] = await db
+      .select({ status: heartbeatRuns.status, turns: heartbeatRuns.maxRunTurns })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.id, runId));
+    expect(row.status).toBe("running");
+    expect(row.turns).toBe(42);
+  });
 });
