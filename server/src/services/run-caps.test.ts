@@ -35,6 +35,9 @@ describe("isWallClockExceeded", () => {
   it("false when within the cap", () => {
     expect(isWallClockExceeded(base, new Date("2026-07-11T00:00:30Z"))).toBe(false);
   });
+  it("false at the exact boundary (elapsed === cap)", () => {
+    expect(isWallClockExceeded(base, new Date("2026-07-11T00:01:00Z"))).toBe(false);
+  });
   it("false when no cap or no startedAt", () => {
     expect(isWallClockExceeded({ ...base, maxRunWallClockMs: null }, new Date())).toBe(false);
     expect(isWallClockExceeded({ ...base, startedAt: null }, new Date())).toBe(false);
