@@ -46,6 +46,9 @@ function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
       ...(parsed.data.executionMode ? { executionMode: parsed.data.executionMode } : {}),
       // Absent => unlimited; only carry through an explicit cap.
       ...(parsed.data.maxConcurrentRuns ? { maxConcurrentRuns: parsed.data.maxConcurrentRuns } : {}),
+      // Absent => unlimited; only carry through an explicit cap.
+      ...(parsed.data.maxRunWallClockMs ? { maxRunWallClockMs: parsed.data.maxRunWallClockMs } : {}),
+      ...(parsed.data.maxRunCostCents ? { maxRunCostCents: parsed.data.maxRunCostCents } : {}),
     };
   }
   return {

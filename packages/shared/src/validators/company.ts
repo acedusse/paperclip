@@ -50,6 +50,8 @@ export const updateCompanySchema = createCompanySchema
     logoAssetId: logoAssetIdSchema,
     attachmentMaxBytes: attachmentMaxBytesSchema.optional(),
     maxConcurrentRuns: z.number().int().positive().nullable().optional(),
+    maxRunWallClockMs: z.number().int().positive().nullable().optional(),
+    maxRunCostCents: z.number().int().positive().nullable().optional(),
   });
 
 export type UpdateCompany = z.infer<typeof updateCompanySchema>;

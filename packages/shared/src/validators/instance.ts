@@ -49,6 +49,8 @@ export const instanceGeneralSettingsSchema = z.object({
   // Kubernetes sandbox provider and denies local/ssh execution (cloud_tenant).
   executionMode: z.enum(["kubernetes", "any"]).optional(),
   maxConcurrentRuns: z.number().int().positive().nullable().optional(),
+  maxRunWallClockMs: z.number().int().positive().nullable().optional(),
+  maxRunCostCents: z.number().int().positive().nullable().optional(),
 }).strict();
 
 export const patchInstanceGeneralSettingsSchema = instanceGeneralSettingsSchema.partial();
