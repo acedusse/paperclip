@@ -67,6 +67,11 @@ export const heartbeatRuns = pgTable(
     continuationAttempt: integer("continuation_attempt").notNull().default(0),
     lastUsefulActionAt: timestamp("last_useful_action_at", { withTimezone: true }),
     nextAction: text("next_action"),
+    // Combo-01 Phase 2.0 wind-down substrate. Both nullable: only set when a run
+    // is wound down (hard) or marked with soft wind-down intent.
+    windDownReason: text("wind_down_reason"),
+    // "when-allowed" | "no" — resume policy supplied by the wind-down caller.
+    resumePolicy: text("resume_policy"),
     contextSnapshot: jsonb("context_snapshot").$type<Record<string, unknown>>(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
