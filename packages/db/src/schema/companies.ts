@@ -28,6 +28,9 @@ export const companies = pgTable(
     budgetMonthlyCents: integer("budget_monthly_cents").notNull().default(0),
     spentMonthlyCents: integer("spent_monthly_cents").notNull().default(0),
     maxConcurrentRuns: integer("max_concurrent_runs"),
+    // Combo-01 Phase 2a per-run ceilings (company override; null = unset).
+    maxRunWallClockMs: integer("max_run_wall_clock_ms"),
+    maxRunCostCents: integer("max_run_cost_cents"),
     attachmentMaxBytes: integer("attachment_max_bytes")
       .notNull()
       .default(10 * 1024 * 1024),

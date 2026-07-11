@@ -72,6 +72,11 @@ export const heartbeatRuns = pgTable(
     windDownReason: text("wind_down_reason"),
     // "when-allowed" | "no" — resume policy supplied by the wind-down caller.
     resumePolicy: text("resume_policy"),
+    // Combo-01 Phase 2a: effective per-run ceilings, stamped at claim from
+    // company ?? instance config. Null = unlimited. Enforcement reads these,
+    // not live config.
+    maxRunWallClockMs: integer("max_run_wall_clock_ms"),
+    maxRunCostCents: integer("max_run_cost_cents"),
     contextSnapshot: jsonb("context_snapshot").$type<Record<string, unknown>>(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
