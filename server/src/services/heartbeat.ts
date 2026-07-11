@@ -17,7 +17,7 @@ import path from "node:path";
 import { execFile as execFileCallback } from "node:child_process";
 import { promisify } from "node:util";
 import { randomUUID } from "node:crypto";
-import { and, asc, desc, eq, getTableColumns, gt, gte, inArray, isNull, lt, lte, notInArray, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, getTableColumns, gt, gte, inArray, isNotNull, isNull, lt, lte, notInArray, or, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
   AGENT_DEFAULT_MAX_CONCURRENT_RUNS,
@@ -187,6 +187,13 @@ import {
   type WindDownReason,
   type WindDownRunRow,
 } from "./run-wind-down.js";
+import {
+  applyRunTurnCap,
+  evaluateRunCostCap,
+  resolveRunCaps,
+  type RunCaps,
+  type RunningRunCapRow,
+} from "./run-caps.js";
 import {
   evaluateAgentInvokability,
   evaluateAgentInvokabilityFromDb,
@@ -7303,6 +7310,58 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.max ?? null;
   }
 
+  // Resolve the effective per-run ceilings for a company at claim time. Fail
+  // open: any lookup error yields unlimited (null) rather than blocking claims.
+  async function resolveStampedRunCaps(companyId: string): Promise<RunCaps> {
+    let instance: RunCaps = { maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null };
+    let company: RunCaps = { maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null };
+    try {
+      const general = await instanceSettingsService(db).getGeneral();
+      instance = {
+        maxRunWallClockMs: general.maxRunWallClockMs ?? null,
+        maxRunCostCents: general.maxRunCostCents ?? null,
+        maxRunTurns: general.maxRunTurns ?? null,
+      };
+    } catch (err) {
+      logger.warn({ err }, "instance run-cap lookup failed; treating as unlimited");
+    }
+    try {
+      const [row] = await db
+        .select({ wc: companies.maxRunWallClockMs, cost: companies.maxRunCostCents, turns: companies.maxRunTurns })
+        .from(companies)
+        .where(eq(companies.id, companyId));
+      company = { maxRunWallClockMs: row?.wc ?? null, maxRunCostCents: row?.cost ?? null, maxRunTurns: row?.turns ?? null };
+    } catch (err) {
+      logger.warn({ err }, "company run-cap lookup failed; treating as unlimited");
+    }
+    return resolveRunCaps({ company, instance });
+  }
+
+  async function findRunningRunsWithCaps(): Promise<RunningRunCapRow[]> {
+    return db
+      .select({
+        id: heartbeatRuns.id,
+        startedAt: heartbeatRuns.startedAt,
+        maxRunWallClockMs: heartbeatRuns.maxRunWallClockMs,
+        maxRunCostCents: heartbeatRuns.maxRunCostCents,
+      })
+      .from(heartbeatRuns)
+      .where(
+        and(
+          eq(heartbeatRuns.status, "running"),
+          or(isNotNull(heartbeatRuns.maxRunWallClockMs), isNotNull(heartbeatRuns.maxRunCostCents)),
+        ),
+      );
+  }
+
+  async function getStampedCostCap(runId: string): Promise<number | null> {
+    const [row] = await db
+      .select({ cap: heartbeatRuns.maxRunCostCents })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.id, runId));
+    return row?.cap ?? null;
+  }
+
   async function getInstanceAdmissionStatus(): Promise<AdmissionStatus> {
     const general = await instanceSettingsService(db).getGeneral();
     const { cap, source } = resolveEffectiveCap(
@@ -7424,12 +7483,16 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     }
 
     const claimedAt = new Date();
+    const stampedCaps = await resolveStampedRunCaps(run.companyId);
     const claimed = await db
       .update(heartbeatRuns)
       .set({
         status: "running",
         startedAt: run.startedAt ?? claimedAt,
         updatedAt: claimedAt,
+        maxRunWallClockMs: stampedCaps.maxRunWallClockMs,
+        maxRunCostCents: stampedCaps.maxRunCostCents,
+        maxRunTurns: stampedCaps.maxRunTurns,
       })
       .where(and(eq(heartbeatRuns.id, run.id), eq(heartbeatRuns.status, "queued")))
       .returning()
@@ -8267,7 +8330,17 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       .where(eq(agentRuntimeState.agentId, agent.id));
 
     if (additionalCostCents > 0 || hasTokenUsage) {
-      const costs = costService(db, budgetHooks);
+      const costs = costService(db, budgetHooks, {
+        enforceRunCostCap: async (runId: string) => {
+          const violation = await evaluateRunCostCap(
+            { getStampedCostCap, sumRunCostCents: (id) => costService(db).sumRunCostCents(id) },
+            runId,
+          );
+          if (violation) {
+            await windDownRun(runId, { mode: "hard", resume: "when-allowed", reason: "cap-cost" });
+          }
+        },
+      });
       await costs.createEvent(agent.companyId, {
         heartbeatRunId: run.id,
         agentId: agent.id,
@@ -8982,10 +9055,14 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     const runtimeSkillEntries = await companySkills.listRuntimeSkillEntries(agent.companyId, {
       versionSelections: skillVersionSelectionMap(runtimeSkillPreference.desiredSkillEntries),
     });
-    let runtimeConfig = {
-      ...effectiveResolvedConfig,
-      paperclipRuntimeSkills: runtimeSkillEntries,
-    };
+    let runtimeConfig = applyRunTurnCap(
+      {
+        ...effectiveResolvedConfig,
+        paperclipRuntimeSkills: runtimeSkillEntries,
+      },
+      run.maxRunTurns ?? null,
+      agent.adapterType,
+    );
     const hostExecutionWorkspaceConfig = stripHostWorkspaceProvisionForLowTrustSandbox({
       config: runtimeConfig,
       trustPreset,
@@ -12529,6 +12606,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     windDownRun,
     findResumableWoundDownOrphans,
     reenqueueWoundDownOrphan,
+
+    // Combo-01 Phase 2a per-run caps: query deps consumed by run-caps.ts sweep/reactive checks.
+    findRunningRunsWithCaps,
+    getStampedCostCap,
 
     /**
      * Pause-only. Emits errorCode "agent_paused" unconditionally; its sole caller is the

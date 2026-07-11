@@ -61,6 +61,9 @@ export interface InstanceGeneralSettings {
    * (no instance-level admission gating).
    */
   maxConcurrentRuns?: number;
+  maxRunWallClockMs?: number | null;
+  maxRunCostCents?: number | null;
+  maxRunTurns?: number | null;
 }
 
 export interface InstanceExperimentalSettings {

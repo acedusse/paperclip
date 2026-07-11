@@ -172,7 +172,12 @@ describe("InstanceGeneralSettings — instance cap + admission status", () => {
     });
     await flushReact();
 
-    expect(mockInstanceSettingsApi.updateGeneral.mock.calls.at(-1)?.[0]).toEqual({ maxConcurrentRuns: 10 });
+    expect(mockInstanceSettingsApi.updateGeneral.mock.calls.at(-1)?.[0]).toEqual({
+      maxConcurrentRuns: 10,
+      maxRunWallClockMs: null,
+      maxRunCostCents: null,
+      maxRunTurns: null,
+    });
 
     const refreshedInput = maxRunsInput();
     await act(async () => {
@@ -185,7 +190,12 @@ describe("InstanceGeneralSettings — instance cap + admission status", () => {
     });
     await flushReact();
 
-    expect(mockInstanceSettingsApi.updateGeneral.mock.calls.at(-1)?.[0]).toEqual({ maxConcurrentRuns: null });
+    expect(mockInstanceSettingsApi.updateGeneral.mock.calls.at(-1)?.[0]).toEqual({
+      maxConcurrentRuns: null,
+      maxRunWallClockMs: null,
+      maxRunCostCents: null,
+      maxRunTurns: null,
+    });
   });
 
   it("disables the save affordance when the cap is not empty or a positive integer", async () => {

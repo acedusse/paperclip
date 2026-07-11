@@ -131,5 +131,64 @@ describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns",
     await svc.updateGeneral({ maxConcurrentRuns: null });
     expect((await svc.getGeneral()).maxConcurrentRuns).toBeUndefined();
   });
+
+  it("persists and reads back maxRunWallClockMs", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunWallClockMs: 600000 });
+    expect((await svc.getGeneral()).maxRunWallClockMs).toBe(600000);
+  });
+
+  it("persists and reads back maxRunCostCents", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunCostCents: 500 });
+    expect((await svc.getGeneral()).maxRunCostCents).toBe(500);
+  });
+
+  it("preserves both per-run cap fields through normalize round-trip", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunWallClockMs: 300000, maxRunCostCents: 250 });
+    const general = await svc.getGeneral();
+    expect(general.maxRunWallClockMs).toBe(300000);
+    expect(general.maxRunCostCents).toBe(250);
+  });
+
+  it("omits per-run caps when unset (unlimited)", async () => {
+    const svc = instanceSettingsService(db);
+    const general = await svc.getGeneral();
+    expect(general.maxRunWallClockMs).toBeUndefined();
+    expect(general.maxRunCostCents).toBeUndefined();
+  });
+
+  it("clears per-run caps when set to null", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunWallClockMs: 60000, maxRunCostCents: 100 });
+    expect((await svc.getGeneral()).maxRunWallClockMs).toBe(60000);
+    expect((await svc.getGeneral()).maxRunCostCents).toBe(100);
+
+    await svc.updateGeneral({ maxRunWallClockMs: null, maxRunCostCents: null });
+    const cleared = await svc.getGeneral();
+    expect(cleared.maxRunWallClockMs).toBeUndefined();
+    expect(cleared.maxRunCostCents).toBeUndefined();
+  });
+
+  it("persists and reads back maxRunTurns", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunTurns: 42 });
+    expect((await svc.getGeneral()).maxRunTurns).toBe(42);
+  });
+
+  it("omits maxRunTurns when unset (unlimited)", async () => {
+    const svc = instanceSettingsService(db);
+    expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
+  });
+
+  it("clears maxRunTurns when set to null", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunTurns: 42 });
+    expect((await svc.getGeneral()).maxRunTurns).toBe(42);
+
+    await svc.updateGeneral({ maxRunTurns: null });
+    expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
+  });
 });
 // [END: module]

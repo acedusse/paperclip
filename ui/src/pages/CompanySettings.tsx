@@ -56,6 +56,9 @@ export function CompanySettings() {
   const [brandColor, setBrandColor] = useState("");
   const [attachmentMaxMiB, setAttachmentMaxMiB] = useState(String(DEFAULT_COMPANY_ATTACHMENT_MAX_MIB));
   const [maxRuns, setMaxRuns] = useState("");
+  const [maxRunWallClockMs, setMaxRunWallClockMs] = useState("");
+  const [maxRunCostCents, setMaxRunCostCents] = useState("");
+  const [maxRunTurns, setMaxRunTurns] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [logoUploadError, setLogoUploadError] = useState<string | null>(null);
 
@@ -67,6 +70,9 @@ export function CompanySettings() {
     setBrandColor(selectedCompany.brandColor ?? "");
     setAttachmentMaxMiB(String(Math.round((selectedCompany.attachmentMaxBytes ?? DEFAULT_COMPANY_ATTACHMENT_MAX_BYTES) / BYTES_PER_MIB)));
     setMaxRuns(String(selectedCompany.maxConcurrentRuns ?? ""));
+    setMaxRunWallClockMs(String(selectedCompany.maxRunWallClockMs ?? ""));
+    setMaxRunCostCents(String(selectedCompany.maxRunCostCents ?? ""));
+    setMaxRunTurns(String(selectedCompany.maxRunTurns ?? ""));
     setLogoUrl(selectedCompany.logoUrl ?? "");
   }, [selectedCompany]);
 
@@ -79,6 +85,23 @@ export function CompanySettings() {
   const maxRunsValid =
     trimmedMaxRuns === "" || (Number.isInteger(Number(trimmedMaxRuns)) && Number(trimmedMaxRuns) > 0);
   const maxRunsPayload = trimmedMaxRuns === "" ? null : Number(trimmedMaxRuns);
+  const trimmedMaxRunWallClockMs = maxRunWallClockMs.trim();
+  const maxRunWallClockMsValid =
+    trimmedMaxRunWallClockMs === "" ||
+    (Number.isInteger(Number(trimmedMaxRunWallClockMs)) && Number(trimmedMaxRunWallClockMs) > 0);
+  const maxRunWallClockMsPayload =
+    trimmedMaxRunWallClockMs === "" ? null : Number(trimmedMaxRunWallClockMs);
+  const trimmedMaxRunCostCents = maxRunCostCents.trim();
+  const maxRunCostCentsValid =
+    trimmedMaxRunCostCents === "" ||
+    (Number.isInteger(Number(trimmedMaxRunCostCents)) && Number(trimmedMaxRunCostCents) > 0);
+  const maxRunCostCentsPayload =
+    trimmedMaxRunCostCents === "" ? null : Number(trimmedMaxRunCostCents);
+  const trimmedMaxRunTurns = maxRunTurns.trim();
+  const maxRunTurnsValid =
+    trimmedMaxRunTurns === "" ||
+    (Number.isInteger(Number(trimmedMaxRunTurns)) && Number(trimmedMaxRunTurns) > 0);
+  const maxRunTurnsPayload = trimmedMaxRunTurns === "" ? null : Number(trimmedMaxRunTurns);
   const cloudSyncEnabled = experimentalSettings?.enableCloudSync === true;
 
   const admissionStatusQuery = useQuery({
@@ -94,7 +117,10 @@ export function CompanySettings() {
       description !== (selectedCompany.description ?? "") ||
       brandColor !== (selectedCompany.brandColor ?? "") ||
       attachmentMaxBytes !== (selectedCompany.attachmentMaxBytes ?? DEFAULT_COMPANY_ATTACHMENT_MAX_BYTES) ||
-      maxRunsPayload !== (selectedCompany.maxConcurrentRuns ?? null));
+      maxRunsPayload !== (selectedCompany.maxConcurrentRuns ?? null) ||
+      maxRunWallClockMsPayload !== (selectedCompany.maxRunWallClockMs ?? null) ||
+      maxRunCostCentsPayload !== (selectedCompany.maxRunCostCents ?? null) ||
+      maxRunTurnsPayload !== (selectedCompany.maxRunTurns ?? null));
 
   const generalMutation = useMutation({
     mutationFn: (data: {
@@ -103,6 +129,9 @@ export function CompanySettings() {
       brandColor: string | null;
       attachmentMaxBytes: number;
       maxConcurrentRuns: number | null;
+      maxRunWallClockMs: number | null;
+      maxRunCostCents: number | null;
+      maxRunTurns: number | null;
     }) => companiesApi.update(selectedCompanyId!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
@@ -200,7 +229,10 @@ export function CompanySettings() {
       description: description.trim() || null,
       brandColor: brandColor || null,
       attachmentMaxBytes,
-      maxConcurrentRuns: maxRunsPayload
+      maxConcurrentRuns: maxRunsPayload,
+      maxRunWallClockMs: maxRunWallClockMsPayload,
+      maxRunCostCents: maxRunCostCentsPayload,
+      maxRunTurns: maxRunTurnsPayload
     });
   }
 
@@ -381,6 +413,69 @@ export function CompanySettings() {
                   />
                 </div>
               </Field>
+              <Field
+                label="Max run wall-clock time"
+                hint="Cap on how long a single run may execute, in milliseconds. Empty = unlimited."
+              >
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    type="number"
+                    min={1}
+                    value={maxRunWallClockMs}
+                    onChange={(e) => setMaxRunWallClockMs(e.target.value)}
+                    aria-invalid={!maxRunWallClockMsValid}
+                    data-testid="company-max-run-wall-clock-ms-input"
+                    className="w-28"
+                  />
+                  {!maxRunWallClockMsValid && (
+                    <span className="text-xs text-destructive">
+                      Enter a positive whole number, or leave empty for unlimited.
+                    </span>
+                  )}
+                </div>
+              </Field>
+              <Field
+                label="Max run cost"
+                hint="Cap on how much a single run may spend, in cents. Empty = unlimited."
+              >
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    type="number"
+                    min={1}
+                    value={maxRunCostCents}
+                    onChange={(e) => setMaxRunCostCents(e.target.value)}
+                    aria-invalid={!maxRunCostCentsValid}
+                    data-testid="company-max-run-cost-cents-input"
+                    className="w-28"
+                  />
+                  {!maxRunCostCentsValid && (
+                    <span className="text-xs text-destructive">
+                      Enter a positive whole number, or leave empty for unlimited.
+                    </span>
+                  )}
+                </div>
+              </Field>
+              <Field
+                label="Max run turns"
+                hint="Cap on agent turns for a single run. Only enforced for adapters that support turn limits (Claude, Grok). Empty = unlimited."
+              >
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    type="number"
+                    min={1}
+                    value={maxRunTurns}
+                    onChange={(e) => setMaxRunTurns(e.target.value)}
+                    aria-invalid={!maxRunTurnsValid}
+                    data-testid="company-max-run-turns-input"
+                    className="w-28"
+                  />
+                  {!maxRunTurnsValid && (
+                    <span className="text-xs text-destructive">
+                      Enter a positive whole number, or leave empty for unlimited.
+                    </span>
+                  )}
+                </div>
+              </Field>
             </div>
           </div>
         </div>
@@ -392,7 +487,15 @@ export function CompanySettings() {
           <Button
             size="sm"
             onClick={handleSaveGeneral}
-            disabled={generalMutation.isPending || !companyName.trim() || !attachmentMaxValid || !maxRunsValid}
+            disabled={
+              generalMutation.isPending ||
+              !companyName.trim() ||
+              !attachmentMaxValid ||
+              !maxRunsValid ||
+              !maxRunWallClockMsValid ||
+              !maxRunCostCentsValid ||
+              !maxRunTurnsValid
+            }
           >
             {generalMutation.isPending ? "Saving..." : "Save changes"}
           </Button>

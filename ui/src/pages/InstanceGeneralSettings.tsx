@@ -93,6 +93,21 @@ export function InstanceGeneralSettings() {
     setMaxRuns(String(generalQuery.data?.maxConcurrentRuns ?? ""));
   }, [generalQuery.data?.maxConcurrentRuns]);
 
+  const [maxRunWallClockMs, setMaxRunWallClockMs] = useState("");
+  useEffect(() => {
+    setMaxRunWallClockMs(String(generalQuery.data?.maxRunWallClockMs ?? ""));
+  }, [generalQuery.data?.maxRunWallClockMs]);
+
+  const [maxRunCostCents, setMaxRunCostCents] = useState("");
+  useEffect(() => {
+    setMaxRunCostCents(String(generalQuery.data?.maxRunCostCents ?? ""));
+  }, [generalQuery.data?.maxRunCostCents]);
+
+  const [maxRunTurns, setMaxRunTurns] = useState("");
+  useEffect(() => {
+    setMaxRunTurns(String(generalQuery.data?.maxRunTurns ?? ""));
+  }, [generalQuery.data?.maxRunTurns]);
+
   if (generalQuery.isLoading) {
     return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
   }
@@ -116,9 +131,24 @@ export function InstanceGeneralSettings() {
   const maxRunsValid =
     trimmedMaxRuns === "" || (Number.isInteger(Number(trimmedMaxRuns)) && Number(trimmedMaxRuns) > 0);
 
+  const trimmedWallClock = maxRunWallClockMs.trim();
+  const maxRunWallClockMsValid =
+    trimmedWallClock === "" || (Number.isInteger(Number(trimmedWallClock)) && Number(trimmedWallClock) > 0);
+
+  const trimmedCost = maxRunCostCents.trim();
+  const maxRunCostCentsValid =
+    trimmedCost === "" || (Number.isInteger(Number(trimmedCost)) && Number(trimmedCost) > 0);
+
+  const trimmedTurns = maxRunTurns.trim();
+  const maxRunTurnsValid =
+    trimmedTurns === "" || (Number.isInteger(Number(trimmedTurns)) && Number(trimmedTurns) > 0);
+
   function saveMaxRuns() {
     updateGeneralMutation.mutate({
       maxConcurrentRuns: trimmedMaxRuns === "" ? null : Number(trimmedMaxRuns),
+      maxRunWallClockMs: trimmedWallClock === "" ? null : Number(trimmedWallClock),
+      maxRunCostCents: trimmedCost === "" ? null : Number(trimmedCost),
+      maxRunTurns: trimmedTurns === "" ? null : Number(trimmedTurns),
     });
   }
 
@@ -198,10 +228,61 @@ export function InstanceGeneralSettings() {
                 />
               </Field>
             </div>
+            <div className="w-40">
+              <Field
+                label="Max run wall-clock time"
+                hint="Instance-wide cap on a single run's duration, in milliseconds. Empty = unlimited."
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  value={maxRunWallClockMs}
+                  onChange={(e) => setMaxRunWallClockMs(e.target.value)}
+                  aria-invalid={!maxRunWallClockMsValid}
+                  data-testid="instance-max-run-wall-clock-ms-input"
+                />
+              </Field>
+            </div>
+            <div className="w-40">
+              <Field
+                label="Max run cost"
+                hint="Instance-wide cap on a single run's spend, in cents. Empty = unlimited."
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  value={maxRunCostCents}
+                  onChange={(e) => setMaxRunCostCents(e.target.value)}
+                  aria-invalid={!maxRunCostCentsValid}
+                  data-testid="instance-max-run-cost-cents-input"
+                />
+              </Field>
+            </div>
+            <div className="w-40">
+              <Field
+                label="Max run turns"
+                hint="Instance-wide cap on agent turns per run. Only enforced for adapters that support turn limits (Claude, Grok). Empty = unlimited."
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  value={maxRunTurns}
+                  onChange={(e) => setMaxRunTurns(e.target.value)}
+                  aria-invalid={!maxRunTurnsValid}
+                  data-testid="instance-max-run-turns-input"
+                />
+              </Field>
+            </div>
             <Button
               size="sm"
               onClick={saveMaxRuns}
-              disabled={!maxRunsValid || updateGeneralMutation.isPending}
+              disabled={
+                !maxRunsValid ||
+                !maxRunWallClockMsValid ||
+                !maxRunCostCentsValid ||
+                !maxRunTurnsValid ||
+                updateGeneralMutation.isPending
+              }
             >
               {updateGeneralMutation.isPending ? "Saving..." : "Save"}
             </Button>
@@ -209,6 +290,21 @@ export function InstanceGeneralSettings() {
           {!maxRunsValid && (
             <span className="text-xs text-destructive">
               Enter a positive whole number, or leave empty for unlimited.
+            </span>
+          )}
+          {!maxRunWallClockMsValid && (
+            <span className="text-xs text-destructive">
+              Enter a positive whole number of milliseconds, or leave empty for unlimited.
+            </span>
+          )}
+          {!maxRunCostCentsValid && (
+            <span className="text-xs text-destructive">
+              Enter a positive whole number of cents, or leave empty for unlimited.
+            </span>
+          )}
+          {!maxRunTurnsValid && (
+            <span className="text-xs text-destructive">
+              Enter a positive whole number of turns, or leave empty for unlimited.
             </span>
           )}
           <AdmissionStatusLine status={admissionStatusQuery.data} isError={admissionStatusQuery.isError} />

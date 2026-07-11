@@ -62,7 +62,13 @@ async function getMonthlySpendTotal(
   return Number(row?.total ?? 0);
 }
 
-export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
+export type CostServiceHooks = {
+  // Combo-01 Phase 2a: reactive per-run cost-cap enforcement, invoked after each
+  // recorded cost event that carries a heartbeatRunId.
+  enforceRunCostCap?: (heartbeatRunId: string) => Promise<void>;
+};
+
+export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}, costHooks: CostServiceHooks = {}) {
   const budgets = budgetService(db, budgetHooks);
   return {
     createEvent: async (companyId: string, data: Omit<typeof costEvents.$inferInsert, "companyId">) => {
@@ -112,6 +118,10 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
 
       await budgets.evaluateCostEvent(event);
 
+      if (event.heartbeatRunId) {
+        await costHooks.enforceRunCostCap?.(event.heartbeatRunId);
+      }
+
       return event;
     },
 
@@ -147,6 +157,14 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
         budgetCents: company.budgetMonthlyCents,
         utilizationPercent: Number(utilization.toFixed(2)),
       };
+    },
+
+    sumRunCostCents: async (runId: string): Promise<number> => {
+      const [row] = await db
+        .select({ total: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision` })
+        .from(costEvents)
+        .where(eq(costEvents.heartbeatRunId, runId));
+      return Number(row?.total ?? 0);
     },
 
     issueTreeSummary: async (
