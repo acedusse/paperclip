@@ -31,6 +31,8 @@ export const companies = pgTable(
     // Combo-01 Phase 2a per-run ceilings (company override; null = unset).
     maxRunWallClockMs: integer("max_run_wall_clock_ms"),
     maxRunCostCents: integer("max_run_cost_cents"),
+    // Combo-01 Phase 2b per-run turn ceiling (company override; null = unset).
+    maxRunTurns: integer("max_run_turns"),
     attachmentMaxBytes: integer("attachment_max_bytes")
       .notNull()
       .default(10 * 1024 * 1024),

@@ -77,6 +77,10 @@ export const heartbeatRuns = pgTable(
     // not live config.
     maxRunWallClockMs: integer("max_run_wall_clock_ms"),
     maxRunCostCents: integer("max_run_cost_cents"),
+    // Combo-01 Phase 2b: effective per-run turn ceiling, stamped at claim from
+    // company ?? instance config. Null = unlimited. Audit/observability only;
+    // enforcement is delegated to the adapter CLI (--max-turns).
+    maxRunTurns: integer("max_run_turns"),
     contextSnapshot: jsonb("context_snapshot").$type<Record<string, unknown>>(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
