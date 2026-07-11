@@ -29,6 +29,7 @@ export interface Company {
   maxConcurrentRuns?: number | null;
   maxRunWallClockMs?: number | null;
   maxRunCostCents?: number | null;
+  maxRunTurns?: number | null;
   requireBoardApprovalForNewAgents: boolean;
   feedbackDataSharingEnabled: boolean;
   feedbackDataSharingConsentAt: Date | null;

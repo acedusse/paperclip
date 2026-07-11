@@ -63,6 +63,7 @@ export interface InstanceGeneralSettings {
   maxConcurrentRuns?: number;
   maxRunWallClockMs?: number | null;
   maxRunCostCents?: number | null;
+  maxRunTurns?: number | null;
 }
 
 export interface InstanceExperimentalSettings {

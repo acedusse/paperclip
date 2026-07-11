@@ -51,6 +51,7 @@ export const instanceGeneralSettingsSchema = z.object({
   maxConcurrentRuns: z.number().int().positive().nullable().optional(),
   maxRunWallClockMs: z.number().int().positive().nullable().optional(),
   maxRunCostCents: z.number().int().positive().nullable().optional(),
+  maxRunTurns: z.number().int().positive().nullable().optional(),
 }).strict();
 
 export const patchInstanceGeneralSettingsSchema = instanceGeneralSettingsSchema.partial();
