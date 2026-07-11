@@ -2,7 +2,7 @@
 // like run-wind-down.ts. Enforcement terminates via the injected windDownRun.
 import type { ReconcileResult, ReconcileSource } from "./admission-reconciler.js";
 
-export type RunCaps = { maxRunWallClockMs: number | null; maxRunCostCents: number | null };
+export type RunCaps = { maxRunWallClockMs: number | null; maxRunCostCents: number | null; maxRunTurns: number | null };
 export type RunCapReason = "cap-wallclock" | "cap-cost";
 export type RunCapViolation = { runId: string; reason: RunCapReason };
 
@@ -19,7 +19,34 @@ export function resolveRunCaps(input: { company: RunCaps; instance: RunCaps }): 
   return {
     maxRunWallClockMs: input.company.maxRunWallClockMs ?? input.instance.maxRunWallClockMs,
     maxRunCostCents: input.company.maxRunCostCents ?? input.instance.maxRunCostCents,
+    maxRunTurns: input.company.maxRunTurns ?? input.instance.maxRunTurns,
   };
+}
+
+// The per-adapter config field that carries the CLI turn limit. Adapters absent
+// from this map do not accept a turn flag today; the cap silently no-ops for them.
+export const RUN_TURN_CONFIG_FIELD_BY_ADAPTER: Record<string, string> = {
+  claude_local: "maxTurnsPerRun",
+  grok_local: "maxTurns",
+};
+
+// Tightest-wins: a governance cap can only LOWER the agent's own turn limit.
+// Returns a new config with the effective min written to the adapter's turn
+// field, or the input unchanged when the adapter is unsupported or there is
+// nothing to cap. Reads a non-positive/non-finite current value as "unset".
+export function applyRunTurnCap<T extends Record<string, unknown>>(
+  config: T,
+  stampedTurns: number | null,
+  adapterType: string,
+): T {
+  const field = RUN_TURN_CONFIG_FIELD_BY_ADAPTER[adapterType];
+  if (!field) return config;
+  const raw = (config as Record<string, unknown>)[field];
+  const current = typeof raw === "number" && Number.isFinite(raw) && raw > 0 ? raw : Infinity;
+  const stamped = stampedTurns != null && stampedTurns > 0 ? stampedTurns : Infinity;
+  const effective = Math.min(current, stamped);
+  if (!Number.isFinite(effective)) return config;
+  return { ...config, [field]: effective } as T;
 }
 
 export function isWallClockExceeded(row: RunningRunCapRow, now: Date): boolean {

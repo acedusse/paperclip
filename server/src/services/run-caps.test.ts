@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  applyRunTurnCap,
   evaluateRunCostCap,
   isWallClockExceeded,
   makeRunCapSweepSource,
@@ -11,19 +12,19 @@ describe("resolveRunCaps", () => {
   it("company overrides instance per field", () => {
     expect(
       resolveRunCaps({
-        company: { maxRunWallClockMs: 1000, maxRunCostCents: null },
-        instance: { maxRunWallClockMs: 9999, maxRunCostCents: 500 },
+        company: { maxRunWallClockMs: 1000, maxRunCostCents: null, maxRunTurns: 20 },
+        instance: { maxRunWallClockMs: 9999, maxRunCostCents: 500, maxRunTurns: 99 },
       }),
-    ).toEqual({ maxRunWallClockMs: 1000, maxRunCostCents: 500 });
+    ).toEqual({ maxRunWallClockMs: 1000, maxRunCostCents: 500, maxRunTurns: 20 });
   });
 
   it("both null => unlimited", () => {
     expect(
       resolveRunCaps({
-        company: { maxRunWallClockMs: null, maxRunCostCents: null },
-        instance: { maxRunWallClockMs: null, maxRunCostCents: null },
+        company: { maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null },
+        instance: { maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null },
       }),
-    ).toEqual({ maxRunWallClockMs: null, maxRunCostCents: null });
+    ).toEqual({ maxRunWallClockMs: null, maxRunCostCents: null, maxRunTurns: null });
   });
 });
 
@@ -102,5 +103,45 @@ describe("makeRunCapSweepSource", () => {
     });
     expect(await source.reconcile(now)).toEqual({ source: "run-cap-sweep", drifted: 0, repaired: 0 });
     expect(windDownRun).not.toHaveBeenCalled();
+  });
+});
+
+describe("applyRunTurnCap", () => {
+  it("stamped cap tightens claude_local's maxTurnsPerRun", () => {
+    const out = applyRunTurnCap({ maxTurnsPerRun: 1000 }, 50, "claude_local");
+    expect(out).toEqual({ maxTurnsPerRun: 50 });
+  });
+
+  it("agent's own limit wins when it is tighter", () => {
+    const out = applyRunTurnCap({ maxTurnsPerRun: 30 }, 50, "claude_local");
+    expect(out).toEqual({ maxTurnsPerRun: 30 });
+  });
+
+  it("uses grok_local's maxTurns field", () => {
+    const out = applyRunTurnCap({ maxTurns: 1000 }, 40, "grok_local");
+    expect(out).toEqual({ maxTurns: 40 });
+  });
+
+  it("writes the stamped cap when the agent field is unset", () => {
+    const out = applyRunTurnCap({}, 25, "claude_local");
+    expect(out).toEqual({ maxTurnsPerRun: 25 });
+  });
+
+  it("leaves config untouched when both are unset", () => {
+    const input = { maxTurnsPerRun: undefined };
+    const out = applyRunTurnCap(input, null, "claude_local");
+    expect(out).toBe(input);
+  });
+
+  it("no-ops (returns input) for an unsupported adapter", () => {
+    const input = { maxTurnsPerRun: 1000 };
+    const out = applyRunTurnCap(input, 10, "codex_local");
+    expect(out).toBe(input);
+  });
+
+  it("does not mutate the input config", () => {
+    const input = { maxTurnsPerRun: 1000 };
+    applyRunTurnCap(input, 50, "claude_local");
+    expect(input).toEqual({ maxTurnsPerRun: 1000 });
   });
 });
