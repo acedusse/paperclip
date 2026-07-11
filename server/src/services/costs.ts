@@ -149,6 +149,14 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
       };
     },
 
+    sumRunCostCents: async (runId: string): Promise<number> => {
+      const [row] = await db
+        .select({ total: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision` })
+        .from(costEvents)
+        .where(eq(costEvents.heartbeatRunId, runId));
+      return Number(row?.total ?? 0);
+    },
+
     issueTreeSummary: async (
       companyId: string,
       issueId: string,
