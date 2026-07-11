@@ -62,7 +62,13 @@ async function getMonthlySpendTotal(
   return Number(row?.total ?? 0);
 }
 
-export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
+export type CostServiceHooks = {
+  // Combo-01 Phase 2a: reactive per-run cost-cap enforcement, invoked after each
+  // recorded cost event that carries a heartbeatRunId.
+  enforceRunCostCap?: (heartbeatRunId: string) => Promise<void>;
+};
+
+export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}, costHooks: CostServiceHooks = {}) {
   const budgets = budgetService(db, budgetHooks);
   return {
     createEvent: async (companyId: string, data: Omit<typeof costEvents.$inferInsert, "companyId">) => {
@@ -111,6 +117,10 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}) {
         .where(eq(companies.id, companyId));
 
       await budgets.evaluateCostEvent(event);
+
+      if (event.heartbeatRunId) {
+        await costHooks.enforceRunCostCap?.(event.heartbeatRunId);
+      }
 
       return event;
     },

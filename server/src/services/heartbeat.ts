@@ -188,6 +188,7 @@ import {
   type WindDownRunRow,
 } from "./run-wind-down.js";
 import {
+  evaluateRunCostCap,
   resolveRunCaps,
   type RunCaps,
   type RunningRunCapRow,
@@ -8326,7 +8327,17 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       .where(eq(agentRuntimeState.agentId, agent.id));
 
     if (additionalCostCents > 0 || hasTokenUsage) {
-      const costs = costService(db, budgetHooks);
+      const costs = costService(db, budgetHooks, {
+        enforceRunCostCap: async (runId: string) => {
+          const violation = await evaluateRunCostCap(
+            { getStampedCostCap, sumRunCostCents: (id) => costService(db).sumRunCostCents(id) },
+            runId,
+          );
+          if (violation) {
+            await windDownRun(runId, { mode: "hard", resume: "when-allowed", reason: "cap-cost" });
+          }
+        },
+      });
       await costs.createEvent(agent.companyId, {
         heartbeatRunId: run.id,
         agentId: agent.id,

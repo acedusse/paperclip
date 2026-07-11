@@ -38,6 +38,7 @@ import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
 import { fetchAllQuotaWindows } from "../services/quota-windows.js";
 import { badRequest } from "../errors.js";
 import type { PluginWorkerManager } from "../services/plugin-worker-manager.js";
+import { evaluateRunCostCap } from "../services/run-caps.js";
 
 export function parseCostDateRange(query: Record<string, unknown>) {
   const fromRaw = query.from as string | undefined;
@@ -70,7 +71,17 @@ export function costRoutes(
   const budgetHooks = {
     cancelWorkForScope: heartbeat.cancelBudgetScopeWork,
   };
-  const costs = costService(db, budgetHooks);
+  const costs = costService(db, budgetHooks, {
+    enforceRunCostCap: async (runId: string) => {
+      const violation = await evaluateRunCostCap(
+        { getStampedCostCap: heartbeat.getStampedCostCap, sumRunCostCents: (id) => costService(db).sumRunCostCents(id) },
+        runId,
+      );
+      if (violation) {
+        await heartbeat.windDownRun(runId, { mode: "hard", resume: "when-allowed", reason: "cap-cost" });
+      }
+    },
+  });
   const finance = financeService(db);
   const budgets = budgetService(db, budgetHooks);
   const companies = companyService(db);
