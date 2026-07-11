@@ -188,6 +188,7 @@ import {
   type WindDownRunRow,
 } from "./run-wind-down.js";
 import {
+  applyRunTurnCap,
   evaluateRunCostCap,
   resolveRunCaps,
   type RunCaps,
@@ -9054,10 +9055,14 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     const runtimeSkillEntries = await companySkills.listRuntimeSkillEntries(agent.companyId, {
       versionSelections: skillVersionSelectionMap(runtimeSkillPreference.desiredSkillEntries),
     });
-    let runtimeConfig = {
-      ...effectiveResolvedConfig,
-      paperclipRuntimeSkills: runtimeSkillEntries,
-    };
+    let runtimeConfig = applyRunTurnCap(
+      {
+        ...effectiveResolvedConfig,
+        paperclipRuntimeSkills: runtimeSkillEntries,
+      },
+      run.maxRunTurns ?? null,
+      agent.adapterType,
+    );
     const hostExecutionWorkspaceConfig = stripHostWorkspaceProvisionForLowTrustSandbox({
       config: runtimeConfig,
       trustPreset,
