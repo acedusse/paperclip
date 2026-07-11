@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  makeWoundDownResumeSource,
+  shouldSuppressContinuationOnFinish,
   STOPPABLE_WIND_DOWN_STATUSES,
   windDownRun,
+  type OrphanedWoundDownRun,
   type WindDownDeps,
   type WindDownRunRow,
 } from "./run-wind-down.js";
@@ -79,5 +82,51 @@ describe("windDownRun", () => {
 
   it("exposes the stoppable status set", () => {
     expect(STOPPABLE_WIND_DOWN_STATUSES).toEqual(["queued", "running", "scheduled_retry"]);
+  });
+});
+
+describe("wound-down-resume reconcile source", () => {
+  it("re-enqueues every resumable orphan and reports the count", async () => {
+    const orphans: OrphanedWoundDownRun[] = [
+      { id: "r1", agentId: "a1" },
+      { id: "r2", agentId: "a2" },
+    ];
+    const reenqueueOrphan = vi.fn(async () => {});
+    const source = makeWoundDownResumeSource({
+      findResumableOrphans: vi.fn(async () => orphans),
+      reenqueueOrphan,
+    });
+    const result = await source.reconcile(new Date());
+    expect(source.name).toBe("wound-down-resume");
+    expect(reenqueueOrphan).toHaveBeenCalledTimes(2);
+    expect(result).toEqual({ source: "wound-down-resume", drifted: 2, repaired: 2 });
+  });
+
+  it("reports zero when nothing is resumable", async () => {
+    const source = makeWoundDownResumeSource({
+      findResumableOrphans: vi.fn(async () => []),
+      reenqueueOrphan: vi.fn(async () => {}),
+    });
+    expect(await source.reconcile(new Date())).toEqual({
+      source: "wound-down-resume",
+      drifted: 0,
+      repaired: 0,
+    });
+  });
+});
+
+describe("shouldSuppressContinuationOnFinish", () => {
+  it("suppresses continuation for a soft wind-down with resume=no", () => {
+    expect(shouldSuppressContinuationOnFinish({ windDownReason: "drain", resumePolicy: "no" })).toBe(true);
+  });
+
+  it("allows normal promotion for a soft wind-down with resume=when-allowed", () => {
+    expect(
+      shouldSuppressContinuationOnFinish({ windDownReason: "drain", resumePolicy: "when-allowed" }),
+    ).toBe(false);
+  });
+
+  it("allows normal promotion for an ordinary finish (no wind-down intent)", () => {
+    expect(shouldSuppressContinuationOnFinish({ windDownReason: null, resumePolicy: null })).toBe(false);
   });
 });

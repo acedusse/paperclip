@@ -5,6 +5,7 @@
 //
 // Pure + dependency-injected: it never touches the heartbeat singleton or the
 // DB directly. The heartbeat service wires concrete deps (see heartbeat.ts).
+import type { ReconcileResult, ReconcileSource } from "./admission-reconciler.js";
 
 export type WindDownMode = "soft" | "hard";
 export type ResumePolicy = "when-allowed" | "no";
@@ -56,4 +57,45 @@ export async function windDownRun(
   await deps.markWoundDown(runId, opts.reason, opts.resume);
   await deps.releaseIssue(run, { reenqueue: opts.resume === "when-allowed" });
   return { outcome: "terminated" };
+}
+
+// The soft-finish branch: a run that completed its turn naturally but carries a
+// soft wind-down intent with resume="no" must NOT promote a continuation. Any
+// other case (no intent, or resume="when-allowed") promotes normally. Extracted
+// as a pure function so the heartbeat finish path stays a one-liner and this
+// decision is unit-tested without the DB harness.
+export function shouldSuppressContinuationOnFinish(run: {
+  windDownReason: string | null;
+  resumePolicy: string | null;
+}): boolean {
+  return run.windDownReason != null && run.resumePolicy === "no";
+}
+
+// A run wound down with resume="when-allowed" whose issue has no active/queued
+// continuation — e.g. the process crashed between terminate and re-enqueue.
+export type OrphanedWoundDownRun = { id: string; agentId: string };
+
+export type WoundDownResumeDeps = {
+  // Ground-truth query: wound_down + resumePolicy="when-allowed" rows whose issue
+  // has no active/queued continuation run.
+  findResumableOrphans(now: Date): Promise<OrphanedWoundDownRun[]>;
+  reenqueueOrphan(run: OrphanedWoundDownRun): Promise<void>;
+};
+
+// Crash-safety source for the Phase-1 admission reconciler: re-enqueues resumable
+// wound-down runs whose continuation never got scheduled. Runs with
+// resumePolicy="no" are intentionally left alone.
+export function makeWoundDownResumeSource(deps: WoundDownResumeDeps): ReconcileSource {
+  return {
+    name: "wound-down-resume",
+    async reconcile(now: Date): Promise<ReconcileResult> {
+      const orphans = await deps.findResumableOrphans(now);
+      let repaired = 0;
+      for (const orphan of orphans) {
+        await deps.reenqueueOrphan(orphan);
+        repaired += 1;
+      }
+      return { source: "wound-down-resume", drifted: orphans.length, repaired };
+    },
+  };
 }
