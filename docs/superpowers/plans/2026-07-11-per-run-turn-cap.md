@@ -165,34 +165,44 @@ git commit -m "feat(shared): accept per-run turn cap on instance + company"
 
 **Files:**
 - Modify: `server/src/services/instance-settings.ts:51`
-- Test: `server/src/services/__tests__/instance-settings-run-caps.test.ts`
+- Test: `server/src/__tests__/instance-settings-service.test.ts`
 
 **Interfaces:**
 - Consumes: `InstanceGeneralSettings.maxRunTurns` (Task 2).
 - Produces: `normalizeGeneralSettings` preserves an explicit `maxRunTurns` through the `.strip()` storage schema.
 
-- [ ] **Step 1: Write the failing test**
+**Note (corrected during execution):** `normalizeGeneralSettings` is **not exported**, so it cannot be unit-tested directly. The established 2a pattern proves carry-through via a round-trip through `instanceSettingsService` (`updateGeneral` → `getGeneral`) against embedded Postgres, in `server/src/__tests__/instance-settings-service.test.ts`. Follow that. If embedded Postgres is unavailable the `describeEmbeddedPostgres` block SKIPS; in that case still add the tests + carry-through line, note the skip, and use `cd server && pnpm typecheck` as GREEN evidence.
 
-Open `server/src/services/__tests__/instance-settings-run-caps.test.ts`. Add this test inside the existing top-level `describe` block (mirror the existing wall-clock/cost cases in that file):
+- [ ] **Step 1: Write the failing tests**
+
+In `server/src/__tests__/instance-settings-service.test.ts`, inside the existing `describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns", ...)` block, after the "clears per-run caps when set to null" test, add (mirroring the sibling `maxRunWallClockMs`/`maxRunCostCents` round-trip tests exactly):
 
 ```ts
-  it("carries an explicit maxRunTurns through normalize", () => {
-    const result = normalizeGeneralSettings({ maxRunTurns: 40 });
-    expect(result.maxRunTurns).toBe(40);
+  it("persists and reads back maxRunTurns", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunTurns: 42 });
+    expect((await svc.getGeneral()).maxRunTurns).toBe(42);
   });
 
-  it("drops maxRunTurns when unset", () => {
-    const result = normalizeGeneralSettings({});
-    expect(result.maxRunTurns).toBeUndefined();
+  it("omits maxRunTurns when unset (unlimited)", async () => {
+    const svc = instanceSettingsService(db);
+    expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
+  });
+
+  it("clears maxRunTurns when set to null", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ maxRunTurns: 42 });
+    expect((await svc.getGeneral()).maxRunTurns).toBe(42);
+
+    await svc.updateGeneral({ maxRunTurns: null });
+    expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
   });
 ```
 
-If `normalizeGeneralSettings` is not already imported in this file, add it to the existing import from `../instance-settings.js` (match how the file imports the function under test).
+- [ ] **Step 2: Run the tests to verify they fail (RED)**
 
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `cd server && npx vitest run src/services/__tests__/instance-settings-run-caps.test.ts`
-Expected: FAIL — `maxRunTurns` is `undefined` on the first case (the `.strip()` storage schema drops it because normalize does not carry it through).
+Run: `cd server && npx vitest run src/__tests__/instance-settings-service.test.ts`
+Expected: FAIL — "persists and reads back maxRunTurns" fails because normalize drops `maxRunTurns` (comes back `undefined`). (If the suite SKIPS for lack of embedded Postgres, proceed and rely on the Step 4 typecheck as GREEN evidence.)
 
 - [ ] **Step 3: Carry the field through normalize**
 
@@ -203,15 +213,15 @@ In `server/src/services/instance-settings.ts`, immediately after the `maxRunCost
       ...(parsed.data.maxRunTurns ? { maxRunTurns: parsed.data.maxRunTurns } : {}),
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [ ] **Step 4: Run the tests to verify they pass (GREEN)**
 
-Run: `cd server && npx vitest run src/services/__tests__/instance-settings-run-caps.test.ts`
-Expected: PASS.
+Run: `cd server && npx vitest run src/__tests__/instance-settings-service.test.ts`
+Expected: PASS. (If skipped: `cd server && pnpm typecheck` clean substitutes as GREEN evidence.)
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add server/src/services/instance-settings.ts server/src/services/__tests__/instance-settings-run-caps.test.ts
+git add server/src/services/instance-settings.ts server/src/__tests__/instance-settings-service.test.ts
 git commit -m "feat(config): carry per-run turn cap through instance normalize"
 ```
 
