@@ -56,6 +56,31 @@ export function activeScheduleCap(
   return cap;
 }
 
+// Forward-scan minute-by-minute (bounded) for the first minute at which the active
+// schedule cap changes. Scanning in UTC and re-deriving zoned parts each step sidesteps
+// error-prone reverse (zoned->UTC) conversion across DST. Runs only on the pollable
+// status endpoint, never the hot admission gate, so the bounded cost is immaterial.
+export function nextScheduleTransition(
+  windows: ScheduleWindow[] | null | undefined,
+  timezone: string | null | undefined,
+  now: Date,
+  horizonDays = 8,
+): { at: Date; cap: number | null } | null {
+  if (!timezone || !windows || windows.length === 0) return null;
+  const current = activeScheduleCap(windows, timezone, now);
+  const cursor = new Date(now.getTime());
+  cursor.setUTCSeconds(0, 0);
+  const limit = horizonDays * 24 * 60;
+  for (let i = 0; i < limit; i += 1) {
+    cursor.setUTCMinutes(cursor.getUTCMinutes() + 1);
+    const cap = activeScheduleCap(windows, timezone, cursor);
+    if (cap !== current) {
+      return { at: new Date(cursor.getTime()), cap };
+    }
+  }
+  return null;
+}
+
 export function activeManualOverride(
   company: { manualCapOverride?: number | null; manualCapOverrideExpiresAt?: Date | null },
   now: Date,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { activeScheduleCap, activeManualOverride } from "./schedule-cap.js";
+import { activeScheduleCap, activeManualOverride, nextScheduleTransition } from "./schedule-cap.js";
 import type { ScheduleWindow } from "@paperclipai/shared";
 
 const w = (over: Partial<ScheduleWindow>): ScheduleWindow => ({
@@ -83,5 +83,37 @@ describe("activeManualOverride", () => {
   it("returns null when absent", () => {
     expect(activeManualOverride({ manualCapOverride: null, manualCapOverrideExpiresAt: null }, now)).toBeNull();
     expect(activeManualOverride({}, now)).toBeNull();
+  });
+});
+
+describe("nextScheduleTransition", () => {
+  const tz2 = "America/New_York";
+  const win: ScheduleWindow = {
+    id: "biz",
+    label: "Business hours",
+    days: [1, 2, 3, 4, 5],
+    startMinute: 540, // 09:00
+    endMinute: 1020, // 17:00
+    maxConcurrentRuns: 4,
+  };
+
+  it("returns null when there are no windows", () => {
+    expect(nextScheduleTransition([], tz2, new Date())).toBeNull();
+    expect(nextScheduleTransition([win], null, new Date())).toBeNull();
+  });
+
+  it("finds the next boundary and the cap that takes effect", () => {
+    // Monday 2026-07-13 08:00 EDT = 12:00Z -> before the window opens.
+    const before = nextScheduleTransition([win], tz2, new Date("2026-07-13T12:00:00Z"));
+    expect(before?.cap).toBe(4);
+    // Boundary is 09:00 EDT = 13:00Z.
+    expect(before?.at.toISOString()).toBe("2026-07-13T13:00:00.000Z");
+  });
+
+  it("finds the closing boundary from inside the window", () => {
+    // Monday 10:00 EDT = 14:00Z -> inside; next change is the 17:00 close -> no opinion (null).
+    const after = nextScheduleTransition([win], tz2, new Date("2026-07-13T14:00:00Z"));
+    expect(after?.cap).toBeNull();
+    expect(after?.at.toISOString()).toBe("2026-07-13T21:00:00.000Z"); // 17:00 EDT
   });
 });
