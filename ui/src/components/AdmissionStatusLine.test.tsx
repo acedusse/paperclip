@@ -166,6 +166,91 @@ describe("AdmissionStatusLine", () => {
     });
   });
 
+  it("shows a schedule badge when the schedule sets the cap", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 4,
+            source: "schedule",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toContain("· schedule");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows an override badge when a manual override sets the cap", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 4,
+            source: "manual-override",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toContain("· override");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the next transition when present", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 4,
+            source: "configured-default",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+            scheduleNextTransition: { at: "2026-07-13T13:00:00.000Z", cap: 2 },
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toMatch(/→ 2 runs/);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows 'status unavailable' on error", () => {
     container = document.createElement("div");
     document.body.appendChild(container);

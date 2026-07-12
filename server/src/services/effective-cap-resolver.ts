@@ -29,6 +29,8 @@ export type CapContext = {
   configuredMax: number | null;
   executionState?: RunExecutionState;
   breakerLevel?: BreakerLevel;
+  manualOverrideCap?: number | null;
+  scheduleCap?: number | null;
 };
 
 export type CapWriter = {
@@ -77,10 +79,36 @@ export const predictiveBreakerWriter: CapWriter = {
   },
 };
 
+// Combo-01 Phase 3b: operator "boost / quiet now" override. Reads a pre-computed,
+// unexpired override cap from the context (null when none/expired). Sits below the
+// breaker, so a safety throttle/halt or a human panic always wins over a boost.
+export const manualOverrideWriter: CapWriter = {
+  name: "manual-override",
+  precedence: CAP_WRITER_PRECEDENCE.indexOf("manual-override"),
+  resolve: (ctx) => ctx.manualOverrideCap ?? null,
+};
+
+// Combo-01 Phase 3b: time-of-day schedule. Reads the currently-active window cap
+// (most-restrictive-wins, computed at the resolver site); null outside every window.
+export const scheduleWriter: CapWriter = {
+  name: "schedule",
+  precedence: CAP_WRITER_PRECEDENCE.indexOf("schedule"),
+  resolve: (ctx) => ctx.scheduleCap ?? null,
+};
+
 // Company resolver sites use this set (instance sites have no breaker — no budget).
 export const PHASE3_COMPANY_WRITERS: CapWriter[] = [
   panicDrainWriter,
   predictiveBreakerWriter,
+  configuredDefaultWriter,
+];
+
+// Company resolver sites use this set once schedule + manual override ship.
+export const PHASE3B_COMPANY_WRITERS: CapWriter[] = [
+  panicDrainWriter,
+  predictiveBreakerWriter,
+  manualOverrideWriter,
+  scheduleWriter,
   configuredDefaultWriter,
 ];
 
