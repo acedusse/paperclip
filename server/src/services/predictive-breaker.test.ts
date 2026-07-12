@@ -3,8 +3,11 @@ import {
   BREAKER,
   classifyDownLevel,
   computeTimeToLimit,
+  evaluateCompanyBreaker,
   nextLevelWithHysteresis,
+  type BreakerEvalDeps,
 } from "./predictive-breaker.js";
+import type { BreakerLevel } from "@paperclipai/shared";
 
 const H = 40; // horizon minutes -> halt<=10, throttle<=40, warn<=80
 const T0 = new Date("2026-07-12T00:00:00Z");
@@ -56,5 +59,62 @@ describe("nextLevelWithHysteresis", () => {
   });
   it("holds when the raw level equals the current level", () => {
     expect(nextLevelWithHysteresis("throttle", T0, 30, H, afterDwell)).toBe("throttle");
+  });
+});
+
+function fakeDeps(over: Partial<BreakerEvalDeps> & {
+  burn?: number;
+  remaining?: number | null;
+  state?: { level: BreakerLevel; since: Date } | null;
+}): { deps: BreakerEvalDeps; saved: Array<{ level: BreakerLevel }>; wound: string[]; logs: Array<[BreakerLevel, BreakerLevel]> } {
+  const saved: Array<{ level: BreakerLevel }> = [];
+  const wound: string[] = [];
+  const logs: Array<[BreakerLevel, BreakerLevel]> = [];
+  const deps: BreakerEvalDeps = {
+    getBurnRateCentsPerMin: async () => over.burn ?? 0,
+    getMostUrgentRemainingCents: async () => (over.remaining === undefined ? 1000 : over.remaining),
+    loadState: async () => over.state ?? null,
+    saveState: async (_c, row) => {
+      saved.push({ level: row.level });
+    },
+    windDownCompanyRuns: async (companyId) => {
+      wound.push(companyId);
+    },
+    logTransition: async (_c, from, to) => {
+      logs.push([from, to]);
+    },
+    ...over,
+  };
+  return { deps, saved, wound, logs };
+}
+
+describe("evaluateCompanyBreaker", () => {
+  it("returns normal and does not wind down when not burning", async () => {
+    const { deps, wound } = fakeDeps({ burn: 0, remaining: 1000 });
+    const level = await evaluateCompanyBreaker(deps, "c1", 40, T0);
+    expect(level).toBe("normal");
+    expect(wound).toEqual([]);
+  });
+
+  it("escalates to halt and winds down when the budget is nearly gone", async () => {
+    // remaining 10, burn 5/min -> tt=2 <= H/4(10) -> halt
+    const { deps, wound, logs } = fakeDeps({ burn: 5, remaining: 10 });
+    const level = await evaluateCompanyBreaker(deps, "c1", 40, T0);
+    expect(level).toBe("halt");
+    expect(wound).toEqual(["c1"]);
+    expect(logs).toContainEqual(["normal", "halt"]);
+  });
+
+  it("winds down every tick while halted (idempotent backstop)", async () => {
+    const { deps, wound } = fakeDeps({ burn: 5, remaining: 10, state: { level: "halt", since: T0 } });
+    await evaluateCompanyBreaker(deps, "c1", 40, new Date(T0.getTime() + 60_000));
+    expect(wound).toEqual(["c1"]); // still winds down while the level stays halt
+  });
+
+  it("resets to normal and skips wind-down when the company is ineligible", async () => {
+    const { deps, wound } = fakeDeps({ remaining: null, state: { level: "throttle", since: T0 } });
+    const level = await evaluateCompanyBreaker(deps, "c1", 40, T0);
+    expect(level).toBe("normal");
+    expect(wound).toEqual([]);
   });
 });
