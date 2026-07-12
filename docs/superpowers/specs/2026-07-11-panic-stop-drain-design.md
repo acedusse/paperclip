@@ -26,6 +26,7 @@ Phase 1 caps *concurrency*; 2a/2b cap a single run's *wall-clock / cost / turns*
    - **A guard in `claimQueuedRun`** holds runs queued on the *direct* claim path (`executeRun`→`claimQueuedRun`, used by process-recovery / scheduled-retry / direct-wakeup) that bypasses the budget gate. This is what makes the seam "the only path a run can start, including recovery/retry."
 5. **Drain holds, it does not cancel.** Draining and halted both *block new starts*; only halted *cancels in-flight*. Held runs stay `queued` (not cancelled), so Resume recovers them.
 6. **Naming.** The field is `runExecutionState` — both `executionState` (issue-workflow JSONB) and `executionMode` (instance restricted/unrestricted policy) are already taken.
+7. **Fail-open under DB failure (accepted guarantee).** `isScopeQuiescing` and the admission count/state lookups fail *open*: a DB lookup error is treated as `running`. Consequence: during a DB outage a halted fleet can admit new runs until the DB recovers — the `panic-halt-sweep` reconcile source then converges it back to halted on a subsequent tick. **Panic is therefore best-effort under DB failure, eventually-consistent via the sweep.** This is deliberate: failing *closed* on the state check would let a transient blip wedge all normal admission (treat every scope as quiescing), a worse self-inflicted outage on the common path. (Reviewed + accepted 2026-07-11.)
 
 ## State model & storage (mirrors the 2a/2b config split)
 
@@ -65,7 +66,7 @@ A new service seam (in `heartbeat.ts`, exposed like `windDownRun`, or a small `r
   - If the **target is `halted`**, run the panic fan-out for the scope.
   - `draining` / `running`: persist only (blocking + resume come from the writer/guard and the existing cap).
 - **Panic fan-out** `panicStopScope(scope)`: enumerate `running` runs in scope (`findRunningRunsInstanceWide` / `findRunningRunsForCompany` — row-returning variants of the existing count helpers, or reuse the shape of `findRunningRunsWithCaps`) and `windDownRun(id, { mode:"hard", resume:"when-allowed", reason:"panic" })` each. Idempotent: re-panicking a halted scope with no running runs is a no-op.
-- Audit every transition + every wound-down run to `activity-log` (mirrors the admit/defer auditing from Phase 1).
+- Audit every transition + every wound-down run to `activity-log` (mirrors the admit/defer auditing from Phase 1). **Scope carve-out (accepted 2026-07-11):** `activity_log.companyId` is a NOT-NULL FK, so only **company-scope** transitions get an `activity_log` row. **Instance-scope** transitions are recorded via `logger.info` instead (the individual wound-down runs still land in each run's event log). Making instance transitions queryable in `activity_log` (nullable `companyId` or a dedicated instance-audit path) is a deferred follow-up, to be picked up if a queryable instance-panic audit trail becomes an operational requirement.
 
 ## Crash-safe backstop (reconcile source)
 
