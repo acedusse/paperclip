@@ -190,5 +190,26 @@ describeEmbeddedPostgres("instanceSettingsService.getGeneral maxConcurrentRuns",
     await svc.updateGeneral({ maxRunTurns: null });
     expect((await svc.getGeneral()).maxRunTurns).toBeUndefined();
   });
+
+  it("persists and reads back runExecutionState", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ runExecutionState: "halted" });
+    expect((await svc.getGeneral()).runExecutionState).toBe("halted");
+  });
+
+  it("omits runExecutionState when unset (defaults to running at read sites)", async () => {
+    const svc = instanceSettingsService(db);
+    expect((await svc.getGeneral()).runExecutionState).toBeUndefined();
+  });
+
+  it("clears runExecutionState back to running", async () => {
+    const svc = instanceSettingsService(db);
+    await svc.updateGeneral({ runExecutionState: "draining" });
+    expect((await svc.getGeneral()).runExecutionState).toBe("draining");
+
+    await svc.updateGeneral({ runExecutionState: "running" });
+    // "running" is the default; normalize only carries through a non-running state (see Step 3).
+    expect((await svc.getGeneral()).runExecutionState).toBeUndefined();
+  });
 });
 // [END: module]

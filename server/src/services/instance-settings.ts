@@ -50,6 +50,10 @@ function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
       ...(parsed.data.maxRunWallClockMs ? { maxRunWallClockMs: parsed.data.maxRunWallClockMs } : {}),
       ...(parsed.data.maxRunCostCents ? { maxRunCostCents: parsed.data.maxRunCostCents } : {}),
       ...(parsed.data.maxRunTurns ? { maxRunTurns: parsed.data.maxRunTurns } : {}),
+      // Only carry a non-default state; "running" (or absent) reads as unset.
+      ...(parsed.data.runExecutionState && parsed.data.runExecutionState !== "running"
+        ? { runExecutionState: parsed.data.runExecutionState }
+        : {}),
     };
   }
   return {
