@@ -274,5 +274,48 @@ describeEmbeddedPostgres("heartbeat idle streak e2e (timer wakeReason -> idle st
       await teardown();
     }
   });
+
+  it("resets a non-zero streak to 0 when an enabled agent's timer run completes productively (proves the update actually fires via the real path)", async () => {
+    // The two cases above both leave the streak at 0 (an enabled agent whose benign run is
+    // productive stays 0; a disabled agent stays 0), so neither proves applyIdleStreakUpdate
+    // is actually invoked-and-writes on the real completion path. Seeding a non-zero streak
+    // and observing it collapse to 0 does: the write only happens if the gated call fired.
+    // This is robust to the mock's liveness classification as long as the run is NOT an empty
+    // heartbeat (a productive OR non-timer OR failed completion all reset) — which we assert.
+    const { agentId } = await seedDueAgent({ idleBackoffEnabled: true, streak: 3 });
+    try {
+      const result = await heartbeat.tickTimers(now);
+      expect(result.enqueued).toBe(1);
+
+      const [queuedRun] = await db
+        .select({ id: heartbeatRuns.id })
+        .from(heartbeatRuns)
+        .where(eq(heartbeatRuns.agentId, agentId));
+      expect(queuedRun).toBeTruthy();
+
+      const run = await drainRunToTerminal(queuedRun.id);
+
+      const context = parseObject(run.contextSnapshot);
+      const wakeReason = context.wakeReason as string | null;
+      expect(wakeReason).toBe("heartbeat_timer");
+      expect(run.status).toBe("succeeded");
+
+      // The benign mock's run is not an empty heartbeat, so a reset (not an increment) is the
+      // expected transition; assert that precondition so this stays a genuine reset test.
+      expect(
+        isEmptyTimerHeartbeat({
+          wakeReason,
+          outcome: "succeeded",
+          livenessState: run.livenessState as RunLivenessState | null,
+        }),
+      ).toBe(false);
+
+      const [agentRow] = await db.select().from(agents).where(eq(agents.id, agentId));
+      // 3 -> 0: only reachable if applyIdleStreakUpdate ran on the real completion path.
+      expect(agentRow.heartbeatIdleStreak).toBe(0);
+    } finally {
+      await teardown();
+    }
+  });
 });
 // [END: module]
