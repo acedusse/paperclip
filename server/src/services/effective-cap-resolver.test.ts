@@ -17,9 +17,12 @@ import {
   CAP_WRITER_PRECEDENCE,
   PHASE1_WRITERS,
   PHASE3_COMPANY_WRITERS,
+  PHASE3B_COMPANY_WRITERS,
   configuredDefaultWriter,
+  manualOverrideWriter,
   panicDrainWriter,
   predictiveBreakerWriter,
+  scheduleWriter,
   resolveEffectiveCap,
   type CapWriter,
 } from "./effective-cap-resolver.js";
@@ -141,6 +144,48 @@ describe("predictiveBreakerWriter", () => {
       PHASE3_COMPANY_WRITERS,
     );
     expect(source).toBe("panic-drain");
+  });
+});
+
+describe("phase 3b writers", () => {
+  it("manual-override writer returns its cap, else no opinion", () => {
+    expect(manualOverrideWriter.resolve({ configuredMax: 10, manualOverrideCap: 25 })).toBe(25);
+    expect(manualOverrideWriter.resolve({ configuredMax: 10, manualOverrideCap: 0 })).toBe(0);
+    expect(manualOverrideWriter.resolve({ configuredMax: 10 })).toBeNull();
+  });
+
+  it("schedule writer returns its cap, else no opinion", () => {
+    expect(scheduleWriter.resolve({ configuredMax: 10, scheduleCap: 4 })).toBe(4);
+    expect(scheduleWriter.resolve({ configuredMax: 10, scheduleCap: 0 })).toBe(0);
+    expect(scheduleWriter.resolve({ configuredMax: 10 })).toBeNull();
+  });
+
+  it("manual override beats schedule beats configured default", () => {
+    const ctx = { configuredMax: 10, manualOverrideCap: 25, scheduleCap: 4 };
+    expect(resolveEffectiveCap(ctx, PHASE3B_COMPANY_WRITERS)).toEqual({ cap: 25, source: "manual-override" });
+    expect(resolveEffectiveCap({ configuredMax: 10, scheduleCap: 4 }, PHASE3B_COMPANY_WRITERS)).toEqual({
+      cap: 4,
+      source: "schedule",
+    });
+    expect(resolveEffectiveCap({ configuredMax: 10 }, PHASE3B_COMPANY_WRITERS)).toEqual({
+      cap: 10,
+      source: "configured-default",
+    });
+  });
+
+  it("breaker HALT and panic-drain both outrank a manual boost", () => {
+    expect(
+      resolveEffectiveCap(
+        { configuredMax: 10, manualOverrideCap: 25, breakerLevel: "halt" },
+        PHASE3B_COMPANY_WRITERS,
+      ),
+    ).toEqual({ cap: 0, source: "predictive-breaker" });
+    expect(
+      resolveEffectiveCap(
+        { configuredMax: 10, manualOverrideCap: 25, executionState: "draining" },
+        PHASE3B_COMPANY_WRITERS,
+      ),
+    ).toEqual({ cap: 0, source: "panic-drain" });
   });
 });
 // [END: module]

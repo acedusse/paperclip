@@ -52,6 +52,8 @@ import {
   updateCompanyBrandingSchema,
   companyArtifactsQuerySchema,
   companyArtifactsResponseSchema,
+  capOverrideSchema,
+  runExecutionStateSchema,
   // Routine
   createRoutineSchema,
   updateRoutineSchema,
@@ -871,6 +873,39 @@ registry.registerPath({
   path: "/api/companies/{companyId}/admission-status",
   tags: ["companies"],
   summary: "Get company admission status",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/execution-state",
+  tags: ["companies"],
+  summary: "Set a company's run execution state",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(z.object({ state: runExecutionStateSchema })),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/cap-override",
+  tags: ["companies"],
+  summary: "Set a company's manual concurrency cap override",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(capOverrideSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/api/companies/{companyId}/cap-override",
+  tags: ["companies"],
+  summary: "Clear a company's manual concurrency cap override",
   request: { params: z.object({ companyId: z.string() }) },
   responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
 });
@@ -2488,6 +2523,15 @@ registry.registerPath({
   tags: ["instance"],
   summary: "Get instance admission status",
   responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/instance/execution-state",
+  tags: ["instance"],
+  summary: "Set the instance's run execution state",
+  request: { body: jsonBody(z.object({ state: runExecutionStateSchema })) },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
 });
 
 registry.registerPath({

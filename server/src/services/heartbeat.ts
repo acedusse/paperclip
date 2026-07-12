@@ -181,7 +181,8 @@ import { productivityReviewService } from "./productivity-review.js";
 import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
 import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
-import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3_COMPANY_WRITERS } from "./effective-cap-resolver.js";
+import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3B_COMPANY_WRITERS } from "./effective-cap-resolver.js";
+import { activeScheduleCap, activeManualOverride, nextScheduleTransition } from "./schedule-cap.js";
 import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
 import {
@@ -3421,6 +3422,7 @@ export type AdmissionStatus = {
   queued: number;
   runExecutionState: RunExecutionState;
   breakerLevel: BreakerLevel;
+  scheduleNextTransition?: { at: Date; cap: number | null } | null;
 };
 
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
@@ -7373,6 +7375,28 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return (row?.level as BreakerLevel | undefined) ?? "normal";
   }
 
+  // Combo-01 Phase 3b: schedule + manual-override cap context, read in ONE
+  // round-trip (the four columns backing activeScheduleCap / activeManualOverride).
+  async function loadCompanyScheduleContext(
+    companyId: string,
+    now: Date,
+  ): Promise<{ scheduleCap: number | null; manualOverrideCap: number | null }> {
+    const [row] = await db
+      .select({
+        scheduleWindows: companies.scheduleWindows,
+        scheduleTimezone: companies.scheduleTimezone,
+        manualCapOverride: companies.manualCapOverride,
+        manualCapOverrideExpiresAt: companies.manualCapOverrideExpiresAt,
+      })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    if (!row) return { scheduleCap: null, manualOverrideCap: null };
+    return {
+      scheduleCap: activeScheduleCap(row.scheduleWindows, row.scheduleTimezone, now),
+      manualOverrideCap: activeManualOverride(row, now),
+    };
+  }
+
   const breakerDeps: BreakerEvalDeps = {
     getBurnRateCentsPerMin,
     getMostUrgentRemainingCents,
@@ -7612,14 +7636,26 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
   }
 
   async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
+    const now = new Date();
     const runExecutionState = await getEffectiveExecutionState(companyId);
     const breakerLevel = await loadCompanyBreakerLevel(companyId);
+    const { scheduleCap, manualOverrideCap } = await loadCompanyScheduleContext(companyId, now);
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: await getCompanyMaxConcurrentRuns(companyId), executionState: runExecutionState, breakerLevel },
-      PHASE3_COMPANY_WRITERS,
+      {
+        configuredMax: await getCompanyMaxConcurrentRuns(companyId),
+        executionState: runExecutionState,
+        breakerLevel,
+        manualOverrideCap,
+        scheduleCap,
+      },
+      PHASE3B_COMPANY_WRITERS,
     );
+    const [scheduleRow] = await db
+      .select({ windows: companies.scheduleWindows, tz: companies.scheduleTimezone })
+      .from(companies)
+      .where(eq(companies.id, companyId));
     // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
-    // the three queries aren't in a transaction, so counts can be momentarily inconsistent.
+    // the queries aren't in a transaction, so counts can be momentarily inconsistent.
     return {
       cap,
       source,
@@ -7627,6 +7663,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       queued: await countQueuedRunsForCompany(companyId),
       runExecutionState,
       breakerLevel,
+      scheduleNextTransition: scheduleRow
+        ? nextScheduleTransition(scheduleRow.windows, scheduleRow.tz, now)
+        : null,
     };
   }
 
@@ -8730,13 +8769,19 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       try {
         const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
         const breakerLevel = evaluatedBreakerLevel ?? (await loadCompanyBreakerLevel(agent.companyId));
+        const { scheduleCap, manualOverrideCap } = await loadCompanyScheduleContext(
+          agent.companyId,
+          new Date(),
+        );
         ({ cap: companyCap } = resolveEffectiveCap(
           {
             configuredMax: companyMax,
             executionState: await getEffectiveExecutionState(agent.companyId),
             breakerLevel,
+            manualOverrideCap,
+            scheduleCap,
           },
-          PHASE3_COMPANY_WRITERS,
+          PHASE3B_COMPANY_WRITERS,
         ));
       } catch (err) {
         logger.warn({ err }, "company admission cap lookup failed; falling back");
@@ -12517,6 +12562,54 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     });
   }
 
+  // Combo-01 Phase 3b: operator "boost / quiet now" override. cap + expiry are
+  // persisted on the company row and read by loadCompanyScheduleContext at
+  // admission time via activeManualOverride (null once expiresAt has passed).
+  async function setCompanyManualCapOverride(
+    companyId: string,
+    cap: number,
+    durationMinutes: number,
+    actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
+  ): Promise<void> {
+    const expiresAt = new Date(Date.now() + durationMinutes * 60_000);
+    await db
+      .update(companies)
+      .set({ manualCapOverride: cap, manualCapOverrideExpiresAt: expiresAt, updatedAt: new Date() })
+      .where(eq(companies.id, companyId));
+    await logActivity(db, {
+      companyId,
+      actorType: actor.actorType,
+      actorId: actor.actorId,
+      agentId: actor.agentId ?? null,
+      runId: actor.runId ?? null,
+      action: "company.manual_cap_override_set",
+      entityType: "company",
+      entityId: companyId,
+      details: { cap, durationMinutes, expiresAt: expiresAt.toISOString() },
+    });
+  }
+
+  async function clearCompanyManualCapOverride(
+    companyId: string,
+    actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
+  ): Promise<void> {
+    await db
+      .update(companies)
+      .set({ manualCapOverride: null, manualCapOverrideExpiresAt: null, updatedAt: new Date() })
+      .where(eq(companies.id, companyId));
+    await logActivity(db, {
+      companyId,
+      actorType: actor.actorType,
+      actorId: actor.actorId,
+      agentId: actor.agentId ?? null,
+      runId: actor.runId ?? null,
+      action: "company.manual_cap_override_cleared",
+      entityType: "company",
+      entityId: companyId,
+      details: {},
+    });
+  }
+
   async function setInstanceRunExecutionState(
     state: RunExecutionState, actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
   ): Promise<void> {
@@ -12995,6 +13088,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     setCompanyRunExecutionState,
     setInstanceRunExecutionState,
     findRunningRunsInHaltedScopes,
+
+    // Combo-01 Phase 3b: operator schedule/manual-override cap setters.
+    setCompanyManualCapOverride,
+    clearCompanyManualCapOverride,
 
     /**
      * Pause-only. Emits errorCode "agent_paused" unconditionally; its sole caller is the

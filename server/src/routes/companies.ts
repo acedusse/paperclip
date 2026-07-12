@@ -20,6 +20,7 @@ import { agents as agentsTable } from "@paperclipai/db";
 import { z } from "zod";
 import {
   DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION,
+  capOverrideSchema,
   companyArtifactsQuerySchema,
   companyPortabilityExportSchema,
   companyPortabilityImportSchema,
@@ -45,6 +46,7 @@ import {
   heartbeatService,
   logActivity,
 } from "../services/index.js";
+import { isValidTimeZone } from "../services/zoned-time.js";
 import type { StorageService } from "../storage/types.js";
 import { assertBoard, assertCompanyAccess, assertInstanceAdmin, getActorInfo } from "./authz.js";
 import { COMPANY_IMPORT_ROUTE_PATH } from "./company-import-paths.js";
@@ -172,6 +174,33 @@ export function companyRoutes(db: Db, storage?: StorageService) {
       res.json(await heartbeat.getCompanyAdmissionStatus(companyId));
     },
   );
+
+  router.post(
+    "/:companyId/cap-override",
+    validate(capOverrideSchema),
+    async (req, res) => {
+      const companyId = req.params.companyId as string;
+      assertCompanyAccess(req, companyId);
+      assertBoard(req);
+      const actor = getActorInfo(req);
+      await heartbeat.setCompanyManualCapOverride(
+        companyId,
+        req.body.cap,
+        req.body.durationMinutes,
+        actor,
+      );
+      res.json(await heartbeat.getCompanyAdmissionStatus(companyId));
+    },
+  );
+
+  router.delete("/:companyId/cap-override", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertCompanyAccess(req, companyId);
+    assertBoard(req);
+    const actor = getActorInfo(req);
+    await heartbeat.clearCompanyManualCapOverride(companyId, actor);
+    res.json(await heartbeat.getCompanyAdmissionStatus(companyId));
+  });
 
   router.get("/:companyId", async (req, res) => {
     const companyId = req.params.companyId as string;
@@ -402,6 +431,33 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     } else {
       assertBoard(req);
       body = updateCompanySchema.parse(req.body);
+
+      if (body.scheduleTimezone != null && !isValidTimeZone(body.scheduleTimezone as string)) {
+        res.status(422).json({ error: `Invalid timezone: ${body.scheduleTimezone}` });
+        return;
+      }
+      if (
+        Array.isArray(body.scheduleWindows) &&
+        body.scheduleWindows.length > 0 &&
+        !body.scheduleTimezone
+      ) {
+        // A company may only rely on an already-stored tz when the patch doesn't set one.
+        if (!existingCompany.scheduleTimezone) {
+          res.status(422).json({ error: "scheduleTimezone is required when scheduleWindows are set" });
+          return;
+        }
+      }
+
+      // Clearing the timezone while windows remain configured would silently inert them.
+      if (body.scheduleTimezone === null) {
+        const windowsAfter = Array.isArray(body.scheduleWindows)
+          ? body.scheduleWindows
+          : existingCompany.scheduleWindows ?? [];
+        if (windowsAfter.length > 0) {
+          res.status(422).json({ error: "scheduleTimezone is required while schedule windows exist" });
+          return;
+        }
+      }
 
       if (body.feedbackDataSharingEnabled === true && !existingCompany.feedbackDataSharingEnabled) {
         body = {
