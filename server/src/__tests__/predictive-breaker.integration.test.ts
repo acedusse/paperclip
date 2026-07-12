@@ -446,4 +446,96 @@ describeEmbeddedPostgres("predictive budget circuit breaker (integration)", () =
     expect(statusC.cap).toBe(10);
     expect(statusC.breakerLevel).toBe("normal");
   });
+
+  it("NO-QUEUE HALT: a saturated, fast-burning company with NO queued runs still escalates to halt and winds down its in-flight run via resumeQueuedRuns", async () => {
+    // Regression proof for Task 10: the breaker was previously only evaluated
+    // inside startNextQueuedRunForAgent, which early-returns when a company has
+    // no queued work. A company saturated with a long-running, fast-burning run
+    // and NOTHING queued would therefore never escalate and never auto-halt.
+    // resumeQueuedRuns() now sweeps every company with a RUNNING run once per
+    // tick. This scenario has ZERO queued runs, so the queued-admission loop is
+    // a no-op and ONLY the new running-company pass can produce the halt --
+    // i.e. it fails against the pre-fix code path.
+    const companyId = await createCompany();
+    await enableBreaker(companyId, 60);
+    await seedCompanyBudgetPolicy(companyId, 1000);
+
+    // In-flight run, no queued runs anywhere for this company.
+    const runningAgentId = await createAgent(companyId);
+    const runningRunId = randomUUID();
+    await db.insert(heartbeatRuns).values({
+      id: runningRunId,
+      companyId,
+      agentId: runningAgentId,
+      invocationSource: "assignment",
+      triggerDetail: "system",
+      status: "running",
+      startedAt: new Date(),
+    });
+
+    // remaining = amount - observed <= 0 forces HALT unconditionally.
+    await seedCostEvent(companyId, runningAgentId, 1000, new Date());
+
+    // Drive the per-tick admission sweep (NOT startNextQueuedRunForAgent).
+    await heartbeat.resumeQueuedRuns();
+
+    const [state] = await db
+      .select({ level: companyBreakerState.level })
+      .from(companyBreakerState)
+      .where(eq(companyBreakerState.companyId, companyId));
+    expect(state.level).toBe("halt");
+
+    const status = await heartbeat.getCompanyAdmissionStatus(companyId);
+    expect(status.cap).toBe(0);
+    expect(status.source).toBe("predictive-breaker");
+    expect(status.breakerLevel).toBe("halt");
+
+    const [runningRow] = await db
+      .select({
+        status: heartbeatRuns.status,
+        reason: heartbeatRuns.windDownReason,
+        resume: heartbeatRuns.resumePolicy,
+      })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.id, runningRunId));
+    expect(runningRow.status).toBe("wound_down");
+    expect(runningRow.reason).toBe("predictive-breaker-halt");
+    expect(runningRow.resume).toBe("when-allowed");
+  });
+
+  it("NO-QUEUE HEALTHY: a company with a running run but plenty of budget stays normal under the resumeQueuedRuns sweep", async () => {
+    const companyId = await createCompany();
+    await enableBreaker(companyId, 60, 10);
+    await seedCompanyBudgetPolicy(companyId, 10_000);
+
+    const runningAgentId = await createAgent(companyId);
+    const runningRunId = randomUUID();
+    await db.insert(heartbeatRuns).values({
+      id: runningRunId,
+      companyId,
+      agentId: runningAgentId,
+      invocationSource: "assignment",
+      triggerDetail: "system",
+      status: "running",
+      startedAt: new Date(),
+    });
+
+    // Tiny spend against a large budget -> remaining huge, burn negligible ->
+    // timeToLimit far past 2H -> NORMAL. No queued runs.
+    await seedCostEvent(companyId, runningAgentId, 10, new Date());
+
+    await heartbeat.resumeQueuedRuns();
+
+    const [state] = await db
+      .select({ level: companyBreakerState.level })
+      .from(companyBreakerState)
+      .where(eq(companyBreakerState.companyId, companyId));
+    expect(state.level).toBe("normal");
+
+    const [runningRow] = await db
+      .select({ status: heartbeatRuns.status })
+      .from(heartbeatRuns)
+      .where(eq(heartbeatRuns.id, runningRunId));
+    expect(runningRow.status).toBe("running");
+  });
 });

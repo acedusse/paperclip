@@ -8475,6 +8475,32 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     for (const agentId of agentIds) {
       await startNextQueuedRunForAgent(agentId, breakerMemo);
     }
+
+    // Runaway-spend coverage for companies with NO queued work: the queued
+    // admission loop above only evaluates the breaker for companies that have a
+    // queued run to admit. A company that is saturated with a long-running,
+    // fast-burning run and has nothing queued would otherwise never be
+    // evaluated, so the ladder could never escalate to HALT and the auto
+    // wind-down would never fire. Sweep every company with at least one RUNNING
+    // run once per tick, sharing the same `breakerMemo` so companies already
+    // evaluated in the queued loop are a memo hit (not re-evaluated).
+    const runningCompanies = await db
+      .selectDistinct({ companyId: heartbeatRuns.companyId })
+      .from(heartbeatRuns)
+      .innerJoin(companies, eq(companies.id, heartbeatRuns.companyId))
+      .where(and(
+        eq(heartbeatRuns.status, "running"),
+        eq(companies.status, "active"),
+      ));
+    for (const { companyId } of runningCompanies) {
+      // Fail open per company: a breaker evaluation failure must never break the
+      // sweep. On halt, evaluateBreakerForCompany winds down the in-flight runs.
+      try {
+        await evaluateBreakerForCompany(companyId, breakerMemo);
+      } catch (err) {
+        logger.warn({ err, companyId }, "predictive breaker evaluation failed for running company; continuing sweep");
+      }
+    }
   }
 
   async function reconcileStrandedAssignedIssues() {
