@@ -62,3 +62,20 @@ export function buildAgentWipFlow(
     flow: computeFlowMetrics(completions),
   };
 }
+
+/** The issue statuses a checkout flips to in_progress (issues.ts checkout expectedStatuses). */
+export const WIP_NEW_START_STATUSES = new Set(["todo", "backlog", "blocked"]);
+
+/** A queued run is a "new start" (raises WIP) iff its issue is checkout-eligible. */
+export function isNewStartIssueStatus(status: string | null | undefined): boolean {
+  return status != null && WIP_NEW_START_STATUSES.has(status);
+}
+
+/**
+ * New-start budget for one admission sweep. Infinity when WIP enforcement is
+ * disabled (opt-in parity); otherwise the remaining in-progress headroom.
+ */
+export function newStartBudget(cfg: WipLimitConfig, currentInProgress: number): number {
+  if (!cfg.enabled) return Infinity;
+  return Math.max(0, cfg.maxInProgress - currentInProgress);
+}
