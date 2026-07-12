@@ -7419,36 +7419,51 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     },
   };
 
-  // Breaker is enabled for a company when the company flag is set OR the instance
-  // default enables it (company value if set, else instance default, else disabled).
-  async function isBreakerEnabledForCompany(companyId: string): Promise<boolean> {
-    const [row] = await db
-      .select({ enabled: companies.predictiveBreakerEnabled })
-      .from(companies)
-      .where(eq(companies.id, companyId));
-    if (row?.enabled) return true;
-    const general = await instanceSettingsService(db).getGeneral();
-    return general.predictiveBreakerEnabled ?? false;
+  // Evaluate one company's breaker and return the RESOLVED level so callers can
+  // thread it straight into the company CapContext (no follow-up state re-read).
+  //
+  // Per-tick memoization: pass a `memo` (created once per admission sweep) to
+  // evaluate each company at most once per tick. On a cache hit the persisted
+  // evaluation is reused verbatim; the memo is a per-sweep local, so it cannot
+  // leak a stale level across ticks. Without a memo (single-agent callers) the
+  // company is simply evaluated once.
+  async function evaluateBreakerForCompany(
+    companyId: string,
+    memo?: Map<string, BreakerLevel>,
+  ): Promise<BreakerLevel> {
+    const cached = memo?.get(companyId);
+    if (cached !== undefined) return cached;
+    const level = await evaluateBreakerForCompanyUncached(companyId);
+    memo?.set(companyId, level);
+    return level;
   }
 
-  // Horizon: company value if set (> 0), else instance default (> 0), else null (skip).
-  async function getBreakerHorizonForCompany(companyId: string): Promise<number | null> {
-    const [row] = await db
-      .select({ horizon: companies.breakerHorizonMinutes })
-      .from(companies)
-      .where(eq(companies.id, companyId));
-    if (row?.horizon && row.horizon > 0) return row.horizon;
-    const general = await instanceSettingsService(db).getGeneral();
-    const instanceHorizon = general.breakerHorizonMinutes;
-    return instanceHorizon && instanceHorizon > 0 ? instanceHorizon : null;
-  }
-
-  // Evaluate one company's breaker (enabled + horizon resolved from company/instance).
-  async function evaluateBreakerForCompany(companyId: string): Promise<void> {
-    if (!(await isBreakerEnabledForCompany(companyId))) return;
-    const horizon = await getBreakerHorizonForCompany(companyId);
-    if (!horizon || horizon <= 0) return;
-    await evaluateCompanyBreaker(breakerDeps, companyId, horizon, new Date());
+  async function evaluateBreakerForCompanyUncached(companyId: string): Promise<BreakerLevel> {
+    // Resolve enable flag AND horizon from a single instance-settings fetch and a
+    // single companies row read (previously four reads across two helpers).
+    const [general, [companyRow]] = await Promise.all([
+      instanceSettings.getGeneral(),
+      db
+        .select({
+          enabled: companies.predictiveBreakerEnabled,
+          horizon: companies.breakerHorizonMinutes,
+        })
+        .from(companies)
+        .where(eq(companies.id, companyId)),
+    ]);
+    // Enable semantics (deliberate, user-approved): company flag OR instance
+    // default acting as a floor. DO NOT change this.
+    const enabled = Boolean(companyRow?.enabled) || (general.predictiveBreakerEnabled ?? false);
+    if (!enabled) return loadCompanyBreakerLevel(companyId);
+    // Horizon: company value if set (> 0), else instance default (> 0), else skip.
+    const horizon =
+      companyRow?.horizon && companyRow.horizon > 0
+        ? companyRow.horizon
+        : general.breakerHorizonMinutes && general.breakerHorizonMinutes > 0
+          ? general.breakerHorizonMinutes
+          : null;
+    if (!horizon || horizon <= 0) return loadCompanyBreakerLevel(companyId);
+    return evaluateCompanyBreaker(breakerDeps, companyId, horizon, new Date());
   }
 
   // Combo-01 Phase 2c: fail-open state lookups. Any DB error is treated as
@@ -8324,6 +8339,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       .where(eq(heartbeatRuns.status, "running"));
 
     const reaped: string[] = [];
+    // One breaker memo per reap sweep: companies with multiple reaped agents are
+    // evaluated once. Fresh per call => no cross-tick staleness.
+    const breakerMemo = new Map<string, BreakerLevel>();
 
     for (const { run, adapterType, adapterConfig } of activeRuns) {
       if (runningProcesses.has(run.id) || activeRunExecutions.has(run.id)) continue;
@@ -8429,7 +8447,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       });
 
       await finalizeAgentStatus(run.agentId, "failed", baseMessage);
-      await startNextQueuedRunForAgent(run.agentId);
+      await startNextQueuedRunForAgent(run.agentId, breakerMemo);
       runningProcesses.delete(run.id);
       reaped.push(run.id);
     }
@@ -8451,8 +8469,11 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       ));
 
     const agentIds = [...new Set(queuedRuns.map((r) => r.agentId))];
+    // One breaker memo per sweep: each company is evaluated at most once even
+    // when it has many queued agents. Fresh per call => no cross-tick staleness.
+    const breakerMemo = new Map<string, BreakerLevel>();
     for (const agentId of agentIds) {
-      await startNextQueuedRunForAgent(agentId);
+      await startNextQueuedRunForAgent(agentId, breakerMemo);
     }
   }
 
@@ -8576,7 +8597,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     }
   }
 
-  async function startNextQueuedRunForAgent(agentId: string) {
+  async function startNextQueuedRunForAgent(agentId: string, breakerMemo?: Map<string, BreakerLevel>) {
     return withAgentStartLock(agentId, async () => {
       const agent = await getAgent(agentId);
       if (!agent) return [];
@@ -8660,17 +8681,21 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         instanceCap = null;
       }
       // Evaluate the predictive breaker BEFORE resolving the company cap so the
-      // freshly-persisted level is what the resolver reads on this same tick. Fail
-      // open: a breaker evaluation failure must never block admission.
+      // freshly-persisted level is what the resolver reads on this same tick. The
+      // evaluation is memoized per admission sweep (once per company per tick) and
+      // returns the resolved level, so the company cap resolves without a second
+      // state read. Fail open: a breaker evaluation failure must never block
+      // admission (we then fall back to the persisted level below).
+      let evaluatedBreakerLevel: BreakerLevel | null = null;
       try {
-        await evaluateBreakerForCompany(agent.companyId);
+        evaluatedBreakerLevel = await evaluateBreakerForCompany(agent.companyId, breakerMemo);
       } catch (err) {
         logger.warn({ err }, "predictive breaker evaluation failed; continuing admission");
       }
       let companyCap: number | null = null;
       try {
         const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
-        const breakerLevel = await loadCompanyBreakerLevel(agent.companyId);
+        const breakerLevel = evaluatedBreakerLevel ?? (await loadCompanyBreakerLevel(agent.companyId));
         ({ cap: companyCap } = resolveEffectiveCap(
           {
             configuredMax: companyMax,
