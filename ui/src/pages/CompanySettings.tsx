@@ -111,7 +111,7 @@ export function CompanySettings() {
     trimmedBreakerHorizonMinutes === "" ||
     (Number.isInteger(Number(trimmedBreakerHorizonMinutes)) && Number(trimmedBreakerHorizonMinutes) > 0);
   const breakerHorizonMinutesPayload =
-    trimmedBreakerHorizonMinutes === "" ? undefined : Number(trimmedBreakerHorizonMinutes);
+    trimmedBreakerHorizonMinutes === "" ? null : Number(trimmedBreakerHorizonMinutes);
   const cloudSyncEnabled = experimentalSettings?.enableCloudSync === true;
 
   const admissionStatusQuery = useQuery({
@@ -143,7 +143,7 @@ export function CompanySettings() {
       maxRunCostCentsPayload !== (selectedCompany.maxRunCostCents ?? null) ||
       maxRunTurnsPayload !== (selectedCompany.maxRunTurns ?? null) ||
       predictiveBreakerEnabled !== (selectedCompany.predictiveBreakerEnabled ?? false) ||
-      breakerHorizonMinutesPayload !== (selectedCompany.breakerHorizonMinutes ?? undefined));
+      breakerHorizonMinutesPayload !== (selectedCompany.breakerHorizonMinutes ?? null));
 
   const generalMutation = useMutation({
     mutationFn: (data: {
@@ -156,7 +156,7 @@ export function CompanySettings() {
       maxRunCostCents: number | null;
       maxRunTurns: number | null;
       predictiveBreakerEnabled: boolean;
-      breakerHorizonMinutes?: number;
+      breakerHorizonMinutes: number | null;
     }) => companiesApi.update(selectedCompanyId!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });

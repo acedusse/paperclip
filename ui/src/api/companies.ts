@@ -64,7 +64,7 @@ export const companiesApi = {
       maxRunCostCents?: number | null;
       maxRunTurns?: number | null;
       predictiveBreakerEnabled?: boolean;
-      breakerHorizonMinutes?: number;
+      breakerHorizonMinutes?: number | null;
     },
   ) => api.patch<Company>(`/companies/${companyId}`, data),
   updateBranding: (companyId: string, data: UpdateCompanyBranding) =>
