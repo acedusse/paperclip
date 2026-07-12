@@ -184,7 +184,12 @@ import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
 import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3_COMPANY_WRITERS } from "./effective-cap-resolver.js";
 import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
-import { effectiveIntervalSec, isEmptyTimerHeartbeat, nextIdleStreak } from "./heartbeat-cadence.js";
+import {
+  effectiveIntervalSec,
+  isEmptyTimerHeartbeat,
+  nextIdleStreak,
+  parseHeartbeatCadenceConfig,
+} from "./heartbeat-cadence.js";
 import {
   shouldSuppressContinuationOnFinish,
   windDownRun as windDownRunCore,
@@ -10457,11 +10462,13 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         outcome,
         outcome === "succeeded" ? null : (adapterResult.errorMessage ?? null),
       );
-      await self.applyIdleStreakUpdate(agent.id, {
-        wakeReason: readNonEmptyString(context.wakeReason),
-        outcome,
-        livenessState: (finalizedRun ?? run).livenessState as RunLivenessState | null,
-      });
+      if (parseHeartbeatCadenceConfig(agent.runtimeConfig).idleBackoff.enabled) {
+        await self.applyIdleStreakUpdate(agent.id, {
+          wakeReason: readNonEmptyString(context.wakeReason),
+          outcome,
+          livenessState: (finalizedRun ?? run).livenessState as RunLivenessState | null,
+        });
+      }
     } catch (err) {
       const message = redactCurrentUserText(
         err instanceof Error ? err.message : "Unknown adapter failure",
@@ -12962,6 +12969,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     ): Promise<number | null> => {
       const existing = await getAgent(agentId);
       if (!existing) return null;
+      if (!parseHeartbeatCadenceConfig(existing.runtimeConfig).idleBackoff.enabled) {
+        return existing.heartbeatIdleStreak;
+      }
       const streak = nextIdleStreak(existing.heartbeatIdleStreak, isEmptyTimerHeartbeat(signal));
       if (streak !== existing.heartbeatIdleStreak) {
         await db

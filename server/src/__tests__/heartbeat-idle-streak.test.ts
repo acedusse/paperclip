@@ -53,6 +53,7 @@ describeEmbeddedPostgres("heartbeat idle streak", () => {
 
   async function seedAgent(opts: {
     heartbeatIdleStreak: number;
+    idleBackoffEnabled?: boolean;
   }): Promise<{ heartbeat: ReturnType<typeof heartbeatService>; db: ReturnType<typeof createDb>; agentId: string }> {
     const companyId = randomUUID();
     await db.insert(companies).values({
@@ -70,15 +71,17 @@ describeEmbeddedPostgres("heartbeat idle streak", () => {
       status: "active",
       adapterType: "codex_local",
       adapterConfig: {},
-      runtimeConfig: {},
+      runtimeConfig: opts.idleBackoffEnabled
+        ? { heartbeat: { idleBackoff: { enabled: true } } }
+        : {},
       permissions: {},
       heartbeatIdleStreak: opts.heartbeatIdleStreak,
     });
     return { heartbeat, db, agentId };
   }
 
-  it("increments after an empty timer heartbeat", async () => {
-    const { heartbeat, db, agentId } = await seedAgent({ heartbeatIdleStreak: 0 });
+  it("increments after an empty timer heartbeat when idle backoff is enabled", async () => {
+    const { heartbeat, db, agentId } = await seedAgent({ heartbeatIdleStreak: 0, idleBackoffEnabled: true });
     const next = await heartbeat.applyIdleStreakUpdate(agentId, {
       wakeReason: "heartbeat_timer",
       outcome: "succeeded",
@@ -89,8 +92,8 @@ describeEmbeddedPostgres("heartbeat idle streak", () => {
     expect(row.heartbeatIdleStreak).toBe(1);
   });
 
-  it("resets to 0 after a productive timer heartbeat", async () => {
-    const { heartbeat, agentId } = await seedAgent({ heartbeatIdleStreak: 4 });
+  it("resets to 0 after a productive timer heartbeat when idle backoff is enabled", async () => {
+    const { heartbeat, agentId } = await seedAgent({ heartbeatIdleStreak: 4, idleBackoffEnabled: true });
     expect(
       await heartbeat.applyIdleStreakUpdate(agentId, {
         wakeReason: "heartbeat_timer",
@@ -100,8 +103,8 @@ describeEmbeddedPostgres("heartbeat idle streak", () => {
     ).toBe(0);
   });
 
-  it("resets to 0 when an event wake completes", async () => {
-    const { heartbeat, agentId } = await seedAgent({ heartbeatIdleStreak: 4 });
+  it("resets to 0 when an event wake completes when idle backoff is enabled", async () => {
+    const { heartbeat, agentId } = await seedAgent({ heartbeatIdleStreak: 4, idleBackoffEnabled: true });
     expect(
       await heartbeat.applyIdleStreakUpdate(agentId, {
         wakeReason: "issue_monitor_due",
@@ -111,8 +114,8 @@ describeEmbeddedPostgres("heartbeat idle streak", () => {
     ).toBe(0);
   });
 
-  it("resets to 0 on a failed timer heartbeat", async () => {
-    const { heartbeat, agentId } = await seedAgent({ heartbeatIdleStreak: 4 });
+  it("resets to 0 on a failed timer heartbeat when idle backoff is enabled", async () => {
+    const { heartbeat, agentId } = await seedAgent({ heartbeatIdleStreak: 4, idleBackoffEnabled: true });
     expect(
       await heartbeat.applyIdleStreakUpdate(agentId, {
         wakeReason: "heartbeat_timer",
@@ -120,6 +123,18 @@ describeEmbeddedPostgres("heartbeat idle streak", () => {
         livenessState: "empty_response",
       }),
     ).toBe(0);
+  });
+
+  it("does not accrue streak for an empty timer heartbeat when idle backoff is disabled (default)", async () => {
+    const { heartbeat, db, agentId } = await seedAgent({ heartbeatIdleStreak: 2, idleBackoffEnabled: false });
+    const next = await heartbeat.applyIdleStreakUpdate(agentId, {
+      wakeReason: "heartbeat_timer",
+      outcome: "succeeded",
+      livenessState: "empty_response",
+    });
+    expect(next).toBe(2);
+    const [row] = await db.select().from(agents).where(eq(agents.id, agentId));
+    expect(row.heartbeatIdleStreak).toBe(2);
   });
 });
 // [END: module]
