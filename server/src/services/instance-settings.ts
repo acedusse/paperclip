@@ -50,9 +50,7 @@ export function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings 
       ...(parsed.data.maxRunWallClockMs ? { maxRunWallClockMs: parsed.data.maxRunWallClockMs } : {}),
       ...(parsed.data.maxRunCostCents ? { maxRunCostCents: parsed.data.maxRunCostCents } : {}),
       ...(parsed.data.maxRunTurns ? { maxRunTurns: parsed.data.maxRunTurns } : {}),
-      ...(parsed.data.predictiveBreakerEnabled
-        ? { predictiveBreakerEnabled: parsed.data.predictiveBreakerEnabled }
-        : {}),
+      predictiveBreakerEnabled: parsed.data.predictiveBreakerEnabled ?? false,
       ...(parsed.data.breakerHorizonMinutes
         ? { breakerHorizonMinutes: parsed.data.breakerHorizonMinutes }
         : {}),

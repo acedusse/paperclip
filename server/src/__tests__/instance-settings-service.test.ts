@@ -107,10 +107,16 @@ describe("instance settings service", () => {
     expect(out.breakerHorizonMinutes).toBe(30);
   });
 
-  it("omits predictive-breaker config when unset", () => {
+  it("defaults predictiveBreakerEnabled to false when unset", () => {
     const out = normalizeGeneralSettings({});
-    expect(out.predictiveBreakerEnabled).toBeUndefined();
+    expect(out.predictiveBreakerEnabled).toBe(false);
     expect(out.breakerHorizonMinutes).toBeUndefined();
+  });
+
+  it("preserves explicit predictiveBreakerEnabled=false", () => {
+    expect(normalizeGeneralSettings({ predictiveBreakerEnabled: false }).predictiveBreakerEnabled).toBe(
+      false,
+    );
   });
 });
 
