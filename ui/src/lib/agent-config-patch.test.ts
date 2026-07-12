@@ -152,6 +152,33 @@ describe("buildAgentUpdatePatch", () => {
     });
   });
 
+  it("writes WIP limit policy under runtimeConfig.heartbeat", () => {
+    const patch = buildAgentUpdatePatch(
+      makeAgent(),
+      makeOverlay({
+        heartbeat: {
+          wipLimit: {
+            enabled: true,
+            maxInProgress: 5,
+          },
+        },
+      }),
+    );
+
+    expect(patch).toEqual({
+      runtimeConfig: {
+        heartbeat: {
+          enabled: true,
+          intervalSec: 300,
+          wipLimit: {
+            enabled: true,
+            maxInProgress: 5,
+          },
+        },
+      },
+    });
+  });
+
   it("merges cheap profile changes onto existing runtimeConfig.modelProfiles state", () => {
     const agent = makeAgent();
     agent.runtimeConfig = {
