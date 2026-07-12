@@ -36,6 +36,9 @@ export const companies = pgTable(
     // Combo-01 Phase 2c: fleet execution state. running = normal; draining =
     // refuse new run starts; halted = refuse new + in-flight wound down.
     runExecutionState: text("run_execution_state").notNull().default("running"),
+    // Combo-01 Phase 3a predictive budget circuit breaker (company override).
+    predictiveBreakerEnabled: boolean("predictive_breaker_enabled").notNull().default(false),
+    breakerHorizonMinutes: integer("breaker_horizon_minutes"),
     attachmentMaxBytes: integer("attachment_max_bytes")
       .notNull()
       .default(10 * 1024 * 1024),
