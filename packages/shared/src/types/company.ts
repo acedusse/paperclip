@@ -30,6 +30,7 @@ export interface Company {
   maxRunWallClockMs?: number | null;
   maxRunCostCents?: number | null;
   maxRunTurns?: number | null;
+  runExecutionState?: "running" | "draining" | "halted";
   requireBoardApprovalForNewAgents: boolean;
   feedbackDataSharingEnabled: boolean;
   feedbackDataSharingConsentAt: Date | null;

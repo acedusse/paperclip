@@ -923,12 +923,15 @@ export {
   lowTrustBoundarySchema,
   lowTrustReviewPresetPolicySchema,
   trustAuthorizationPolicySchema,
+  RUN_EXECUTION_STATES,
+  runExecutionStateSchema,
   type PatchInstanceExperimentalSettings,
   type PatchInstanceSettings,
   type IssueGraphLivenessAutoRecoveryRequest,
   type TrustPresetInput,
   type LowTrustBoundaryInput,
   type TrustAuthorizationPolicyInput,
+  type RunExecutionState,
 } from "./validators/index.js";
 
 export {
