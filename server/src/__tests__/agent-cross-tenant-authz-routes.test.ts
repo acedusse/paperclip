@@ -43,6 +43,7 @@ const baseAgent = {
   pausedAt: null,
   permissions: { canCreateAgents: false },
   lastHeartbeatAt: null,
+  heartbeatIdleStreak: 0,
   metadata: null,
   createdAt: new Date("2026-04-11T00:00:00.000Z"),
   updatedAt: new Date("2026-04-11T00:00:00.000Z"),

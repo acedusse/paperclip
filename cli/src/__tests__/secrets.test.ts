@@ -49,6 +49,7 @@ function agent(partial: Partial<Agent>): Agent {
       canCreateAgents: false,
     },
     lastHeartbeatAt: null,
+    heartbeatIdleStreak: 0,
     metadata: null,
     createdAt: new Date("2026-04-26T00:00:00.000Z"),
     updatedAt: new Date("2026-04-26T00:00:00.000Z"),
