@@ -24,6 +24,21 @@ describe("schedule presets & helpers", () => {
   it("Always full clears windows", () => {
     expect(SCHEDULE_PRESETS.find((p) => p.key === "always-full")!.windows(2)).toEqual([]);
   });
+  it("Nights & weekends preset pauses the weekday workday (cap 0)", () => {
+    const nightsWeekends = SCHEDULE_PRESETS.find((p) => p.key === "nights-weekends")!.windows(2);
+    expect(nightsWeekends).toHaveLength(1);
+    expect(nightsWeekends[0]).toMatchObject({
+      days: [1, 2, 3, 4, 5],
+      startMinute: 540,
+      endMinute: 1020,
+      maxConcurrentRuns: 0,
+    });
+  });
+  it("Nights & weekends and business-hours-throttle presets are genuinely distinct", () => {
+    const nightsWeekends = SCHEDULE_PRESETS.find((p) => p.key === "nights-weekends")!.windows(2);
+    const businessHoursThrottle = SCHEDULE_PRESETS.find((p) => p.key === "business-hours-throttle")!.windows(2);
+    expect(nightsWeekends[0].maxConcurrentRuns).not.toBe(businessHoursThrottle[0].maxConcurrentRuns);
+  });
   it("round-trips minute<->time", () => {
     expect(timeToMinute("09:30")).toBe(570);
     expect(minuteToTime(570)).toBe("09:30");

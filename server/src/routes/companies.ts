@@ -452,7 +452,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
       if (body.scheduleTimezone === null) {
         const windowsAfter = Array.isArray(body.scheduleWindows)
           ? body.scheduleWindows
-          : existingCompany?.scheduleWindows ?? [];
+          : existingCompany.scheduleWindows ?? [];
         if (windowsAfter.length > 0) {
           res.status(422).json({ error: "scheduleTimezone is required while schedule windows exist" });
           return;
