@@ -182,6 +182,14 @@ company-only).
 - **Company storage:** real columns on `companies` (`predictive_breaker_enabled boolean NOT NULL DEFAULT
   false`, `breaker_horizon_minutes integer`). Instance storage: keys in the `general` JSONB.
 
+> **Accepted semantics (Phase 3a, 2026-07-12):** because `predictive_breaker_enabled` is a non-nullable
+> boolean, "company unset" is unrepresentable, so enablement resolves as `companyEnabled ||
+> instanceDefault` — the **instance default is a floor**: with it OFF, the per-company flag decides
+> (opt-in); with it ON, every company is protected and there is no per-company opt-out. This is the
+> deliberate, fail-safe reading (budget protection is hard to accidentally disable) and it supersedes the
+> earlier "company value if set, else instance default" wording for the *enable* flag. Horizon
+> (`breaker_horizon_minutes`, nullable) still resolves company-if-set-else-instance-default as written.
+
 ## Observability & operator surface
 
 - `AdmissionStatus` gains `breakerLevel: BreakerLevel` (default `normal`); `source` already reports the
