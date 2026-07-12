@@ -33,7 +33,7 @@ const DEFAULT_SINGLETON_KEY = "default";
 const instanceGeneralSettingsStorageSchema = instanceGeneralSettingsSchema.strip();
 const instanceExperimentalSettingsStorageSchema = instanceExperimentalSettingsSchema.strip();
 
-function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
+export function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
   const parsed = instanceGeneralSettingsStorageSchema.safeParse(raw ?? {});
   if (parsed.success) {
     return {
@@ -50,6 +50,12 @@ function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings {
       ...(parsed.data.maxRunWallClockMs ? { maxRunWallClockMs: parsed.data.maxRunWallClockMs } : {}),
       ...(parsed.data.maxRunCostCents ? { maxRunCostCents: parsed.data.maxRunCostCents } : {}),
       ...(parsed.data.maxRunTurns ? { maxRunTurns: parsed.data.maxRunTurns } : {}),
+      ...(parsed.data.predictiveBreakerEnabled
+        ? { predictiveBreakerEnabled: parsed.data.predictiveBreakerEnabled }
+        : {}),
+      ...(parsed.data.breakerHorizonMinutes
+        ? { breakerHorizonMinutes: parsed.data.breakerHorizonMinutes }
+        : {}),
       // Only carry a non-default state; "running" (or absent) reads as unset.
       ...(parsed.data.runExecutionState && parsed.data.runExecutionState !== "running"
         ? { runExecutionState: parsed.data.runExecutionState }
