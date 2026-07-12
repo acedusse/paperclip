@@ -14,7 +14,7 @@
 // [START: module]
 import { Buffer } from "node:buffer";
 import { createHash } from "node:crypto";
-import { and, asc, desc, eq, gt, inArray, isNull, like, lt, ne, notInArray, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gt, gte, inArray, isNotNull, isNull, like, lt, ne, notInArray, or, sql, type SQL } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
   activityLog,
@@ -6473,6 +6473,51 @@ export function issueService(db: Db) {
         project: a.projectId ? projectMap.get(a.projectId) ?? null : null,
         goal: a.goalId ? goalMap.get(a.goalId) ?? null : null,
       }));
+    },
+    inProgressIssueCountsByAgent: async (companyId: string, agentId?: string): Promise<Map<string, number>> => {
+      const rows = await db
+        .select({ agentId: issues.assigneeAgentId, count: sql<number>`count(*)` })
+        .from(issues)
+        .where(and(
+          eq(issues.companyId, companyId),
+          eq(issues.status, "in_progress"),
+          isNotNull(issues.assigneeAgentId),
+          ...(agentId ? [eq(issues.assigneeAgentId, agentId)] : []),
+        ))
+        .groupBy(issues.assigneeAgentId);
+      const map = new Map<string, number>();
+      for (const row of rows) {
+        if (row.agentId) map.set(row.agentId, Number(row.count ?? 0));
+      }
+      return map;
+    },
+    recentCompletionsByAgent: async (
+      companyId: string,
+      sinceIso: string,
+      agentId?: string,
+    ): Promise<Map<string, { startedAt: Date | null; completedAt: Date }[]>> => {
+      const rows = await db
+        .select({
+          agentId: issues.assigneeAgentId,
+          startedAt: issues.startedAt,
+          completedAt: issues.completedAt,
+        })
+        .from(issues)
+        .where(and(
+          eq(issues.companyId, companyId),
+          isNotNull(issues.assigneeAgentId),
+          isNotNull(issues.completedAt),
+          gte(issues.completedAt, new Date(sinceIso)),
+          ...(agentId ? [eq(issues.assigneeAgentId, agentId)] : []),
+        ));
+      const map = new Map<string, { startedAt: Date | null; completedAt: Date }[]>();
+      for (const row of rows) {
+        if (!row.agentId || !row.completedAt) continue;
+        const list = map.get(row.agentId) ?? [];
+        list.push({ startedAt: row.startedAt, completedAt: row.completedAt });
+        map.set(row.agentId, list);
+      }
+      return map;
     },
   };
 }
