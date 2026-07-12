@@ -684,6 +684,17 @@ export const RUN_LIVENESS_STATES = [
 ] as const;
 export type RunLivenessState = (typeof RUN_LIVENESS_STATES)[number];
 
+/**
+ * Liveness states that indicate a successful run made concrete progress.
+ * Single source of truth shared by recovery handoff and heartbeat idle-backoff.
+ */
+export const PRODUCTIVE_RUN_LIVENESS_STATES: ReadonlySet<RunLivenessState> = new Set([
+  "advanced",
+  "completed",
+  "blocked",
+  "needs_followup",
+]);
+
 export const LIVE_EVENT_TYPES = [
   "heartbeat.run.queued",
   "heartbeat.run.status",

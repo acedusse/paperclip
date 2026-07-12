@@ -861,6 +861,8 @@ export {
   type ResourceMembershipUpdateResult,
 } from "./types/resource-memberships.js";
 
+export * from "./validators/agent-heartbeat.js";
+
 export { workspaceRuntimeControlTargetSchema } from "./validators/execution-workspace.js";
 export {
   findWorkspaceCommandDefinition,
