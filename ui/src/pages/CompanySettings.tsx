@@ -56,8 +56,8 @@ export const SCHEDULE_PRESETS: SchedulePreset[] = [
   {
     key: "nights-weekends",
     label: "Nights & weekends only",
-    windows: (cap) => [
-      { id: "weekday-day", label: "Weekday daytime", days: [1, 2, 3, 4, 5], startMinute: 540, endMinute: 1020, maxConcurrentRuns: cap },
+    windows: () => [
+      { id: "weekday-day", label: "Weekday daytime (paused)", days: [1, 2, 3, 4, 5], startMinute: 540, endMinute: 1020, maxConcurrentRuns: 0 },
     ],
   },
   {
@@ -693,7 +693,7 @@ export function CompanySettings() {
         <div className="space-y-4 rounded-md border border-border px-4 py-4">
           <Field
             label="Timezone"
-            hint="IANA timezone used to evaluate the windows below. Empty = UTC."
+            hint="IANA timezone (e.g. America/New_York). Required for the windows below to take effect."
           >
             <input
               className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"

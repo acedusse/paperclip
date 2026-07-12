@@ -409,5 +409,62 @@ describeEmbeddedPostgres("admission-status routes", () => {
     expect(res.status).toBe(200);
     expect(res.body.scheduleTimezone).toBe("America/New_York");
   });
+
+  it("PATCH /api/companies/:id rejects clearing scheduleTimezone while windows remain stored", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const setupRes = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleTimezone: "America/New_York",
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(setupRes.status).toBe(200);
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({ scheduleTimezone: null });
+    expect(res.status).toBe(422);
+    expect(res.body.error).toMatch(/scheduleTimezone/);
+  });
+
+  it("PATCH /api/companies/:id allows clearing scheduleTimezone together with scheduleWindows", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const setupRes = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleTimezone: "America/New_York",
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(setupRes.status).toBe(200);
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({ scheduleWindows: [], scheduleTimezone: null });
+    expect(res.status).toBe(200);
+    expect(res.body.scheduleTimezone).toBeNull();
+    expect(res.body.scheduleWindows).toEqual([]);
+  });
 });
 // [END: module]

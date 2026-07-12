@@ -25,6 +25,10 @@ function isWindowActive(
   prevWeekday: number,
   minuteOfDay: number,
 ): boolean {
+  // start === end means a full 24h window on each listed day (spec: no empty window).
+  if (window.startMinute === window.endMinute) {
+    return window.days.includes(weekday);
+  }
   const wraps = window.endMinute <= window.startMinute;
   if (!wraps) {
     return (

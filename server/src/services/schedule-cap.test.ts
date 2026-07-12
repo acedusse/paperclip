@@ -57,6 +57,17 @@ describe("activeScheduleCap", () => {
     expect(activeScheduleCap([allDay], tz, new Date("2026-07-13T14:00:00Z"))).toBe(0);
   });
 
+  it("treats a non-zero start === end as a full 24h window on its days (not a wrap starting at startMinute)", () => {
+    const allDay = w({ days: [1], startMinute: 540, endMinute: 540, maxConcurrentRuns: 3 });
+    // Monday 02:00 EDT (before 09:00) -> must still be active; the old wrap-branch logic
+    // would have excluded this because coverage "started" at startMinute.
+    expect(activeScheduleCap([allDay], tz, new Date("2026-07-13T06:00:00Z"))).toBe(3);
+    // Monday 16:00 EDT (after 09:00) -> active.
+    expect(activeScheduleCap([allDay], tz, new Date("2026-07-13T20:00:00Z"))).toBe(3);
+    // Tuesday 10:00 EDT -> not a listed day, inactive.
+    expect(activeScheduleCap([allDay], tz, new Date("2026-07-14T14:00:00Z"))).toBeNull();
+  });
+
   it("takes the most-restrictive cap on overlap", () => {
     const a = w({ maxConcurrentRuns: 4 });
     const b = w({ id: "b", maxConcurrentRuns: 1 });
