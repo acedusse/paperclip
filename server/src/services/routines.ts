@@ -74,21 +74,13 @@ import { heartbeatService } from "./heartbeat.js";
 import { queueIssueAssignmentWakeup, type IssueAssignmentWakeupDeps } from "./issue-assignment-wakeup.js";
 import { logActivity } from "./activity-log.js";
 import type { PluginWorkerManager } from "./plugin-worker-manager.js";
+import { getZonedMinuteParts, isValidTimeZone } from "./zoned-time.js";
 
 const OPEN_ISSUE_STATUSES = ["backlog", "todo", "in_progress", "in_review", "blocked"];
 const LIVE_HEARTBEAT_RUN_STATUSES = ["queued", "running", "scheduled_retry"];
 const TERMINAL_ISSUE_STATUSES = new Set(["done", "cancelled"]);
 const MAX_CATCH_UP_RUNS = 25;
 const MAX_ROUTINE_REVISIONS = 100;
-const WEEKDAY_INDEX: Record<string, number> = {
-  Sun: 0,
-  Mon: 1,
-  Tue: 2,
-  Wed: 3,
-  Thu: 4,
-  Fri: 5,
-  Sat: 6,
-};
 
 type Actor = { agentId?: string | null; userId?: string | null; runId?: string | null };
 type RoutineRow = typeof routines.$inferSelect;
@@ -103,9 +95,7 @@ function routineWebhookSecretConfigPath(secretId: string) {
 }
 
 function assertTimeZone(timeZone: string) {
-  try {
-    getZonedMinuteFormatter(timeZone).format(new Date());
-  } catch {
+  if (!isValidTimeZone(timeZone)) {
     throw unprocessable(`Invalid timezone: ${timeZone}`);
   }
 }
@@ -114,49 +104,6 @@ function floorToMinute(date: Date) {
   const copy = new Date(date.getTime());
   copy.setUTCSeconds(0, 0);
   return copy;
-}
-
-// Constructing an Intl.DateTimeFormat costs ~1ms of ICU work, and
-// computeNextRun calls getZonedMinuteParts once per minute-step (up to
-// 366*24*60*5 iterations for sparse schedules), which can block the event
-// loop for minutes per scheduler tick. Formatter instances are immutable,
-// so cache one per timezone. See #8033.
-const zonedMinuteFormatterCache = new Map<string, Intl.DateTimeFormat>();
-
-function getZonedMinuteFormatter(timeZone: string) {
-  let formatter = zonedMinuteFormatterCache.get(timeZone);
-  if (!formatter) {
-    formatter = new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      hour12: false,
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      weekday: "short",
-    });
-    zonedMinuteFormatterCache.set(timeZone, formatter);
-  }
-  return formatter;
-}
-
-function getZonedMinuteParts(date: Date, timeZone: string) {
-  const formatter = getZonedMinuteFormatter(timeZone);
-  const parts = formatter.formatToParts(date);
-  const map = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-  const weekday = WEEKDAY_INDEX[map.weekday ?? ""];
-  if (weekday == null) {
-    throw new Error(`Unable to resolve weekday for timezone ${timeZone}`);
-  }
-  return {
-    year: Number(map.year),
-    month: Number(map.month),
-    day: Number(map.day),
-    hour: Number(map.hour),
-    minute: Number(map.minute),
-    weekday,
-  };
 }
 
 function matchesCronMinute(expression: string, timeZone: string, date: Date) {
