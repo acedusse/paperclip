@@ -26,6 +26,7 @@ import {
   envBindingSchema,
   isEnvironmentDriverSupportedForAdapter,
   type BillingType,
+  type BreakerLevel,
   type EnvironmentLeaseStatus,
   type ExecutionWorkspace,
   type ExecutionWorkspaceConfig,
@@ -45,6 +46,8 @@ import {
   agentWakeupRequests,
   activityLog,
   approvals,
+  budgetPolicies,
+  companyBreakerState,
   companySkills as companySkillsTable,
   companies,
   costEvents,
@@ -86,7 +89,7 @@ import { costService } from "./costs.js";
 import { trackAgentFirstHeartbeat } from "@paperclipai/shared/telemetry";
 import { getTelemetryClient } from "../telemetry.js";
 import { companySkillService } from "./company-skills.js";
-import { budgetService, type BudgetEnforcementScope } from "./budgets.js";
+import { budgetService, computeObservedAmount, type BudgetEnforcementScope } from "./budgets.js";
 import { secretService, type MissingRuntimeBinding } from "./secrets.js";
 import { resolveDefaultAgentWorkspaceDir, resolveManagedProjectWorkspaceDir } from "../home-paths.js";
 import {
@@ -177,7 +180,8 @@ import { productivityReviewService } from "./productivity-review.js";
 import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
 import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
-import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
+import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3_COMPANY_WRITERS } from "./effective-cap-resolver.js";
+import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
 import {
   shouldSuppressContinuationOnFinish,
@@ -3409,6 +3413,7 @@ export type AdmissionStatus = {
   running: number;
   queued: number;
   runExecutionState: RunExecutionState;
+  breakerLevel: BreakerLevel;
 };
 
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
@@ -7313,6 +7318,139 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.max ?? null;
   }
 
+  // ===== Combo-01 Phase 3a: predictive breaker wiring =====
+
+  // Rolling windowed burn rate (cents/min) over the last BREAKER.burnWindowMs.
+  // Mirrors how budgets.ts sums costEvents.costCents.
+  async function getBurnRateCentsPerMin(companyId: string): Promise<number> {
+    const windowStart = new Date(Date.now() - BREAKER.burnWindowMs);
+    const [row] = await db
+      .select({ total: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision` })
+      .from(costEvents)
+      .where(and(eq(costEvents.companyId, companyId), gte(costEvents.occurredAt, windowStart)));
+    const windowMin = BREAKER.burnWindowMs / 60_000;
+    return Number(row?.total ?? 0) / windowMin;
+  }
+
+  // Min remaining cents across active company-scoped billed_cents policies with a
+  // finite (amount > 0) budget. null => ineligible (no such policy). Observed spend
+  // reuses budgets.ts computeObservedAmount so the window resolution is identical.
+  async function getMostUrgentRemainingCents(companyId: string): Promise<number | null> {
+    const policies = await db
+      .select()
+      .from(budgetPolicies)
+      .where(
+        and(
+          eq(budgetPolicies.companyId, companyId),
+          eq(budgetPolicies.scopeType, "company"),
+          eq(budgetPolicies.metric, "billed_cents"),
+          eq(budgetPolicies.isActive, true),
+        ),
+      );
+    let min: number | null = null;
+    for (const policy of policies) {
+      if (!policy.amount || policy.amount <= 0) continue;
+      const observed = await computeObservedAmount(db, policy);
+      const remaining = Math.max(0, policy.amount - observed);
+      min = min === null ? remaining : Math.min(min, remaining);
+    }
+    return min;
+  }
+
+  async function loadCompanyBreakerLevel(companyId: string): Promise<BreakerLevel> {
+    const [row] = await db
+      .select({ level: companyBreakerState.level })
+      .from(companyBreakerState)
+      .where(eq(companyBreakerState.companyId, companyId));
+    return (row?.level as BreakerLevel | undefined) ?? "normal";
+  }
+
+  const breakerDeps: BreakerEvalDeps = {
+    getBurnRateCentsPerMin,
+    getMostUrgentRemainingCents,
+    loadState: async (companyId) => {
+      const [row] = await db
+        .select({ level: companyBreakerState.level, since: companyBreakerState.since })
+        .from(companyBreakerState)
+        .where(eq(companyBreakerState.companyId, companyId));
+      return row ? { level: row.level as BreakerLevel, since: row.since } : null;
+    },
+    saveState: async (companyId, r) => {
+      await db
+        .insert(companyBreakerState)
+        .values({
+          companyId,
+          level: r.level,
+          since: r.since,
+          lastBurnRateCpm: r.lastBurnRateCpm,
+          lastTimeToLimitM: r.lastTimeToLimitM,
+          updatedAt: new Date(),
+        })
+        .onConflictDoUpdate({
+          target: companyBreakerState.companyId,
+          set: {
+            level: r.level,
+            since: r.since,
+            lastBurnRateCpm: r.lastBurnRateCpm,
+            lastTimeToLimitM: r.lastTimeToLimitM,
+            updatedAt: new Date(),
+          },
+        });
+    },
+    windDownCompanyRuns: async (companyId) => {
+      const rows = await db
+        .select({ id: heartbeatRuns.id })
+        .from(heartbeatRuns)
+        .where(and(eq(heartbeatRuns.companyId, companyId), eq(heartbeatRuns.status, "running")));
+      for (const row of rows) {
+        await windDownRun(row.id, { mode: "hard", resume: "when-allowed", reason: "predictive-breaker-halt" });
+      }
+    },
+    logTransition: async (companyId, from, to, ctx) => {
+      await logActivity(db, {
+        companyId,
+        actorType: "system",
+        actorId: "predictive-breaker",
+        action: "admission.breaker_transition",
+        entityType: "company",
+        entityId: companyId,
+        details: { from, to, ...ctx },
+      });
+    },
+  };
+
+  // Breaker is enabled for a company when the company flag is set OR the instance
+  // default enables it (company value if set, else instance default, else disabled).
+  async function isBreakerEnabledForCompany(companyId: string): Promise<boolean> {
+    const [row] = await db
+      .select({ enabled: companies.predictiveBreakerEnabled })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    if (row?.enabled) return true;
+    const general = await instanceSettingsService(db).getGeneral();
+    return general.predictiveBreakerEnabled ?? false;
+  }
+
+  // Horizon: company value if set (> 0), else instance default (> 0), else null (skip).
+  async function getBreakerHorizonForCompany(companyId: string): Promise<number | null> {
+    const [row] = await db
+      .select({ horizon: companies.breakerHorizonMinutes })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    if (row?.horizon && row.horizon > 0) return row.horizon;
+    const general = await instanceSettingsService(db).getGeneral();
+    const instanceHorizon = general.breakerHorizonMinutes;
+    return instanceHorizon && instanceHorizon > 0 ? instanceHorizon : null;
+  }
+
+  // Evaluate one company's breaker (enabled + horizon resolved from company/instance).
+  async function evaluateBreakerForCompany(companyId: string): Promise<void> {
+    if (!(await isBreakerEnabledForCompany(companyId))) return;
+    const horizon = await getBreakerHorizonForCompany(companyId);
+    if (!horizon || horizon <= 0) return;
+    await evaluateCompanyBreaker(breakerDeps, companyId, horizon, new Date());
+  }
+
   // Combo-01 Phase 2c: fail-open state lookups. Any DB error is treated as
   // "running" so a lookup failure never wedges the fleet.
   async function getInstanceRunExecutionState(): Promise<RunExecutionState> {
@@ -7445,14 +7583,17 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       running: await countRunningRunsInstanceWide(),
       queued: await countQueuedRunsInstanceWide(),
       runExecutionState,
+      // Instance scope has no budget, therefore no predictive breaker.
+      breakerLevel: "normal",
     };
   }
 
   async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
     const runExecutionState = await getEffectiveExecutionState(companyId);
+    const breakerLevel = await loadCompanyBreakerLevel(companyId);
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: await getCompanyMaxConcurrentRuns(companyId), executionState: runExecutionState },
-      PHASE1_WRITERS,
+      { configuredMax: await getCompanyMaxConcurrentRuns(companyId), executionState: runExecutionState, breakerLevel },
+      PHASE3_COMPANY_WRITERS,
     );
     // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
     // the three queries aren't in a transaction, so counts can be momentarily inconsistent.
@@ -7462,6 +7603,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       running: await countRunningRunsForCompany(companyId),
       queued: await countQueuedRunsForCompany(companyId),
       runExecutionState,
+      breakerLevel,
     };
   }
 
@@ -8517,12 +8659,25 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
         instanceCap = null;
       }
+      // Evaluate the predictive breaker BEFORE resolving the company cap so the
+      // freshly-persisted level is what the resolver reads on this same tick. Fail
+      // open: a breaker evaluation failure must never block admission.
+      try {
+        await evaluateBreakerForCompany(agent.companyId);
+      } catch (err) {
+        logger.warn({ err }, "predictive breaker evaluation failed; continuing admission");
+      }
       let companyCap: number | null = null;
       try {
         const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
+        const breakerLevel = await loadCompanyBreakerLevel(agent.companyId);
         ({ cap: companyCap } = resolveEffectiveCap(
-          { configuredMax: companyMax, executionState: await getEffectiveExecutionState(agent.companyId) },
-          PHASE1_WRITERS,
+          {
+            configuredMax: companyMax,
+            executionState: await getEffectiveExecutionState(agent.companyId),
+            breakerLevel,
+          },
+          PHASE3_COMPANY_WRITERS,
         ));
       } catch (err) {
         logger.warn({ err }, "company admission cap lookup failed; falling back");
