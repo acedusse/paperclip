@@ -42,6 +42,12 @@ export {
 } from "./run-execution-state.js";
 
 export {
+  BREAKER_LEVELS,
+  breakerLevelSchema,
+  type BreakerLevel,
+} from "./breaker-level.js";
+
+export {
   createCompanySchema,
   updateCompanySchema,
   updateCompanyBrandingSchema,

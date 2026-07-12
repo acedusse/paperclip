@@ -31,6 +31,8 @@ export interface Company {
   maxRunCostCents?: number | null;
   maxRunTurns?: number | null;
   runExecutionState?: "running" | "draining" | "halted";
+  predictiveBreakerEnabled?: boolean;
+  breakerHorizonMinutes?: number;
   requireBoardApprovalForNewAgents: boolean;
   feedbackDataSharingEnabled: boolean;
   feedbackDataSharingConsentAt: Date | null;
