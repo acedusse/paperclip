@@ -98,7 +98,8 @@ manual_cap_override_expires_at timestamptz                         -- auto-rever
 ScheduleWindow {
   id: string                 // stable client-generated id (for UI CRUD / diffing)
   label: string              // operator-facing, e.g. "Business hours"
-  days: number[]             // ISO weekdays 1–7 (Mon=1 … Sun=7), non-empty, unique
+  days: number[]             // weekdays 0–6 (Sun=0 … Sat=6), non-empty, unique —
+                             //   matches getZonedMinuteParts / cron.ts weekday convention
   startMinute: number        // minute-of-day 0..1439, in company tz
   endMinute: number          // minute-of-day 0..1439; if endMinute <= startMinute the window
                              //   wraps past midnight into the next day
@@ -106,7 +107,7 @@ ScheduleWindow {
 }
 ```
 
-**Validation:** `days` non-empty and each in `1..7`; `startMinute`/`endMinute` in `0..1439`;
+**Validation:** `days` non-empty and each in `0..6`; `startMinute`/`endMinute` in `0..1439`;
 `maxConcurrentRuns >= 0`; `schedule_timezone` valid per the existing `assertTimeZone` when any window
 exists; a bounded maximum window count (e.g. 24) to keep per-tick evaluation cheap.
 
@@ -144,11 +145,14 @@ not depend on it — the read-time check is authoritative.)
 
 ### `nextScheduleTransition(windows, timezone, now): { at: Date; cap: number | null } | null`
 
-Look ahead from `now` (bounded, e.g. 8 days) for the next minute at which `activeScheduleCap` changes
-value, reusing the same zoned-minute logic. Returns the boundary instant and the cap that takes effect,
-or `null` if the schedule never changes within the horizon (empty/constant schedule). Drives the
-operator readout ("throttles to 4 runs at 9:00am"). Kept deliberately simple: step forward in coarse
-increments to the next window edge rather than minute-by-minute scanning the whole horizon.
+Forward-scan minute-by-minute from `now` up to a bounded horizon (8 days) for the first minute at which
+`activeScheduleCap` returns a different value, reusing the same zoned-minute logic. Returns that
+boundary instant and the cap that takes effect, or `null` if the schedule never changes within the
+horizon (empty/constant schedule). Drives the operator readout ("throttles to 4 runs at 9:00am").
+Forward-scanning in UTC and re-deriving zoned parts each step deliberately sidesteps error-prone
+reverse-timezone (zoned→UTC) conversion across DST. The scan is bounded (≤ 8×1440 iterations against a
+cached `Intl` formatter) and runs only on the **pollable status endpoint**, never in the hot admission
+gate, so its cost is immaterial.
 
 ## The writers (`effective-cap-resolver.ts`)
 
