@@ -53,6 +53,8 @@ export const updateCompanySchema = createCompanySchema
     maxRunWallClockMs: z.number().int().positive().nullable().optional(),
     maxRunCostCents: z.number().int().positive().nullable().optional(),
     maxRunTurns: z.number().int().positive().nullable().optional(),
+    predictiveBreakerEnabled: z.boolean().optional(),
+    breakerHorizonMinutes: z.number().int().positive().nullable().optional(),
   });
 
 export type UpdateCompany = z.infer<typeof updateCompanySchema>;

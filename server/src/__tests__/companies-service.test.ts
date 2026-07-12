@@ -579,6 +579,40 @@ describeEmbeddedPostgres("companyService", () => {
     expect(reactivateActivity[0]).toMatchObject({ details: { agentsRestored: 0 } });
   });
 
+  it("persists predictiveBreakerEnabled and breakerHorizonMinutes on update", async () => {
+    const companyId = randomUUID();
+
+    await db.insert(companies).values({
+      id: companyId,
+      name: "Breaker Co",
+      issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+
+    const updated = await companyService(db).update(
+      companyId,
+      { predictiveBreakerEnabled: true, breakerHorizonMinutes: 30 },
+      { actorType: "user", actorId: "test-user", agentId: null, runId: null },
+    );
+
+    expect(updated).toMatchObject({
+      predictiveBreakerEnabled: true,
+      breakerHorizonMinutes: 30,
+    });
+
+    const rows = await db
+      .select({
+        predictiveBreakerEnabled: companies.predictiveBreakerEnabled,
+        breakerHorizonMinutes: companies.breakerHorizonMinutes,
+      })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    expect(rows[0]).toMatchObject({
+      predictiveBreakerEnabled: true,
+      breakerHorizonMinutes: 30,
+    });
+  });
+
   it("does not emit company.reactivated when paused → active restores no archive-paused agents", async () => {
     const companyId = randomUUID();
     const manualPausedAgentId = randomUUID();
