@@ -16,8 +16,10 @@ import { describe, expect, it } from "vitest";
 import {
   CAP_WRITER_PRECEDENCE,
   PHASE1_WRITERS,
+  PHASE3_COMPANY_WRITERS,
   configuredDefaultWriter,
   panicDrainWriter,
+  predictiveBreakerWriter,
   resolveEffectiveCap,
   type CapWriter,
 } from "./effective-cap-resolver.js";
@@ -103,6 +105,42 @@ describe("panicDrainWriter", () => {
     );
     expect(cap).toBe(10);
     expect(source).toBe("configured-default");
+  });
+});
+
+describe("predictiveBreakerWriter", () => {
+  it("predictive-breaker: halt forces cap 0", () => {
+    expect(predictiveBreakerWriter.resolve({ configuredMax: 10, breakerLevel: "halt" })).toBe(0);
+  });
+
+  it("predictive-breaker: throttle halves a configured cap with a floor of 1", () => {
+    expect(predictiveBreakerWriter.resolve({ configuredMax: 10, breakerLevel: "throttle" })).toBe(
+      5,
+    );
+    expect(predictiveBreakerWriter.resolve({ configuredMax: 1, breakerLevel: "throttle" })).toBe(
+      1,
+    );
+  });
+
+  it("predictive-breaker: throttle with no configured cap uses the uncapped fallback", () => {
+    expect(
+      predictiveBreakerWriter.resolve({ configuredMax: null, breakerLevel: "throttle" }),
+    ).toBe(2);
+  });
+
+  it("predictive-breaker: normal/warn/absent are no-opinion", () => {
+    expect(predictiveBreakerWriter.resolve({ configuredMax: 10, breakerLevel: "normal" })).toBeNull();
+    expect(predictiveBreakerWriter.resolve({ configuredMax: 10, breakerLevel: "warn" })).toBeNull();
+    expect(predictiveBreakerWriter.resolve({ configuredMax: 10 })).toBeNull();
+  });
+
+  it("predictive-breaker sits between panic-drain and configured-default", () => {
+    // halt from the breaker is overridden by a draining/halted execution state.
+    const { source } = resolveEffectiveCap(
+      { configuredMax: 10, executionState: "draining", breakerLevel: "throttle" },
+      PHASE3_COMPANY_WRITERS,
+    );
+    expect(source).toBe("panic-drain");
   });
 });
 // [END: module]
