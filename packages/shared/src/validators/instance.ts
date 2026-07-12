@@ -24,6 +24,7 @@ import {
   MIN_ISSUE_GRAPH_LIVENESS_AUTO_RECOVERY_LOOKBACK_HOURS,
 } from "../types/instance.js";
 import { feedbackDataSharingPreferenceSchema } from "./feedback.js";
+import { runExecutionStateSchema } from "./run-execution-state.js";
 
 function presetSchema<T extends readonly number[]>(presets: T, label: string) {
   return z.number().refine(
@@ -52,6 +53,7 @@ export const instanceGeneralSettingsSchema = z.object({
   maxRunWallClockMs: z.number().int().positive().nullable().optional(),
   maxRunCostCents: z.number().int().positive().nullable().optional(),
   maxRunTurns: z.number().int().positive().nullable().optional(),
+  runExecutionState: runExecutionStateSchema.optional(),
 }).strict();
 
 export const patchInstanceGeneralSettingsSchema = instanceGeneralSettingsSchema.partial();

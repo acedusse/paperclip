@@ -64,6 +64,7 @@ export interface InstanceGeneralSettings {
   maxRunWallClockMs?: number | null;
   maxRunCostCents?: number | null;
   maxRunTurns?: number | null;
+  runExecutionState?: "running" | "draining" | "halted";
 }
 
 export interface InstanceExperimentalSettings {

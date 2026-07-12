@@ -34,6 +34,7 @@ import {
   type IssueExecutionMonitorRecoveryPolicy,
   type ModelProfileKey,
   type RoutineRevisionSnapshotV1,
+  type RunExecutionState,
   type RunLivenessState,
   type SourceTrustMetadata,
 } from "@paperclipai/shared";
@@ -177,6 +178,7 @@ import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
 import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
 import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
+import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
 import {
   shouldSuppressContinuationOnFinish,
   windDownRun as windDownRunCore,
@@ -3406,6 +3408,7 @@ export type AdmissionStatus = {
   source: string;
   running: number;
   queued: number;
+  runExecutionState: RunExecutionState;
 };
 
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
@@ -7310,6 +7313,42 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.max ?? null;
   }
 
+  // Combo-01 Phase 2c: fail-open state lookups. Any DB error is treated as
+  // "running" so a lookup failure never wedges the fleet.
+  async function getInstanceRunExecutionState(): Promise<RunExecutionState> {
+    try {
+      return (await instanceSettingsService(db).getGeneral()).runExecutionState ?? "running";
+    } catch (err) {
+      logger.warn({ err }, "instance run-execution-state lookup failed; treating as running");
+      return "running";
+    }
+  }
+
+  async function getCompanyRunExecutionState(companyId: string): Promise<RunExecutionState> {
+    try {
+      const [row] = await db
+        .select({ s: companies.runExecutionState })
+        .from(companies)
+        .where(eq(companies.id, companyId));
+      return (row?.s as RunExecutionState | undefined) ?? "running";
+    } catch (err) {
+      logger.warn({ err }, "company run-execution-state lookup failed; treating as running");
+      return "running";
+    }
+  }
+
+  async function getEffectiveExecutionState(companyId: string): Promise<RunExecutionState> {
+    const [instance, company] = await Promise.all([
+      getInstanceRunExecutionState(),
+      getCompanyRunExecutionState(companyId),
+    ]);
+    return resolveEffectiveExecutionState(instance, company);
+  }
+
+  async function isScopeQuiescing(companyId: string): Promise<boolean> {
+    return isQuiescing(await getEffectiveExecutionState(companyId));
+  }
+
   // Resolve the effective per-run ceilings for a company at claim time. Fail
   // open: any lookup error yields unlimited (null) rather than blocking claims.
   async function resolveStampedRunCaps(companyId: string): Promise<RunCaps> {
@@ -7362,10 +7401,39 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.cap ?? null;
   }
 
+  // Combo-01 Phase 2c: row-returning variants of the running-run counts above,
+  // used by the panic fan-out (which needs ids to wind down, not just counts).
+  async function findRunningRunsForCompany(companyId: string): Promise<{ id: string }[]> {
+    return db.select({ id: heartbeatRuns.id }).from(heartbeatRuns)
+      .where(and(eq(heartbeatRuns.companyId, companyId), eq(heartbeatRuns.status, "running")));
+  }
+
+  async function findRunningRunsInstanceWide(): Promise<{ id: string }[]> {
+    return db.select({ id: heartbeatRuns.id }).from(heartbeatRuns)
+      .where(eq(heartbeatRuns.status, "running"));
+  }
+
+  // Running runs whose EFFECTIVE scope state is halted (instance halt covers all
+  // companies; otherwise only companies individually halted). Used by the sweep.
+  async function findRunningRunsInHaltedScopes(): Promise<{ id: string }[]> {
+    if ((await getInstanceRunExecutionState()) === "halted") {
+      return findRunningRunsInstanceWide();
+    }
+    const haltedCompanies = await db.select({ id: companies.id }).from(companies)
+      .where(eq(companies.runExecutionState, "halted"));
+    if (haltedCompanies.length === 0) return [];
+    return db.select({ id: heartbeatRuns.id }).from(heartbeatRuns)
+      .where(and(
+        eq(heartbeatRuns.status, "running"),
+        inArray(heartbeatRuns.companyId, haltedCompanies.map((c) => c.id)),
+      ));
+  }
+
   async function getInstanceAdmissionStatus(): Promise<AdmissionStatus> {
     const general = await instanceSettingsService(db).getGeneral();
+    const runExecutionState = general.runExecutionState ?? "running";
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: general.maxConcurrentRuns ?? null },
+      { configuredMax: general.maxConcurrentRuns ?? null, executionState: runExecutionState },
       PHASE1_WRITERS,
     );
     // Cap, running, and queued are read via separate queries (no shared transaction), so a
@@ -7376,12 +7444,14 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       source,
       running: await countRunningRunsInstanceWide(),
       queued: await countQueuedRunsInstanceWide(),
+      runExecutionState,
     };
   }
 
   async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
+    const runExecutionState = await getEffectiveExecutionState(companyId);
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: await getCompanyMaxConcurrentRuns(companyId) },
+      { configuredMax: await getCompanyMaxConcurrentRuns(companyId), executionState: runExecutionState },
       PHASE1_WRITERS,
     );
     // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
@@ -7391,11 +7461,16 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       source,
       running: await countRunningRunsForCompany(companyId),
       queued: await countQueuedRunsForCompany(companyId),
+      runExecutionState,
     };
   }
 
   async function claimQueuedRun(run: typeof heartbeatRuns.$inferSelect, companyAgents?: AgentOrgRow[]) {
     if (run.status !== "queued") return run;
+    // Combo-01 Phase 2c: while the scope is draining/halted, HOLD the run —
+    // return null (leaves the row queued, does NOT cancel), so Resume re-admits
+    // it. Covers the executeRun direct-claim path that skips the budget gate.
+    if (await isScopeQuiescing(run.companyId)) return null;
     const agent = await getAgent(run.agentId);
     if (!agent) {
       await cancelRunInternal(run.id, "Cancelled because the agent no longer exists");
@@ -8435,7 +8510,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       try {
         const general = await instanceSettingsService(db).getGeneral();
         ({ cap: instanceCap } = resolveEffectiveCap(
-          { configuredMax: general.maxConcurrentRuns ?? null },
+          { configuredMax: general.maxConcurrentRuns ?? null, executionState: general.runExecutionState ?? "running" },
           PHASE1_WRITERS,
         ));
       } catch (err) {
@@ -8445,7 +8520,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       let companyCap: number | null = null;
       try {
         const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
-        ({ cap: companyCap } = resolveEffectiveCap({ configuredMax: companyMax }, PHASE1_WRITERS));
+        ({ cap: companyCap } = resolveEffectiveCap(
+          { configuredMax: companyMax, executionState: await getEffectiveExecutionState(agent.companyId) },
+          PHASE1_WRITERS,
+        ));
       } catch (err) {
         logger.warn({ err }, "company admission cap lookup failed; falling back");
         companyCap = null;
@@ -12181,6 +12259,67 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return windDownRunCore(windDownDeps, runId, opts);
   }
 
+  // Combo-01 Phase 2c: panic fan-out. Reversible — always wound down "hard" with
+  // resume "when-allowed", never a destructive cancel path, so runs can restart
+  // once the scope is un-halted.
+  async function panicStopRuns(runs: { id: string }[]): Promise<void> {
+    for (const run of runs) {
+      await windDownRun(run.id, { mode: "hard", resume: "when-allowed", reason: "panic" });
+    }
+  }
+
+  // actor mirrors the shape threaded into companies.ts audit calls:
+  // { actorType, actorId, agentId?, runId? }. Optional: callers that don't
+  // have an actor in scope (e.g. tests, internal sweeps) fall back to "system".
+  type ExecutionStateActor = {
+    actorType: LogActivityInput["actorType"]; actorId: string; agentId?: string | null; runId?: string | null;
+  };
+  const SYSTEM_EXECUTION_STATE_ACTOR: ExecutionStateActor = { actorType: "system", actorId: "system" };
+
+  async function setCompanyRunExecutionState(
+    companyId: string, state: RunExecutionState, actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
+  ): Promise<void> {
+    const from = await getCompanyRunExecutionState(companyId);
+    await db.update(companies).set({ runExecutionState: state, updatedAt: new Date() })
+      .where(eq(companies.id, companyId));
+    let runsWoundDown = 0;
+    if (state === "halted") {
+      const runs = await findRunningRunsForCompany(companyId);
+      await panicStopRuns(runs);
+      runsWoundDown = runs.length;
+    }
+    await logActivity(db, {
+      companyId, actorType: actor.actorType, actorId: actor.actorId,
+      agentId: actor.agentId ?? null, runId: actor.runId ?? null,
+      action: "company.run_execution_state_changed", entityType: "company", entityId: companyId,
+      details: { from, to: state, runsWoundDown },
+    });
+  }
+
+  async function setInstanceRunExecutionState(
+    state: RunExecutionState, actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
+  ): Promise<void> {
+    const from = await getInstanceRunExecutionState();
+    await instanceSettings.updateGeneral({ runExecutionState: state });
+    let runsWoundDown = 0;
+    if (state === "halted") {
+      const runs = await findRunningRunsInstanceWide();
+      await panicStopRuns(runs);
+      runsWoundDown = runs.length;
+    }
+    // Instance-scope audit: activity_log.companyId is NOT NULL with an FK to
+    // companies.id (see packages/db/src/schema/activity_log.ts), so there is no
+    // per-company-less row to write via logActivity. Rather than fan a synthetic
+    // row out to every company (misleading — this wasn't a per-company action) or
+    // skip the audit trail entirely, log it structurally via the app logger; the
+    // wind-down side effects on individual runs still land in the run's own event
+    // log, so the effect isn't silent even without an activity_log row.
+    logger.info(
+      { from, to: state, runsWoundDown, actorType: actor.actorType, actorId: actor.actorId },
+      "instance run_execution_state changed",
+    );
+  }
+
   // Ground-truth query for the wound-down-resume reconcile source: wound_down +
   // resumePolicy="when-allowed" rows whose issue has no active/queued continuation.
   async function findResumableWoundDownOrphans(_now: Date): Promise<OrphanedWoundDownRun[]> {
@@ -12610,6 +12749,11 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     // Combo-01 Phase 2a per-run caps: query deps consumed by run-caps.ts sweep/reactive checks.
     findRunningRunsWithCaps,
     getStampedCostCap,
+
+    // Combo-01 Phase 2c: panic fan-out — state setters + the sweep's ground-truth query.
+    setCompanyRunExecutionState,
+    setInstanceRunExecutionState,
+    findRunningRunsInHaltedScopes,
 
     /**
      * Pause-only. Emits errorCode "agent_paused" unconditionally; its sole caller is the

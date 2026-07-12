@@ -33,6 +33,9 @@ export const companies = pgTable(
     maxRunCostCents: integer("max_run_cost_cents"),
     // Combo-01 Phase 2b per-run turn ceiling (company override; null = unset).
     maxRunTurns: integer("max_run_turns"),
+    // Combo-01 Phase 2c: fleet execution state. running = normal; draining =
+    // refuse new run starts; halted = refuse new + in-flight wound down.
+    runExecutionState: text("run_execution_state").notNull().default("running"),
     attachmentMaxBytes: integer("attachment_max_bytes")
       .notNull()
       .default(10 * 1024 * 1024),

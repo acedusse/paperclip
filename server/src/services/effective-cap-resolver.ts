@@ -12,6 +12,7 @@
 // JSON_FLOW: {"file": "server/src/services/effective-cap-resolver.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import type { RunExecutionState } from "@paperclipai/shared";
 
 // Locked precedence order (highest priority first). Later combo-01 slices
 // register writers at these names; a unit test asserts this array so nothing
@@ -24,7 +25,7 @@ export const CAP_WRITER_PRECEDENCE = Object.freeze([
   "configured-default",
 ] as const);
 
-export type CapContext = { configuredMax: number | null };
+export type CapContext = { configuredMax: number | null; executionState?: RunExecutionState };
 
 export type CapWriter = {
   name: string;
@@ -38,7 +39,16 @@ export const configuredDefaultWriter: CapWriter = {
   resolve: (ctx) => ctx.configuredMax,
 };
 
-export const PHASE1_WRITERS: CapWriter[] = [configuredDefaultWriter];
+// Combo-01 Phase 2c: top-precedence writer. draining/halted force the cap to 0
+// so the admission budget admits nothing. Absent/running = no opinion.
+export const panicDrainWriter: CapWriter = {
+  name: "panic-drain",
+  precedence: CAP_WRITER_PRECEDENCE.indexOf("panic-drain"),
+  resolve: (ctx) =>
+    ctx.executionState === "halted" || ctx.executionState === "draining" ? 0 : null,
+};
+
+export const PHASE1_WRITERS: CapWriter[] = [panicDrainWriter, configuredDefaultWriter];
 
 // First non-null writer by ascending precedence wins. null cap = unlimited.
 export function resolveEffectiveCap(

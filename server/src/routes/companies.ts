@@ -17,6 +17,7 @@ import { Router, type Request } from "express";
 import { and, count as countFn, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agents as agentsTable } from "@paperclipai/db";
+import { z } from "zod";
 import {
   DEFAULT_FEEDBACK_DATA_SHARING_TERMS_VERSION,
   companyArtifactsQuerySchema,
@@ -27,6 +28,7 @@ import {
   feedbackTargetTypeSchema,
   feedbackTraceStatusSchema,
   feedbackVoteValueSchema,
+  runExecutionStateSchema,
   updateCompanyBrandingSchema,
   updateCompanySchema,
 } from "@paperclipai/shared";
@@ -156,6 +158,20 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     assertCompanyAccess(req, companyId);
     res.json(await heartbeat.getCompanyAdmissionStatus(companyId));
   });
+
+  const executionStateBodySchema = z.object({ state: runExecutionStateSchema });
+  router.post(
+    "/:companyId/execution-state",
+    validate(executionStateBodySchema),
+    async (req, res) => {
+      const companyId = req.params.companyId as string;
+      assertCompanyAccess(req, companyId);
+      assertBoard(req);
+      const actor = getActorInfo(req);
+      await heartbeat.setCompanyRunExecutionState(companyId, req.body.state, actor);
+      res.json(await heartbeat.getCompanyAdmissionStatus(companyId));
+    },
+  );
 
   router.get("/:companyId", async (req, res) => {
     const companyId = req.params.companyId as string;

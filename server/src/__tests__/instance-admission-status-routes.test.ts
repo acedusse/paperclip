@@ -139,7 +139,13 @@ describeEmbeddedPostgres("admission-status routes", () => {
     const app = createApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
     const res = await request(app).get("/api/instance/admission-status");
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ cap: 10, source: "configured-default", running: 1, queued: 0 });
+    expect(res.body).toEqual({
+      cap: 10,
+      source: "configured-default",
+      running: 1,
+      queued: 0,
+      runExecutionState: "running",
+    });
   });
 
   it("GET /api/instance/admission-status rejects non-board callers", async () => {
@@ -154,7 +160,13 @@ describeEmbeddedPostgres("admission-status routes", () => {
     const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
     const res = await request(app).get(`/api/companies/${company}/admission-status`);
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ cap: 3, source: "configured-default", running: 0, queued: 0 });
+    expect(res.body).toEqual({
+      cap: 3,
+      source: "configured-default",
+      running: 0,
+      queued: 0,
+      runExecutionState: "running",
+    });
   });
 
   it("GET /api/companies/:id/admission-status rejects callers without access to the company", async () => {
@@ -183,7 +195,13 @@ describeEmbeddedPostgres("admission-status routes", () => {
 
     const afterSetStatus = await request(app).get(`/api/companies/${company}/admission-status`);
     expect(afterSetStatus.status).toBe(200);
-    expect(afterSetStatus.body).toEqual({ cap: 7, source: "configured-default", running: 0, queued: 0 });
+    expect(afterSetStatus.body).toEqual({
+      cap: 7,
+      source: "configured-default",
+      running: 0,
+      queued: 0,
+      runExecutionState: "running",
+    });
 
     const clearRes = await request(app)
       .patch(`/api/companies/${company}`)
@@ -194,6 +212,73 @@ describeEmbeddedPostgres("admission-status routes", () => {
     const afterClearStatus = await request(app).get(`/api/companies/${company}/admission-status`);
     expect(afterClearStatus.status).toBe(200);
     expect(afterClearStatus.body.cap).toBeNull();
+  });
+
+  it("POST /api/instance/execution-state sets state and returns fresh admission status", async () => {
+    const app = createApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const res = await request(app)
+      .post("/api/instance/execution-state")
+      .send({ state: "draining" });
+    expect(res.status).toBe(200);
+    expect(res.body.runExecutionState).toBe("draining");
+
+    const statusRes = await request(app).get("/api/instance/admission-status");
+    expect(statusRes.status).toBe(200);
+    expect(statusRes.body.runExecutionState).toBe("draining");
+  });
+
+  it("POST /api/instance/execution-state rejects non-instance-admin callers", async () => {
+    const app = createApp({
+      type: "board",
+      userId: "user-1",
+      source: "session",
+      isInstanceAdmin: false,
+      companyIds: [],
+    });
+    const res = await request(app)
+      .post("/api/instance/execution-state")
+      .send({ state: "draining" });
+    expect(res.status).toBe(403);
+  });
+
+  it("POST /api/instance/execution-state rejects invalid state values", async () => {
+    const app = createApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+    const res = await request(app)
+      .post("/api/instance/execution-state")
+      .send({ state: "paused" });
+    expect(res.status).toBe(400);
+  });
+
+  it("POST /api/companies/:id/execution-state sets state and returns fresh admission status", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const res = await request(app)
+      .post(`/api/companies/${company}/execution-state`)
+      .send({ state: "halted" });
+    expect(res.status).toBe(200);
+    expect(res.body.runExecutionState).toBe("halted");
+
+    const statusRes = await request(app).get(`/api/companies/${company}/admission-status`);
+    expect(statusRes.status).toBe(200);
+    expect(statusRes.body.runExecutionState).toBe("halted");
+  });
+
+  it("POST /api/companies/:id/execution-state rejects callers without access to the company", async () => {
+    const company = await createCompany();
+    const otherCompany = await createCompany();
+    const app = createCompanyApp({
+      type: "board",
+      userId: "user-1",
+      source: "session",
+      isInstanceAdmin: false,
+      companyIds: [otherCompany],
+    });
+    const res = await request(app)
+      .post(`/api/companies/${company}/execution-state`)
+      .send({ state: "halted" });
+    expect(res.status).toBe(403);
   });
 });
 // [END: module]

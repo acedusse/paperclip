@@ -13,12 +13,14 @@
 // ==========================================
 // [START: module]
 import { Router, type Request } from "express";
+import { z } from "zod";
 import type { Db } from "@paperclipai/db";
 import {
   issueGraphLivenessAutoRecoveryRequestSchema,
   patchInstanceSettingsSchema,
   patchInstanceExperimentalSettingsSchema,
   patchInstanceGeneralSettingsSchema,
+  runExecutionStateSchema,
 } from "@paperclipai/shared";
 import { forbidden } from "../errors.js";
 import { validate } from "../middleware/validate.js";
@@ -52,6 +54,16 @@ export function instanceSettingsRoutes(db: Db) {
     assertBoardOrgAccess(req);
     res.json(await heartbeat.getInstanceAdmissionStatus());
   });
+
+  router.post(
+    "/instance/execution-state",
+    validate(z.object({ state: runExecutionStateSchema })),
+    async (req, res) => {
+      assertCanManageInstanceSettings(req);
+      await heartbeat.setInstanceRunExecutionState(req.body.state, getActorInfo(req));
+      res.json(await heartbeat.getInstanceAdmissionStatus());
+    },
+  );
 
   router.patch(
     "/instance/settings",

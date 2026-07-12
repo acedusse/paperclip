@@ -111,6 +111,17 @@ export function CompanySettings() {
     refetchInterval: 10_000,
   });
 
+  const executionStateMutation = useMutation({
+    mutationFn: (state: "running" | "draining" | "halted") =>
+      companiesApi.setExecutionState(selectedCompanyId!, state),
+    onSuccess: async () => {
+      if (selectedCompanyId) {
+        await queryClient.invalidateQueries({ queryKey: queryKeys.companies.admissionStatus(selectedCompanyId) });
+      }
+    },
+  });
+  const executionState = admissionStatusQuery.data?.runExecutionState ?? "running";
+
   const generalDirty =
     !!selectedCompany &&
     (companyName !== selectedCompany.name ||
@@ -411,6 +422,40 @@ export function CompanySettings() {
                     status={admissionStatusQuery.data}
                     isError={admissionStatusQuery.isError}
                   />
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={executionState === "draining" || executionStateMutation.isPending}
+                      onClick={() => executionStateMutation.mutate("draining")}
+                    >
+                      Drain
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      disabled={executionState === "halted" || executionStateMutation.isPending}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            "Panic will cancel all in-flight runs (checkpointed, resumable). Continue?",
+                          )
+                        ) {
+                          executionStateMutation.mutate("halted");
+                        }
+                      }}
+                    >
+                      Panic
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={executionState === "running" || executionStateMutation.isPending}
+                      onClick={() => executionStateMutation.mutate("running")}
+                    >
+                      Resume
+                    </Button>
+                  </div>
                 </div>
               </Field>
               <Field
