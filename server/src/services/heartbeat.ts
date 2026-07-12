@@ -184,6 +184,7 @@ import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
 import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3_COMPANY_WRITERS } from "./effective-cap-resolver.js";
 import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
+import { effectiveIntervalSec, isEmptyTimerHeartbeat, nextIdleStreak } from "./heartbeat-cadence.js";
 import {
   shouldSuppressContinuationOnFinish,
   windDownRun as windDownRunCore,
@@ -10456,6 +10457,11 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         outcome,
         outcome === "succeeded" ? null : (adapterResult.errorMessage ?? null),
       );
+      await self.applyIdleStreakUpdate(agent.id, {
+        wakeReason: readNonEmptyString(context.wakeReason),
+        outcome,
+        livenessState: (finalizedRun ?? run).livenessState as RunLivenessState | null,
+      });
     } catch (err) {
       const message = redactCurrentUserText(
         err instanceof Error ? err.message : "Unknown adapter failure",
@@ -12629,7 +12635,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     await cancelPendingWakeupsForBudgetScope(scope);
   }
 
-  return {
+  const self = {
     list: async (companyId: string, agentId?: string, limit?: number) => {
       const safeForLegacyEncoding = await hasUnsafeTextProjectionDatabase();
       const query = db
@@ -12949,6 +12955,22 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
 
     cancelRun: (runId: string, reason?: string, options?: CancelRunOptions) => cancelRunInternal(runId, reason, options),
 
+    applyIdleStreakUpdate: async (
+      agentId: string,
+      signal: { wakeReason: string | null; outcome: string; livenessState: RunLivenessState | null },
+    ): Promise<number | null> => {
+      const existing = await getAgent(agentId);
+      if (!existing) return null;
+      const streak = nextIdleStreak(existing.heartbeatIdleStreak, isEmptyTimerHeartbeat(signal));
+      if (streak !== existing.heartbeatIdleStreak) {
+        await db
+          .update(agents)
+          .set({ heartbeatIdleStreak: streak, updatedAt: new Date() })
+          .where(eq(agents.id, agentId));
+      }
+      return streak;
+    },
+
     // Combo-01 Phase 2.0 wind-down substrate (no product caller yet; 2a/2c consume these).
     windDownRun,
     findResumableWoundDownOrphans,
@@ -13022,5 +13044,6 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     getCompanyAdmissionStatus,
     startNextQueuedRunForAgent,
   };
+  return self;
 }
 // [END: module]
