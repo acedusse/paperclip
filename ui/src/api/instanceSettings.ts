@@ -20,6 +20,7 @@ import type {
   PatchInstanceSettings,
   PatchInstanceGeneralSettings,
   PatchInstanceExperimentalSettings,
+  RunExecutionState,
 } from "@paperclipai/shared";
 import { api } from "./client";
 
@@ -28,6 +29,7 @@ export type AdmissionStatus = {
   source: string;
   running: number;
   queued: number;
+  runExecutionState: RunExecutionState;
 };
 
 export const instanceSettingsApi = {
@@ -35,6 +37,8 @@ export const instanceSettingsApi = {
     api.get<InstanceSettings>("/instance/settings"),
   getAdmissionStatus: () =>
     api.get<AdmissionStatus>("/instance/admission-status"),
+  setExecutionState: (state: RunExecutionState) =>
+    api.post<AdmissionStatus>("/instance/execution-state", { state }),
   update: (patch: PatchInstanceSettings) =>
     api.patch<InstanceSettings>("/instance/settings", patch),
   getGeneral: () =>

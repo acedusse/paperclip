@@ -21,6 +21,7 @@ import type {
   CompanyPortabilityImportResult,
   CompanyPortabilityPreviewRequest,
   CompanyPortabilityPreviewResult,
+  RunExecutionState,
   UpdateCompanyBranding,
 } from "@paperclipai/shared";
 import { api } from "./client";
@@ -34,6 +35,8 @@ export const companiesApi = {
   stats: () => api.get<CompanyStats>("/companies/stats"),
   getAdmissionStatus: (companyId: string) =>
     api.get<AdmissionStatus>(`/companies/${companyId}/admission-status`),
+  setExecutionState: (companyId: string, state: RunExecutionState) =>
+    api.post<AdmissionStatus>(`/companies/${companyId}/execution-state`, { state }),
   create: (data: {
     name: string;
     description?: string | null;

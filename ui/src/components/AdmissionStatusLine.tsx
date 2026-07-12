@@ -25,9 +25,13 @@ export function AdmissionStatusLine({
     return <span className="text-xs text-muted-foreground">status unavailable</span>;
   }
   const cap = status.cap === null ? "unlimited" : String(status.cap);
+  const stateBadge =
+    status.runExecutionState && status.runExecutionState !== "running" ? (
+      <span className="ml-1 font-medium text-destructive">· {status.runExecutionState}</span>
+    ) : null;
   return (
     <span className="text-xs text-muted-foreground">
-      running {status.running} / cap {cap} · {status.queued} queued
+      running {status.running} / cap {cap} · {status.queued} queued{stateBadge}
     </span>
   );
 }
