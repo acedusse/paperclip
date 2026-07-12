@@ -30,6 +30,7 @@ import {
 } from "./helpers/embedded-postgres.js";
 import { heartbeatService } from "../services/heartbeat.ts";
 import { instanceSettingsService } from "../services/instance-settings.ts";
+import { makePanicHaltSweepSource } from "../services/run-execution-state.ts";
 import { runningProcesses } from "../adapters/index.ts";
 
 const mockAdapterExecute = vi.hoisted(() =>
@@ -178,6 +179,46 @@ describeEmbeddedPostgres("drain/halt gating holds queued claims (integration)", 
     await db.update(companies).set({ runExecutionState: "running" }).where(eq(companies.id, companyId));
     await heartbeat.startNextQueuedRunForAgent(agentId);
     expect((await db.select({ s: heartbeatRuns.status }).from(heartbeatRuns).where(eq(heartbeatRuns.id, runId)))[0].s).toBe("running");
+  });
+
+  it("halting a company winds down its running runs (resumable)", async () => {
+    const companyId = await createCompany();
+    const agentId = await createAgent(companyId);
+    const runId = randomUUID();
+    await db.insert(heartbeatRuns).values({
+      id: runId, companyId, agentId,
+      invocationSource: "assignment", triggerDetail: "system", status: "running", startedAt: new Date(),
+    });
+
+    await heartbeat.setCompanyRunExecutionState(companyId, "halted");
+
+    const [row] = await db.select({ status: heartbeatRuns.status, reason: heartbeatRuns.windDownReason, resume: heartbeatRuns.resumePolicy })
+      .from(heartbeatRuns).where(eq(heartbeatRuns.id, runId));
+    expect(row.status).toBe("wound_down");
+    expect(row.reason).toBe("panic");
+    expect(row.resume).toBe("when-allowed");
+    expect((await db.select({ s: companies.runExecutionState }).from(companies).where(eq(companies.id, companyId)))[0].s).toBe("halted");
+  });
+
+  it("panic-halt-sweep winds down a run that slipped into running under a halted company", async () => {
+    const companyId = await createCompany();
+    await db.update(companies).set({ runExecutionState: "halted" }).where(eq(companies.id, companyId));
+    const agentId = await createAgent(companyId);
+    const runId = randomUUID();
+    await db.insert(heartbeatRuns).values({
+      id: runId, companyId, agentId,
+      invocationSource: "assignment", triggerDetail: "system", status: "running", startedAt: new Date(),
+    });
+
+    const rows = await heartbeat.findRunningRunsInHaltedScopes();
+    expect(rows.map((r) => r.id)).toContain(runId);
+    const source = makePanicHaltSweepSource({
+      findRunningRunsInHaltedScopes: heartbeat.findRunningRunsInHaltedScopes,
+      windDownRun: heartbeat.windDownRun,
+    });
+    const result = await source.reconcile(new Date());
+    expect(result.repaired).toBeGreaterThanOrEqual(1);
+    expect((await db.select({ s: heartbeatRuns.status }).from(heartbeatRuns).where(eq(heartbeatRuns.id, runId)))[0].s).toBe("wound_down");
   });
 
   it("instance halt cascades to block a company that is itself running", async () => {

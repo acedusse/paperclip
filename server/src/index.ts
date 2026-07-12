@@ -69,6 +69,7 @@ import { createPluginWorkerManager } from "./services/plugin-worker-manager.js";
 import { phase1ReconcileSources, runReconcile } from "./services/admission-reconciler.js";
 import { makeWoundDownResumeSource } from "./services/run-wind-down.js";
 import { makeRunCapSweepSource } from "./services/run-caps.js";
+import { makePanicHaltSweepSource } from "./services/run-execution-state.js";
 import { costService } from "./services/costs.js";
 import { createStorageServiceFromConfig } from "./storage/index.js";
 import { printStartupBanner } from "./startup-banner.js";
@@ -905,6 +906,10 @@ export async function startServer(): Promise<StartedServer> {
           makeRunCapSweepSource({
             findRunningRunsWithCaps: heartbeat.findRunningRunsWithCaps,
             sumRunCostCents: (runId) => costService(db).sumRunCostCents(runId),
+            windDownRun: heartbeat.windDownRun,
+          }),
+          makePanicHaltSweepSource({
+            findRunningRunsInHaltedScopes: heartbeat.findRunningRunsInHaltedScopes,
             windDownRun: heartbeat.windDownRun,
           }),
         ],
