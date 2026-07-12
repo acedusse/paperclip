@@ -101,6 +101,8 @@ const mockIssueApprovalService = vi.hoisted(() => ({
 
 const mockIssueService = vi.hoisted(() => ({
   list: vi.fn(),
+  inProgressIssueCountsByAgent: vi.fn(),
+  recentCompletionsByAgent: vi.fn(),
 }));
 
 const mockSecretService = vi.hoisted(() => ({
@@ -343,6 +345,8 @@ describe.sequential("agent permission routes", () => {
     mockHeartbeatService.cancelInvocationsForAgents.mockReset();
     mockIssueApprovalService.linkManyForApproval.mockReset();
     mockIssueService.list.mockReset();
+    mockIssueService.inProgressIssueCountsByAgent.mockReset();
+    mockIssueService.recentCompletionsByAgent.mockReset();
     mockSecretService.normalizeAdapterConfigForPersistence.mockReset();
     mockSecretService.resolveAdapterConfigForRuntime.mockReset();
     mockAgentInstructionsService.materializeManagedBundle.mockReset();
@@ -417,6 +421,8 @@ describe.sequential("agent permission routes", () => {
       censorUsernameInLogs: false,
     });
     mockLogActivity.mockResolvedValue(undefined);
+    mockIssueService.inProgressIssueCountsByAgent.mockResolvedValue(new Map());
+    mockIssueService.recentCompletionsByAgent.mockResolvedValue(new Map());
   });
 
   it("redacts agent detail for authenticated company members without agent admin permission", async () => {

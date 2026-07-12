@@ -1,17 +1,18 @@
 /**
- * FILE: server/src/__tests__/agents-heartbeat-cadence-read.test.ts
- * ABOUT: agents-heartbeat-cadence-read.test.ts (__tests__ module).
+ * FILE: server/src/__tests__/agents-wip-flow-list.test.ts
+ * ABOUT: agents-wip-flow-list.test.ts (__tests__ module).
  *
  * SECTIONS:
- *   [TAG: module] - agents-heartbeat-cadence-read.test.ts (__tests__ module).
+ *   [TAG: module] - agents-wip-flow-list.test.ts (__tests__ module).
  */
 // ==========================================
 // [META: module]
-// INTENT: Prove GET /api/agents/:id exposes heartbeatIdleStreak and a
-// computed effectiveHeartbeatIntervalSec derived from the agent's
-// runtimeConfig.heartbeat idle-backoff policy. Harness modeled on
-// agent-permissions-routes.test.ts (mocked agentService + supertest).
-// JSON_FLOW: {"file": "server/src/__tests__/agents-heartbeat-cadence-read.test.ts", "imports": "see code", "exports": "see code"}
+// INTENT: Prove GET /companies/:companyId/agents attaches per-agent wip/flow
+// fields using exactly one grouped in-progress-count query and one grouped
+// recent-completions query for the whole request (not one per agent). Harness
+// copied from agents-heartbeat-cadence-read.test.ts (mocked agentService +
+// issueService + supertest).
+// JSON_FLOW: {"file": "server/src/__tests__/agents-wip-flow-list.test.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
 import express from "express";
@@ -296,7 +297,7 @@ async function requestApp(
   }
 }
 
-describe.sequential("agent heartbeat cadence read exposure", () => {
+describe.sequential("agent wip/flow list exposure", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.doUnmock("@paperclipai/shared/telemetry");
@@ -408,7 +409,13 @@ describe.sequential("agent heartbeat cadence read exposure", () => {
     mockIssueService.recentCompletionsByAgent.mockResolvedValue(new Map());
   });
 
-  it("exposes idle streak and effective heartbeat interval", async () => {
+  it("attaches wip/flow to each agent with two grouped queries", async () => {
+    mockAgentService.list.mockResolvedValue([
+      { ...baseAgent, id: agentId, runtimeConfig: { heartbeat: { wipLimit: { enabled: true, maxInProgress: 3 } } } },
+    ]);
+    mockIssueService.inProgressIssueCountsByAgent.mockResolvedValue(new Map([[agentId, 4]]));
+    mockIssueService.recentCompletionsByAgent.mockResolvedValue(new Map());
+
     const app = await createApp({
       type: "board",
       userId: "board-user",
@@ -417,11 +424,13 @@ describe.sequential("agent heartbeat cadence read exposure", () => {
       companyIds: [companyId],
     });
 
-    const res = await requestApp(app, (baseUrl) => request(baseUrl).get(`/api/agents/${agentId}`));
+    const res = await requestApp(app, (baseUrl) => request(baseUrl).get(`/api/companies/${companyId}/agents`));
 
     expect(res.status).toBe(200);
-    expect(res.body.heartbeatIdleStreak).toBe(2);
-    expect(res.body.effectiveHeartbeatIntervalSec).toBe(1200); // 300 * 2^2
+    expect(res.body[0].wip).toEqual({ limit: 3, current: 4, overBy: 1, overLimit: true });
+    expect(res.body[0].flow).toEqual({ throughputLast7d: 0, medianCycleTimeMs: null });
+    expect(mockIssueService.inProgressIssueCountsByAgent).toHaveBeenCalledTimes(1);
+    expect(mockIssueService.recentCompletionsByAgent).toHaveBeenCalledTimes(1);
   }, 20_000);
 });
 // [END: module]
