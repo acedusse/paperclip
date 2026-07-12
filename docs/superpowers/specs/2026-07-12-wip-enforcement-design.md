@@ -35,6 +35,16 @@ starting, start finishing").
   defers new starts and audits them for the operator; it does not alter prompt assembly.
 - Changing the checkout point, the flow metrics, or the UI (all shipped in the observability slice).
 
+**Boundary (explicitly not covered)**
+- The gate covers the **autonomous** run-selection path only. An *explicit* checkout — an operator
+  or agent calling the checkout endpoint (`server/src/routes/issues.ts`, `svc.checkout(...)`) — also
+  flips an issue to `in_progress` and is **not** WIP-gated, by design: WIP enforcement steers
+  autonomous starts, it does not block a human/agent deliberately picking up work. So an agent's
+  in-progress count can exceed its WIP limit via explicit checkout; the gate only prevents the
+  *autonomous loop* from starting new work past the limit. (Decision 1's "single choke point" is
+  the single choke point for **autonomous** starts, not for every possible `→ in_progress`
+  transition.)
+
 **Not built (already exists — reused from the observability slice)**
 - `parseWipLimitConfig(runtimeConfig)` and `wipLimitSchema` (`server/src/services/wip-flow.ts`,
   `packages/shared/.../agent-heartbeat.ts`).
