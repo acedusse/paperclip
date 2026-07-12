@@ -128,6 +128,7 @@ function createAgent(): Agent {
     budgetMonthlyCents: 0,
     spentMonthlyCents: 0,
     lastHeartbeatAt: null,
+    heartbeatIdleStreak: 0,
     icon: "code",
     metadata: null,
     createdAt: new Date("2026-04-02T00:00:00.000Z"),

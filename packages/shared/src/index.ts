@@ -152,6 +152,7 @@ export {
   HEARTBEAT_INVOCATION_SOURCES,
   HEARTBEAT_RUN_STATUSES,
   RUN_LIVENESS_STATES,
+  PRODUCTIVE_RUN_LIVENESS_STATES,
   WAKEUP_TRIGGER_DETAILS,
   WAKEUP_REQUEST_STATUSES,
   LIVE_EVENT_TYPES,
@@ -860,6 +861,8 @@ export {
   type ResourceMemberships,
   type ResourceMembershipUpdateResult,
 } from "./types/resource-memberships.js";
+
+export * from "./validators/agent-heartbeat.js";
 
 export { workspaceRuntimeControlTargetSchema } from "./validators/execution-workspace.js";
 export {

@@ -82,6 +82,7 @@ import type {
 } from "@paperclipai/adapter-utils";
 import { skillVersionSelectionMap } from "../services/runtime-skill-selections.js";
 import { secretService } from "../services/secrets.js";
+import { effectiveIntervalSec, parseHeartbeatCadenceConfig } from "../services/heartbeat-cadence.js";
 import {
   detectAdapterModel,
   findActiveServerAdapter,
@@ -581,9 +582,12 @@ export function agentRoutes(
       svc.getChainOfCommand(agent.id),
       buildAgentAccessState(agent),
     ]);
+    const cadence = parseHeartbeatCadenceConfig(agent.runtimeConfig);
+    const effectiveHeartbeatIntervalSec = effectiveIntervalSec(cadence.intervalSec, agent.heartbeatIdleStreak, cadence.idleBackoff);
 
     return {
       ...(options?.restricted ? redactForRestrictedAgentView(agent) : agent),
+      effectiveHeartbeatIntervalSec,
       chainOfCommand,
       access: accessState,
     };

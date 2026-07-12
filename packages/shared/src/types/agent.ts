@@ -113,6 +113,10 @@ export interface Agent {
   errorReason?: string | null;
   permissions: AgentPermissions;
   lastHeartbeatAt: Date | null;
+  /** Combo-01 Phase 4A: consecutive empty timer-heartbeat count (0 when active). */
+  heartbeatIdleStreak: number;
+  /** Combo-01 Phase 4A: computed effective wake interval (read-only; set by the read path). */
+  effectiveHeartbeatIntervalSec?: number;
   metadata: Record<string, unknown> | null;
   orgChainHealth?: AgentOrgChainHealth;
   createdAt: Date;

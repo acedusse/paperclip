@@ -16,6 +16,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { agentWakeupRequests, agents, heartbeatRuns, issues } from "@paperclipai/db";
 import type { IssueCommentMetadata, IssueCommentPresentation, RunLivenessState } from "@paperclipai/shared";
+import { PRODUCTIVE_RUN_LIVENESS_STATES } from "@paperclipai/shared";
 import { withRecoveryModelProfileHint } from "./model-profile-hint.js";
 
 export const FINISH_SUCCESSFUL_RUN_HANDOFF_REASON = "finish_successful_run_handoff";
@@ -37,12 +38,7 @@ export const SUCCESSFUL_RUN_HANDOFF_OPTIONS = [
   "delegate_or_continue_from_checkpoint",
 ] as const;
 
-const PRODUCTIVE_SUCCESS_LIVENESS_STATES = new Set<RunLivenessState>([
-  "advanced",
-  "completed",
-  "blocked",
-  "needs_followup",
-]);
+const PRODUCTIVE_SUCCESS_LIVENESS_STATES = PRODUCTIVE_RUN_LIVENESS_STATES;
 
 const IDEMPOTENT_HANDOFF_WAKE_STATUSES = [
   "queued",

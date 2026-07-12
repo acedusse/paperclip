@@ -48,6 +48,8 @@ export const agents = pgTable(
     errorReason: text("error_reason"),
     permissions: jsonb("permissions").$type<Record<string, unknown>>().notNull().default({}),
     lastHeartbeatAt: timestamp("last_heartbeat_at", { withTimezone: true }),
+    // Combo-01 Phase 4A: consecutive empty timer-heartbeat count driving idle backoff.
+    heartbeatIdleStreak: integer("heartbeat_idle_streak").notNull().default(0),
     metadata: jsonb("metadata").$type<Record<string, unknown>>(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

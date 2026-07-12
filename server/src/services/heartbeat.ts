@@ -24,6 +24,7 @@ import {
   ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY,
   MODEL_PROFILE_KEYS,
   envBindingSchema,
+  idleBackoffSchema,
   isEnvironmentDriverSupportedForAdapter,
   type BillingType,
   type BreakerLevel,
@@ -184,6 +185,12 @@ import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3B_COMPANY_WRITERS } from "./
 import { activeScheduleCap, activeManualOverride, nextScheduleTransition } from "./schedule-cap.js";
 import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
+import {
+  effectiveIntervalSec,
+  isEmptyTimerHeartbeat,
+  nextIdleStreak,
+  parseHeartbeatCadenceConfig,
+} from "./heartbeat-cadence.js";
 import {
   shouldSuppressContinuationOnFinish,
   windDownRun as windDownRunCore,
@@ -7063,6 +7070,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return {
       enabled: asBoolean(heartbeat.enabled, false),
       intervalSec: Math.max(0, asNumber(heartbeat.intervalSec, 0)),
+      idleBackoff: idleBackoffSchema.parse(parseObject(heartbeat.idleBackoff)),
       wakeOnDemand: asBoolean(heartbeat.wakeOnDemand ?? heartbeat.wakeOnAssignment ?? heartbeat.wakeOnOnDemand ?? heartbeat.wakeOnAutomation, true),
       maxConcurrentRuns: normalizeMaxConcurrentRuns(heartbeat.maxConcurrentRuns),
       skipTimerWhenNoActionableWork: asBoolean(
@@ -10499,6 +10507,13 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         outcome,
         outcome === "succeeded" ? null : (adapterResult.errorMessage ?? null),
       );
+      if (parseHeartbeatCadenceConfig(agent.runtimeConfig).idleBackoff.enabled) {
+        await self.applyIdleStreakUpdate(agent.id, {
+          wakeReason: readNonEmptyString(context.wakeReason),
+          outcome,
+          livenessState: (finalizedRun ?? run).livenessState as RunLivenessState | null,
+        });
+      }
     } catch (err) {
       const message = redactCurrentUserText(
         err instanceof Error ? err.message : "Unknown adapter failure",
@@ -12720,7 +12735,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     await cancelPendingWakeupsForBudgetScope(scope);
   }
 
-  return {
+  const self = {
     list: async (companyId: string, agentId?: string, limit?: number) => {
       const safeForLegacyEncoding = await hasUnsafeTextProjectionDatabase();
       const query = db
@@ -13011,7 +13026,8 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         checked += 1;
         const baseline = new Date(agent.lastHeartbeatAt ?? agent.createdAt).getTime();
         const elapsedMs = now.getTime() - baseline;
-        if (elapsedMs < policy.intervalSec * 1000) continue;
+        const effectiveSec = effectiveIntervalSec(policy.intervalSec, agent.heartbeatIdleStreak, policy.idleBackoff);
+        if (elapsedMs < effectiveSec * 1000) continue;
 
         const run = await enqueueWakeup(agent.id, {
           source: "timer",
@@ -13039,6 +13055,25 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     },
 
     cancelRun: (runId: string, reason?: string, options?: CancelRunOptions) => cancelRunInternal(runId, reason, options),
+
+    applyIdleStreakUpdate: async (
+      agentId: string,
+      signal: { wakeReason: string | null; outcome: string; livenessState: RunLivenessState | null },
+    ): Promise<number | null> => {
+      const existing = await getAgent(agentId);
+      if (!existing) return null;
+      if (!parseHeartbeatCadenceConfig(existing.runtimeConfig).idleBackoff.enabled) {
+        return existing.heartbeatIdleStreak;
+      }
+      const streak = nextIdleStreak(existing.heartbeatIdleStreak, isEmptyTimerHeartbeat(signal));
+      if (streak !== existing.heartbeatIdleStreak) {
+        await db
+          .update(agents)
+          .set({ heartbeatIdleStreak: streak, updatedAt: new Date() })
+          .where(eq(agents.id, agentId));
+      }
+      return streak;
+    },
 
     // Combo-01 Phase 2.0 wind-down substrate (no product caller yet; 2a/2c consume these).
     windDownRun,
@@ -13117,5 +13152,6 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     getCompanyAdmissionStatus,
     startNextQueuedRunForAgent,
   };
+  return self;
 }
 // [END: module]
