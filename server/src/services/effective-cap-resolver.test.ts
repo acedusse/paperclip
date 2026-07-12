@@ -17,6 +17,7 @@ import {
   CAP_WRITER_PRECEDENCE,
   PHASE1_WRITERS,
   configuredDefaultWriter,
+  panicDrainWriter,
   resolveEffectiveCap,
   type CapWriter,
 } from "./effective-cap-resolver.js";
@@ -67,6 +68,41 @@ describe("effective-cap-resolver", () => {
   it("configured-default writer echoes the instance setting", () => {
     expect(configuredDefaultWriter.resolve({ configuredMax: 5 })).toBe(5);
     expect(configuredDefaultWriter.resolve({ configuredMax: null })).toBeNull();
+  });
+});
+
+describe("panicDrainWriter", () => {
+  it("forces cap 0 when halted", () => {
+    expect(panicDrainWriter.resolve({ configuredMax: 10, executionState: "halted" })).toBe(0);
+  });
+  it("forces cap 0 when draining", () => {
+    expect(panicDrainWriter.resolve({ configuredMax: 10, executionState: "draining" })).toBe(0);
+  });
+  it("has no opinion when running", () => {
+    expect(panicDrainWriter.resolve({ configuredMax: 10, executionState: "running" })).toBeNull();
+  });
+  it("has no opinion when state is absent", () => {
+    expect(panicDrainWriter.resolve({ configuredMax: 10 })).toBeNull();
+  });
+  it("is registered at top precedence (index 0)", () => {
+    expect(panicDrainWriter.precedence).toBe(CAP_WRITER_PRECEDENCE.indexOf("panic-drain"));
+    expect(panicDrainWriter.precedence).toBe(0);
+  });
+  it("wins over configured-default when halted (resolveEffectiveCap)", () => {
+    const { cap, source } = resolveEffectiveCap(
+      { configuredMax: 10, executionState: "halted" },
+      PHASE1_WRITERS,
+    );
+    expect(cap).toBe(0);
+    expect(source).toBe("panic-drain");
+  });
+  it("falls through to configured-default when running", () => {
+    const { cap, source } = resolveEffectiveCap(
+      { configuredMax: 10, executionState: "running" },
+      PHASE1_WRITERS,
+    );
+    expect(cap).toBe(10);
+    expect(source).toBe("configured-default");
   });
 });
 // [END: module]
