@@ -1,17 +1,18 @@
 /**
- * FILE: server/src/__tests__/agents-heartbeat-cadence-read.test.ts
- * ABOUT: agents-heartbeat-cadence-read.test.ts (__tests__ module).
+ * FILE: server/src/__tests__/agents-wip-flow-read.test.ts
+ * ABOUT: agents-wip-flow-read.test.ts (__tests__ module).
  *
  * SECTIONS:
- *   [TAG: module] - agents-heartbeat-cadence-read.test.ts (__tests__ module).
+ *   [TAG: module] - agents-wip-flow-read.test.ts (__tests__ module).
  */
 // ==========================================
 // [META: module]
-// INTENT: Prove GET /api/agents/:id exposes heartbeatIdleStreak and a
-// computed effectiveHeartbeatIntervalSec derived from the agent's
-// runtimeConfig.heartbeat idle-backoff policy. Harness modeled on
-// agent-permissions-routes.test.ts (mocked agentService + supertest).
-// JSON_FLOW: {"file": "server/src/__tests__/agents-heartbeat-cadence-read.test.ts", "imports": "see code", "exports": "see code"}
+// INTENT: Prove GET /api/agents/:id exposes wip status and flow metrics,
+// computed from the agent's runtimeConfig.heartbeat.wipLimit policy plus
+// single-agent in-progress-count / recent-completions issue queries. Harness
+// copied from agents-heartbeat-cadence-read.test.ts (mocked agentService +
+// issueService + supertest).
+// JSON_FLOW: {"file": "server/src/__tests__/agents-wip-flow-read.test.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
 import express from "express";
@@ -296,7 +297,7 @@ async function requestApp(
   }
 }
 
-describe.sequential("agent heartbeat cadence read exposure", () => {
+describe.sequential("agent wip/flow read exposure", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.doUnmock("@paperclipai/shared/telemetry");
@@ -408,7 +409,17 @@ describe.sequential("agent heartbeat cadence read exposure", () => {
     mockIssueService.recentCompletionsByAgent.mockResolvedValue(new Map());
   });
 
-  it("exposes idle streak and effective heartbeat interval", async () => {
+  it("exposes wip status and flow metrics on GET /api/agents/:id", async () => {
+    const start = new Date("2026-07-11T00:00:00.000Z");
+    mockAgentService.getById.mockResolvedValue({
+      ...baseAgent,
+      runtimeConfig: { heartbeat: { wipLimit: { enabled: true, maxInProgress: 1 } } },
+    });
+    mockIssueService.inProgressIssueCountsByAgent.mockResolvedValue(new Map([[agentId, 2]]));
+    mockIssueService.recentCompletionsByAgent.mockResolvedValue(
+      new Map([[agentId, [{ startedAt: start, completedAt: new Date(start.getTime() + 4000) }]]]),
+    );
+
     const app = await createApp({
       type: "board",
       userId: "board-user",
@@ -420,8 +431,8 @@ describe.sequential("agent heartbeat cadence read exposure", () => {
     const res = await requestApp(app, (baseUrl) => request(baseUrl).get(`/api/agents/${agentId}`));
 
     expect(res.status).toBe(200);
-    expect(res.body.heartbeatIdleStreak).toBe(2);
-    expect(res.body.effectiveHeartbeatIntervalSec).toBe(1200); // 300 * 2^2
+    expect(res.body.wip).toEqual({ limit: 1, current: 2, overBy: 1, overLimit: true });
+    expect(res.body.flow).toEqual({ throughputLast7d: 1, medianCycleTimeMs: 4000 });
   }, 20_000);
 });
 // [END: module]

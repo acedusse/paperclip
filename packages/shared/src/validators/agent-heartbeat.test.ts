@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { idleBackoffSchema } from "./agent-heartbeat.js";
+import { idleBackoffSchema, wipLimitSchema } from "./agent-heartbeat.js";
 
 describe("idleBackoffSchema", () => {
   it("defaults to disabled with multiplier 2 when empty", () => {
@@ -18,5 +18,24 @@ describe("idleBackoffSchema", () => {
 
   it("rejects non-positive maxIntervalSec", () => {
     expect(() => idleBackoffSchema.parse({ maxIntervalSec: 0 })).toThrow();
+  });
+});
+
+describe("wipLimitSchema", () => {
+  it("defaults to disabled with a maxInProgress of 3", () => {
+    expect(wipLimitSchema.parse({})).toEqual({ enabled: false, maxInProgress: 3 });
+  });
+
+  it("accepts an explicit enabled limit", () => {
+    expect(wipLimitSchema.parse({ enabled: true, maxInProgress: 5 })).toEqual({
+      enabled: true,
+      maxInProgress: 5,
+    });
+  });
+
+  it("rejects a non-positive or non-integer maxInProgress", () => {
+    expect(() => wipLimitSchema.parse({ maxInProgress: 0 })).toThrow();
+    expect(() => wipLimitSchema.parse({ maxInProgress: -1 })).toThrow();
+    expect(() => wipLimitSchema.parse({ maxInProgress: 2.5 })).toThrow();
   });
 });

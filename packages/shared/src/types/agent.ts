@@ -117,6 +117,10 @@ export interface Agent {
   heartbeatIdleStreak: number;
   /** Combo-01 Phase 4A: computed effective wake interval (read-only; set by the read path). */
   effectiveHeartbeatIntervalSec?: number;
+  /** Combo-01 Phase 4A-ii: in-progress load vs limit (read-only; set by the read path). */
+  wip?: { limit: number | null; current: number; overBy: number; overLimit: boolean };
+  /** Combo-01 Phase 4A-ii: trailing-7d flow metrics (read-only; set by the read path). */
+  flow?: { throughputLast7d: number; medianCycleTimeMs: number | null };
   metadata: Record<string, unknown> | null;
   orgChainHealth?: AgentOrgChainHealth;
   createdAt: Date;

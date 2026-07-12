@@ -179,6 +179,7 @@ function buildAgent(adapterType: string, runtimeConfig: Record<string, unknown> 
     spentMonthlyCents: 0,
     permissions: {},
     lastHeartbeatAt: null,
+    heartbeatIdleStreak: 0,
     metadata: null,
     createdAt: new Date(),
     updatedAt: new Date(),

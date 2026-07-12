@@ -252,6 +252,7 @@ describe("agent routes adapter validation", () => {
       pausedAt: null,
       permissions: { canCreateAgents: false },
       lastHeartbeatAt: null,
+      heartbeatIdleStreak: 0,
       metadata: null,
       createdAt: new Date(),
       updatedAt: new Date(),

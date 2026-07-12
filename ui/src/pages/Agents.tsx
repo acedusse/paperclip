@@ -25,6 +25,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { AgentStatusBadge, AgentStatusCapsule } from "../components/StatusBadge";
 import { AgentActionButtons } from "../components/AgentActionButtons";
 import { AgentCadenceReadout } from "../components/AgentCadenceReadout";
+import { AgentWipReadout } from "../components/AgentWipReadout";
 import { MembershipAction } from "../components/MembershipAction";
 import { EntityRow } from "../components/EntityRow";
 import { EmptyState } from "../components/EmptyState";
@@ -83,6 +84,14 @@ function getCadenceReadoutProps(agent: Agent) {
     effectiveHeartbeatIntervalSec: agent.effectiveHeartbeatIntervalSec ?? intervalSec,
     enabled: idleBackoff.enabled === true,
     intervalSec,
+  };
+}
+
+/** Derive AgentWipReadout props from an agent's wip/flow fields (Combo-01 Phase 4A-ii). */
+function getWipReadoutProps(agent: Agent) {
+  return {
+    wip: agent.wip ?? { limit: null, current: 0, overBy: 0, overLimit: false },
+    flow: agent.flow ?? { throughputLast7d: 0, medianCycleTimeMs: null },
   };
 }
 
@@ -527,6 +536,9 @@ function AgentMetaColumns({ agent }: { agent: Agent }) {
         </span>
         <div className="whitespace-nowrap">
           <AgentCadenceReadout {...getCadenceReadoutProps(agent)} />
+        </div>
+        <div className="whitespace-nowrap">
+          <AgentWipReadout {...getWipReadoutProps(agent)} />
         </div>
       </div>
     </>
