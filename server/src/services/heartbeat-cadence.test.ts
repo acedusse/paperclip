@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { IdleBackoffConfig } from "@paperclipai/shared";
-import { effectiveIntervalSec, isEmptyTimerHeartbeat, nextIdleStreak } from "./heartbeat-cadence.js";
+import {
+  effectiveIntervalSec,
+  isEmptyTimerHeartbeat,
+  nextIdleStreak,
+  parseHeartbeatCadenceConfig,
+} from "./heartbeat-cadence.js";
 
 const on: IdleBackoffConfig = { enabled: true, multiplier: 2, maxIntervalSec: 3600 };
 
@@ -29,6 +34,16 @@ describe("nextIdleStreak", () => {
   });
   it("resets to 0 on a non-empty completion", () => {
     expect(nextIdleStreak(3, false)).toBe(0);
+  });
+});
+
+describe("parseHeartbeatCadenceConfig", () => {
+  it("extracts intervalSec and idleBackoff, defaulting a missing block", () => {
+    expect(parseHeartbeatCadenceConfig({ heartbeat: { intervalSec: 300, idleBackoff: { enabled: true } } }))
+      .toEqual({ intervalSec: 300, idleBackoff: { enabled: true, multiplier: 2, maxIntervalSec: 3600 } });
+  });
+  it("returns interval 0 and disabled backoff for an empty config", () => {
+    expect(parseHeartbeatCadenceConfig(null)).toEqual({ intervalSec: 0, idleBackoff: { enabled: false, multiplier: 2, maxIntervalSec: 3600 } });
   });
 });
 

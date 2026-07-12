@@ -1,4 +1,4 @@
-import { PRODUCTIVE_RUN_LIVENESS_STATES, type IdleBackoffConfig, type RunLivenessState } from "@paperclipai/shared";
+import { idleBackoffSchema, PRODUCTIVE_RUN_LIVENESS_STATES, type IdleBackoffConfig, type RunLivenessState } from "@paperclipai/shared";
 
 /**
  * Effective timer interval for an agent given its idle streak. Grows
@@ -10,6 +10,13 @@ export function effectiveIntervalSec(baseSec: number, streak: number, cfg: IdleB
   const grown = baseSec * cfg.multiplier ** Math.max(0, streak);
   const cap = Math.max(baseSec, cfg.maxIntervalSec);
   return Math.min(grown, cap);
+}
+
+/** Parse just the fields idle-backoff needs from an agent's runtimeConfig blob. */
+export function parseHeartbeatCadenceConfig(runtimeConfig: unknown): { intervalSec: number; idleBackoff: IdleBackoffConfig } {
+  const hb = (runtimeConfig as { heartbeat?: Record<string, unknown> } | null)?.heartbeat ?? {};
+  const intervalSec = typeof hb.intervalSec === "number" && hb.intervalSec > 0 ? hb.intervalSec : 0;
+  return { intervalSec, idleBackoff: idleBackoffSchema.parse(hb.idleBackoff ?? {}) };
 }
 
 /** Increment on an empty heartbeat, otherwise reset to 0. */
