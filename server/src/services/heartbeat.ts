@@ -34,6 +34,7 @@ import {
   type IssueExecutionMonitorRecoveryPolicy,
   type ModelProfileKey,
   type RoutineRevisionSnapshotV1,
+  type RunExecutionState,
   type RunLivenessState,
   type SourceTrustMetadata,
 } from "@paperclipai/shared";
@@ -177,6 +178,7 @@ import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
 import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
 import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
+import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
 import {
   shouldSuppressContinuationOnFinish,
   windDownRun as windDownRunCore,
@@ -3406,6 +3408,7 @@ export type AdmissionStatus = {
   source: string;
   running: number;
   queued: number;
+  runExecutionState: RunExecutionState;
 };
 
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
@@ -7310,6 +7313,42 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return row?.max ?? null;
   }
 
+  // Combo-01 Phase 2c: fail-open state lookups. Any DB error is treated as
+  // "running" so a lookup failure never wedges the fleet.
+  async function getInstanceRunExecutionState(): Promise<RunExecutionState> {
+    try {
+      return (await instanceSettingsService(db).getGeneral()).runExecutionState ?? "running";
+    } catch (err) {
+      logger.warn({ err }, "instance run-execution-state lookup failed; treating as running");
+      return "running";
+    }
+  }
+
+  async function getCompanyRunExecutionState(companyId: string): Promise<RunExecutionState> {
+    try {
+      const [row] = await db
+        .select({ s: companies.runExecutionState })
+        .from(companies)
+        .where(eq(companies.id, companyId));
+      return (row?.s as RunExecutionState | undefined) ?? "running";
+    } catch (err) {
+      logger.warn({ err }, "company run-execution-state lookup failed; treating as running");
+      return "running";
+    }
+  }
+
+  async function getEffectiveExecutionState(companyId: string): Promise<RunExecutionState> {
+    const [instance, company] = await Promise.all([
+      getInstanceRunExecutionState(),
+      getCompanyRunExecutionState(companyId),
+    ]);
+    return resolveEffectiveExecutionState(instance, company);
+  }
+
+  async function isScopeQuiescing(companyId: string): Promise<boolean> {
+    return isQuiescing(await getEffectiveExecutionState(companyId));
+  }
+
   // Resolve the effective per-run ceilings for a company at claim time. Fail
   // open: any lookup error yields unlimited (null) rather than blocking claims.
   async function resolveStampedRunCaps(companyId: string): Promise<RunCaps> {
@@ -7364,8 +7403,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
 
   async function getInstanceAdmissionStatus(): Promise<AdmissionStatus> {
     const general = await instanceSettingsService(db).getGeneral();
+    const runExecutionState = general.runExecutionState ?? "running";
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: general.maxConcurrentRuns ?? null },
+      { configuredMax: general.maxConcurrentRuns ?? null, executionState: runExecutionState },
       PHASE1_WRITERS,
     );
     // Cap, running, and queued are read via separate queries (no shared transaction), so a
@@ -7376,12 +7416,14 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       source,
       running: await countRunningRunsInstanceWide(),
       queued: await countQueuedRunsInstanceWide(),
+      runExecutionState,
     };
   }
 
   async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
+    const runExecutionState = await getEffectiveExecutionState(companyId);
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: await getCompanyMaxConcurrentRuns(companyId) },
+      { configuredMax: await getCompanyMaxConcurrentRuns(companyId), executionState: runExecutionState },
       PHASE1_WRITERS,
     );
     // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
@@ -7391,11 +7433,16 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       source,
       running: await countRunningRunsForCompany(companyId),
       queued: await countQueuedRunsForCompany(companyId),
+      runExecutionState,
     };
   }
 
   async function claimQueuedRun(run: typeof heartbeatRuns.$inferSelect, companyAgents?: AgentOrgRow[]) {
     if (run.status !== "queued") return run;
+    // Combo-01 Phase 2c: while the scope is draining/halted, HOLD the run —
+    // return null (leaves the row queued, does NOT cancel), so Resume re-admits
+    // it. Covers the executeRun direct-claim path that skips the budget gate.
+    if (await isScopeQuiescing(run.companyId)) return null;
     const agent = await getAgent(run.agentId);
     if (!agent) {
       await cancelRunInternal(run.id, "Cancelled because the agent no longer exists");
@@ -8435,7 +8482,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       try {
         const general = await instanceSettingsService(db).getGeneral();
         ({ cap: instanceCap } = resolveEffectiveCap(
-          { configuredMax: general.maxConcurrentRuns ?? null },
+          { configuredMax: general.maxConcurrentRuns ?? null, executionState: general.runExecutionState ?? "running" },
           PHASE1_WRITERS,
         ));
       } catch (err) {
@@ -8445,7 +8492,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       let companyCap: number | null = null;
       try {
         const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
-        ({ cap: companyCap } = resolveEffectiveCap({ configuredMax: companyMax }, PHASE1_WRITERS));
+        ({ cap: companyCap } = resolveEffectiveCap(
+          { configuredMax: companyMax, executionState: await getEffectiveExecutionState(agent.companyId) },
+          PHASE1_WRITERS,
+        ));
       } catch (err) {
         logger.warn({ err }, "company admission cap lookup failed; falling back");
         companyCap = null;

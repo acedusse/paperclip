@@ -371,7 +371,13 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
     await insertRun({ companyId: company, agentId: agent, status: "queued" });
 
     const s = await heartbeat.getInstanceAdmissionStatus();
-    expect(s).toEqual({ cap: 10, source: "configured-default", running: 1, queued: 1 });
+    expect(s).toEqual({
+      cap: 10,
+      source: "configured-default",
+      running: 1,
+      queued: 1,
+      runExecutionState: "running",
+    });
   });
 
   it("reports company admission status, unset cap => null/none, isolated per company", async () => {
@@ -386,12 +392,14 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
       source: "configured-default",
       running: 1,
       queued: 0,
+      runExecutionState: "running",
     });
     expect(await heartbeat.getCompanyAdmissionStatus(companyB)).toEqual({
       cap: null,
       source: "none",
       running: 0,
       queued: 0,
+      runExecutionState: "running",
     });
   });
 

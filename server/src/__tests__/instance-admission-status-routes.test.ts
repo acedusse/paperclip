@@ -139,7 +139,13 @@ describeEmbeddedPostgres("admission-status routes", () => {
     const app = createApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
     const res = await request(app).get("/api/instance/admission-status");
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ cap: 10, source: "configured-default", running: 1, queued: 0 });
+    expect(res.body).toEqual({
+      cap: 10,
+      source: "configured-default",
+      running: 1,
+      queued: 0,
+      runExecutionState: "running",
+    });
   });
 
   it("GET /api/instance/admission-status rejects non-board callers", async () => {
@@ -154,7 +160,13 @@ describeEmbeddedPostgres("admission-status routes", () => {
     const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
     const res = await request(app).get(`/api/companies/${company}/admission-status`);
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ cap: 3, source: "configured-default", running: 0, queued: 0 });
+    expect(res.body).toEqual({
+      cap: 3,
+      source: "configured-default",
+      running: 0,
+      queued: 0,
+      runExecutionState: "running",
+    });
   });
 
   it("GET /api/companies/:id/admission-status rejects callers without access to the company", async () => {
@@ -183,7 +195,13 @@ describeEmbeddedPostgres("admission-status routes", () => {
 
     const afterSetStatus = await request(app).get(`/api/companies/${company}/admission-status`);
     expect(afterSetStatus.status).toBe(200);
-    expect(afterSetStatus.body).toEqual({ cap: 7, source: "configured-default", running: 0, queued: 0 });
+    expect(afterSetStatus.body).toEqual({
+      cap: 7,
+      source: "configured-default",
+      running: 0,
+      queued: 0,
+      runExecutionState: "running",
+    });
 
     const clearRes = await request(app)
       .patch(`/api/companies/${company}`)
