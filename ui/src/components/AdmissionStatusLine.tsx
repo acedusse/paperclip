@@ -29,9 +29,21 @@ export function AdmissionStatusLine({
     status.runExecutionState && status.runExecutionState !== "running" ? (
       <span className="ml-1 font-medium text-destructive">· {status.runExecutionState}</span>
     ) : null;
+  const breakerBadge =
+    status.breakerLevel && status.breakerLevel !== "normal" ? (
+      <span
+        className={
+          status.breakerLevel === "warn"
+            ? "ml-1 font-medium text-amber-600 dark:text-amber-400"
+            : "ml-1 font-medium text-destructive"
+        }
+      >
+        · breaker: {status.breakerLevel}
+      </span>
+    ) : null;
   return (
     <span className="text-xs text-muted-foreground">
-      running {status.running} / cap {cap} · {status.queued} queued{stateBadge}
+      running {status.running} / cap {cap} · {status.queued} queued{stateBadge}{breakerBadge}
     </span>
   );
 }

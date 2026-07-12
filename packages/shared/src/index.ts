@@ -925,6 +925,8 @@ export {
   trustAuthorizationPolicySchema,
   RUN_EXECUTION_STATES,
   runExecutionStateSchema,
+  BREAKER_LEVELS,
+  breakerLevelSchema,
   type PatchInstanceExperimentalSettings,
   type PatchInstanceSettings,
   type IssueGraphLivenessAutoRecoveryRequest,
@@ -932,6 +934,7 @@ export {
   type LowTrustBoundaryInput,
   type TrustAuthorizationPolicyInput,
   type RunExecutionState,
+  type BreakerLevel,
 } from "./validators/index.js";
 
 export {

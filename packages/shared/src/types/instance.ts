@@ -65,6 +65,8 @@ export interface InstanceGeneralSettings {
   maxRunCostCents?: number | null;
   maxRunTurns?: number | null;
   runExecutionState?: "running" | "draining" | "halted";
+  predictiveBreakerEnabled?: boolean;
+  breakerHorizonMinutes?: number;
 }
 
 export interface InstanceExperimentalSettings {

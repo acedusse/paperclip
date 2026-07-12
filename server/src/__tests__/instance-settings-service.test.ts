@@ -18,7 +18,11 @@ import {
   getEmbeddedPostgresTestSupport,
   startEmbeddedPostgresTestDatabase,
 } from "./helpers/embedded-postgres.js";
-import { instanceSettingsService, normalizeExperimentalSettings } from "../services/instance-settings.js";
+import {
+  instanceSettingsService,
+  normalizeExperimentalSettings,
+  normalizeGeneralSettings,
+} from "../services/instance-settings.js";
 
 const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
 const describeEmbeddedPostgres = embeddedPostgresSupport.supported ? describe : describe.skip;
@@ -92,6 +96,27 @@ describe("instance settings service", () => {
     expect(
       normalizeExperimentalSettings({ enableConferenceRoomChat: "yes" }).enableConferenceRoomChat,
     ).toBe(false);
+  });
+
+  it("carries predictive-breaker config through normalize", () => {
+    const out = normalizeGeneralSettings({
+      predictiveBreakerEnabled: true,
+      breakerHorizonMinutes: 30,
+    });
+    expect(out.predictiveBreakerEnabled).toBe(true);
+    expect(out.breakerHorizonMinutes).toBe(30);
+  });
+
+  it("defaults predictiveBreakerEnabled to false when unset", () => {
+    const out = normalizeGeneralSettings({});
+    expect(out.predictiveBreakerEnabled).toBe(false);
+    expect(out.breakerHorizonMinutes).toBeUndefined();
+  });
+
+  it("preserves explicit predictiveBreakerEnabled=false", () => {
+    expect(normalizeGeneralSettings({ predictiveBreakerEnabled: false }).predictiveBreakerEnabled).toBe(
+      false,
+    );
   });
 });
 

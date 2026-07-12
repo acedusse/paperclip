@@ -63,6 +63,8 @@ export const companiesApi = {
       maxRunWallClockMs?: number | null;
       maxRunCostCents?: number | null;
       maxRunTurns?: number | null;
+      predictiveBreakerEnabled?: boolean;
+      breakerHorizonMinutes?: number | null;
     },
   ) => api.patch<Company>(`/companies/${companyId}`, data),
   updateBranding: (companyId: string, data: UpdateCompanyBranding) =>

@@ -12,7 +12,7 @@
 // JSON_FLOW: {"file": "server/src/services/effective-cap-resolver.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-import type { RunExecutionState } from "@paperclipai/shared";
+import type { BreakerLevel, RunExecutionState } from "@paperclipai/shared";
 
 // Locked precedence order (highest priority first). Later combo-01 slices
 // register writers at these names; a unit test asserts this array so nothing
@@ -25,7 +25,11 @@ export const CAP_WRITER_PRECEDENCE = Object.freeze([
   "configured-default",
 ] as const);
 
-export type CapContext = { configuredMax: number | null; executionState?: RunExecutionState };
+export type CapContext = {
+  configuredMax: number | null;
+  executionState?: RunExecutionState;
+  breakerLevel?: BreakerLevel;
+};
 
 export type CapWriter = {
   name: string;
@@ -47,6 +51,38 @@ export const panicDrainWriter: CapWriter = {
   resolve: (ctx) =>
     ctx.executionState === "halted" || ctx.executionState === "draining" ? 0 : null,
 };
+
+// Combo-01 Phase 3a: cap-mapping constants (the ladder/hysteresis constants live
+// in predictive-breaker.ts; these two are the writer's authority on the cap).
+export const BREAKER_THROTTLE_FACTOR = 0.5;
+export const BREAKER_THROTTLE_UNCAPPED_CAP = 2;
+
+// Reads the persisted breaker level (decided by the evaluator) and maps it to a
+// cap. halt -> 0; throttle -> half the configured cap (floor 1), or the uncapped
+// fallback when concurrency is otherwise unlimited; normal/warn/absent -> no opinion.
+export const predictiveBreakerWriter: CapWriter = {
+  name: "predictive-breaker",
+  precedence: CAP_WRITER_PRECEDENCE.indexOf("predictive-breaker"),
+  resolve: (ctx) => {
+    switch (ctx.breakerLevel) {
+      case "halt":
+        return 0;
+      case "throttle":
+        return ctx.configuredMax == null
+          ? BREAKER_THROTTLE_UNCAPPED_CAP
+          : Math.max(1, Math.floor(ctx.configuredMax * BREAKER_THROTTLE_FACTOR));
+      default:
+        return null;
+    }
+  },
+};
+
+// Company resolver sites use this set (instance sites have no breaker — no budget).
+export const PHASE3_COMPANY_WRITERS: CapWriter[] = [
+  panicDrainWriter,
+  predictiveBreakerWriter,
+  configuredDefaultWriter,
+];
 
 export const PHASE1_WRITERS: CapWriter[] = [panicDrainWriter, configuredDefaultWriter];
 

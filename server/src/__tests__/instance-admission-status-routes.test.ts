@@ -145,6 +145,7 @@ describeEmbeddedPostgres("admission-status routes", () => {
       running: 1,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
     });
   });
 
@@ -166,6 +167,7 @@ describeEmbeddedPostgres("admission-status routes", () => {
       running: 0,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
     });
   });
 
@@ -201,6 +203,7 @@ describeEmbeddedPostgres("admission-status routes", () => {
       running: 0,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
     });
 
     const clearRes = await request(app)

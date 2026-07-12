@@ -116,6 +116,16 @@ export function InstanceGeneralSettings() {
     setMaxRunTurns(String(generalQuery.data?.maxRunTurns ?? ""));
   }, [generalQuery.data?.maxRunTurns]);
 
+  const [predictiveBreakerEnabled, setPredictiveBreakerEnabled] = useState(false);
+  useEffect(() => {
+    setPredictiveBreakerEnabled(generalQuery.data?.predictiveBreakerEnabled ?? false);
+  }, [generalQuery.data?.predictiveBreakerEnabled]);
+
+  const [breakerHorizonMinutes, setBreakerHorizonMinutes] = useState("");
+  useEffect(() => {
+    setBreakerHorizonMinutes(String(generalQuery.data?.breakerHorizonMinutes ?? ""));
+  }, [generalQuery.data?.breakerHorizonMinutes]);
+
   if (generalQuery.isLoading) {
     return <div className="text-sm text-muted-foreground">Loading general settings...</div>;
   }
@@ -157,6 +167,22 @@ export function InstanceGeneralSettings() {
       maxRunWallClockMs: trimmedWallClock === "" ? null : Number(trimmedWallClock),
       maxRunCostCents: trimmedCost === "" ? null : Number(trimmedCost),
       maxRunTurns: trimmedTurns === "" ? null : Number(trimmedTurns),
+    });
+  }
+
+  const trimmedBreakerHorizonMinutes = breakerHorizonMinutes.trim();
+  const breakerHorizonMinutesValid =
+    trimmedBreakerHorizonMinutes === "" ||
+    (Number.isInteger(Number(trimmedBreakerHorizonMinutes)) && Number(trimmedBreakerHorizonMinutes) > 0);
+  const breakerDirty =
+    predictiveBreakerEnabled !== (generalQuery.data?.predictiveBreakerEnabled ?? false) ||
+    breakerHorizonMinutes.trim() !== String(generalQuery.data?.breakerHorizonMinutes ?? "");
+
+  function saveBreakerSettings() {
+    updateGeneralMutation.mutate({
+      predictiveBreakerEnabled,
+      breakerHorizonMinutes:
+        trimmedBreakerHorizonMinutes === "" ? undefined : Number(trimmedBreakerHorizonMinutes),
     });
   }
 
@@ -350,6 +376,59 @@ export function InstanceGeneralSettings() {
               Resume
             </Button>
           </div>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-border bg-card p-5">
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <h2 className="text-sm font-semibold">Predictive budget breaker</h2>
+            <p className="max-w-2xl text-sm text-muted-foreground">
+              Forecasts monthly budget burn and automatically tightens the run cap before the
+              budget runs out.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-end gap-3">
+            <label className="flex items-center gap-2 pb-2 text-sm">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-border"
+                checked={predictiveBreakerEnabled}
+                onChange={(e) => setPredictiveBreakerEnabled(e.target.checked)}
+                data-testid="instance-predictive-breaker-enabled-checkbox"
+              />
+              Enable predictive budget breaker
+            </label>
+            <div className="w-56">
+              <Field
+                label="Budget breaker horizon (minutes)"
+                hint="Lower the cap when the budget is forecast to run out within this many minutes."
+              >
+                <Input
+                  type="number"
+                  min={1}
+                  value={breakerHorizonMinutes}
+                  onChange={(e) => setBreakerHorizonMinutes(e.target.value)}
+                  aria-invalid={!breakerHorizonMinutesValid}
+                  data-testid="instance-breaker-horizon-minutes-input"
+                />
+              </Field>
+            </div>
+            {breakerDirty && (
+              <Button
+                size="sm"
+                onClick={saveBreakerSettings}
+                disabled={!breakerHorizonMinutesValid || updateGeneralMutation.isPending}
+              >
+                {updateGeneralMutation.isPending ? "Saving..." : "Save"}
+              </Button>
+            )}
+          </div>
+          {!breakerHorizonMinutesValid && (
+            <span className="text-xs text-destructive">
+              Enter a positive whole number, or leave empty for unset.
+            </span>
+          )}
         </div>
       </section>
 

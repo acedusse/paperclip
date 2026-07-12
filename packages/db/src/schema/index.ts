@@ -13,6 +13,7 @@
 // ==========================================
 // [START: module]
 export { companies } from "./companies.js";
+export { companyBreakerState } from "./company-breaker-state.js";
 export { companyLogos } from "./company_logos.js";
 export { authUsers, authSessions, authAccounts, authVerifications } from "./auth.js";
 export { instanceSettings } from "./instance_settings.js";

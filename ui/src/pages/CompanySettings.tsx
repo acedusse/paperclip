@@ -59,6 +59,8 @@ export function CompanySettings() {
   const [maxRunWallClockMs, setMaxRunWallClockMs] = useState("");
   const [maxRunCostCents, setMaxRunCostCents] = useState("");
   const [maxRunTurns, setMaxRunTurns] = useState("");
+  const [predictiveBreakerEnabled, setPredictiveBreakerEnabled] = useState(false);
+  const [breakerHorizonMinutes, setBreakerHorizonMinutes] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [logoUploadError, setLogoUploadError] = useState<string | null>(null);
 
@@ -73,6 +75,8 @@ export function CompanySettings() {
     setMaxRunWallClockMs(String(selectedCompany.maxRunWallClockMs ?? ""));
     setMaxRunCostCents(String(selectedCompany.maxRunCostCents ?? ""));
     setMaxRunTurns(String(selectedCompany.maxRunTurns ?? ""));
+    setPredictiveBreakerEnabled(selectedCompany.predictiveBreakerEnabled ?? false);
+    setBreakerHorizonMinutes(String(selectedCompany.breakerHorizonMinutes ?? ""));
     setLogoUrl(selectedCompany.logoUrl ?? "");
   }, [selectedCompany]);
 
@@ -102,6 +106,12 @@ export function CompanySettings() {
     trimmedMaxRunTurns === "" ||
     (Number.isInteger(Number(trimmedMaxRunTurns)) && Number(trimmedMaxRunTurns) > 0);
   const maxRunTurnsPayload = trimmedMaxRunTurns === "" ? null : Number(trimmedMaxRunTurns);
+  const trimmedBreakerHorizonMinutes = breakerHorizonMinutes.trim();
+  const breakerHorizonMinutesValid =
+    trimmedBreakerHorizonMinutes === "" ||
+    (Number.isInteger(Number(trimmedBreakerHorizonMinutes)) && Number(trimmedBreakerHorizonMinutes) > 0);
+  const breakerHorizonMinutesPayload =
+    trimmedBreakerHorizonMinutes === "" ? null : Number(trimmedBreakerHorizonMinutes);
   const cloudSyncEnabled = experimentalSettings?.enableCloudSync === true;
 
   const admissionStatusQuery = useQuery({
@@ -131,7 +141,9 @@ export function CompanySettings() {
       maxRunsPayload !== (selectedCompany.maxConcurrentRuns ?? null) ||
       maxRunWallClockMsPayload !== (selectedCompany.maxRunWallClockMs ?? null) ||
       maxRunCostCentsPayload !== (selectedCompany.maxRunCostCents ?? null) ||
-      maxRunTurnsPayload !== (selectedCompany.maxRunTurns ?? null));
+      maxRunTurnsPayload !== (selectedCompany.maxRunTurns ?? null) ||
+      predictiveBreakerEnabled !== (selectedCompany.predictiveBreakerEnabled ?? false) ||
+      breakerHorizonMinutesPayload !== (selectedCompany.breakerHorizonMinutes ?? null));
 
   const generalMutation = useMutation({
     mutationFn: (data: {
@@ -143,6 +155,8 @@ export function CompanySettings() {
       maxRunWallClockMs: number | null;
       maxRunCostCents: number | null;
       maxRunTurns: number | null;
+      predictiveBreakerEnabled: boolean;
+      breakerHorizonMinutes: number | null;
     }) => companiesApi.update(selectedCompanyId!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
@@ -243,7 +257,9 @@ export function CompanySettings() {
       maxConcurrentRuns: maxRunsPayload,
       maxRunWallClockMs: maxRunWallClockMsPayload,
       maxRunCostCents: maxRunCostCentsPayload,
-      maxRunTurns: maxRunTurnsPayload
+      maxRunTurns: maxRunTurnsPayload,
+      predictiveBreakerEnabled,
+      breakerHorizonMinutes: breakerHorizonMinutesPayload
     });
   }
 
@@ -521,6 +537,39 @@ export function CompanySettings() {
                   )}
                 </div>
               </Field>
+              <Field label="Predictive budget breaker">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-border"
+                    checked={predictiveBreakerEnabled}
+                    onChange={(e) => setPredictiveBreakerEnabled(e.target.checked)}
+                    data-testid="company-predictive-breaker-enabled-checkbox"
+                  />
+                  Enable predictive budget breaker
+                </label>
+              </Field>
+              <Field
+                label="Budget breaker horizon (minutes)"
+                hint="Lower the cap when the budget is forecast to run out within this many minutes."
+              >
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    type="number"
+                    min={1}
+                    value={breakerHorizonMinutes}
+                    onChange={(e) => setBreakerHorizonMinutes(e.target.value)}
+                    aria-invalid={!breakerHorizonMinutesValid}
+                    data-testid="company-breaker-horizon-minutes-input"
+                    className="w-28"
+                  />
+                  {!breakerHorizonMinutesValid && (
+                    <span className="text-xs text-destructive">
+                      Enter a positive whole number, or leave empty for unset.
+                    </span>
+                  )}
+                </div>
+              </Field>
             </div>
           </div>
         </div>
@@ -539,7 +588,8 @@ export function CompanySettings() {
               !maxRunsValid ||
               !maxRunWallClockMsValid ||
               !maxRunCostCentsValid ||
-              !maxRunTurnsValid
+              !maxRunTurnsValid ||
+              !breakerHorizonMinutesValid
             }
           >
             {generalMutation.isPending ? "Saving..." : "Save changes"}
