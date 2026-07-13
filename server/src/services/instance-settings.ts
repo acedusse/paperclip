@@ -51,6 +51,7 @@ export function normalizeGeneralSettings(raw: unknown): InstanceGeneralSettings 
       ...(parsed.data.maxRunCostCents ? { maxRunCostCents: parsed.data.maxRunCostCents } : {}),
       ...(parsed.data.maxRunTurns ? { maxRunTurns: parsed.data.maxRunTurns } : {}),
       predictiveBreakerEnabled: parsed.data.predictiveBreakerEnabled ?? false,
+      workspaceClaimAwareScheduling: parsed.data.workspaceClaimAwareScheduling ?? false,
       ...(parsed.data.breakerHorizonMinutes
         ? { breakerHorizonMinutes: parsed.data.breakerHorizonMinutes }
         : {}),

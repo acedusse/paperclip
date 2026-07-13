@@ -55,6 +55,7 @@ export const instanceGeneralSettingsSchema = z.object({
   maxRunTurns: z.number().int().positive().nullable().optional(),
   runExecutionState: runExecutionStateSchema.optional(),
   predictiveBreakerEnabled: z.boolean().optional(),
+  workspaceClaimAwareScheduling: z.boolean().default(false),
   breakerHorizonMinutes: z.number().int().positive().optional(),
 }).strict();
 

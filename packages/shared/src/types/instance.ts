@@ -66,6 +66,12 @@ export interface InstanceGeneralSettings {
   maxRunTurns?: number | null;
   runExecutionState?: "running" | "draining" | "halted";
   predictiveBreakerEnabled?: boolean;
+  /**
+   * When true, the run scheduler defers starting NEW work into a shared
+   * workspace another active run holds a live path claim on (Combo 01, 4B).
+   * Absent/false = no claim-aware gating.
+   */
+  workspaceClaimAwareScheduling?: boolean;
   breakerHorizonMinutes?: number;
 }
 
