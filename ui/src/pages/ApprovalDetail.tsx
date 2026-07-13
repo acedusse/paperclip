@@ -17,6 +17,8 @@ import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { approvalsApi } from "../api/approvals";
 import { agentsApi } from "../api/agents";
+import { runChangesetsApi } from "../api/runChangesets";
+import { RunChangesetView } from "../components/RunChangesetView";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { queryKeys } from "../lib/queryKeys";
@@ -64,6 +66,16 @@ export function ApprovalDetail() {
     queryKey: queryKeys.agents.list(resolvedCompanyId ?? ""),
     queryFn: () => agentsApi.list(resolvedCompanyId ?? ""),
     enabled: !!resolvedCompanyId,
+  });
+
+  const runId = typeof (approval?.payload as Record<string, unknown> | null | undefined)?.runId === "string"
+    ? ((approval!.payload as Record<string, unknown>).runId as string)
+    : null;
+  const { data: changeset } = useQuery({
+    queryKey: ["run-changeset", runId],
+    queryFn: () => runChangesetsApi.get(runId as string),
+    enabled: !!runId,
+    retry: false,
   });
 
   useEffect(() => {
@@ -336,6 +348,13 @@ export function ApprovalDetail() {
           )}
         </div>
       </div>
+
+      {changeset && (
+        <div className="border border-border rounded-lg p-4 space-y-3">
+          <h3 className="text-sm font-medium">Changes</h3>
+          <RunChangesetView changeset={changeset} />
+        </div>
+      )}
 
       <div className="border border-border rounded-lg p-4 space-y-3">
         <h3 className="text-sm font-medium">Comments ({comments?.length ?? 0})</h3>
