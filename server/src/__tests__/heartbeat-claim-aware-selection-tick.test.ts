@@ -68,6 +68,41 @@ vi.mock("../adapters/index.ts", async () => {
   };
 });
 
+// Fault-isolation seam: heartbeat.ts calls workspacePathClaimService(db) exactly once,
+// inside heartbeatService(db)'s closure (not per-tick and not exposed on the returned
+// heartbeat object), so a test can't vi.spyOn the live instance directly. Instead we wrap
+// the module's factory export so the resulting service delegates to the REAL
+// implementation for every call/table — preserving byte-identical behavior for the four
+// existing cases — except activeClaimCountsForWorkspaces, which rejects on demand when
+// claimCountsFault.shouldThrow is flipped on for the duration of a single test. This lets
+// the fault-isolation test below force exactly the throw the claim-resolution try/catch
+// (heartbeat.ts's claim-aware selection block) is meant to catch, without touching any
+// production file.
+const claimCountsFault = vi.hoisted(() => ({ shouldThrow: false }));
+
+vi.mock("../services/workspace-path-claims.ts", async () => {
+  const actual = await vi.importActual<typeof import("../services/workspace-path-claims.ts")>(
+    "../services/workspace-path-claims.ts",
+  );
+  return {
+    ...actual,
+    workspacePathClaimService: (db: Parameters<typeof actual.workspacePathClaimService>[0]) => {
+      const real = actual.workspacePathClaimService(db);
+      return {
+        ...real,
+        activeClaimCountsForWorkspaces: async (
+          ...args: Parameters<typeof real.activeClaimCountsForWorkspaces>
+        ) => {
+          if (claimCountsFault.shouldThrow) {
+            throw new Error("simulated activeClaimCountsForWorkspaces failure (test fault injection)");
+          }
+          return real.activeClaimCountsForWorkspaces(...args);
+        },
+      };
+    },
+  };
+});
+
 const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
 const describeEmbeddedPostgres = embeddedPostgresSupport.supported ? describe : describe.skip;
 
@@ -293,6 +328,26 @@ describeEmbeddedPostgres("heartbeat claim-aware gate in the claim loop", () => {
     return siblingRunId;
   }
 
+  // WIP-enabled variant of createAgent, used only by the WIP-composition test below.
+  // The shared createAgent() above always disables WIP (by design, so the sibling WIP
+  // gate never interferes with the other claim-gate cases); this local helper mirrors
+  // heartbeat-wip-enforcement-tick.test.ts's createAgent(companyId, wipLimit) shape.
+  async function createWipAgent(companyId: string, maxInProgress: number): Promise<string> {
+    const agentId = randomUUID();
+    await db.insert(agents).values({
+      id: agentId,
+      companyId,
+      name: `Agent-${agentId.slice(0, 8)}`,
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: { heartbeat: { maxConcurrentRuns: 20, wipLimit: { enabled: true, maxInProgress } } },
+      permissions: {},
+    });
+    return agentId;
+  }
+
   async function getRunStatus(runId: string): Promise<string> {
     const [row] = await db.select({ status: heartbeatRuns.status }).from(heartbeatRuns).where(eq(heartbeatRuns.id, runId));
     return row.status;
@@ -375,5 +430,71 @@ describeEmbeddedPostgres("heartbeat claim-aware gate in the claim loop", () => {
       .from(activityLog)
       .where(and(eq(activityLog.action, "issue.start_admitted_despite_path_claim"), eq(activityLog.entityId, newStartIssueId)));
     expect(audits).toHaveLength(1);
+  });
+
+  it("fails open (admits, no gate) when claim-count resolution throws mid-sweep", async () => {
+    const { agentId, newStartIssueId, newStartRunId } = await seedContendedNewStart({ flag: true });
+
+    claimCountsFault.shouldThrow = true;
+    try {
+      // Must resolve (not reject): a failure resolving the gate must never propagate
+      // into selection. On catch, heartbeat.ts's claim-aware block resets
+      // claimSchedEnabled=false and clears claimCounts, so this sweep admits exactly as
+      // if the flag were off.
+      const claimed = await heartbeat.startNextQueuedRunForAgent(agentId);
+      expect(claimed.map((r) => r.id)).toContain(newStartRunId);
+      expect(await getRunStatus(newStartRunId)).toBe("running");
+    } finally {
+      claimCountsFault.shouldThrow = false;
+    }
+
+    const deferAudits = await db
+      .select()
+      .from(activityLog)
+      .where(and(eq(activityLog.action, "issue.start_deferred_path_claim"), eq(activityLog.entityId, newStartIssueId)));
+    expect(deferAudits).toHaveLength(0);
+  });
+
+  it("a claim-deferred new start does not consume the WIP new-start budget", async () => {
+    await instanceSettingsService(db).updateGeneral({ workspaceClaimAwareScheduling: true });
+
+    const companyId = await createCompany();
+    // WIP enabled, maxInProgress=1, zero in_progress issues => budget for exactly one
+    // new start this sweep.
+    const agentId = await createWipAgent(companyId, 1);
+    const projectId = await createProject(companyId);
+
+    // Issue A: a new start on a CONTENDED shared workspace (another running run holds a
+    // live claim there) => should be claim-deferred, not claimed.
+    const contendedWorkspaceId = await createSharedWorkspace(companyId, projectId);
+    await createActiveSiblingClaim(companyId, agentId, contendedWorkspaceId);
+    const contendedIssueId = await createIssue(companyId, agentId, "todo", contendedWorkspaceId);
+    const contendedRunId = await createQueuedRun(companyId, agentId, contendedIssueId);
+
+    // Issue B: a new start on an UNCONTENDED shared workspace (no active claims there)
+    // => should be admitted, using the single WIP new-start slot that A's deferral must
+    // NOT have consumed.
+    const uncontendedWorkspaceId = await createSharedWorkspace(companyId, projectId);
+    const uncontendedIssueId = await createIssue(companyId, agentId, "todo", uncontendedWorkspaceId);
+    const uncontendedRunId = await createQueuedRun(companyId, agentId, uncontendedIssueId);
+
+    const claimed = await heartbeat.startNextQueuedRunForAgent(agentId);
+    const ids = claimed.map((r) => r.id);
+
+    expect(ids).not.toContain(contendedRunId);
+    expect(ids).toContain(uncontendedRunId);
+    expect(await getRunStatus(contendedRunId)).toBe("queued");
+    expect(await getRunStatus(uncontendedRunId)).toBe("running");
+
+    const claimAudits = await db
+      .select()
+      .from(activityLog)
+      .where(and(eq(activityLog.action, "issue.start_deferred_path_claim"), eq(activityLog.entityId, contendedIssueId)));
+    expect(claimAudits).toHaveLength(1);
+
+    // Confirms A was deferred by the CLAIM gate (not the WIP gate) and that B was never
+    // WIP-deferred either — the WIP budget was spent on B, not burned by A.
+    const wipAudits = await db.select().from(activityLog).where(eq(activityLog.action, "issue.start_deferred_wip_limit"));
+    expect(wipAudits).toHaveLength(0);
   });
 });
