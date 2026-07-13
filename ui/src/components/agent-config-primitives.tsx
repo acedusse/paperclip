@@ -74,6 +74,11 @@ export const help: Record<string, string> = {
   maxTurnContinuationMaxAttempts: "Maximum automatic continuations after one max-turn stop. This is separate from max turns per run.",
   maxTurnContinuationDelaySec: "Seconds to wait before starting each max-turn continuation.",
   budgetMonthlyCents: "Monthly spending limit in cents. 0 means no limit.",
+  idleBackoffEnabled: "Automatically slow down the heartbeat timer while this agent runs several ticks in a row without doing anything. Resets to the normal interval as soon as it does real work.",
+  idleBackoffMultiplier: "Growth factor applied to the heartbeat interval per consecutive idle tick (e.g. 2 doubles the interval each time).",
+  idleBackoffMaxIntervalSec: "Upper bound on how slow the backed-off heartbeat interval is allowed to grow, in minutes.",
+  wipLimitEnabled: "Warn when this agent has more issues in progress at once than the limit below. This is a visibility signal only — it does not stop the agent from starting new work.",
+  wipLimitMaxInProgress: "The number of in-progress issues at which this agent is flagged as over its WIP limit.",
 };
 
 import { getAdapterLabels } from "../adapters/adapter-display-registry";

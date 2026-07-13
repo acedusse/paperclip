@@ -70,6 +70,7 @@ import { phase1ReconcileSources, runReconcile } from "./services/admission-recon
 import { makeWoundDownResumeSource } from "./services/run-wind-down.js";
 import { makeRunCapSweepSource } from "./services/run-caps.js";
 import { makePanicHaltSweepSource } from "./services/run-execution-state.js";
+import { workspacePathClaimService, makePathClaimExpirySource } from "./services/workspace-path-claims.js";
 import { costService } from "./services/costs.js";
 import { createStorageServiceFromConfig } from "./storage/index.js";
 import { printStartupBanner } from "./startup-banner.js";
@@ -911,6 +912,10 @@ export async function startServer(): Promise<StartedServer> {
           makePanicHaltSweepSource({
             findRunningRunsInHaltedScopes: heartbeat.findRunningRunsInHaltedScopes,
             windDownRun: heartbeat.windDownRun,
+          }),
+          makePathClaimExpirySource({
+            findExpiredClaims: (now) => workspacePathClaimService(db).findExpiredClaims(now),
+            expireClaim: (id) => workspacePathClaimService(db).expireClaim(id),
           }),
         ],
         new Date(),

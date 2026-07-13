@@ -109,6 +109,7 @@ describeEmbeddedPostgres("agent service secret binding sync", () => {
       runtimeConfig: {},
       spentMonthlyCents: 0,
       lastHeartbeatAt: null,
+      heartbeatIdleStreak: 0,
     });
 
     const bindings = await db

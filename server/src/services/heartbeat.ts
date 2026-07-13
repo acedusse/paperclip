@@ -24,8 +24,10 @@ import {
   ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY,
   MODEL_PROFILE_KEYS,
   envBindingSchema,
+  idleBackoffSchema,
   isEnvironmentDriverSupportedForAdapter,
   type BillingType,
+  type BreakerLevel,
   type EnvironmentLeaseStatus,
   type ExecutionWorkspace,
   type ExecutionWorkspaceConfig,
@@ -45,6 +47,8 @@ import {
   agentWakeupRequests,
   activityLog,
   approvals,
+  budgetPolicies,
+  companyBreakerState,
   companySkills as companySkillsTable,
   companies,
   costEvents,
@@ -86,7 +90,7 @@ import { costService } from "./costs.js";
 import { trackAgentFirstHeartbeat } from "@paperclipai/shared/telemetry";
 import { getTelemetryClient } from "../telemetry.js";
 import { companySkillService } from "./company-skills.js";
-import { budgetService, type BudgetEnforcementScope } from "./budgets.js";
+import { budgetService, computeObservedAmount, type BudgetEnforcementScope } from "./budgets.js";
 import { secretService, type MissingRuntimeBinding } from "./secrets.js";
 import { resolveDefaultAgentWorkspaceDir, resolveManagedProjectWorkspaceDir } from "../home-paths.js";
 import {
@@ -119,6 +123,7 @@ import {
   sanitizeRuntimeServiceBaseEnv,
 } from "./workspace-runtime.js";
 import { issueService } from "./issues.js";
+import { parseWipLimitConfig, isNewStartIssueStatus, newStartBudget } from "./wip-flow.js";
 import {
   buildIssueMonitorClearedPatch,
   buildIssueMonitorTriggeredPatch,
@@ -137,6 +142,9 @@ import {
 } from "./issue-continuation-summary.js";
 import { executionWorkspaceService, mergeExecutionWorkspaceConfig } from "./execution-workspaces.js";
 import { workspaceOperationService } from "./workspace-operations.js";
+import { workspacePathClaimService, DEFAULT_CLAIM_TTL_MS } from "./workspace-path-claims.js";
+import { decideClaimScheduling } from "./workspace-claim-scheduling.js";
+import { detectConcurrentSharedActivity } from "./workspace-conflict.js";
 import { isProcessGroupAlive, terminateLocalService } from "./local-service-supervisor.js";
 import {
   buildExecutionWorkspaceAdapterConfig,
@@ -177,8 +185,16 @@ import { productivityReviewService } from "./productivity-review.js";
 import { taskWatchdogService } from "./task-watchdogs.js";
 import { withAgentStartLock } from "./agent-start-lock.js";
 import { withInstanceAdmissionLock } from "./instance-admission-lock.js";
-import { resolveEffectiveCap, PHASE1_WRITERS } from "./effective-cap-resolver.js";
+import { resolveEffectiveCap, PHASE1_WRITERS, PHASE3B_COMPANY_WRITERS } from "./effective-cap-resolver.js";
+import { activeScheduleCap, activeManualOverride, nextScheduleTransition } from "./schedule-cap.js";
+import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
+import {
+  effectiveIntervalSec,
+  isEmptyTimerHeartbeat,
+  nextIdleStreak,
+  parseHeartbeatCadenceConfig,
+} from "./heartbeat-cadence.js";
 import {
   shouldSuppressContinuationOnFinish,
   windDownRun as windDownRunCore,
@@ -3410,6 +3426,8 @@ export type AdmissionStatus = {
   running: number;
   queued: number;
   runExecutionState: RunExecutionState;
+  breakerLevel: BreakerLevel;
+  scheduleNextTransition?: { at: Date; cap: number | null } | null;
 };
 
 export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) {
@@ -3433,6 +3451,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     environmentRuntime,
   });
   const workspaceOperationsSvc = workspaceOperationService(db);
+  const workspacePathClaimsSvc = workspacePathClaimService(db);
   const activeRunExecutions = new Set<string>();
   const liveRunExecutions = {
     has(id: string) {
@@ -3470,6 +3489,19 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         { err: releaseError.error, leaseId: releaseError.leaseId, runId: input.runId },
         "failed to release environment lease for heartbeat run",
       );
+    }
+  }
+
+  // Best-effort: release any workspace path claims still held by this run once
+  // it reaches a terminal state. Never allowed to break run teardown — the
+  // path-claim-expiry reconciler sweep (see workspace-path-claims.ts) is the
+  // crash-safe backstop if this fails or is skipped.
+  async function releasePathClaimsForRun(runId: string, runStatus: string | null | undefined) {
+    const status = runStatus === "cancelled" ? "released" : runStatus === "failed" ? "failed" : "released";
+    try {
+      await workspacePathClaimsSvc.releaseClaimsForRun(runId, status);
+    } catch (err) {
+      logger.warn({ err, runId }, "path-claim release failed; reconciler TTL will reclaim");
     }
   }
 
@@ -7062,6 +7094,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return {
       enabled: asBoolean(heartbeat.enabled, false),
       intervalSec: Math.max(0, asNumber(heartbeat.intervalSec, 0)),
+      idleBackoff: idleBackoffSchema.parse(parseObject(heartbeat.idleBackoff)),
       wakeOnDemand: asBoolean(heartbeat.wakeOnDemand ?? heartbeat.wakeOnAssignment ?? heartbeat.wakeOnOnDemand ?? heartbeat.wakeOnAutomation, true),
       maxConcurrentRuns: normalizeMaxConcurrentRuns(heartbeat.maxConcurrentRuns),
       skipTimerWhenNoActionableWork: asBoolean(
@@ -7271,6 +7304,59 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return issuesSvc.listDependencyReadiness(companyId, issueIds);
   }
 
+  async function auditWipDeferral(
+    agent: { id: string; companyId: string },
+    runId: string,
+    issueId: string,
+    cfg: { maxInProgress: number },
+    budget: number,
+  ) {
+    try {
+      await logActivity(db, {
+        companyId: agent.companyId,
+        actorType: "system",
+        actorId: "wip-flow-control",
+        agentId: agent.id,
+        runId,
+        action: "issue.start_deferred_wip_limit",
+        entityType: "issue",
+        entityId: issueId,
+        details: { maxInProgress: cfg.maxInProgress, newStartBudget: budget },
+      });
+    } catch (err) {
+      logger.warn({ err, issueId, runId }, "WIP deferral audit failed; continuing admission");
+    }
+  }
+
+  async function auditClaimScheduling(
+    agent: { id: string; companyId: string },
+    runId: string,
+    issueId: string,
+    action: "issue.start_deferred_path_claim" | "issue.start_admitted_despite_path_claim",
+    details: {
+      executionWorkspaceId: string;
+      contendingClaimCount: number;
+      queuedForMs: number;
+      boundMs: number;
+    },
+  ) {
+    try {
+      await logActivity(db, {
+        companyId: agent.companyId,
+        actorType: "system",
+        actorId: "workspace-conflict-scheduling",
+        agentId: agent.id,
+        runId,
+        action,
+        entityType: "issue",
+        entityId: issueId,
+        details,
+      });
+    } catch (err) {
+      logger.warn({ err, issueId, runId }, "claim-scheduling audit failed; continuing admission");
+    }
+  }
+
   async function countRunningRunsForAgent(agentId: string) {
     const [{ count }] = await db
       .select({ count: sql<number>`count(*)` })
@@ -7317,6 +7403,176 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       .from(companies)
       .where(eq(companies.id, companyId));
     return row?.max ?? null;
+  }
+
+  // ===== Combo-01 Phase 3a: predictive breaker wiring =====
+
+  // Rolling windowed burn rate (cents/min) over the last BREAKER.burnWindowMs.
+  // Mirrors how budgets.ts sums costEvents.costCents.
+  async function getBurnRateCentsPerMin(companyId: string): Promise<number> {
+    const windowStart = new Date(Date.now() - BREAKER.burnWindowMs);
+    const [row] = await db
+      .select({ total: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision` })
+      .from(costEvents)
+      .where(and(eq(costEvents.companyId, companyId), gte(costEvents.occurredAt, windowStart)));
+    const windowMin = BREAKER.burnWindowMs / 60_000;
+    return Number(row?.total ?? 0) / windowMin;
+  }
+
+  // Min remaining cents across active company-scoped billed_cents policies with a
+  // finite (amount > 0) budget. null => ineligible (no such policy). Observed spend
+  // reuses budgets.ts computeObservedAmount so the window resolution is identical.
+  async function getMostUrgentRemainingCents(companyId: string): Promise<number | null> {
+    const policies = await db
+      .select()
+      .from(budgetPolicies)
+      .where(
+        and(
+          eq(budgetPolicies.companyId, companyId),
+          eq(budgetPolicies.scopeType, "company"),
+          eq(budgetPolicies.metric, "billed_cents"),
+          eq(budgetPolicies.isActive, true),
+        ),
+      );
+    let min: number | null = null;
+    for (const policy of policies) {
+      if (!policy.amount || policy.amount <= 0) continue;
+      const observed = await computeObservedAmount(db, policy);
+      const remaining = Math.max(0, policy.amount - observed);
+      min = min === null ? remaining : Math.min(min, remaining);
+    }
+    return min;
+  }
+
+  async function loadCompanyBreakerLevel(companyId: string): Promise<BreakerLevel> {
+    const [row] = await db
+      .select({ level: companyBreakerState.level })
+      .from(companyBreakerState)
+      .where(eq(companyBreakerState.companyId, companyId));
+    return (row?.level as BreakerLevel | undefined) ?? "normal";
+  }
+
+  // Combo-01 Phase 3b: schedule + manual-override cap context, read in ONE
+  // round-trip (the four columns backing activeScheduleCap / activeManualOverride).
+  async function loadCompanyScheduleContext(
+    companyId: string,
+    now: Date,
+  ): Promise<{ scheduleCap: number | null; manualOverrideCap: number | null }> {
+    const [row] = await db
+      .select({
+        scheduleWindows: companies.scheduleWindows,
+        scheduleTimezone: companies.scheduleTimezone,
+        manualCapOverride: companies.manualCapOverride,
+        manualCapOverrideExpiresAt: companies.manualCapOverrideExpiresAt,
+      })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    if (!row) return { scheduleCap: null, manualOverrideCap: null };
+    return {
+      scheduleCap: activeScheduleCap(row.scheduleWindows, row.scheduleTimezone, now),
+      manualOverrideCap: activeManualOverride(row, now),
+    };
+  }
+
+  const breakerDeps: BreakerEvalDeps = {
+    getBurnRateCentsPerMin,
+    getMostUrgentRemainingCents,
+    loadState: async (companyId) => {
+      const [row] = await db
+        .select({ level: companyBreakerState.level, since: companyBreakerState.since })
+        .from(companyBreakerState)
+        .where(eq(companyBreakerState.companyId, companyId));
+      return row ? { level: row.level as BreakerLevel, since: row.since } : null;
+    },
+    saveState: async (companyId, r) => {
+      await db
+        .insert(companyBreakerState)
+        .values({
+          companyId,
+          level: r.level,
+          since: r.since,
+          lastBurnRateCpm: r.lastBurnRateCpm,
+          lastTimeToLimitM: r.lastTimeToLimitM,
+          updatedAt: new Date(),
+        })
+        .onConflictDoUpdate({
+          target: companyBreakerState.companyId,
+          set: {
+            level: r.level,
+            since: r.since,
+            lastBurnRateCpm: r.lastBurnRateCpm,
+            lastTimeToLimitM: r.lastTimeToLimitM,
+            updatedAt: new Date(),
+          },
+        });
+    },
+    windDownCompanyRuns: async (companyId) => {
+      const rows = await db
+        .select({ id: heartbeatRuns.id })
+        .from(heartbeatRuns)
+        .where(and(eq(heartbeatRuns.companyId, companyId), eq(heartbeatRuns.status, "running")));
+      for (const row of rows) {
+        await windDownRun(row.id, { mode: "hard", resume: "when-allowed", reason: "predictive-breaker-halt" });
+      }
+    },
+    logTransition: async (companyId, from, to, ctx) => {
+      await logActivity(db, {
+        companyId,
+        actorType: "system",
+        actorId: "predictive-breaker",
+        action: "admission.breaker_transition",
+        entityType: "company",
+        entityId: companyId,
+        details: { from, to, ...ctx },
+      });
+    },
+  };
+
+  // Evaluate one company's breaker and return the RESOLVED level so callers can
+  // thread it straight into the company CapContext (no follow-up state re-read).
+  //
+  // Per-tick memoization: pass a `memo` (created once per admission sweep) to
+  // evaluate each company at most once per tick. On a cache hit the persisted
+  // evaluation is reused verbatim; the memo is a per-sweep local, so it cannot
+  // leak a stale level across ticks. Without a memo (single-agent callers) the
+  // company is simply evaluated once.
+  async function evaluateBreakerForCompany(
+    companyId: string,
+    memo?: Map<string, BreakerLevel>,
+  ): Promise<BreakerLevel> {
+    const cached = memo?.get(companyId);
+    if (cached !== undefined) return cached;
+    const level = await evaluateBreakerForCompanyUncached(companyId);
+    memo?.set(companyId, level);
+    return level;
+  }
+
+  async function evaluateBreakerForCompanyUncached(companyId: string): Promise<BreakerLevel> {
+    // Resolve enable flag AND horizon from a single instance-settings fetch and a
+    // single companies row read (previously four reads across two helpers).
+    const [general, [companyRow]] = await Promise.all([
+      instanceSettings.getGeneral(),
+      db
+        .select({
+          enabled: companies.predictiveBreakerEnabled,
+          horizon: companies.breakerHorizonMinutes,
+        })
+        .from(companies)
+        .where(eq(companies.id, companyId)),
+    ]);
+    // Enable semantics (deliberate, user-approved): company flag OR instance
+    // default acting as a floor. DO NOT change this.
+    const enabled = Boolean(companyRow?.enabled) || (general.predictiveBreakerEnabled ?? false);
+    if (!enabled) return loadCompanyBreakerLevel(companyId);
+    // Horizon: company value if set (> 0), else instance default (> 0), else skip.
+    const horizon =
+      companyRow?.horizon && companyRow.horizon > 0
+        ? companyRow.horizon
+        : general.breakerHorizonMinutes && general.breakerHorizonMinutes > 0
+          ? general.breakerHorizonMinutes
+          : null;
+    if (!horizon || horizon <= 0) return loadCompanyBreakerLevel(companyId);
+    return evaluateCompanyBreaker(breakerDeps, companyId, horizon, new Date());
   }
 
   // Combo-01 Phase 2c: fail-open state lookups. Any DB error is treated as
@@ -7451,23 +7707,42 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       running: await countRunningRunsInstanceWide(),
       queued: await countQueuedRunsInstanceWide(),
       runExecutionState,
+      // Instance scope has no budget, therefore no predictive breaker.
+      breakerLevel: "normal",
     };
   }
 
   async function getCompanyAdmissionStatus(companyId: string): Promise<AdmissionStatus> {
+    const now = new Date();
     const runExecutionState = await getEffectiveExecutionState(companyId);
+    const breakerLevel = await loadCompanyBreakerLevel(companyId);
+    const { scheduleCap, manualOverrideCap } = await loadCompanyScheduleContext(companyId, now);
     const { cap, source } = resolveEffectiveCap(
-      { configuredMax: await getCompanyMaxConcurrentRuns(companyId), executionState: runExecutionState },
-      PHASE1_WRITERS,
+      {
+        configuredMax: await getCompanyMaxConcurrentRuns(companyId),
+        executionState: runExecutionState,
+        breakerLevel,
+        manualOverrideCap,
+        scheduleCap,
+      },
+      PHASE3B_COMPANY_WRITERS,
     );
+    const [scheduleRow] = await db
+      .select({ windows: companies.scheduleWindows, tz: companies.scheduleTimezone })
+      .from(companies)
+      .where(eq(companies.id, companyId));
     // Same best-effort/lock-free snapshot tradeoff as getInstanceAdmissionStatus above:
-    // the three queries aren't in a transaction, so counts can be momentarily inconsistent.
+    // the queries aren't in a transaction, so counts can be momentarily inconsistent.
     return {
       cap,
       source,
       running: await countRunningRunsForCompany(companyId),
       queued: await countQueuedRunsForCompany(companyId),
       runExecutionState,
+      breakerLevel,
+      scheduleNextTransition: scheduleRow
+        ? nextScheduleTransition(scheduleRow.windows, scheduleRow.tz, now)
+        : null,
     };
   }
 
@@ -8188,6 +8463,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       .where(eq(heartbeatRuns.status, "running"));
 
     const reaped: string[] = [];
+    // One breaker memo per reap sweep: companies with multiple reaped agents are
+    // evaluated once. Fresh per call => no cross-tick staleness.
+    const breakerMemo = new Map<string, BreakerLevel>();
 
     for (const { run, adapterType, adapterConfig } of activeRuns) {
       if (runningProcesses.has(run.id) || activeRunExecutions.has(run.id)) continue;
@@ -8293,7 +8571,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       });
 
       await finalizeAgentStatus(run.agentId, "failed", baseMessage);
-      await startNextQueuedRunForAgent(run.agentId);
+      await startNextQueuedRunForAgent(run.agentId, breakerMemo);
       runningProcesses.delete(run.id);
       reaped.push(run.id);
     }
@@ -8315,8 +8593,37 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       ));
 
     const agentIds = [...new Set(queuedRuns.map((r) => r.agentId))];
+    // One breaker memo per sweep: each company is evaluated at most once even
+    // when it has many queued agents. Fresh per call => no cross-tick staleness.
+    const breakerMemo = new Map<string, BreakerLevel>();
     for (const agentId of agentIds) {
-      await startNextQueuedRunForAgent(agentId);
+      await startNextQueuedRunForAgent(agentId, breakerMemo);
+    }
+
+    // Runaway-spend coverage for companies with NO queued work: the queued
+    // admission loop above only evaluates the breaker for companies that have a
+    // queued run to admit. A company that is saturated with a long-running,
+    // fast-burning run and has nothing queued would otherwise never be
+    // evaluated, so the ladder could never escalate to HALT and the auto
+    // wind-down would never fire. Sweep every company with at least one RUNNING
+    // run once per tick, sharing the same `breakerMemo` so companies already
+    // evaluated in the queued loop are a memo hit (not re-evaluated).
+    const runningCompanies = await db
+      .selectDistinct({ companyId: heartbeatRuns.companyId })
+      .from(heartbeatRuns)
+      .innerJoin(companies, eq(companies.id, heartbeatRuns.companyId))
+      .where(and(
+        eq(heartbeatRuns.status, "running"),
+        eq(companies.status, "active"),
+      ));
+    for (const { companyId } of runningCompanies) {
+      // Fail open per company: a breaker evaluation failure must never break the
+      // sweep. On halt, evaluateBreakerForCompany winds down the in-flight runs.
+      try {
+        await evaluateBreakerForCompany(companyId, breakerMemo);
+      } catch (err) {
+        logger.warn({ err, companyId }, "predictive breaker evaluation failed for running company; continuing sweep");
+      }
     }
   }
 
@@ -8440,7 +8747,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     }
   }
 
-  async function startNextQueuedRunForAgent(agentId: string) {
+  async function startNextQueuedRunForAgent(agentId: string, breakerMemo?: Map<string, BreakerLevel>) {
     return withAgentStartLock(agentId, async () => {
       const agent = await getAgent(agentId);
       if (!agent) return [];
@@ -8455,6 +8762,18 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       const runningCount = await countRunningRunsForAgent(agentId);
       const availableSlots = Math.max(0, policy.maxConcurrentRuns - runningCount);
       if (availableSlots <= 0) return [];
+
+      const wipCfg = parseWipLimitConfig(agent.runtimeConfig);
+      let wipBudget = Infinity;
+      if (wipCfg.enabled) {
+        try {
+          const counts = await issuesSvc.inProgressIssueCountsByAgent(agent.companyId, agentId);
+          wipBudget = newStartBudget(wipCfg, counts.get(agentId) ?? 0);
+        } catch (err) {
+          logger.warn({ err }, "WIP in-progress count failed; admitting without WIP gate this sweep");
+          wipBudget = Infinity;
+        }
+      }
 
       const queuedRuns = await db
         .select()
@@ -8474,6 +8793,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
           id: issues.id,
           status: issues.status,
           priority: issues.priority,
+          executionWorkspaceId: issues.executionWorkspaceId,
         })
         .from(issues)
         .where(
@@ -8501,12 +8821,84 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         return left.createdAt.getTime() - right.createdAt.getTime();
       });
 
+      // Claim-aware selection (Combo 01, 4B slice 3). Off by default; on failure
+      // admit without the gate this sweep. Resolved once; read inside claimUpTo.
+      const claimNow = new Date();
+      let claimSchedEnabled = false;
+      const claimCounts = new Map<string, number>();
+      try {
+        claimSchedEnabled =
+          (await instanceSettingsService(db).getGeneral()).workspaceClaimAwareScheduling ?? false;
+        if (claimSchedEnabled) {
+          const newStartWorkspaceIds = [
+            ...new Set(
+              prioritizedRuns
+                .map((run) => {
+                  const iid = readNonEmptyString(parseObject(run.contextSnapshot).issueId);
+                  const issue = iid ? issueById.get(iid) : undefined;
+                  return isNewStartIssueStatus(issue?.status ?? null)
+                    ? issue?.executionWorkspaceId ?? null
+                    : null;
+                })
+                .filter((wsId): wsId is string => Boolean(wsId)),
+            ),
+          ];
+          const counts = await workspacePathClaimsSvc.activeClaimCountsForWorkspaces(
+            newStartWorkspaceIds,
+            claimNow,
+          );
+          for (const [wsId, count] of counts) claimCounts.set(wsId, count);
+        }
+      } catch (err) {
+        logger.warn({ err }, "claim-aware scheduling resolve failed; admitting without claim gate this sweep");
+        claimSchedEnabled = false;
+        claimCounts.clear();
+      }
+
       const claimedRuns: Array<typeof heartbeatRuns.$inferSelect> = [];
+      let newStartsClaimed = 0;
       const claimUpTo = async (budget: number) => {
         for (const queuedRun of prioritizedRuns) {
           if (claimedRuns.length >= budget) break;
+          const issueId = readNonEmptyString(parseObject(queuedRun.contextSnapshot).issueId);
+          const isNewStart = isNewStartIssueStatus(issueId ? issueById.get(issueId)?.status : null);
+          const claimWsId = issueId ? issueById.get(issueId)?.executionWorkspaceId ?? null : null;
+          const contendingClaimCount = claimWsId ? claimCounts.get(claimWsId) ?? 0 : 0;
+          const claimDecision = decideClaimScheduling({
+            enabled: claimSchedEnabled,
+            isNewStart,
+            activeClaimCount: contendingClaimCount,
+            queuedForMs: claimNow.getTime() - new Date(queuedRun.createdAt).getTime(),
+            boundMs: DEFAULT_CLAIM_TTL_MS,
+          });
+          if (claimDecision !== "admit" && issueId && claimWsId) {
+            await auditClaimScheduling(
+              agent,
+              queuedRun.id,
+              issueId,
+              claimDecision === "defer"
+                ? "issue.start_deferred_path_claim"
+                : "issue.start_admitted_despite_path_claim",
+              {
+                executionWorkspaceId: claimWsId,
+                contendingClaimCount,
+                queuedForMs: claimNow.getTime() - new Date(queuedRun.createdAt).getTime(),
+                boundMs: DEFAULT_CLAIM_TTL_MS,
+              },
+            );
+          }
+          if (claimDecision === "defer") {
+            continue; // leave queued; another run is actively editing this shared workspace
+          }
+          if (isNewStart && newStartsClaimed >= wipBudget) {
+            if (issueId) await auditWipDeferral(agent, queuedRun.id, issueId, wipCfg, wipBudget);
+            continue; // leave queued; steer the agent to finish in-progress work first
+          }
           const claimed = await claimQueuedRun(queuedRun, companyAgents);
-          if (claimed) claimedRuns.push(claimed); // claim flips queued→running atomically
+          if (claimed) {
+            claimedRuns.push(claimed); // claim flips queued→running atomically
+            if (isNewStart) newStartsClaimed += 1;
+          }
         }
       };
 
@@ -8523,12 +8915,35 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         logger.warn({ err }, "instance admission cap lookup failed; falling back to per-agent only");
         instanceCap = null;
       }
+      // Evaluate the predictive breaker BEFORE resolving the company cap so the
+      // freshly-persisted level is what the resolver reads on this same tick. The
+      // evaluation is memoized per admission sweep (once per company per tick) and
+      // returns the resolved level, so the company cap resolves without a second
+      // state read. Fail open: a breaker evaluation failure must never block
+      // admission (we then fall back to the persisted level below).
+      let evaluatedBreakerLevel: BreakerLevel | null = null;
+      try {
+        evaluatedBreakerLevel = await evaluateBreakerForCompany(agent.companyId, breakerMemo);
+      } catch (err) {
+        logger.warn({ err }, "predictive breaker evaluation failed; continuing admission");
+      }
       let companyCap: number | null = null;
       try {
         const companyMax = await getCompanyMaxConcurrentRuns(agent.companyId);
+        const breakerLevel = evaluatedBreakerLevel ?? (await loadCompanyBreakerLevel(agent.companyId));
+        const { scheduleCap, manualOverrideCap } = await loadCompanyScheduleContext(
+          agent.companyId,
+          new Date(),
+        );
         ({ cap: companyCap } = resolveEffectiveCap(
-          { configuredMax: companyMax, executionState: await getEffectiveExecutionState(agent.companyId) },
-          PHASE1_WRITERS,
+          {
+            configuredMax: companyMax,
+            executionState: await getEffectiveExecutionState(agent.companyId),
+            breakerLevel,
+            manualOverrideCap,
+            scheduleCap,
+          },
+          PHASE3B_COMPANY_WRITERS,
         ));
       } catch (err) {
         logger.warn({ err }, "company admission cap lookup failed; falling back");
@@ -8575,6 +8990,37 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       }
       return claimedRuns;
     });
+  }
+
+  // Best-effort audit: flags when a run starts executing in a shared_workspace
+  // that another running run already occupies. Never throws into run execution —
+  // detection/audit failures are logged and swallowed.
+  async function auditConcurrentSharedActivity(
+    agent: { id: string; companyId: string },
+    runId: string,
+    workspaceId: string,
+  ) {
+    try {
+      const otherActiveRunIds = await workspaceOperationsSvc.runningRunIdsOnWorkspace(workspaceId, runId);
+      const { isConcurrent, otherRunIds } = detectConcurrentSharedActivity({
+        workspaceMode: "shared_workspace",
+        otherActiveRunIds,
+      });
+      if (!isConcurrent) return;
+      await logActivity(db, {
+        companyId: agent.companyId,
+        actorType: "system",
+        actorId: "workspace-conflict-detection",
+        agentId: agent.id,
+        runId,
+        action: "workspace_concurrent_activity_detected",
+        entityType: "execution_workspace",
+        entityId: workspaceId,
+        details: { concurrentRunIds: otherRunIds, count: otherRunIds.length },
+      });
+    } catch (err) {
+      logger.warn({ err, workspaceId, runId }, "concurrent shared-workspace detection failed; ignoring");
+    }
   }
 
   async function executeRun(runId: string) {
@@ -9157,6 +9603,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       heartbeatRunId: run.id,
       executionWorkspaceId: existingExecutionWorkspace?.id ?? null,
     });
+    if (existingExecutionWorkspace && existingExecutionWorkspace.mode === "shared_workspace") {
+      await auditConcurrentSharedActivity(agent, run.id, existingExecutionWorkspace.id);
+    }
     const executionWorkspaceBase = {
       baseCwd: resolvedWorkspace.cwd,
       source: resolvedWorkspace.source,
@@ -10254,6 +10703,13 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         outcome,
         outcome === "succeeded" ? null : (adapterResult.errorMessage ?? null),
       );
+      if (parseHeartbeatCadenceConfig(agent.runtimeConfig).idleBackoff.enabled) {
+        await self.applyIdleStreakUpdate(agent.id, {
+          wakeReason: readNonEmptyString(context.wakeReason),
+          outcome,
+          livenessState: (finalizedRun ?? run).livenessState as RunLivenessState | null,
+        });
+      }
     } catch (err) {
       const message = redactCurrentUserText(
         err instanceof Error ? err.message : "Unknown adapter failure",
@@ -10429,6 +10885,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
             status: latestRun?.status,
             failureReason: latestRun?.error ?? undefined,
           });
+          await releasePathClaimsForRun(run.id, latestRun?.status);
           await releaseRuntimeServicesForRun(run.id).catch(() => undefined);
           activeRunExecutions.delete(run.id);
           await startNextQueuedRunForAgent(run.agentId);
@@ -12302,6 +12759,54 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     });
   }
 
+  // Combo-01 Phase 3b: operator "boost / quiet now" override. cap + expiry are
+  // persisted on the company row and read by loadCompanyScheduleContext at
+  // admission time via activeManualOverride (null once expiresAt has passed).
+  async function setCompanyManualCapOverride(
+    companyId: string,
+    cap: number,
+    durationMinutes: number,
+    actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
+  ): Promise<void> {
+    const expiresAt = new Date(Date.now() + durationMinutes * 60_000);
+    await db
+      .update(companies)
+      .set({ manualCapOverride: cap, manualCapOverrideExpiresAt: expiresAt, updatedAt: new Date() })
+      .where(eq(companies.id, companyId));
+    await logActivity(db, {
+      companyId,
+      actorType: actor.actorType,
+      actorId: actor.actorId,
+      agentId: actor.agentId ?? null,
+      runId: actor.runId ?? null,
+      action: "company.manual_cap_override_set",
+      entityType: "company",
+      entityId: companyId,
+      details: { cap, durationMinutes, expiresAt: expiresAt.toISOString() },
+    });
+  }
+
+  async function clearCompanyManualCapOverride(
+    companyId: string,
+    actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
+  ): Promise<void> {
+    await db
+      .update(companies)
+      .set({ manualCapOverride: null, manualCapOverrideExpiresAt: null, updatedAt: new Date() })
+      .where(eq(companies.id, companyId));
+    await logActivity(db, {
+      companyId,
+      actorType: actor.actorType,
+      actorId: actor.actorId,
+      agentId: actor.agentId ?? null,
+      runId: actor.runId ?? null,
+      action: "company.manual_cap_override_cleared",
+      entityType: "company",
+      entityId: companyId,
+      details: {},
+    });
+  }
+
   async function setInstanceRunExecutionState(
     state: RunExecutionState, actor: ExecutionStateActor = SYSTEM_EXECUTION_STATE_ACTOR,
   ): Promise<void> {
@@ -12427,7 +12932,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     await cancelPendingWakeupsForBudgetScope(scope);
   }
 
-  return {
+  const self = {
     list: async (companyId: string, agentId?: string, limit?: number) => {
       const safeForLegacyEncoding = await hasUnsafeTextProjectionDatabase();
       const query = db
@@ -12718,7 +13223,8 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         checked += 1;
         const baseline = new Date(agent.lastHeartbeatAt ?? agent.createdAt).getTime();
         const elapsedMs = now.getTime() - baseline;
-        if (elapsedMs < policy.intervalSec * 1000) continue;
+        const effectiveSec = effectiveIntervalSec(policy.intervalSec, agent.heartbeatIdleStreak, policy.idleBackoff);
+        if (elapsedMs < effectiveSec * 1000) continue;
 
         const run = await enqueueWakeup(agent.id, {
           source: "timer",
@@ -12747,6 +13253,25 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
 
     cancelRun: (runId: string, reason?: string, options?: CancelRunOptions) => cancelRunInternal(runId, reason, options),
 
+    applyIdleStreakUpdate: async (
+      agentId: string,
+      signal: { wakeReason: string | null; outcome: string; livenessState: RunLivenessState | null },
+    ): Promise<number | null> => {
+      const existing = await getAgent(agentId);
+      if (!existing) return null;
+      if (!parseHeartbeatCadenceConfig(existing.runtimeConfig).idleBackoff.enabled) {
+        return existing.heartbeatIdleStreak;
+      }
+      const streak = nextIdleStreak(existing.heartbeatIdleStreak, isEmptyTimerHeartbeat(signal));
+      if (streak !== existing.heartbeatIdleStreak) {
+        await db
+          .update(agents)
+          .set({ heartbeatIdleStreak: streak, updatedAt: new Date() })
+          .where(eq(agents.id, agentId));
+      }
+      return streak;
+    },
+
     // Combo-01 Phase 2.0 wind-down substrate (no product caller yet; 2a/2c consume these).
     windDownRun,
     findResumableWoundDownOrphans,
@@ -12760,6 +13285,10 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     setCompanyRunExecutionState,
     setInstanceRunExecutionState,
     findRunningRunsInHaltedScopes,
+
+    // Combo-01 Phase 3b: operator schedule/manual-override cap setters.
+    setCompanyManualCapOverride,
+    clearCompanyManualCapOverride,
 
     /**
      * Pause-only. Emits errorCode "agent_paused" unconditionally; its sole caller is the
@@ -12820,5 +13349,6 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     getCompanyAdmissionStatus,
     startNextQueuedRunForAgent,
   };
+  return self;
 }
 // [END: module]

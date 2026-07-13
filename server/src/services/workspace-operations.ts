@@ -14,9 +14,9 @@
 // [START: module]
 import { randomUUID } from "node:crypto";
 import type { Db } from "@paperclipai/db";
-import { workspaceOperations } from "@paperclipai/db";
+import { workspaceOperations, heartbeatRuns } from "@paperclipai/db";
 import type { WorkspaceOperation, WorkspaceOperationPhase, WorkspaceOperationStatus } from "@paperclipai/shared";
-import { asc, desc, eq, inArray, isNull, or, and } from "drizzle-orm";
+import { asc, desc, eq, inArray, isNull, isNotNull, ne, or, and } from "drizzle-orm";
 import { notFound } from "../errors.js";
 import { redactCurrentUserText, redactCurrentUserValue } from "../log-redaction.js";
 import { instanceSettingsService } from "./instance-settings.js";
@@ -235,6 +235,20 @@ export function workspaceOperationService(db: Db) {
         .orderBy(asc(workspaceOperations.startedAt), asc(workspaceOperations.createdAt), asc(workspaceOperations.id));
 
       return rows.map(toWorkspaceOperation);
+    },
+
+    runningRunIdsOnWorkspace: async (executionWorkspaceId: string, excludeRunId: string): Promise<string[]> => {
+      const rows = await db
+        .selectDistinct({ runId: workspaceOperations.heartbeatRunId })
+        .from(workspaceOperations)
+        .innerJoin(heartbeatRuns, eq(heartbeatRuns.id, workspaceOperations.heartbeatRunId))
+        .where(and(
+          eq(workspaceOperations.executionWorkspaceId, executionWorkspaceId),
+          eq(heartbeatRuns.status, "running"),
+          ne(workspaceOperations.heartbeatRunId, excludeRunId),
+          isNotNull(workspaceOperations.heartbeatRunId),
+        ));
+      return rows.map((r) => r.runId).filter((id): id is string => id != null);
     },
 
     listForExecutionWorkspace: async (executionWorkspaceId: string) => {

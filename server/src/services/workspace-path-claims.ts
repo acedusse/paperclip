@@ -1,0 +1,160 @@
+/**
+ * FILE: server/src/services/workspace-path-claims.ts
+ * ABOUT: workspace-path-claims.ts (services module).
+ *
+ * SECTIONS:
+ *   [TAG: module] - workspace-path-claims.ts (services module).
+ */
+// ==========================================
+// [META: module]
+// INTENT: workspace-path-claims.ts (services module).
+// PSEUDOCODE: 1. Load dependencies. 2. Define module members. 3. Export public API.
+// JSON_FLOW: {"file": "server/src/services/workspace-path-claims.ts", "imports": "see code", "exports": "see code"}
+// ==========================================
+// [START: module]
+import { randomUUID } from "node:crypto";
+import type { Db } from "@paperclipai/db";
+import { workspacePathClaims } from "@paperclipai/db";
+import { and, eq, gt, inArray, isNotNull, lte, ne, sql } from "drizzle-orm";
+import type { ReconcileResult, ReconcileSource } from "./admission-reconciler.js";
+import { normalizeClaimPath } from "./workspace-path-overlap.js";
+
+export const DEFAULT_CLAIM_TTL_MS = 1_800_000;
+
+export type WorkspacePathClaim = typeof workspacePathClaims.$inferSelect;
+
+export interface AcquireClaimInput {
+  companyId: string;
+  executionWorkspaceId: string;
+  heartbeatRunId: string;
+  agentId: string | null;
+  path: string;
+  ttlMs?: number;
+  now?: Date;
+}
+
+export function workspacePathClaimService(db: Db) {
+  return {
+    async acquireClaim(input: AcquireClaimInput): Promise<WorkspacePathClaim> {
+      const now = input.now ?? new Date();
+      const ttlMs = input.ttlMs ?? DEFAULT_CLAIM_TTL_MS;
+      const row = await db
+        .insert(workspacePathClaims)
+        .values({
+          id: randomUUID(),
+          companyId: input.companyId,
+          executionWorkspaceId: input.executionWorkspaceId,
+          heartbeatRunId: input.heartbeatRunId,
+          agentId: input.agentId,
+          path: normalizeClaimPath(input.path),
+          status: "active",
+          acquiredAt: now,
+          expiresAt: new Date(now.getTime() + ttlMs),
+        })
+        .returning()
+        .then((rows) => rows[0]!);
+      return row;
+    },
+
+    async releaseClaimsForRun(
+      heartbeatRunId: string,
+      status: "released" | "expired" | "failed" = "released",
+      now: Date = new Date(),
+    ): Promise<number> {
+      const rows = await db
+        .update(workspacePathClaims)
+        .set({ status, releasedAt: now, updatedAt: now })
+        .where(and(
+          eq(workspacePathClaims.heartbeatRunId, heartbeatRunId),
+          eq(workspacePathClaims.status, "active"),
+        ))
+        .returning();
+      return rows.length;
+    },
+
+    async listActiveClaimsOnWorkspace(
+      executionWorkspaceId: string,
+      excludeRunId?: string,
+    ): Promise<WorkspacePathClaim[]> {
+      const conditions = [
+        eq(workspacePathClaims.executionWorkspaceId, executionWorkspaceId),
+        eq(workspacePathClaims.status, "active"),
+      ];
+      if (excludeRunId) {
+        conditions.push(ne(workspacePathClaims.heartbeatRunId, excludeRunId));
+      }
+      return db
+        .select()
+        .from(workspacePathClaims)
+        .where(and(...conditions))
+        .orderBy(workspacePathClaims.acquiredAt);
+    },
+
+    async activeClaimCountsForWorkspaces(
+      executionWorkspaceIds: string[],
+      now: Date,
+    ): Promise<Map<string, number>> {
+      const counts = new Map<string, number>();
+      if (executionWorkspaceIds.length === 0) return counts;
+      const rows = await db
+        .select({
+          executionWorkspaceId: workspacePathClaims.executionWorkspaceId,
+          count: sql<number>`count(*)::int`,
+        })
+        .from(workspacePathClaims)
+        .where(
+          and(
+            inArray(workspacePathClaims.executionWorkspaceId, executionWorkspaceIds),
+            eq(workspacePathClaims.status, "active"),
+            gt(workspacePathClaims.expiresAt, now),
+          ),
+        )
+        .groupBy(workspacePathClaims.executionWorkspaceId);
+      for (const row of rows) counts.set(row.executionWorkspaceId, Number(row.count));
+      return counts;
+    },
+
+    async findExpiredClaims(now: Date): Promise<Array<{ id: string }>> {
+      return db
+        .select({ id: workspacePathClaims.id })
+        .from(workspacePathClaims)
+        .where(and(
+          eq(workspacePathClaims.status, "active"),
+          isNotNull(workspacePathClaims.expiresAt),
+          lte(workspacePathClaims.expiresAt, now),
+        ));
+    },
+
+    async expireClaim(id: string, now: Date = new Date()): Promise<void> {
+      await db
+        .update(workspacePathClaims)
+        .set({ status: "expired", releasedAt: now, updatedAt: now })
+        .where(and(
+          eq(workspacePathClaims.id, id),
+          eq(workspacePathClaims.status, "active"),
+        ));
+    },
+  };
+}
+
+// Periodic sweep: expire any active claim whose TTL has lapsed. Crash-safe
+// backstop for the same expiry that acquireClaim's TTL already implies —
+// this is what actually flips status to "expired" if nothing else does.
+export function makePathClaimExpirySource(deps: {
+  findExpiredClaims: (now: Date) => Promise<Array<{ id: string }>>;
+  expireClaim: (id: string) => Promise<void>;
+}): ReconcileSource {
+  return {
+    name: "path-claim-expiry",
+    async reconcile(now: Date): Promise<ReconcileResult> {
+      const expired = await deps.findExpiredClaims(now);
+      let repaired = 0;
+      for (const { id } of expired) {
+        await deps.expireClaim(id);
+        repaired += 1;
+      }
+      return { source: "path-claim-expiry", drifted: expired.length, repaired };
+    },
+  };
+}
+// [END: module]

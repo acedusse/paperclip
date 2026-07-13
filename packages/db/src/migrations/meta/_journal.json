@@ -783,7 +783,28 @@
       "idx": 111,
       "version": "7",
       "when": 1781902600000,
-      "tag": "0111_combo05_review_cockpit",
+      "tag": "0111_predictive_breaker",
+      "breakpoints": true
+    },
+    {
+      "idx": 112,
+      "version": "7",
+      "when": 1781902700000,
+      "tag": "0112_spend_schedule",
+      "breakpoints": true
+    },
+    {
+      "idx": 113,
+      "version": "7",
+      "when": 1781902701000,
+      "tag": "0113_heartbeat_idle_streak",
+      "breakpoints": true
+    },
+    {
+      "idx": 114,
+      "version": "7",
+      "when": 1784236200000,
+      "tag": "0114_workspace_path_claims",
       "breakpoints": true
     }
   ]

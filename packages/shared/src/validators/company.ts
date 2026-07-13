@@ -17,6 +17,7 @@ import {
   COMPANY_STATUSES,
   MAX_COMPANY_ATTACHMENT_MAX_BYTES,
 } from "../constants.js";
+import { scheduleWindowsSchema } from "./schedule.js";
 
 const logoAssetIdSchema = z.string().uuid().nullable().optional();
 const brandColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/).nullable().optional();
@@ -53,6 +54,10 @@ export const updateCompanySchema = createCompanySchema
     maxRunWallClockMs: z.number().int().positive().nullable().optional(),
     maxRunCostCents: z.number().int().positive().nullable().optional(),
     maxRunTurns: z.number().int().positive().nullable().optional(),
+    predictiveBreakerEnabled: z.boolean().optional(),
+    breakerHorizonMinutes: z.number().int().positive().nullable().optional(),
+    scheduleWindows: scheduleWindowsSchema.optional(),
+    scheduleTimezone: z.string().min(1).nullable().optional(),
   });
 
 export type UpdateCompany = z.infer<typeof updateCompanySchema>;

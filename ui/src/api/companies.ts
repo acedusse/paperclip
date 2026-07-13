@@ -22,6 +22,7 @@ import type {
   CompanyPortabilityPreviewRequest,
   CompanyPortabilityPreviewResult,
   RunExecutionState,
+  UpdateCompany,
   UpdateCompanyBranding,
 } from "@paperclipai/shared";
 import { api } from "./client";
@@ -37,34 +38,18 @@ export const companiesApi = {
     api.get<AdmissionStatus>(`/companies/${companyId}/admission-status`),
   setExecutionState: (companyId: string, state: RunExecutionState) =>
     api.post<AdmissionStatus>(`/companies/${companyId}/execution-state`, { state }),
+  setCapOverride: (companyId: string, cap: number, durationMinutes: number) =>
+    api.post<AdmissionStatus>(`/companies/${companyId}/cap-override`, { cap, durationMinutes }),
+  clearCapOverride: (companyId: string) =>
+    api.delete<AdmissionStatus>(`/companies/${companyId}/cap-override`),
   create: (data: {
     name: string;
     description?: string | null;
     budgetMonthlyCents?: number;
   }) =>
     api.post<Company>("/companies", data),
-  update: (
-    companyId: string,
-    data: Partial<
-      Pick<
-        Company,
-        | "name"
-        | "description"
-        | "status"
-        | "budgetMonthlyCents"
-        | "attachmentMaxBytes"
-        | "requireBoardApprovalForNewAgents"
-        | "feedbackDataSharingEnabled"
-        | "brandColor"
-        | "logoAssetId"
-      >
-    > & {
-      maxConcurrentRuns?: number | null;
-      maxRunWallClockMs?: number | null;
-      maxRunCostCents?: number | null;
-      maxRunTurns?: number | null;
-    },
-  ) => api.patch<Company>(`/companies/${companyId}`, data),
+  update: (companyId: string, data: UpdateCompany) =>
+    api.patch<Company>(`/companies/${companyId}`, data),
   updateBranding: (companyId: string, data: UpdateCompanyBranding) =>
     api.patch<Company>(`/companies/${companyId}/branding`, data),
   archive: (companyId: string) => api.post<Company>(`/companies/${companyId}/archive`, {}),

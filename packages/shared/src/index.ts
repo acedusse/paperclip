@@ -152,6 +152,7 @@ export {
   HEARTBEAT_INVOCATION_SOURCES,
   HEARTBEAT_RUN_STATUSES,
   RUN_LIVENESS_STATES,
+  PRODUCTIVE_RUN_LIVENESS_STATES,
   WAKEUP_TRIGGER_DETAILS,
   WAKEUP_REQUEST_STATUSES,
   LIVE_EVENT_TYPES,
@@ -861,6 +862,8 @@ export {
   type ResourceMembershipUpdateResult,
 } from "./types/resource-memberships.js";
 
+export * from "./validators/agent-heartbeat.js";
+
 export { workspaceRuntimeControlTargetSchema } from "./validators/execution-workspace.js";
 export {
   findWorkspaceCommandDefinition,
@@ -925,6 +928,8 @@ export {
   trustAuthorizationPolicySchema,
   RUN_EXECUTION_STATES,
   runExecutionStateSchema,
+  BREAKER_LEVELS,
+  breakerLevelSchema,
   type PatchInstanceExperimentalSettings,
   type PatchInstanceSettings,
   type IssueGraphLivenessAutoRecoveryRequest,
@@ -932,12 +937,18 @@ export {
   type LowTrustBoundaryInput,
   type TrustAuthorizationPolicyInput,
   type RunExecutionState,
+  type BreakerLevel,
 } from "./validators/index.js";
 
 export {
   createCompanySchema,
   updateCompanySchema,
   updateCompanyBrandingSchema,
+  scheduleWindowSchema,
+  scheduleWindowsSchema,
+  capOverrideSchema,
+  type ScheduleWindow,
+  type CapOverride,
   feedbackTargetTypeSchema,
   feedbackTraceStatusSchema,
   feedbackVoteValueSchema,

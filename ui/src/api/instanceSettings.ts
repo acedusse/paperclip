@@ -30,6 +30,8 @@ export type AdmissionStatus = {
   running: number;
   queued: number;
   runExecutionState: RunExecutionState;
+  breakerLevel: "normal" | "warn" | "throttle" | "halt";
+  scheduleNextTransition?: { at: string; cap: number | null } | null;
 };
 
 export const instanceSettingsApi = {

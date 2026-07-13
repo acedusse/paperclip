@@ -794,6 +794,37 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
     });
   }
 
+  // Combo-01 Phase 4A: idle backoff grows the heartbeat interval geometrically
+  // while the agent goes multiple ticks without doing anything, up to a cap.
+  // Disabled by default so existing agents keep their fixed cadence.
+  const idleBackoff = asObject(effectiveHeartbeat.idleBackoff);
+  const idleBackoffEnabled = asBoolean(idleBackoff.enabled, false);
+  const idleBackoffMultiplier = asFiniteNumber(idleBackoff.multiplier, 2);
+  const idleBackoffMaxIntervalSec = asFiniteNumber(idleBackoff.maxIntervalSec, 3600);
+
+  function updateIdleBackoff(patch: Record<string, unknown>) {
+    mark("heartbeat", "idleBackoff", {
+      enabled: idleBackoffEnabled,
+      multiplier: idleBackoffMultiplier,
+      maxIntervalSec: idleBackoffMaxIntervalSec,
+      ...patch,
+    });
+  }
+
+  // Combo-01 Phase 4A-ii: WIP limit — warn when in-progress load exceeds the cap.
+  // Disabled by default; observability only, no gating.
+  const wipLimit = asObject(effectiveHeartbeat.wipLimit);
+  const wipLimitEnabled = asBoolean(wipLimit.enabled, false);
+  const wipLimitMaxInProgress = asFiniteNumber(wipLimit.maxInProgress, 3);
+
+  function updateWipLimit(patch: Record<string, unknown>) {
+    mark("heartbeat", "wipLimit", {
+      enabled: wipLimitEnabled,
+      maxInProgress: wipLimitMaxInProgress,
+      ...patch,
+    });
+  }
+
   return (
     <div className={cn("relative", cards && "space-y-6")}>
       {/* ---- Floating Save button (edit mode, when dirty) ---- */}
@@ -1422,6 +1453,60 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                           updateMaxTurnContinuation({
                             delayMs: clampDelayMsFromSeconds(v),
                           })}
+                        immediate
+                        className={inputClass}
+                      />
+                    </Field>
+                  </div>
+                ) : null}
+              </div>
+              <div className="rounded-md border border-border/70 px-3 py-2">
+                <ToggleField
+                  label="Idle backoff"
+                  hint={help.idleBackoffEnabled}
+                  checked={idleBackoffEnabled}
+                  onChange={(v) => updateIdleBackoff({ enabled: v })}
+                />
+                {idleBackoffEnabled ? (
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <Field label="Backoff multiplier" hint={help.idleBackoffMultiplier}>
+                      <DraftNumberInput
+                        value={idleBackoffMultiplier}
+                        onCommit={(v) => updateIdleBackoff({ multiplier: Math.max(1.1, v) })}
+                        min={1.1}
+                        step={0.5}
+                        immediate
+                        className={inputClass}
+                      />
+                    </Field>
+                    <Field label="Max interval (min)" hint={help.idleBackoffMaxIntervalSec}>
+                      <DraftNumberInput
+                        value={Math.round(idleBackoffMaxIntervalSec / 60)}
+                        onCommit={(v) => updateIdleBackoff({ maxIntervalSec: Math.max(1, Math.round(v)) * 60 })}
+                        min={1}
+                        step={1}
+                        immediate
+                        className={inputClass}
+                      />
+                    </Field>
+                  </div>
+                ) : null}
+              </div>
+              <div className="rounded-md border border-border/70 px-3 py-2">
+                <ToggleField
+                  label="WIP limit"
+                  hint={help.wipLimitEnabled}
+                  checked={wipLimitEnabled}
+                  onChange={(v) => updateWipLimit({ enabled: v })}
+                />
+                {wipLimitEnabled ? (
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <Field label="Max in progress" hint={help.wipLimitMaxInProgress}>
+                      <DraftNumberInput
+                        value={wipLimitMaxInProgress}
+                        onCommit={(v) => updateWipLimit({ maxInProgress: Math.max(1, Math.round(v)) })}
+                        min={1}
+                        step={1}
                         immediate
                         className={inputClass}
                       />

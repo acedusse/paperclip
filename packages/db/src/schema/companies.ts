@@ -12,7 +12,7 @@
 // JSON_FLOW: {"file": "packages/db/src/schema/companies.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-import { pgTable, uuid, text, integer, timestamp, boolean, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, integer, timestamp, boolean, uniqueIndex, jsonb } from "drizzle-orm/pg-core";
 
 export const companies = pgTable(
   "companies",
@@ -36,6 +36,26 @@ export const companies = pgTable(
     // Combo-01 Phase 2c: fleet execution state. running = normal; draining =
     // refuse new run starts; halted = refuse new + in-flight wound down.
     runExecutionState: text("run_execution_state").notNull().default("running"),
+    // Combo-01 Phase 3a predictive budget circuit breaker (company override).
+    predictiveBreakerEnabled: boolean("predictive_breaker_enabled").notNull().default(false),
+    breakerHorizonMinutes: integer("breaker_horizon_minutes"),
+    // Phase 3b per-company quiet-hours schedule windows + manual cap override.
+    scheduleWindows: jsonb("schedule_windows")
+      .$type<
+        Array<{
+          id: string;
+          label: string;
+          days: number[];
+          startMinute: number;
+          endMinute: number;
+          maxConcurrentRuns: number;
+        }>
+      >()
+      .notNull()
+      .default([]),
+    scheduleTimezone: text("schedule_timezone"),
+    manualCapOverride: integer("manual_cap_override"),
+    manualCapOverrideExpiresAt: timestamp("manual_cap_override_expires_at", { withTimezone: true }),
     attachmentMaxBytes: integer("attachment_max_bytes")
       .notNull()
       .default(10 * 1024 * 1024),
