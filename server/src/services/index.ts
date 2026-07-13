@@ -52,6 +52,8 @@ export { activityService, type ActivityFilters } from "./activity.js";
 export { approvalService } from "./approvals.js";
 export { approvalRiskService, riskScore, RISK_BAND_ORDER, type RiskBand } from "./approval-risk.js";
 export { canDecide, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-authority.js";
+export { recordDecision } from "./approval-decision-audit.js";
+export { registerChannel, getChannels, type DeliveryChannel } from "./notification-delivery.js";
 export { budgetService } from "./budgets.js";
 export { secretService } from "./secrets.js";
 export { routineService } from "./routines.js";
