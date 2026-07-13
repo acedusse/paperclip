@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decideClaimScheduling } from "./workspace-claim-scheduling.ts";
+import { decideClaimScheduling } from "./workspace-claim-scheduling.js";
 
 const base = { enabled: true, isNewStart: true, activeClaimCount: 1, queuedForMs: 0, boundMs: 1000 };
 
