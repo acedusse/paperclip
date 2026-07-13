@@ -142,7 +142,8 @@ import {
 } from "./issue-continuation-summary.js";
 import { executionWorkspaceService, mergeExecutionWorkspaceConfig } from "./execution-workspaces.js";
 import { workspaceOperationService } from "./workspace-operations.js";
-import { workspacePathClaimService } from "./workspace-path-claims.js";
+import { workspacePathClaimService, DEFAULT_CLAIM_TTL_MS } from "./workspace-path-claims.js";
+import { decideClaimScheduling } from "./workspace-claim-scheduling.js";
 import { detectConcurrentSharedActivity } from "./workspace-conflict.js";
 import { isProcessGroupAlive, terminateLocalService } from "./local-service-supervisor.js";
 import {
@@ -7321,6 +7322,35 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     }
   }
 
+  async function auditClaimScheduling(
+    agent: { id: string; companyId: string },
+    runId: string,
+    issueId: string,
+    action: "issue.start_deferred_path_claim" | "issue.start_admitted_despite_path_claim",
+    details: {
+      executionWorkspaceId: string;
+      contendingClaimCount: number;
+      queuedForMs: number;
+      boundMs: number;
+    },
+  ) {
+    try {
+      await logActivity(db, {
+        companyId: agent.companyId,
+        actorType: "system",
+        actorId: "workspace-conflict-scheduling",
+        agentId: agent.id,
+        runId,
+        action,
+        entityType: "issue",
+        entityId: issueId,
+        details,
+      });
+    } catch (err) {
+      logger.warn({ err, issueId, runId }, "claim-scheduling audit failed; continuing admission");
+    }
+  }
+
   async function countRunningRunsForAgent(agentId: string) {
     const [{ count }] = await db
       .select({ count: sql<number>`count(*)` })
@@ -8757,6 +8787,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
           id: issues.id,
           status: issues.status,
           priority: issues.priority,
+          executionWorkspaceId: issues.executionWorkspaceId,
         })
         .from(issues)
         .where(
@@ -8784,6 +8815,40 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         return left.createdAt.getTime() - right.createdAt.getTime();
       });
 
+      // Claim-aware selection (Combo 01, 4B slice 3). Off by default; on failure
+      // admit without the gate this sweep. Resolved once; read inside claimUpTo.
+      const claimNow = new Date();
+      let claimSchedEnabled = false;
+      const claimCounts = new Map<string, number>();
+      try {
+        claimSchedEnabled =
+          (await instanceSettingsService(db).getGeneral()).workspaceClaimAwareScheduling ?? false;
+        if (claimSchedEnabled) {
+          const newStartWorkspaceIds = [
+            ...new Set(
+              prioritizedRuns
+                .map((run) => {
+                  const iid = readNonEmptyString(parseObject(run.contextSnapshot).issueId);
+                  const issue = iid ? issueById.get(iid) : undefined;
+                  return isNewStartIssueStatus(issue?.status ?? null)
+                    ? issue?.executionWorkspaceId ?? null
+                    : null;
+                })
+                .filter((wsId): wsId is string => Boolean(wsId)),
+            ),
+          ];
+          const counts = await workspacePathClaimsSvc.activeClaimCountsForWorkspaces(
+            newStartWorkspaceIds,
+            claimNow,
+          );
+          for (const [wsId, count] of counts) claimCounts.set(wsId, count);
+        }
+      } catch (err) {
+        logger.warn({ err }, "claim-aware scheduling resolve failed; admitting without claim gate this sweep");
+        claimSchedEnabled = false;
+        claimCounts.clear();
+      }
+
       const claimedRuns: Array<typeof heartbeatRuns.$inferSelect> = [];
       let newStartsClaimed = 0;
       const claimUpTo = async (budget: number) => {
@@ -8791,6 +8856,34 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
           if (claimedRuns.length >= budget) break;
           const issueId = readNonEmptyString(parseObject(queuedRun.contextSnapshot).issueId);
           const isNewStart = isNewStartIssueStatus(issueId ? issueById.get(issueId)?.status : null);
+          const claimWsId = issueId ? issueById.get(issueId)?.executionWorkspaceId ?? null : null;
+          const contendingClaimCount = claimWsId ? claimCounts.get(claimWsId) ?? 0 : 0;
+          const claimDecision = decideClaimScheduling({
+            enabled: claimSchedEnabled,
+            isNewStart,
+            activeClaimCount: contendingClaimCount,
+            queuedForMs: claimNow.getTime() - new Date(queuedRun.createdAt).getTime(),
+            boundMs: DEFAULT_CLAIM_TTL_MS,
+          });
+          if (claimDecision !== "admit" && issueId && claimWsId) {
+            await auditClaimScheduling(
+              agent,
+              queuedRun.id,
+              issueId,
+              claimDecision === "defer"
+                ? "issue.start_deferred_path_claim"
+                : "issue.start_admitted_despite_path_claim",
+              {
+                executionWorkspaceId: claimWsId,
+                contendingClaimCount,
+                queuedForMs: claimNow.getTime() - new Date(queuedRun.createdAt).getTime(),
+                boundMs: DEFAULT_CLAIM_TTL_MS,
+              },
+            );
+          }
+          if (claimDecision === "defer") {
+            continue; // leave queued; another run is actively editing this shared workspace
+          }
           if (isNewStart && newStartsClaimed >= wipBudget) {
             if (issueId) await auditWipDeferral(agent, queuedRun.id, issueId, wipCfg, wipBudget);
             continue; // leave queued; steer the agent to finish in-progress work first
