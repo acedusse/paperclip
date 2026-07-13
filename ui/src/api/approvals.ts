@@ -35,5 +35,11 @@ export const approvalsApi = {
   addComment: (id: string, body: string) =>
     api.post<ApprovalComment>(`/approvals/${id}/comments`, { body }),
   listIssues: (id: string) => api.get<Issue[]>(`/approvals/${id}/issues`),
+  triage: (companyId: string) =>
+    api.get<{ items: any[]; groups: { key: string; type: string; agentId: string | null; ids: string[] }[] }>(
+      `/companies/${companyId}/approvals/triage`,
+    ),
+  bulk: (companyId: string, body: { ids: string[]; action: "approve" | "reject" | "request_changes"; decisionNote?: string }) =>
+    api.post<{ results: { id: string; ok: boolean; error?: string }[] }>(`/companies/${companyId}/approvals/bulk`, body),
 };
 // [END: module]
