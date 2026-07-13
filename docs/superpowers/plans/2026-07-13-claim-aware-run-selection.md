@@ -247,7 +247,7 @@ Create `packages/shared/src/validators/instance.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
-import { instanceGeneralSettingsSchema } from "./instance.ts";
+import { instanceGeneralSettingsSchema } from "./instance.js";
 
 describe("instanceGeneralSettingsSchema.workspaceClaimAwareScheduling", () => {
   it("defaults to false when absent", () => {
