@@ -22,6 +22,7 @@
 - Risk bands (thresholds locked here, one constant): `low` = score < 25, `medium` = 25–49, `high` = 50–74, `critical` ≥ 75. `autoDecisionMaxBand` default = `low`.
 - Per-file diff text cap: 200 000 chars; over-cap or binary → metadata only (`truncated: true` / `binary: true`, no `diff`).
 - Follow the existing file-header comment block convention when creating new files (see any `server/src/services/*.ts`).
+- **UI tests (Tasks 10–12):** `@testing-library/react` is **NOT installed** — do not import it. UI component/page tests in this repo start with a `// @vitest-environment jsdom` header comment, set `(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true`, render via `react-dom/client` `createRoot` wrapped in React's `act(...)`, and assert against the rendered DOM (`container.textContent`, `container.querySelector(...)`). Mirror `ui/src/components/ApprovalPayload.test.tsx` and `ui/src/pages/Inbox.test.tsx`. The RTL-style `render`/`screen` snippets shown in Tasks 10 and 12 are **illustrative of the assertions to make** — translate them to this convention.
 
 ---
 
