@@ -235,6 +235,7 @@ import {
 } from "./low-trust-runtime-containment.js";
 import { resolveCoreTrustPreset, type TrustPresetResolution } from "./trust-preset-resolver.js";
 import type { PluginWorkerManager } from "./plugin-worker-manager.js";
+import { runChangesetService } from "./run-changeset.js";
 
 const MAX_LIVE_LOG_CHUNK_BYTES = 8 * 1024;
 const MAX_PERSISTED_LOG_CHUNK_CHARS = 64 * 1024;
@@ -5079,6 +5080,11 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
   }
 
   async function handleRunLivenessContinuation(run: typeof heartbeatRuns.$inferSelect) {
+    // Combo-05: persist a PR-style changeset while the workspace still exists. Best-effort.
+    void runChangesetService(db).captureForRun(run.id).catch((err) => {
+      logger.warn({ err, runId: run.id }, "run changeset capture failed");
+    });
+
     const livenessState = run.livenessState as RunLivenessState | null;
     if (livenessState !== "plan_only" && livenessState !== "empty_response") return;
 
