@@ -123,6 +123,7 @@ import {
   sanitizeRuntimeServiceBaseEnv,
 } from "./workspace-runtime.js";
 import { issueService } from "./issues.js";
+import { parseWipLimitConfig, isNewStartIssueStatus, newStartBudget } from "./wip-flow.js";
 import {
   buildIssueMonitorClearedPatch,
   buildIssueMonitorTriggeredPatch,
@@ -7280,6 +7281,30 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     return issuesSvc.listDependencyReadiness(companyId, issueIds);
   }
 
+  async function auditWipDeferral(
+    agent: { id: string; companyId: string },
+    runId: string,
+    issueId: string,
+    cfg: { maxInProgress: number },
+    budget: number,
+  ) {
+    try {
+      await logActivity(db, {
+        companyId: agent.companyId,
+        actorType: "system",
+        actorId: "wip-flow-control",
+        agentId: agent.id,
+        runId,
+        action: "issue.start_deferred_wip_limit",
+        entityType: "issue",
+        entityId: issueId,
+        details: { maxInProgress: cfg.maxInProgress, newStartBudget: budget },
+      });
+    } catch (err) {
+      logger.warn({ err, issueId, runId }, "WIP deferral audit failed; continuing admission");
+    }
+  }
+
   async function countRunningRunsForAgent(agentId: string) {
     const [{ count }] = await db
       .select({ count: sql<number>`count(*)` })
@@ -8686,6 +8711,18 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       const availableSlots = Math.max(0, policy.maxConcurrentRuns - runningCount);
       if (availableSlots <= 0) return [];
 
+      const wipCfg = parseWipLimitConfig(agent.runtimeConfig);
+      let wipBudget = Infinity;
+      if (wipCfg.enabled) {
+        try {
+          const counts = await issuesSvc.inProgressIssueCountsByAgent(agent.companyId, agentId);
+          wipBudget = newStartBudget(wipCfg, counts.get(agentId) ?? 0);
+        } catch (err) {
+          logger.warn({ err }, "WIP in-progress count failed; admitting without WIP gate this sweep");
+          wipBudget = Infinity;
+        }
+      }
+
       const queuedRuns = await db
         .select()
         .from(heartbeatRuns)
@@ -8732,11 +8769,21 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       });
 
       const claimedRuns: Array<typeof heartbeatRuns.$inferSelect> = [];
+      let newStartsClaimed = 0;
       const claimUpTo = async (budget: number) => {
         for (const queuedRun of prioritizedRuns) {
           if (claimedRuns.length >= budget) break;
+          const issueId = readNonEmptyString(parseObject(queuedRun.contextSnapshot).issueId);
+          const isNewStart = isNewStartIssueStatus(issueId ? issueById.get(issueId)?.status : null);
+          if (isNewStart && newStartsClaimed >= wipBudget) {
+            if (issueId) await auditWipDeferral(agent, queuedRun.id, issueId, wipCfg, wipBudget);
+            continue; // leave queued; steer the agent to finish in-progress work first
+          }
           const claimed = await claimQueuedRun(queuedRun, companyAgents);
-          if (claimed) claimedRuns.push(claimed); // claim flips queued→running atomically
+          if (claimed) {
+            claimedRuns.push(claimed); // claim flips queued→running atomically
+            if (isNewStart) newStartsClaimed += 1;
+          }
         }
       };
 

@@ -16,8 +16,10 @@ export type IdleBackoffConfig = z.infer<typeof idleBackoffSchema>;
 /**
  * Combo-01 Phase 4A-ii per-agent WIP limit, stored under
  * `runtimeConfig.heartbeat.wipLimit`. Disabled by default so existing agents
- * keep unbounded in-progress behavior until an operator opts in. This slice
- * surfaces the limit as a warning only — nothing is gated on it yet.
+ * keep unbounded in-progress behavior until an operator opts in. When enabled,
+ * the limit is surfaced as an over-limit warning (observability slice) and
+ * enforced at run selection — new-issue starts are deferred once the agent is
+ * at its in-progress limit, while continuations of in-progress work proceed.
  */
 export const wipLimitSchema = z.object({
   enabled: z.boolean().default(false),

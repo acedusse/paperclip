@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildAgentWipFlow, computeFlowMetrics, parseWipLimitConfig, wipStatus } from "./wip-flow.js";
+import { buildAgentWipFlow, computeFlowMetrics, parseWipLimitConfig, wipStatus, isNewStartIssueStatus, newStartBudget, WIP_NEW_START_STATUSES } from "./wip-flow.js";
 
 describe("wipStatus", () => {
   it("reports no limit when disabled", () => {
@@ -66,5 +66,30 @@ describe("parseWipLimitConfig / buildAgentWipFlow", () => {
       wip: { limit: 1, current: 2, overBy: 1, overLimit: true },
       flow: { throughputLast7d: 0, medianCycleTimeMs: null },
     });
+  });
+});
+
+describe("isNewStartIssueStatus", () => {
+  it("is true only for checkout-eligible statuses", () => {
+    for (const s of ["todo", "backlog", "blocked"]) expect(isNewStartIssueStatus(s)).toBe(true);
+    for (const s of ["in_progress", "in_review", "done", "cancelled"]) expect(isNewStartIssueStatus(s)).toBe(false);
+  });
+  it("is false for null/undefined (non-issue runs)", () => {
+    expect(isNewStartIssueStatus(null)).toBe(false);
+    expect(isNewStartIssueStatus(undefined)).toBe(false);
+  });
+  it("exposes the exact status set", () => {
+    expect([...WIP_NEW_START_STATUSES].sort()).toEqual(["backlog", "blocked", "todo"]);
+  });
+});
+
+describe("newStartBudget", () => {
+  it("is Infinity when disabled (opt-in parity)", () => {
+    expect(newStartBudget({ enabled: false, maxInProgress: 3 }, 99)).toBe(Infinity);
+  });
+  it("is the remaining headroom when enabled", () => {
+    expect(newStartBudget({ enabled: true, maxInProgress: 3 }, 1)).toBe(2);
+    expect(newStartBudget({ enabled: true, maxInProgress: 3 }, 3)).toBe(0);
+    expect(newStartBudget({ enabled: true, maxInProgress: 3 }, 5)).toBe(0);
   });
 });
