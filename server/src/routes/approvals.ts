@@ -17,6 +17,7 @@ import { eq } from "drizzle-orm";
 import { heartbeatRuns, type Db } from "@paperclipai/db";
 import {
   addApprovalCommentSchema,
+  bulkResolveApprovalsSchema,
   createApprovalSchema,
   requestApprovalRevisionSchema,
   resolveApprovalSchema,
@@ -26,10 +27,14 @@ import { validate } from "../middleware/validate.js";
 import { logger } from "../middleware/logger.js";
 import {
   approvalService,
+  approvalRiskService,
+  approvalTriageService,
   accessService,
+  canDecide,
   heartbeatService,
   issueApprovalService,
   logActivity,
+  recordDecision,
   secretService,
 } from "../services/index.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
@@ -59,6 +64,8 @@ export function approvalRoutes(
 ) {
   const router = Router();
   const svc = approvalService(db);
+  const riskSvc = approvalRiskService(db);
+  const triageSvc = approvalTriageService(db);
   const access = accessService(db);
   const heartbeat = heartbeatService(db, {
     pluginWorkerManager: options.pluginWorkerManager,
@@ -127,6 +134,34 @@ export function approvalRoutes(
     res.json(result.map((approval) => redactApprovalPayload(approval)));
   });
 
+  // Route ordering: this literal /triage path must be registered before any
+  // /companies/:companyId/approvals/:something param route so it isn't
+  // swallowed as a param match. There is no such param route today, but keep
+  // triage + bulk grouped here to preserve that invariant as routes are added.
+  router.get("/companies/:companyId/approvals/triage", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertCompanyAccess(req, companyId);
+    if (!(await assertApprovalAccessAllowed(req, res, companyId))) return;
+    res.json(await triageSvc.listTriage(companyId));
+  });
+
+  router.post(
+    "/companies/:companyId/approvals/bulk",
+    validate(bulkResolveApprovalsSchema),
+    async (req, res) => {
+      assertBoard(req);
+      const companyId = req.params.companyId as string;
+      assertCompanyAccess(req, companyId);
+      const result = await triageSvc.bulkResolve(companyId, {
+        ids: req.body.ids,
+        action: req.body.action,
+        note: req.body.decisionNote ?? null,
+        actor: { actorId: req.actor.userId ?? "board" },
+      });
+      res.json(result);
+    },
+  );
+
   router.get("/approvals/:id", async (req, res) => {
     const id = req.params.id as string;
     const approval = await svc.getById(id);
@@ -191,6 +226,10 @@ export function approvalRoutes(
       details: { type: approval.type, issueIds: uniqueIssueIds },
     });
 
+    await riskSvc.computeAndPersist(approval.id).catch((err) => {
+      logger.warn({ err, approvalId: approval.id }, "risk compute failed on approval create");
+    });
+
     res.status(201).json(redactApprovalPayload(approval));
   });
 
@@ -215,6 +254,13 @@ export function approvalRoutes(
       return;
     }
     const decidedByUserId = req.actor.userId ?? "board";
+    const approvalForGate = await svc.getById(id);
+    const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
+    const gate = canDecide({ band: (risk?.band as any) ?? "low", method: "explicit_human" });
+    if (!gate.allow) {
+      res.status(422).json({ error: gate.deny });
+      return;
+    }
     const { approval, applied } = await svc.approve(id, decidedByUserId, req.body.decisionNote);
 
     if (applied) {
@@ -235,6 +281,20 @@ export function approvalRoutes(
           linkedIssueIds,
         },
       });
+
+      try {
+        await recordDecision(db, {
+          approvalId: approval.id,
+          companyId: approval.companyId,
+          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          method: "explicit_human",
+          outcome: "approved",
+          risk: risk ? { score: risk.score, band: risk.band as any } : null,
+          note: req.body.decisionNote ?? null,
+        });
+      } catch (auditErr) {
+        logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
+      }
 
       if (approval.requestedByAgentId) {
         try {
@@ -311,6 +371,13 @@ export function approvalRoutes(
       return;
     }
     const decidedByUserId = req.actor.userId ?? "board";
+    const approvalForGate = await svc.getById(id);
+    const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
+    const gate = canDecide({ band: (risk?.band as any) ?? "low", method: "explicit_human" });
+    if (!gate.allow) {
+      res.status(422).json({ error: gate.deny });
+      return;
+    }
     const { approval, applied } = await svc.reject(id, decidedByUserId, req.body.decisionNote);
 
     if (applied) {
@@ -323,6 +390,20 @@ export function approvalRoutes(
         entityId: approval.id,
         details: { type: approval.type },
       });
+
+      try {
+        await recordDecision(db, {
+          approvalId: approval.id,
+          companyId: approval.companyId,
+          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          method: "explicit_human",
+          outcome: "rejected",
+          risk: risk ? { score: risk.score, band: risk.band as any } : null,
+          note: req.body.decisionNote ?? null,
+        });
+      } catch (auditErr) {
+        logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
+      }
     }
 
     res.json(redactApprovalPayload(approval));
@@ -339,6 +420,13 @@ export function approvalRoutes(
         return;
       }
       const decidedByUserId = req.actor.userId ?? "board";
+      const approvalForGate = await svc.getById(id);
+      const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
+      const gate = canDecide({ band: (risk?.band as any) ?? "low", method: "explicit_human" });
+      if (!gate.allow) {
+        res.status(422).json({ error: gate.deny });
+        return;
+      }
       const approval = await svc.requestRevision(id, decidedByUserId, req.body.decisionNote);
 
       await logActivity(db, {
@@ -350,6 +438,20 @@ export function approvalRoutes(
         entityId: approval.id,
         details: { type: approval.type },
       });
+
+      try {
+        await recordDecision(db, {
+          approvalId: approval.id,
+          companyId: approval.companyId,
+          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          method: "explicit_human",
+          outcome: "revision_requested",
+          risk: risk ? { score: risk.score, band: risk.band as any } : null,
+          note: req.body.decisionNote ?? null,
+        });
+      } catch (auditErr) {
+        logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
+      }
 
       res.json(redactApprovalPayload(approval));
     },

@@ -41,15 +41,31 @@ const mockSecretService = vi.hoisted(() => ({
   normalizeHireApprovalPayloadForPersistence: vi.fn(),
 }));
 
+const mockRiskService = vi.hoisted(() => ({
+  getSnapshot: vi.fn(),
+  computeAndPersist: vi.fn(),
+}));
+
+const mockTriageService = vi.hoisted(() => ({
+  listTriage: vi.fn(),
+  bulkResolve: vi.fn(),
+}));
+
 const mockLogActivity = vi.hoisted(() => vi.fn());
 const mockAccessService = vi.hoisted(() => ({
   decide: vi.fn(),
 }));
+const mockCanDecide = vi.hoisted(() => vi.fn());
+const mockRecordDecision = vi.hoisted(() => vi.fn());
 
 function registerModuleMocks() {
   vi.doMock("../services/index.js", () => ({
     accessService: () => mockAccessService,
     approvalService: () => mockApprovalService,
+    approvalRiskService: () => mockRiskService,
+    approvalTriageService: () => mockTriageService,
+    canDecide: mockCanDecide,
+    recordDecision: mockRecordDecision,
     heartbeatService: () => mockHeartbeatService,
     issueApprovalService: () => mockIssueApprovalService,
     logActivity: mockLogActivity,
@@ -145,6 +161,10 @@ describe("approval routes idempotent retries", () => {
     mockIssueApprovalService.listIssuesForApproval.mockReset();
     mockIssueApprovalService.linkManyForApproval.mockReset();
     mockSecretService.normalizeHireApprovalPayloadForPersistence.mockReset();
+    mockRiskService.getSnapshot.mockReset();
+    mockRiskService.computeAndPersist.mockReset();
+    mockCanDecide.mockReset();
+    mockRecordDecision.mockReset();
     mockLogActivity.mockReset();
     mockAccessService.decide.mockReset();
     mockAccessService.decide.mockResolvedValue({
@@ -156,6 +176,10 @@ describe("approval routes idempotent retries", () => {
     mockHeartbeatService.wakeup.mockResolvedValue({ id: "wake-1" });
     mockIssueApprovalService.listIssuesForApproval.mockResolvedValue([{ id: "issue-1" }]);
     mockLogActivity.mockResolvedValue(undefined);
+    mockRiskService.getSnapshot.mockResolvedValue(null);
+    mockRiskService.computeAndPersist.mockResolvedValue({ score: 0, band: "low", reasons: [] });
+    mockCanDecide.mockReturnValue({ allow: true });
+    mockRecordDecision.mockResolvedValue(undefined);
   });
 
   it("does not emit duplicate approval side effects when approve is already resolved", async () => {
@@ -277,6 +301,36 @@ describe("approval routes idempotent retries", () => {
 
     expect(res.status).toBe(200);
     expect(mockApprovalService.approve).toHaveBeenCalledWith("approval-4", "user-1", "ship it");
+  });
+
+  it("still wakes the requester and returns 200 when the audit write (recordDecision) fails on approve", async () => {
+    mockApprovalService.getById.mockResolvedValue({
+      id: "approval-audit-fail",
+      companyId: "company-1",
+      type: "hire_agent",
+      status: "pending",
+      payload: {},
+      requestedByAgentId: "agent-99",
+    });
+    mockApprovalService.approve.mockResolvedValue({
+      approval: {
+        id: "approval-audit-fail",
+        companyId: "company-1",
+        type: "hire_agent",
+        status: "approved",
+        payload: {},
+        requestedByAgentId: "agent-99",
+      },
+      applied: true,
+    });
+    mockRecordDecision.mockRejectedValueOnce(new Error("audit boom"));
+
+    const res = await request(await createApp())
+      .post("/api/approvals/approval-audit-fail/approve")
+      .send({ decisionNote: "ship it" });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(mockHeartbeatService.wakeup).toHaveBeenCalled();
   });
 
   it("derives approval attribution from the authenticated actor on reject", async () => {

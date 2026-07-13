@@ -100,4 +100,6 @@ export { pluginDatabaseNamespaces, pluginMigrations } from "./plugin_database.js
 export { pluginJobs, pluginJobRuns } from "./plugin_jobs.js";
 export { pluginWebhookDeliveries } from "./plugin_webhooks.js";
 export { pluginLogs } from "./plugin_logs.js";
+export { runChangesets, type RunChangesetFile, type RunChangesetCommand } from "./run_changesets.js";
+export { approvalRisk } from "./approval_risk.js";
 // [END: module]

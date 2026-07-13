@@ -43,6 +43,9 @@ a cockpit they share one risk model, one diff renderer, one notification pipelin
 
 ## Phasing
 
+> Detailed expansion — shared seams, locked authority precedence, and per-phase exit criteria — in
+> the companion [`combo-05-phasing-corrected.md`](combo-05-phasing-corrected.md).
+
 1. Run change-review diff surface (017) + risk-scored, grouped triage inbox (016) — sorting/grouping
    first (pure upside), auto-approve policies behind narrow explicit rules later.
 2. Scheduled digest (029) — proves the delivery pipeline cheaply.
