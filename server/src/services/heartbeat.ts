@@ -189,6 +189,7 @@ import { activeScheduleCap, activeManualOverride, nextScheduleTransition } from 
 import { BREAKER, evaluateCompanyBreaker, type BreakerEvalDeps } from "./predictive-breaker.js";
 import { resolveEffectiveExecutionState, isQuiescing } from "./run-execution-state.js";
 import {
+  cadenceTransition,
   effectiveIntervalSec,
   isEmptyTimerHeartbeat,
   nextIdleStreak,
@@ -13160,15 +13161,49 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     ): Promise<number | null> => {
       const existing = await getAgent(agentId);
       if (!existing) return null;
-      if (!parseHeartbeatCadenceConfig(existing.runtimeConfig).idleBackoff.enabled) {
+      const cadenceCfg = parseHeartbeatCadenceConfig(existing.runtimeConfig);
+      if (!cadenceCfg.idleBackoff.enabled) {
         return existing.heartbeatIdleStreak;
       }
-      const streak = nextIdleStreak(existing.heartbeatIdleStreak, isEmptyTimerHeartbeat(signal));
-      if (streak !== existing.heartbeatIdleStreak) {
+      const oldStreak = existing.heartbeatIdleStreak;
+      const streak = nextIdleStreak(oldStreak, isEmptyTimerHeartbeat(signal));
+      if (streak !== oldStreak) {
         await db
           .update(agents)
           .set({ heartbeatIdleStreak: streak, updatedAt: new Date() })
           .where(eq(agents.id, agentId));
+
+        // Cadence-transition observability (idea 035 follow-up): on a real
+        // interval change, record the transition + a backlog snapshot so we can
+        // later answer "did the agent back off while assignable work waited?".
+        // Best-effort — never disturbs the streak update or the finalize path.
+        const transition = cadenceTransition(cadenceCfg.intervalSec, oldStreak, streak, cadenceCfg.idleBackoff);
+        if (transition.changed) {
+          try {
+            const actionableBacklogCount = await issuesSvc.startableIssueCountForAgent(existing.companyId, agentId);
+            await logActivity(db, {
+              companyId: existing.companyId,
+              actorType: "system",
+              actorId: "heartbeat-cadence",
+              agentId,
+              action: "agent.heartbeat_cadence_transition",
+              entityType: "agent",
+              entityId: agentId,
+              details: {
+                direction: transition.direction,
+                oldStreak,
+                newStreak: streak,
+                oldIntervalSec: transition.oldIntervalSec,
+                newIntervalSec: transition.newIntervalSec,
+                wakeReason: signal.wakeReason,
+                outcome: signal.outcome,
+                actionableBacklogCount,
+              },
+            });
+          } catch (err) {
+            logger.warn({ err, agentId }, "cadence-transition observability failed; continuing");
+          }
+        }
       }
       return streak;
     },
