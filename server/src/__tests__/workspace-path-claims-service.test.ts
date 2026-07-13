@@ -94,4 +94,28 @@ describeEmbeddedPostgres("workspacePathClaimService", () => {
     await svc.expireClaim(c.id, later);
     expect(await svc.listActiveClaimsOnWorkspace(wsA)).toEqual([]);
   });
+
+  it("counts active-within-TTL claims per workspace, excluding released/expired/other", async () => {
+    const { companyId, agentId, wsA, runA, runB } = await seed();
+    const now = new Date("2026-07-13T00:00:00.000Z");
+    const future = { ttlMs: 60_000, now }; // expiresAt = now + 60s
+    // Two active claims on wsA from two different runs.
+    await svc.acquireClaim({ companyId, executionWorkspaceId: wsA, heartbeatRunId: runA, agentId, path: "src/pay", ...future });
+    await svc.acquireClaim({ companyId, executionWorkspaceId: wsA, heartbeatRunId: runB, agentId, path: "src/ui", ...future });
+    // A released claim must not count.
+    const released = await svc.acquireClaim({ companyId, executionWorkspaceId: wsA, heartbeatRunId: runA, agentId, path: "src/old", ...future });
+    await svc.releaseClaimsForRun(runA); // flips runA's active claims → released
+    // A claim whose TTL already lapsed relative to `now` must not count.
+    await svc.acquireClaim({ companyId, executionWorkspaceId: wsA, heartbeatRunId: runB, agentId, path: "src/stale", ttlMs: 1, now: new Date(now.getTime() - 10_000) });
+
+    const counts = await svc.activeClaimCountsForWorkspaces([wsA], now);
+    // runA's two claims (src/pay, src/old) were released; only runB's src/ui remains active-within-TTL.
+    expect(counts.get(wsA)).toBe(1);
+    expect(released.status).toBe("active"); // acquire returns active before release
+  });
+
+  it("returns an empty map without a query for empty input", async () => {
+    const counts = await svc.activeClaimCountsForWorkspaces([], new Date());
+    expect(counts.size).toBe(0);
+  });
 });
