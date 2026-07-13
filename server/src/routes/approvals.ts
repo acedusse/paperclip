@@ -282,15 +282,19 @@ export function approvalRoutes(
         },
       });
 
-      await recordDecision(db, {
-        approvalId: approval.id,
-        companyId: approval.companyId,
-        actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
-        method: "explicit_human",
-        outcome: "approved",
-        risk: risk ? { score: risk.score, band: risk.band as any } : null,
-        note: req.body.decisionNote ?? null,
-      });
+      try {
+        await recordDecision(db, {
+          approvalId: approval.id,
+          companyId: approval.companyId,
+          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          method: "explicit_human",
+          outcome: "approved",
+          risk: risk ? { score: risk.score, band: risk.band as any } : null,
+          note: req.body.decisionNote ?? null,
+        });
+      } catch (auditErr) {
+        logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
+      }
 
       if (approval.requestedByAgentId) {
         try {
@@ -387,15 +391,19 @@ export function approvalRoutes(
         details: { type: approval.type },
       });
 
-      await recordDecision(db, {
-        approvalId: approval.id,
-        companyId: approval.companyId,
-        actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
-        method: "explicit_human",
-        outcome: "rejected",
-        risk: risk ? { score: risk.score, band: risk.band as any } : null,
-        note: req.body.decisionNote ?? null,
-      });
+      try {
+        await recordDecision(db, {
+          approvalId: approval.id,
+          companyId: approval.companyId,
+          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          method: "explicit_human",
+          outcome: "rejected",
+          risk: risk ? { score: risk.score, band: risk.band as any } : null,
+          note: req.body.decisionNote ?? null,
+        });
+      } catch (auditErr) {
+        logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
+      }
     }
 
     res.json(redactApprovalPayload(approval));
@@ -431,15 +439,19 @@ export function approvalRoutes(
         details: { type: approval.type },
       });
 
-      await recordDecision(db, {
-        approvalId: approval.id,
-        companyId: approval.companyId,
-        actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
-        method: "explicit_human",
-        outcome: "revision_requested",
-        risk: risk ? { score: risk.score, band: risk.band as any } : null,
-        note: req.body.decisionNote ?? null,
-      });
+      try {
+        await recordDecision(db, {
+          approvalId: approval.id,
+          companyId: approval.companyId,
+          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          method: "explicit_human",
+          outcome: "revision_requested",
+          risk: risk ? { score: risk.score, band: risk.band as any } : null,
+          note: req.body.decisionNote ?? null,
+        });
+      } catch (auditErr) {
+        logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
+      }
 
       res.json(redactApprovalPayload(approval));
     },

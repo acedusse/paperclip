@@ -303,6 +303,36 @@ describe("approval routes idempotent retries", () => {
     expect(mockApprovalService.approve).toHaveBeenCalledWith("approval-4", "user-1", "ship it");
   });
 
+  it("still wakes the requester and returns 200 when the audit write (recordDecision) fails on approve", async () => {
+    mockApprovalService.getById.mockResolvedValue({
+      id: "approval-audit-fail",
+      companyId: "company-1",
+      type: "hire_agent",
+      status: "pending",
+      payload: {},
+      requestedByAgentId: "agent-99",
+    });
+    mockApprovalService.approve.mockResolvedValue({
+      approval: {
+        id: "approval-audit-fail",
+        companyId: "company-1",
+        type: "hire_agent",
+        status: "approved",
+        payload: {},
+        requestedByAgentId: "agent-99",
+      },
+      applied: true,
+    });
+    mockRecordDecision.mockRejectedValueOnce(new Error("audit boom"));
+
+    const res = await request(await createApp())
+      .post("/api/approvals/approval-audit-fail/approve")
+      .send({ decisionNote: "ship it" });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(mockHeartbeatService.wakeup).toHaveBeenCalled();
+  });
+
   it("derives approval attribution from the authenticated actor on reject", async () => {
     mockApprovalService.getById.mockResolvedValue({
       id: "approval-5",
