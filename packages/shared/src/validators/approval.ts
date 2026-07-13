@@ -48,4 +48,12 @@ export const addApprovalCommentSchema = z.object({
 });
 
 export type AddApprovalComment = z.infer<typeof addApprovalCommentSchema>;
+
+export const bulkResolveApprovalsSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(200),
+  action: z.enum(["approve", "reject", "request_changes"]),
+  decisionNote: z.string().max(5000).optional().nullable(),
+});
+
+export type BulkResolveApprovals = z.infer<typeof bulkResolveApprovalsSchema>;
 // [END: module]

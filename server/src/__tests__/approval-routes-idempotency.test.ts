@@ -46,6 +46,11 @@ const mockRiskService = vi.hoisted(() => ({
   computeAndPersist: vi.fn(),
 }));
 
+const mockTriageService = vi.hoisted(() => ({
+  listTriage: vi.fn(),
+  bulkResolve: vi.fn(),
+}));
+
 const mockLogActivity = vi.hoisted(() => vi.fn());
 const mockAccessService = vi.hoisted(() => ({
   decide: vi.fn(),
@@ -58,6 +63,7 @@ function registerModuleMocks() {
     accessService: () => mockAccessService,
     approvalService: () => mockApprovalService,
     approvalRiskService: () => mockRiskService,
+    approvalTriageService: () => mockTriageService,
     canDecide: mockCanDecide,
     recordDecision: mockRecordDecision,
     heartbeatService: () => mockHeartbeatService,

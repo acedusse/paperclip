@@ -15,6 +15,7 @@
 import { describe, expect, it } from "vitest";
 import {
   addApprovalCommentSchema,
+  bulkResolveApprovalsSchema,
   requestApprovalRevisionSchema,
   resolveApprovalSchema,
 } from "./approval.js";
@@ -41,6 +42,21 @@ describe("approval validators", () => {
       .toBe("Decision\n\nApproved.");
     expect(requestApprovalRevisionSchema.parse({ decisionNote: "Decision\\r\\nRevise." }).decisionNote)
       .toBe("Decision\nRevise.");
+  });
+
+  it("parses a valid bulk-resolve payload and rejects an empty ids array", () => {
+    const parsed = bulkResolveApprovalsSchema.parse({
+      ids: ["11111111-1111-1111-1111-111111111111"],
+      action: "approve",
+      decisionNote: "batch approved",
+    });
+    expect(parsed).toEqual({
+      ids: ["11111111-1111-1111-1111-111111111111"],
+      action: "approve",
+      decisionNote: "batch approved",
+    });
+
+    expect(() => bulkResolveApprovalsSchema.parse({ ids: [], action: "approve" })).toThrow();
   });
 });
 // [END: module]

@@ -17,6 +17,7 @@ import { eq } from "drizzle-orm";
 import { heartbeatRuns, type Db } from "@paperclipai/db";
 import {
   addApprovalCommentSchema,
+  bulkResolveApprovalsSchema,
   createApprovalSchema,
   requestApprovalRevisionSchema,
   resolveApprovalSchema,
@@ -27,6 +28,7 @@ import { logger } from "../middleware/logger.js";
 import {
   approvalService,
   approvalRiskService,
+  approvalTriageService,
   accessService,
   canDecide,
   heartbeatService,
@@ -63,6 +65,7 @@ export function approvalRoutes(
   const router = Router();
   const svc = approvalService(db);
   const riskSvc = approvalRiskService(db);
+  const triageSvc = approvalTriageService(db);
   const access = accessService(db);
   const heartbeat = heartbeatService(db, {
     pluginWorkerManager: options.pluginWorkerManager,
@@ -130,6 +133,34 @@ export function approvalRoutes(
     const result = await svc.list(companyId, status);
     res.json(result.map((approval) => redactApprovalPayload(approval)));
   });
+
+  // Route ordering: this literal /triage path must be registered before any
+  // /companies/:companyId/approvals/:something param route so it isn't
+  // swallowed as a param match. There is no such param route today, but keep
+  // triage + bulk grouped here to preserve that invariant as routes are added.
+  router.get("/companies/:companyId/approvals/triage", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertCompanyAccess(req, companyId);
+    if (!(await assertApprovalAccessAllowed(req, res, companyId))) return;
+    res.json(await triageSvc.listTriage(companyId));
+  });
+
+  router.post(
+    "/companies/:companyId/approvals/bulk",
+    validate(bulkResolveApprovalsSchema),
+    async (req, res) => {
+      assertBoard(req);
+      const companyId = req.params.companyId as string;
+      assertCompanyAccess(req, companyId);
+      const result = await triageSvc.bulkResolve(companyId, {
+        ids: req.body.ids,
+        action: req.body.action,
+        note: req.body.decisionNote ?? null,
+        actor: { actorId: req.actor.userId ?? "board" },
+      });
+      res.json(result);
+    },
+  );
 
   router.get("/approvals/:id", async (req, res) => {
     const id = req.params.id as string;
