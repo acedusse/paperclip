@@ -215,6 +215,110 @@ describeEmbeddedPostgres("workspace path claim routes", () => {
     expect(await db.select().from(workspacePathClaims)).toHaveLength(0);
   });
 
+  it("rejects an acquire request from a run belonging to a different agent", async () => {
+    const { companyId, wsId, runSelf } = await seedSharedWorkspaceRun();
+    const otherAgentId = randomUUID();
+    await db.insert(agents).values({
+      id: otherAgentId,
+      companyId,
+      name: "OtherAgent",
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: {},
+      permissions: {},
+    });
+
+    // Actor claims to be otherAgentId, but runSelf is actually owned by the
+    // agent seeded in seedSharedWorkspaceRun, so the ownership check must fail.
+    const res = await request(createApp(agentActor(companyId, otherAgentId, runSelf)))
+      .post(`/api/companies/${companyId}/workspace-path-claims`)
+      .send({ path: "src/pay/api" });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(await db.select().from(workspacePathClaims)).toHaveLength(0);
+  });
+
+  it("rejects an acquire request from a run belonging to a different company", async () => {
+    const { agentId, runSelf } = await seedSharedWorkspaceRun();
+    const otherCompanyId = randomUUID();
+    await db.insert(companies).values({
+      id: otherCompanyId,
+      name: "Other Co",
+      issuePrefix: `T${otherCompanyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+
+    // runSelf belongs to the original company, not otherCompanyId.
+    const res = await request(createApp(agentActor(otherCompanyId, agentId, runSelf)))
+      .post(`/api/companies/${otherCompanyId}/workspace-path-claims`)
+      .send({ path: "src/pay/api" });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(await db.select().from(workspacePathClaims)).toHaveLength(0);
+
+    await db.delete(companies).where(eq(companies.id, otherCompanyId));
+  });
+
+  it("rejects a release request from a run belonging to a different agent", async () => {
+    const { companyId, agentId, wsId, runSelf } = await seedSharedWorkspaceRun();
+
+    // First acquire a legitimate claim as the real agent/run.
+    const acquireRes = await request(createApp(agentActor(companyId, agentId, runSelf)))
+      .post(`/api/companies/${companyId}/workspace-path-claims`)
+      .send({ path: "src/pay/api" });
+    expect(acquireRes.status, JSON.stringify(acquireRes.body)).toBe(201);
+
+    const otherAgentId = randomUUID();
+    await db.insert(agents).values({
+      id: otherAgentId,
+      companyId,
+      name: "OtherAgent",
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: {},
+      permissions: {},
+    });
+
+    const releaseRes = await request(createApp(agentActor(companyId, otherAgentId, runSelf)))
+      .post(`/api/companies/${companyId}/workspace-path-claims/release`)
+      .send();
+    expect(releaseRes.status, JSON.stringify(releaseRes.body)).toBe(403);
+
+    const active = await db
+      .select()
+      .from(workspacePathClaims)
+      .where(eq(workspacePathClaims.executionWorkspaceId, wsId));
+    expect(active.some((c) => c.status === "active")).toBe(true);
+  });
+
+  it("rejects a non-string path with 400 before writing a claim", async () => {
+    const { companyId, agentId, runSelf } = await seedSharedWorkspaceRun();
+
+    const res = await request(createApp(agentActor(companyId, agentId, runSelf)))
+      .post(`/api/companies/${companyId}/workspace-path-claims`)
+      .send({ path: 123 });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(400);
+    expect(res.body).toEqual({ error: "path must be a string" });
+    expect(await db.select().from(workspacePathClaims)).toHaveLength(0);
+  });
+
+  it("rejects a non-positive-number ttlMs with 400 before writing a claim", async () => {
+    const { companyId, agentId, runSelf } = await seedSharedWorkspaceRun();
+
+    const res = await request(createApp(agentActor(companyId, agentId, runSelf)))
+      .post(`/api/companies/${companyId}/workspace-path-claims`)
+      .send({ path: "src/pay/api", ttlMs: "not-a-number" });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(400);
+    expect(res.body).toEqual({ error: "ttlMs must be a positive number" });
+    expect(await db.select().from(workspacePathClaims)).toHaveLength(0);
+  });
+
   it("releases the caller's active claims", async () => {
     const { companyId, agentId, wsId, runSelf } = await seedSharedWorkspaceRun();
 

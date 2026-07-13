@@ -20,6 +20,7 @@ import { detectClaimOverlap } from "../services/workspace-path-overlap.js";
 import { logActivity } from "../services/index.js";
 import { assertCompanyAccess } from "./authz.js";
 import { parseObject } from "../adapters/utils.js";
+import { logger } from "../middleware/logger.js";
 
 function readNonEmptyString(value: unknown): string | null {
   return typeof value === "string" && value.trim().length > 0 ? value : null;
@@ -104,6 +105,18 @@ export function workspacePathClaimRoutes(db: Db) {
     const executionWorkspaceId = await resolveSharedWorkspaceForRun(db, res, run);
     if (!executionWorkspaceId) return;
 
+    if (req.body?.path !== undefined && typeof req.body.path !== "string") {
+      res.status(400).json({ error: "path must be a string" });
+      return;
+    }
+    if (
+      req.body?.ttlMs !== undefined &&
+      !(typeof req.body.ttlMs === "number" && Number.isFinite(req.body.ttlMs) && req.body.ttlMs > 0)
+    ) {
+      res.status(400).json({ error: "ttlMs must be a positive number" });
+      return;
+    }
+
     const claim = await svc.acquireClaim({
       companyId,
       executionWorkspaceId,
@@ -127,7 +140,12 @@ export function workspacePathClaimRoutes(db: Db) {
         entityType: "execution_workspace",
         entityId: executionWorkspaceId,
         details: { path: claim.path, conflictingRunIds: conflicts.map((c) => c.heartbeatRunId) },
-      });
+      }).catch((err) =>
+        logger.warn(
+          { err, companyId, executionWorkspaceId, runId: run.id },
+          "path-claim conflict audit failed; ignoring",
+        ),
+      );
     }
 
     res.status(201).json({ claim, conflicts });
