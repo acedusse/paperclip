@@ -142,6 +142,7 @@ import {
 } from "./issue-continuation-summary.js";
 import { executionWorkspaceService, mergeExecutionWorkspaceConfig } from "./execution-workspaces.js";
 import { workspaceOperationService } from "./workspace-operations.js";
+import { detectConcurrentSharedActivity } from "./workspace-conflict.js";
 import { isProcessGroupAlive, terminateLocalService } from "./local-service-supervisor.js";
 import {
   buildExecutionWorkspaceAdapterConfig,
@@ -8877,6 +8878,37 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     });
   }
 
+  // Best-effort audit: flags when a run starts executing in a shared_workspace
+  // that another running run already occupies. Never throws into run execution —
+  // detection/audit failures are logged and swallowed.
+  async function auditConcurrentSharedActivity(
+    agent: { id: string; companyId: string },
+    runId: string,
+    workspaceId: string,
+  ) {
+    try {
+      const otherActiveRunIds = await workspaceOperationsSvc.runningRunIdsOnWorkspace(workspaceId, runId);
+      const { isConcurrent, otherRunIds } = detectConcurrentSharedActivity({
+        workspaceMode: "shared_workspace",
+        otherActiveRunIds,
+      });
+      if (!isConcurrent) return;
+      await logActivity(db, {
+        companyId: agent.companyId,
+        actorType: "system",
+        actorId: "workspace-conflict-detection",
+        agentId: agent.id,
+        runId,
+        action: "workspace_concurrent_activity_detected",
+        entityType: "execution_workspace",
+        entityId: workspaceId,
+        details: { concurrentRunIds: otherRunIds, count: otherRunIds.length },
+      });
+    } catch (err) {
+      logger.warn({ err, workspaceId, runId }, "concurrent shared-workspace detection failed; ignoring");
+    }
+  }
+
   async function executeRun(runId: string) {
     let run = await getRun(runId);
     if (!run) return;
@@ -9457,6 +9489,9 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       heartbeatRunId: run.id,
       executionWorkspaceId: existingExecutionWorkspace?.id ?? null,
     });
+    if (existingExecutionWorkspace && existingExecutionWorkspace.mode === "shared_workspace") {
+      await auditConcurrentSharedActivity(agent, run.id, existingExecutionWorkspace.id);
+    }
     const executionWorkspaceBase = {
       baseCwd: resolvedWorkspace.cwd,
       source: resolvedWorkspace.source,

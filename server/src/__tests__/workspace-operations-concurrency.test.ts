@@ -93,4 +93,16 @@ describeEmbeddedPostgres("workspaceOperationService.runningRunIdsOnWorkspace", (
     await seedOp(companyId, runDone, wsA);
     expect(await svc.runningRunIdsOnWorkspace(wsA, runSelf)).toEqual([]);
   });
+
+  it("dedups multiple op-log rows for the same peer run on the same workspace", async () => {
+    const { companyId, agentId, wsA } = await seed();
+    const runSelf = await seedRun(companyId, agentId, "running");
+    const runPeer = await seedRun(companyId, agentId, "running");
+    await seedOp(companyId, runSelf, wsA);
+    // Two workspace_operations rows for the SAME peer run on the SAME workspace
+    // (e.g. multiple phases logged for one run) must still count as one run.
+    await seedOp(companyId, runPeer, wsA);
+    await seedOp(companyId, runPeer, wsA);
+    expect(await svc.runningRunIdsOnWorkspace(wsA, runSelf)).toEqual([runPeer]);
+  });
 });
