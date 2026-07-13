@@ -41,15 +41,25 @@ const mockSecretService = vi.hoisted(() => ({
   normalizeHireApprovalPayloadForPersistence: vi.fn(),
 }));
 
+const mockRiskService = vi.hoisted(() => ({
+  getSnapshot: vi.fn(),
+  computeAndPersist: vi.fn(),
+}));
+
 const mockLogActivity = vi.hoisted(() => vi.fn());
 const mockAccessService = vi.hoisted(() => ({
   decide: vi.fn(),
 }));
+const mockCanDecide = vi.hoisted(() => vi.fn());
+const mockRecordDecision = vi.hoisted(() => vi.fn());
 
 function registerModuleMocks() {
   vi.doMock("../services/index.js", () => ({
     accessService: () => mockAccessService,
     approvalService: () => mockApprovalService,
+    approvalRiskService: () => mockRiskService,
+    canDecide: mockCanDecide,
+    recordDecision: mockRecordDecision,
     heartbeatService: () => mockHeartbeatService,
     issueApprovalService: () => mockIssueApprovalService,
     logActivity: mockLogActivity,
@@ -145,6 +155,10 @@ describe("approval routes idempotent retries", () => {
     mockIssueApprovalService.listIssuesForApproval.mockReset();
     mockIssueApprovalService.linkManyForApproval.mockReset();
     mockSecretService.normalizeHireApprovalPayloadForPersistence.mockReset();
+    mockRiskService.getSnapshot.mockReset();
+    mockRiskService.computeAndPersist.mockReset();
+    mockCanDecide.mockReset();
+    mockRecordDecision.mockReset();
     mockLogActivity.mockReset();
     mockAccessService.decide.mockReset();
     mockAccessService.decide.mockResolvedValue({
@@ -156,6 +170,10 @@ describe("approval routes idempotent retries", () => {
     mockHeartbeatService.wakeup.mockResolvedValue({ id: "wake-1" });
     mockIssueApprovalService.listIssuesForApproval.mockResolvedValue([{ id: "issue-1" }]);
     mockLogActivity.mockResolvedValue(undefined);
+    mockRiskService.getSnapshot.mockResolvedValue(null);
+    mockRiskService.computeAndPersist.mockResolvedValue({ score: 0, band: "low", reasons: [] });
+    mockCanDecide.mockReturnValue({ allow: true });
+    mockRecordDecision.mockResolvedValue(undefined);
   });
 
   it("does not emit duplicate approval side effects when approve is already resolved", async () => {
