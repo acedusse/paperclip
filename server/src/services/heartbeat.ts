@@ -142,6 +142,7 @@ import {
 } from "./issue-continuation-summary.js";
 import { executionWorkspaceService, mergeExecutionWorkspaceConfig } from "./execution-workspaces.js";
 import { workspaceOperationService } from "./workspace-operations.js";
+import { workspacePathClaimService } from "./workspace-path-claims.js";
 import { detectConcurrentSharedActivity } from "./workspace-conflict.js";
 import { isProcessGroupAlive, terminateLocalService } from "./local-service-supervisor.js";
 import {
@@ -3448,6 +3449,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     environmentRuntime,
   });
   const workspaceOperationsSvc = workspaceOperationService(db);
+  const workspacePathClaimsSvc = workspacePathClaimService(db);
   const activeRunExecutions = new Set<string>();
   const liveRunExecutions = {
     has(id: string) {
@@ -3485,6 +3487,19 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
         { err: releaseError.error, leaseId: releaseError.leaseId, runId: input.runId },
         "failed to release environment lease for heartbeat run",
       );
+    }
+  }
+
+  // Best-effort: release any workspace path claims still held by this run once
+  // it reaches a terminal state. Never allowed to break run teardown — the
+  // path-claim-expiry reconciler sweep (see workspace-path-claims.ts) is the
+  // crash-safe backstop if this fails or is skipped.
+  async function releasePathClaimsForRun(runId: string, runStatus: string | null | undefined) {
+    const status = runStatus === "cancelled" ? "released" : runStatus === "failed" ? "failed" : "released";
+    try {
+      await workspacePathClaimsSvc.releaseClaimsForRun(runId, status);
+    } catch (err) {
+      logger.warn({ err, runId }, "path-claim release failed; reconciler TTL will reclaim");
     }
   }
 
@@ -10771,6 +10786,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
             status: latestRun?.status,
             failureReason: latestRun?.error ?? undefined,
           });
+          await releasePathClaimsForRun(run.id, latestRun?.status);
           await releaseRuntimeServicesForRun(run.id).catch(() => undefined);
           activeRunExecutions.delete(run.id);
           await startNextQueuedRunForAgent(run.agentId);
