@@ -15,7 +15,7 @@
 import { randomUUID } from "node:crypto";
 import type { Db } from "@paperclipai/db";
 import { workspacePathClaims } from "@paperclipai/db";
-import { and, eq, isNotNull, lte, ne } from "drizzle-orm";
+import { and, eq, gt, inArray, isNotNull, lte, ne, sql } from "drizzle-orm";
 import type { ReconcileResult, ReconcileSource } from "./admission-reconciler.js";
 import { normalizeClaimPath } from "./workspace-path-overlap.js";
 
@@ -88,6 +88,30 @@ export function workspacePathClaimService(db: Db) {
         .from(workspacePathClaims)
         .where(and(...conditions))
         .orderBy(workspacePathClaims.acquiredAt);
+    },
+
+    async activeClaimCountsForWorkspaces(
+      executionWorkspaceIds: string[],
+      now: Date,
+    ): Promise<Map<string, number>> {
+      const counts = new Map<string, number>();
+      if (executionWorkspaceIds.length === 0) return counts;
+      const rows = await db
+        .select({
+          executionWorkspaceId: workspacePathClaims.executionWorkspaceId,
+          count: sql<number>`count(*)::int`,
+        })
+        .from(workspacePathClaims)
+        .where(
+          and(
+            inArray(workspacePathClaims.executionWorkspaceId, executionWorkspaceIds),
+            eq(workspacePathClaims.status, "active"),
+            gt(workspacePathClaims.expiresAt, now),
+          ),
+        )
+        .groupBy(workspacePathClaims.executionWorkspaceId);
+      for (const row of rows) counts.set(row.executionWorkspaceId, Number(row.count));
+      return counts;
     },
 
     async findExpiredClaims(now: Date): Promise<Array<{ id: string }>> {
