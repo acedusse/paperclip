@@ -20,6 +20,39 @@ Read `currentExecutionWorkspace`:
 
 If `currentExecutionWorkspace` is `null`, the issue does not currently have a realized execution workspace. For child/follow-up work, create the child with `parentId` or use `inheritExecutionWorkspaceFromIssueId` so Paperclip preserves workspace continuity.
 
+## Coordinating in a Shared Workspace (Path Claims)
+
+When multiple agents work in the same workspace, coordinate file edits by claiming a subtree before you edit it. This prevents conflicting writes.
+
+```sh
+curl -sS -X POST \
+  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
+  -H "Content-Type: application/json" \
+  "$PAPERCLIP_API_URL/api/companies/{companyId}/workspace-path-claims" \
+  -d '{"path":"src/components"}'
+```
+
+The response is `201` with:
+
+```json
+{
+  "claim": { "id": "...", "path": "src/components", "expiresAt": "..." },
+  "conflicts": []
+}
+```
+
+If `conflicts` is non-empty, another agent is actively working on an overlapping path. Prefer a different subtree, or coordinate with them directly — claims are **advisory only** and not enforced.
+
+Claims auto-release when your run ends. To release early:
+
+```sh
+curl -sS -X POST \
+  -H "Authorization: Bearer $PAPERCLIP_API_KEY" \
+  "$PAPERCLIP_API_URL/api/companies/{companyId}/workspace-path-claims/release"
+```
+
+This endpoint is only meaningful in a **shared workspace**. In an isolated (per-issue) worktree, it returns `400`.
+
 ## Control Services
 
 Prefer Paperclip-managed runtime service controls over manual `pnpm dev &` or ad-hoc background processes. These endpoints keep service state, URLs, logs, and ownership visible to other agents and the board.
