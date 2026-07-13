@@ -16,6 +16,7 @@ import { randomUUID } from "node:crypto";
 import type { Db } from "@paperclipai/db";
 import { workspacePathClaims } from "@paperclipai/db";
 import { and, eq, isNotNull, lte, ne } from "drizzle-orm";
+import type { ReconcileResult, ReconcileSource } from "./admission-reconciler.js";
 import { normalizeClaimPath } from "./workspace-path-overlap.js";
 
 export const DEFAULT_CLAIM_TTL_MS = 1_800_000;
@@ -108,6 +109,27 @@ export function workspacePathClaimService(db: Db) {
           eq(workspacePathClaims.id, id),
           eq(workspacePathClaims.status, "active"),
         ));
+    },
+  };
+}
+
+// Periodic sweep: expire any active claim whose TTL has lapsed. Crash-safe
+// backstop for the same expiry that acquireClaim's TTL already implies —
+// this is what actually flips status to "expired" if nothing else does.
+export function makePathClaimExpirySource(deps: {
+  findExpiredClaims: (now: Date) => Promise<Array<{ id: string }>>;
+  expireClaim: (id: string) => Promise<void>;
+}): ReconcileSource {
+  return {
+    name: "path-claim-expiry",
+    async reconcile(now: Date): Promise<ReconcileResult> {
+      const expired = await deps.findExpiredClaims(now);
+      let repaired = 0;
+      for (const { id } of expired) {
+        await deps.expireClaim(id);
+        repaired += 1;
+      }
+      return { source: "path-claim-expiry", drifted: expired.length, repaired };
     },
   };
 }
