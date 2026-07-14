@@ -792,6 +792,13 @@
       "when": 1784000000000,
       "tag": "0112_combo05_auto_approve_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 113,
+      "version": "7",
+      "when": 1784200000000,
+      "tag": "0113_combo05_digests",
+      "breakpoints": true
     }
   ]
 }

@@ -12,6 +12,10 @@
 // JSON_FLOW: {"file": "server/src/services/notification-delivery.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import type { Db } from "@paperclipai/db";
+import { digests } from "@paperclipai/db";
+import type { DigestPayload } from "./digest-narration.js";
+
 export type DeliveryTarget = { userId?: string; companyId: string };
 export type NotificationPayload = {
   kind: string;
@@ -19,6 +23,7 @@ export type NotificationPayload = {
   body?: string;
   link?: string;
   risk?: { band: string; score: number };
+  digest?: { payload: DigestPayload; periodStart: Date | null; periodEnd: Date };
 };
 export type DeliveryChannel = {
   name: "inbox" | "webpush" | "email";
@@ -37,12 +42,20 @@ export function getChannels(): DeliveryChannel[] {
   return [...channels.values()];
 }
 
-// Phase 1: inbox channel is a no-op seam — the inbox/sidebar-badge signal already reflects
-// pending approvals. webpush/email register here in Phase 3.
-registerChannel({
-  name: "inbox",
-  async deliver() {
-    // existing inbox signal already covers this
-  },
-});
+/** Phase 2b: the inbox channel persists a digest row. Registered at app startup with a db handle. */
+export function createInboxDigestChannel(db: Db): DeliveryChannel {
+  return {
+    name: "inbox",
+    async deliver(target, payload) {
+      if (!payload.digest) return; // only digest payloads land in the digests table
+      await db.insert(digests).values({
+        companyId: target.companyId,
+        periodStart: payload.digest.periodStart,
+        periodEnd: payload.digest.periodEnd,
+        payload: payload.digest.payload as unknown as Record<string, unknown>,
+        generatedAt: payload.digest.periodEnd,
+      });
+    },
+  };
+}
 // [END: module]
