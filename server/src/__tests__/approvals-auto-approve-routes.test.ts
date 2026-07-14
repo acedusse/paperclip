@@ -169,6 +169,15 @@ describeEmbeddedPostgres("auto-approve on approval create", () => {
       .send({ type: "request_board_approval", requestedByAgentId: otherAgent.id, payload: {} });
     expect(pending.status).toBe(201);
     expect(pending.body.status).toBe("pending");
+
+    // the auto-approved item reports decidedVia = auto_policy
+    const detail = await request(app).get(`/api/approvals/${created.body.id}`);
+    expect(detail.status).toBe(200);
+    expect(detail.body.decidedVia).toBe("auto_policy");
+
+    // the still-pending item has no decision yet
+    const pendingDetail = await request(app).get(`/api/approvals/${pending.body.id}`);
+    expect(pendingDetail.body.decidedVia).toBeNull();
   });
 });
 // [END: module]

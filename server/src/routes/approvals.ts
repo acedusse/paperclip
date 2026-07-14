@@ -13,8 +13,8 @@
 // ==========================================
 // [START: module]
 import { Router, type Request } from "express";
-import { eq } from "drizzle-orm";
-import { heartbeatRuns, type Db } from "@paperclipai/db";
+import { and, desc, eq } from "drizzle-orm";
+import { activityLog, heartbeatRuns, type Db } from "@paperclipai/db";
 import {
   addApprovalCommentSchema,
   bulkResolveApprovalsSchema,
@@ -269,7 +269,19 @@ export function approvalRoutes(
     }
     assertCompanyAccess(req, approval.companyId);
     if (!(await assertApprovalAccessAllowed(req, res, approval.companyId))) return;
-    res.json(redactApprovalPayload(approval));
+
+    // Combo-05 Phase 2a: expose the deciding method (e.g. "auto_policy") from the latest
+    // decision-audit record so the UI can distinguish an auto-approved item from a human one.
+    const lastDecision = await db
+      .select({ details: activityLog.details })
+      .from(activityLog)
+      .where(and(eq(activityLog.entityId, approval.id), eq(activityLog.action, "approval.decision")))
+      .orderBy(desc(activityLog.createdAt))
+      .limit(1)
+      .then((r) => r[0] ?? null);
+    const decidedVia = (lastDecision?.details as { method?: string } | null)?.method ?? null;
+
+    res.json({ ...redactApprovalPayload(approval), decidedVia });
   });
 
   router.post("/companies/:companyId/approvals", validate(createApprovalSchema), async (req, res) => {
