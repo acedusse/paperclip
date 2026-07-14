@@ -3,7 +3,7 @@ import { RISK_BAND_ORDER, type RiskBand } from "./approval-risk.js";
 export type DecisionMethod = "explicit_human" | "delegated_human" | "coverage_escalation" | "bounded_agent" | "auto_policy";
 export const METHOD_PRECEDENCE: readonly DecisionMethod[] = ["explicit_human", "delegated_human", "coverage_escalation", "bounded_agent", "auto_policy"];
 
-const REGISTERED: ReadonlySet<DecisionMethod> = new Set(["explicit_human"]); // phase 1
+const REGISTERED: ReadonlySet<DecisionMethod> = new Set(["explicit_human", "auto_policy"]); // phase 2a
 const NON_HUMAN: ReadonlySet<DecisionMethod> = new Set(["bounded_agent", "auto_policy"]);
 
 function bandRank(b: RiskBand): number { return RISK_BAND_ORDER.indexOf(b); }
