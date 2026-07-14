@@ -19,6 +19,10 @@ import { approvals, approvalRisk, runChangesets } from "@paperclipai/db";
 export type RiskBand = "low" | "medium" | "high" | "critical";
 export const RISK_BAND_ORDER: RiskBand[] = ["low", "medium", "high", "critical"];
 
+export function bandRank(b: RiskBand): number {
+  return RISK_BAND_ORDER.indexOf(b);
+}
+
 export type RiskContext = {
   approval: { type: string; payload: Record<string, unknown> };
   agentTrustStage?: "trusted" | "probation" | "untrusted" | "unknown";
@@ -36,6 +40,14 @@ function detectSensitiveBoundaries(a: RiskContext["approval"]): string[] {
   if (SENSITIVE_TYPES.includes(a.type)) flags.push(`type:${a.type}`);
   for (const k of SENSITIVE_PAYLOAD_KEYS) if (k in a.payload) flags.push(`payload:${k}`);
   return flags;
+}
+
+export function hasSensitiveBoundary(a: { type: string; payload: Record<string, unknown> }): boolean {
+  return detectSensitiveBoundaries(a).length > 0;
+}
+
+export function impliedSpendFromApproval(payload: Record<string, unknown>): number {
+  return typeof payload?.budgetMonthlyCents === "number" ? (payload.budgetMonthlyCents as number) : 0;
 }
 
 const SIGNALS: Signal[] = [
@@ -120,10 +132,7 @@ export function approvalRiskService(db: Db) {
             .then((r) => r[0]?.s ?? null)
         : null;
 
-      const impliedSpendCents =
-        typeof approval.payload?.budgetMonthlyCents === "number"
-          ? (approval.payload.budgetMonthlyCents as number)
-          : undefined;
+      const impliedSpendCents = impliedSpendFromApproval(approval.payload);
 
       const result = riskScore({
         approval: { type: approval.type, payload: approval.payload },
