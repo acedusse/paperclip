@@ -785,6 +785,13 @@
       "when": 1781902600000,
       "tag": "0111_combo05_review_cockpit",
       "breakpoints": true
+    },
+    {
+      "idx": 112,
+      "version": "7",
+      "when": 1784000000000,
+      "tag": "0112_combo05_auto_approve_policies",
+      "breakpoints": true
     }
   ]
 }
