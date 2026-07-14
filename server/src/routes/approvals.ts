@@ -31,12 +31,16 @@ import {
   approvalTriageService,
   autoApprovePolicyService,
   accessService,
+  bandRank,
+  buildApprovalPushBody,
   canDecide,
+  deliverThroughChannels,
   heartbeatService,
   issueApprovalService,
   logActivity,
   recordDecision,
   secretService,
+  type RiskBand,
 } from "../services/index.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
 import { redactEventPayload } from "../redaction.js";
@@ -44,6 +48,9 @@ import type { PluginWorkerManager } from "../services/plugin-worker-manager.js";
 
 // Combo-05 Phase 2a: locked ceiling — no policy may auto-decide above this band.
 const AUTO_DECISION_MAX_BAND = "low" as const;
+
+// Combo-05 Phase 3a: high-band approvals buzz the phone.
+const PUSH_MIN_BAND = "high" as const;
 
 function redactApprovalPayload<T extends { payload: Record<string, unknown> }>(approval: T): T {
   return {
@@ -381,6 +388,22 @@ export function approvalRoutes(
     }
 
     const finalApproval = (await svc.getById(approval.id)) ?? approval;
+
+    // Phase 3a: high-band approvals buzz the phone. Best-effort; never blocks create.
+    if (finalApproval.status !== "approved") {
+      const pushRisk = await riskSvc.getSnapshot(approval.id);
+      if (pushRisk && bandRank(pushRisk.band as RiskBand) >= bandRank(PUSH_MIN_BAND)) {
+        void deliverThroughChannels(
+          { companyId },
+          {
+            kind: "approval_high_risk",
+            title: `${pushRisk.band} risk approval needs you`,
+            push: buildApprovalPushBody({ approvalType: approval.type, band: pushRisk.band, companyId, approvalId: approval.id }),
+          },
+        ).catch((err) => logger.warn({ err, approvalId: approval.id }, "high-risk push failed"));
+      }
+    }
+
     res.status(201).json(redactApprovalPayload(finalApproval));
   });
 
