@@ -124,5 +124,47 @@ describeEmbeddedPostgres("createWebPushChannel", () => {
     const remaining = await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.companyId, companyId));
     expect(remaining).toHaveLength(1);
   });
+
+  it("still resolves deliver() when pruning a dead subscription itself fails (db.delete rejects)", async () => {
+    // Reseed: the previous test already pruned one subscription down to a single remaining row.
+    // Add a second subscription so this test has two independent sends again, one of which will 410.
+    await db.insert(pushSubscriptions).values({
+      companyId,
+      userId: "user-3",
+      endpoint: "https://push.example.com/sub-3",
+      p256dh: "p256dh-3",
+      auth: "auth-3",
+    });
+
+    const channel = createWebPushChannel(db);
+    (webpush as any).sendNotification.mockClear();
+    (webpush as any).sendNotification.mockRejectedValueOnce(Object.assign(new Error("gone"), { statusCode: 410 }));
+
+    // Force the prune delete to reject once (simulating a transient DB error while pruning),
+    // without touching the delete used for any other purpose.
+    const originalDelete = db.delete.bind(db);
+    const deleteSpy = vi.spyOn(db, "delete").mockImplementationOnce(
+      () =>
+        ({
+          where: () => Promise.reject(new Error("transient db error during prune")),
+        }) as any,
+    );
+
+    try {
+      // Pre-fix, the unguarded `await db.delete(...).where(...)` throws out of the catch block,
+      // out of the for-loop, and out of deliver() itself — this assertion fails against that code.
+      await expect(
+        channel.deliver(
+          { companyId },
+          { kind: "k", title: "t", push: { title: "T", body: "B", url: "/u", tag: "x", band: "high" } },
+        ),
+      ).resolves.toBeUndefined();
+    } finally {
+      deleteSpy.mockRestore();
+      void originalDelete;
+    }
+
+    expect((webpush as any).sendNotification).toHaveBeenCalledTimes(2);
+  });
 });
 // [END: module]

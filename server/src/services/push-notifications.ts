@@ -52,7 +52,12 @@ export function createWebPushChannel(db: Db): DeliveryChannel {
         } catch (err) {
           const statusCode = (err as { statusCode?: number }).statusCode;
           if (statusCode === 404 || statusCode === 410) {
-            await db.delete(pushSubscriptions).where(eq(pushSubscriptions.id, sub.id));
+            await db
+              .delete(pushSubscriptions)
+              .where(eq(pushSubscriptions.id, sub.id))
+              .catch((delErr) =>
+                logger.warn({ err: delErr, subscriptionId: sub.id }, "failed to prune dead push subscription"),
+              );
           } else {
             logger.warn({ err, subscriptionId: sub.id }, "web push send failed");
           }
