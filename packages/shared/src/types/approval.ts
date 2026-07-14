@@ -27,6 +27,8 @@ export interface Approval {
   decidedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  /** Combo-05 Phase 2a: deciding method from the latest decision-audit record (e.g. "auto_policy"); only populated on the single-approval read. */
+  decidedVia?: string | null;
 }
 
 export interface ApprovalComment {
