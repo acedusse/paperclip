@@ -3,6 +3,25 @@
 > Companion to [`combo-05-phasing-corrected.md`](../../../.ideas/combinations/combo-05-phasing-corrected.md)
 > and the Phase 1 design [`2026-07-13-combo05-phase1-review-cockpit-design.md`](2026-07-13-combo05-phase1-review-cockpit-design.md).
 
+## Implementation deltas (recorded during build)
+
+Three things surfaced while implementing that refine — but do not contradict — the design below:
+
+1. **Band floor → allowlist implies `trusted`.** The Phase-1 risk model scores `agentTrustStage: "unknown"`
+   at 40 points, and `computeAndPersist` hardcoded `"unknown"`, so *every* approval floored at `medium` —
+   a `low`-only auto-approve could never match. Resolution (keeps the ceiling locked at `low`): in
+   `computeAndPersist`, an agent that has an active auto-approve policy is scored as `trusted` (0 pts) —
+   the operator's allowlisting **is** the trust decision. Its clean work reaches `low`; spend, secrets, or a
+   large diff still climb above `low` and keep it in the human queue. Implemented as a direct
+   `auto_approve_policies` lookup inside `approval-risk.ts` (no import of the policy service — avoids a cycle).
+2. **Auto-approve must wake the requester.** The human approve *route* (not `approvalService.approve`) emits
+   the `approval.approved` domain event **and** calls `heartbeat.wakeup(...)` so the requesting agent resumes.
+   An auto-approval that skipped this would leave a waiting agent stuck. Both paths now call one shared
+   `applyApprovalApprovedEffects(approval, actor)` helper (in `routes/approvals.ts`) that emits the event and
+   wakes the requester; each caller adds its own `recordDecision` (`explicit_human` vs `auto_policy`).
+3. **Shared-barrel re-export.** New validators must be re-exported from the `@paperclipai/shared` top-level
+   `src/index.ts` barrel (not only `validators/index.ts`), or route imports resolve to `undefined`.
+
 ## Context
 
 Phase 1 shipped and merged (PR #22): the risk model, changeset surface, authority resolver
