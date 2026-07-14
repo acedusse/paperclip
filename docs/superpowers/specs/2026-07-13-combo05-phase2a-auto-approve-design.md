@@ -219,11 +219,15 @@ New shared validator `autoApprovePolicySchema` in `packages/shared/src/validator
 Surface that an approval was auto-decided, so an auto-approved item does not look identical to a
 human-approved one:
 
-- Expose the deciding **method** on the approval/triage read path (read the latest `approval.decision`
-  activity record — already keyed by `entityId` — and derive a `decidedVia` field; pick the cheaper of
-  a join vs. a lookup when the read query is in view).
-- Render a small **"Auto-approved"** chip on the triage item and on `ApprovalDetail`, with the firing
-  policy id in a tooltip.
+- Expose the deciding **method** as a `decidedVia` field on the single-approval read
+  (`GET /approvals/:id`) — derived by reading the latest `approval.decision` activity record (already
+  keyed by `entityId`), returning `details.method` (e.g. `"auto_policy"`) and the firing policy id.
+- Render a small **"Auto-approved"** chip on `ApprovalDetail` when `decidedVia === "auto_policy"`, with
+  the firing policy id in a tooltip.
+
+Auto-approved items become `approved` on create and therefore **never appear in the open-only triage
+queue** — so there is no triage-item badge and no change to the triage read path. `ApprovalDetail` is
+the surface where a decision is inspected.
 
 **Badge-only** — no allowlist-preview affordance this cycle (that belongs to the deferred editor UI).
 
@@ -255,8 +259,10 @@ human-approved one:
   `maxBand` above the constant → 422.
 - **Resolver** (`approval-authority.test.ts` extension): `auto_policy` allowed at/below band; still
   denied above `AUTO_DECISION_MAX_BAND`; `explicit_human` unaffected.
-- **UI**: triage item and `ApprovalDetail` render the "Auto-approved" badge when the decision method
-  is `auto_policy`; a human-approved item does not.
+- **UI**: `ApprovalDetail` renders the "Auto-approved" badge when `decidedVia === "auto_policy"`; a
+  human-approved item does not.
+- **Read path**: `GET /approvals/:id` returns `decidedVia: "auto_policy"` for an auto-approved item and
+  `"explicit_human"` (or null) otherwise.
 
 ---
 
@@ -268,14 +274,14 @@ human-approved one:
 - `server/src/services/auto-approve-policy.ts` (pure matcher + service) + tests
 - `server/src/routes/auto-approve-policies.ts` (board CRUD) + test
 - `packages/shared/src/validators/` — `autoApprovePolicySchema` + test
-- UI "Auto-approved" badge (triage item + `ApprovalDetail`) + tests
+- UI "Auto-approved" badge (`ApprovalDetail`) + test
 
 **Modified:**
 - `server/src/services/approval-authority.ts` — register `auto_policy`
-- `server/src/services/approval-risk.ts` — export sensitive-boundary helpers, `RISK_BAND_ORDER`/`bandRank`, spend helper
-- `server/src/routes/approvals.ts` — evaluate-on-create wiring; `AUTO_DECISION_MAX_BAND` constant
+- `server/src/services/approval-risk.ts` — export sensitive-boundary helper, `bandRank`, spend helper
+- `server/src/routes/approvals.ts` — evaluate-on-create wiring; `AUTO_DECISION_MAX_BAND` constant; `decidedVia` on `GET /approvals/:id`
 - `server/src/services/index.ts`, `server/src/app.ts` — export/mount new service + route
-- triage/detail read path — expose `decidedVia`
+- `ui/src/api/approvals.ts` — `decidedVia` on the `Approval` type
 
 **Untouched (no-op for existing consumers):** Phase-1 human decision path, risk scoring, changeset
 surface.
