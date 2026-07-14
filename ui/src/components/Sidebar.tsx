@@ -33,6 +33,7 @@ import {
   Pin,
   MessagesSquare,
   ShieldCheck,
+  Mail,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { NavLink } from "@/lib/router";
@@ -192,6 +193,7 @@ export function Sidebar() {
           <SidebarNavItem to="/goals" label="Goals" icon={Target} />
           <SidebarNavItem to="/artifacts" label="Artifacts" icon={Package} />
           <SidebarNavItem to="/approvals/triage" label="Triage" icon={ShieldCheck} />
+          <SidebarNavItem to="/digest" label="Digest" icon={Mail} />
           {showWorkspacesLink ? (
             <SidebarNavItem to="/workspaces" label="Workspaces" icon={GitBranch} />
           ) : null}
