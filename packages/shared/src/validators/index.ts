@@ -441,6 +441,14 @@ export {
 } from "./approval.js";
 
 export {
+  AUTO_DECISION_MAX_BAND,
+  createAutoApprovePolicySchema,
+  updateAutoApprovePolicySchema,
+  type CreateAutoApprovePolicy,
+  type UpdateAutoApprovePolicy,
+} from "./auto-approve-policy.js";
+
+export {
   envBindingPlainSchema,
   envBindingSecretRefSchema,
   envBindingSchema,
