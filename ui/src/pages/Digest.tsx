@@ -15,6 +15,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { digestsApi } from "../api/digests";
 import { useCompany } from "../context/CompanyContext";
+import { timeAgo } from "../lib/timeAgo";
 
 export function Digest() {
   const { selectedCompanyId } = useCompany();
@@ -44,7 +45,7 @@ export function Digest() {
         <div className="digest">
           <h2 className="text-lg font-medium">{digest.payload.headline}</h2>
           <p className="text-xs text-muted-foreground">
-            generated {new Date(digest.generatedAt).toLocaleString()}
+            generated {timeAgo(digest.generatedAt)}
           </p>
           {digest.payload.sections.map((section) => (
             <section key={section.key} className="mt-3">
