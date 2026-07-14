@@ -60,6 +60,8 @@ export { digestService, DIGEST_MIN_INTERVAL_HOURS } from "./digest.js";
 export { collectDigestSignals, type DigestSignals } from "./digest-signals.js";
 export { narrateDigest, deterministicNarrator, type DigestPayload } from "./digest-narration.js";
 export { createInboxDigestChannel } from "./notification-delivery.js";
+export { pushVapidService } from "./push-vapid.js";
+export { createWebPushChannel, buildApprovalPushBody } from "./push-notifications.js";
 export { budgetService } from "./budgets.js";
 export { secretService } from "./secrets.js";
 export { routineService } from "./routines.js";
