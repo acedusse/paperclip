@@ -1,19 +1,18 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { registerChannel, getChannels, deliverThroughChannels } from "../services/notification-delivery.js";
 
-function clearChannels() {
-  // Register no-op replacements is awkward; instead assert behavior via spies on fresh fake channels.
-}
-
 describe("deliverThroughChannels", () => {
   it("invokes every registered channel and isolates a throwing one", async () => {
-    const good = vi.fn(() => Promise.resolve());
-    const bad = vi.fn(() => Promise.reject(new Error("boom")));
-    registerChannel({ name: "inbox", deliver: good });
-    registerChannel({ name: "webpush", deliver: bad });
+    const inbox = vi.fn(() => Promise.resolve());
+    const webpush = vi.fn(() => Promise.reject(new Error("boom")));
+    const email = vi.fn(() => Promise.resolve());
+    registerChannel({ name: "inbox", deliver: inbox });
+    registerChannel({ name: "webpush", deliver: webpush });
+    registerChannel({ name: "email", deliver: email });
     await expect(deliverThroughChannels({ companyId: "c1" }, { kind: "k", title: "t" })).resolves.toBeUndefined();
-    expect(good).toHaveBeenCalledTimes(1);
-    expect(bad).toHaveBeenCalledTimes(1);
+    expect(inbox).toHaveBeenCalledTimes(1);
+    expect(webpush).toHaveBeenCalledTimes(1);
+    expect(email).toHaveBeenCalledTimes(1);
   });
 });
 
