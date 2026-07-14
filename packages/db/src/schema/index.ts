@@ -102,4 +102,6 @@ export { runChangesets, type RunChangesetFile, type RunChangesetCommand } from "
 export { approvalRisk } from "./approval_risk.js";
 export { autoApprovePolicies, type AutoApprovePolicyRow } from "./auto_approve_policies.js";
 export { digests, type DigestRow } from "./digests.js";
+export { pushSubscriptions, type PushSubscriptionRow } from "./push_subscriptions.js";
+export { pushVapidKeys, type PushVapidKeyRow } from "./push_vapid_keys.js";
 // [END: module]
