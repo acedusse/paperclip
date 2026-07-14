@@ -37,9 +37,12 @@ is per-approval). It reuses the pipeline's `getChannels()` fan-out and the `Noti
 
 1. **Send via the `web-push` library** — add `web-push` (+ `@types/web-push`) to `server/package.json`.
    It handles VAPID JWT signing and RFC-8291 payload encryption. Also generates the VAPID keypair.
-2. **VAPID keys auto-generated + persisted** in the `instance_settings` singleton under a `push` section
-   (`{ vapid: { publicKey, privateKey }, subject }`), lazily on first use. Turnkey; the DB is already the
-   trust boundary (company secrets live there). `GET /push/vapid-public-key` serves the public key.
+2. **VAPID keys auto-generated + persisted** in a dedicated server-only singleton table `push_vapid_keys`
+   (`public_key`, `private_key`, `subject`), lazily on first use. Turnkey; the DB is already the trust
+   boundary (company secrets live there). A dedicated table — rather than the `instance_settings` singleton —
+   keeps the **private** key out of the schema-validated `general`/`experimental` settings blobs that a
+   settings API could expose to clients, and avoids reworking the settings zod schema. `GET
+   /push/vapid-public-key` serves only the public key.
 3. **Subscriptions are company-scoped** — `push_subscriptions(companyId, userId, endpoint UNIQUE, p256dh,
    auth, userAgent, …)`. A company's high-band approval sends to that company's subscriptions (no
    user→company access lookup at send time).
@@ -83,13 +86,19 @@ push_subscriptions
 
 Indexes: `unique(endpoint)`; `index(company_id)`.
 
-**VAPID keys** live in the `instance_settings` singleton `general`-adjacent `push` section:
-`push: { vapid: { publicKey, privateKey }, subject }`. Auto-generated on first use via
-`web-push`'s `generateVAPIDKeys()`. No new column — stored inside the existing settings jsonb (a new
-top-level `push` key on the settings row, read/written via `instanceSettingsService`).
-
-Migration hand-written raw SQL + journal entry (drizzle baseline stale — see Phase 1). Next number is
-**`0114`** (`0113` is the last).
+**VAPID keys** live in a dedicated server-only singleton table `push_vapid_keys`:
+```
+push_vapid_keys
+  id           uuid pk default gen_random_uuid()
+  singleton    text not null default 'default'  -- unique; enforces one row
+  public_key   text not null
+  private_key  text not null
+  subject      text not null
+  created_at   timestamptz not null default now()
+```
+Unique on `singleton`. Auto-generated on first use via `web-push`'s `generateVAPIDKeys()`, read/written only
+by `pushVapidService` (never exposed except the public key). Both tables ship in migration **`0114`**
+(`0113` is the last). Migration hand-written raw SQL + journal entry (drizzle baseline stale — see Phase 1).
 
 ---
 
@@ -103,10 +112,10 @@ pushVapidService(db): {
   ensureInitialised(): Promise<{ publicKey: string } | null>;  // calls webpush.setVapidDetails once/process; null if unavailable
 }
 ```
-Lazy + memoised per process: reads `instance_settings.push.vapid`; if absent, `webpush.generateVAPIDKeys()`
-and persist; then `webpush.setVapidDetails(subject, publicKey, privateKey)` (once). `subject` defaults to a
-constant `mailto:` (overridable from settings). A generation/persist failure returns `null` (push disabled),
-never throws.
+Lazy + memoised per process: reads the `push_vapid_keys` singleton row; if absent, `webpush.generateVAPIDKeys()`
+and insert (with a constant default `subject`, e.g. `mailto:push@paperclip.local`); then
+`webpush.setVapidDetails(subject, publicKey, privateKey)` (once). A generation/persist failure returns `null`
+(push disabled), never throws.
 
 ### webpush channel — `server/src/services/push-notifications.ts`
 
@@ -250,8 +259,8 @@ This makes 3a demonstrable end-to-end (high-band approval → notification appea
 ## File inventory
 
 **New:**
-- `packages/db/src/schema/push_subscriptions.ts` + barrel export
-- `packages/db/src/migrations/0114_combo05_push_subscriptions.sql` (+ journal)
+- `packages/db/src/schema/push_subscriptions.ts` + `packages/db/src/schema/push_vapid_keys.ts` + barrel exports
+- `packages/db/src/migrations/0114_combo05_push_subscriptions.sql` (both tables) (+ journal)
 - `server/src/services/push-vapid.ts` (+ test)
 - `server/src/services/push-notifications.ts` (webpush channel + `buildApprovalPushBody`) (+ tests)
 - `server/src/routes/push.ts` (+ test)
