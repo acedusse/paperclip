@@ -12,9 +12,9 @@
 // JSON_FLOW: {"file": "server/src/services/approval-risk.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
-import { approvals, approvalRisk, runChangesets } from "@paperclipai/db";
+import { approvals, approvalRisk, autoApprovePolicies, runChangesets } from "@paperclipai/db";
 
 export type RiskBand = "low" | "medium" | "high" | "critical";
 export const RISK_BAND_ORDER: RiskBand[] = ["low", "medium", "high", "critical"];
@@ -134,9 +134,29 @@ export function approvalRiskService(db: Db) {
 
       const impliedSpendCents = impliedSpendFromApproval(approval.payload);
 
+      // Combo-05 Phase 2a: a human allowlisting an agent for auto-approve IS the trust decision.
+      // Treat an allowlisted agent as `trusted` so its clean work can reach the `low` band; other
+      // signals (spend, secrets, diff size) still climb above `low` and keep it in the human queue.
+      // Idea 009 not yet built; non-allowlisted agents degrade to lowest trust (`unknown`).
+      const agentId = approval.requestedByAgentId ?? null;
+      const isAllowlisted = agentId
+        ? await db
+            .select({ id: autoApprovePolicies.id })
+            .from(autoApprovePolicies)
+            .where(
+              and(
+                eq(autoApprovePolicies.companyId, approval.companyId),
+                eq(autoApprovePolicies.agentId, agentId),
+                eq(autoApprovePolicies.isActive, true),
+              ),
+            )
+            .limit(1)
+            .then((r) => r.length > 0)
+        : false;
+
       const result = riskScore({
         approval: { type: approval.type, payload: approval.payload },
-        agentTrustStage: "unknown", // idea 009 not yet built; degrade to lowest trust
+        agentTrustStage: isAllowlisted ? "trusted" : "unknown",
         impliedSpendCents,
         changeset,
       });
