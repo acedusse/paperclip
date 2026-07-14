@@ -15,6 +15,7 @@
 import type { Db } from "@paperclipai/db";
 import { digests } from "@paperclipai/db";
 import type { DigestPayload } from "./digest-narration.js";
+import { logger } from "../middleware/logger.js";
 
 export type DeliveryTarget = { userId?: string; companyId: string };
 export type NotificationPayload = {
@@ -24,6 +25,7 @@ export type NotificationPayload = {
   link?: string;
   risk?: { band: string; score: number };
   digest?: { payload: DigestPayload; periodStart: Date | null; periodEnd: Date };
+  push?: { title: string; body: string; url: string; tag?: string; band?: string };
 };
 export type DeliveryChannel = {
   name: "inbox" | "webpush" | "email";
@@ -57,5 +59,16 @@ export function createInboxDigestChannel(db: Db): DeliveryChannel {
       });
     },
   };
+}
+
+/** Fan a notification out through every registered channel; one channel's throw never aborts the rest. */
+export async function deliverThroughChannels(target: DeliveryTarget, payload: NotificationPayload): Promise<void> {
+  for (const channel of getChannels()) {
+    try {
+      await channel.deliver(target, payload);
+    } catch (err) {
+      logger.warn({ err, channel: channel.name }, "delivery channel failed");
+    }
+  }
 }
 // [END: module]

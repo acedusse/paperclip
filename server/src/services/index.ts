@@ -55,7 +55,7 @@ export { canDecide, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-au
 export { recordDecision } from "./approval-decision-audit.js";
 export { evaluateAutoApprove, autoApprovePolicyService, type AutoApprovePolicy } from "./auto-approve-policy.js";
 export { approvalTriageService } from "./approval-triage.js";
-export { registerChannel, getChannels, type DeliveryChannel } from "./notification-delivery.js";
+export { registerChannel, getChannels, deliverThroughChannels, type DeliveryChannel } from "./notification-delivery.js";
 export { digestService, DIGEST_MIN_INTERVAL_HOURS } from "./digest.js";
 export { collectDigestSignals, type DigestSignals } from "./digest-signals.js";
 export { narrateDigest, deterministicNarrator, type DigestPayload } from "./digest-narration.js";
