@@ -391,16 +391,20 @@ export function approvalRoutes(
 
     // Phase 3a: high-band approvals buzz the phone. Best-effort; never blocks create.
     if (finalApproval.status !== "approved") {
-      const pushRisk = await riskSvc.getSnapshot(approval.id);
-      if (pushRisk && bandRank(pushRisk.band as RiskBand) >= bandRank(PUSH_MIN_BAND)) {
-        void deliverThroughChannels(
-          { companyId },
-          {
-            kind: "approval_high_risk",
-            title: `${pushRisk.band} risk approval needs you`,
-            push: buildApprovalPushBody({ approvalType: approval.type, band: pushRisk.band, companyId, approvalId: approval.id }),
-          },
-        ).catch((err) => logger.warn({ err, approvalId: approval.id }, "high-risk push failed"));
+      try {
+        const pushRisk = await riskSvc.getSnapshot(approval.id);
+        if (pushRisk && bandRank(pushRisk.band as RiskBand) >= bandRank(PUSH_MIN_BAND)) {
+          void deliverThroughChannels(
+            { companyId },
+            {
+              kind: "approval_high_risk",
+              title: `${pushRisk.band} risk approval needs you`,
+              push: buildApprovalPushBody({ approvalType: approval.type, band: pushRisk.band, companyId, approvalId: approval.id }),
+            },
+          ).catch((err) => logger.warn({ err, approvalId: approval.id }, "high-risk push failed"));
+        }
+      } catch (err) {
+        logger.warn({ err, approvalId: approval.id }, "high-risk push gate failed");
       }
     }
 
