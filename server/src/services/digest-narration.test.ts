@@ -40,4 +40,29 @@ describe("narrateDigest", () => {
   it("exposes the deterministic narrator as the default", () => {
     expect(narrateDigest(empty, deterministicNarrator)).toEqual(narrateDigest(empty));
   });
+
+  it("headlines stale runs needing attention when there are no open approvals", () => {
+    const signals: DigestSignals = {
+      openApprovals: { total: 0, byBand: { low: 0, medium: 0, high: 0, critical: 0 }, top: [] },
+      autoApprovedSince: 0,
+      staleRuns: { total: 2, top: [{ runId: "r1", agentId: "ag1", status: "running", staleForMinutes: 400 }] },
+    };
+    const p = narrateDigest(signals);
+    expect(p.headline).toContain("attention");
+    expect(p.headline).not.toContain("Nothing");
+    const keys = p.sections.map((s) => s.key);
+    expect(keys).toEqual(["stale-runs"]);
+  });
+
+  it("keeps the calm headline when auto-handled is the only signal", () => {
+    const signals: DigestSignals = {
+      openApprovals: { total: 0, byBand: { low: 0, medium: 0, high: 0, critical: 0 }, top: [] },
+      autoApprovedSince: 5,
+      staleRuns: { total: 0, top: [] },
+    };
+    const p = narrateDigest(signals);
+    expect(p.headline).toBe("Nothing needs you right now");
+    const keys = p.sections.map((s) => s.key);
+    expect(keys).toEqual(["auto-handled"]);
+  });
 });

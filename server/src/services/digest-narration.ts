@@ -10,8 +10,10 @@
 // INTENT: Pure narration engine: transforms DigestSignals into human-readable
 // DigestPayload (headline, sections, full text). Pluggable narrator strategy.
 // PSEUDOCODE: 1. Produce section per non-empty signal (approvals, auto-handled,
-// stale-runs). 2. Compose headline based on approval count. 3. Flatten to text.
-// 4. Return payload with signals for downstream use.
+// stale-runs). 2. Compose headline from actionable signals only (open
+// approvals, then stale runs; autoApprovedSince is informational and never
+// drives "needs you" wording). 3. Flatten to text. 4. Return payload with
+// signals for downstream use.
 // JSON_FLOW: {"file": "server/src/services/digest-narration.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
@@ -56,8 +58,13 @@ export const deterministicNarrator: DigestNarrator = (signals) => {
   );
 
   const n = signals.openApprovals.total;
+  const s = signals.staleRuns.total;
   const headline =
-    n > 0 ? `${n} approval${n === 1 ? "" : "s"} need${n === 1 ? "s" : ""} you` : "Nothing needs you right now";
+    n > 0
+      ? `${n} approval${n === 1 ? "" : "s"} need${n === 1 ? "s" : ""} you`
+      : s > 0
+        ? `${s} run${s === 1 ? "" : "s"} need${s === 1 ? "s" : ""} attention`
+        : "Nothing needs you right now";
 
   const text = [headline, ...sections.flatMap((sec) => [sec.title, ...sec.lines.map((l) => `  ${l}`)])].join("\n");
 
