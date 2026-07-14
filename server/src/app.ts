@@ -39,7 +39,8 @@ import { executionWorkspaceRoutes } from "./routes/execution-workspaces.js";
 import { runChangesetRoutes } from "./routes/run-changesets.js";
 import { autoApprovePolicyRoutes } from "./routes/auto-approve-policies.js";
 import { digestRoutes } from "./routes/digests.js";
-import { createInboxDigestChannel, registerChannel } from "./services/index.js";
+import { pushRoutes } from "./routes/push.js";
+import { createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
 import { goalRoutes } from "./routes/goals.js";
 import { boardChatRoutes } from "./routes/board-chat.js";
 import { approvalRoutes } from "./routes/approvals.js";
@@ -224,6 +225,7 @@ export async function createApp(
   const workerManager = opts.pluginWorkerManager ?? createPluginWorkerManager();
 
   registerChannel(createInboxDigestChannel(db));
+  registerChannel(createWebPushChannel(db));
 
   // Mount API routes
   const api = Router();
@@ -257,6 +259,7 @@ export async function createApp(
   api.use(runChangesetRoutes(db));
   api.use(autoApprovePolicyRoutes(db));
   api.use(digestRoutes(db));
+  api.use(pushRoutes(db));
   api.use(goalRoutes(db));
   api.use(boardChatRoutes(db, { deploymentMode: opts.deploymentMode }));
   api.use(approvalRoutes(db, { pluginWorkerManager: workerManager }));
