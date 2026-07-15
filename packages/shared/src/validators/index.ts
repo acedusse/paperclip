@@ -454,6 +454,15 @@ export {
 } from "./approval.js";
 
 export {
+  createDelegationGrantSchema,
+  coverageConfigSchema,
+  outOfOfficeSchema,
+  type CreateDelegationGrant,
+  type CoverageConfigUpdate,
+  type OutOfOfficeUpdate,
+} from "./delegation.js";
+
+export {
   AUTO_DECISION_MAX_BAND,
   createAutoApprovePolicySchema,
   updateAutoApprovePolicySchema,
