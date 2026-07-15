@@ -15,8 +15,8 @@
 // [START: module]
 import { Router } from "express";
 import { and, eq } from "drizzle-orm";
-import { pushSubscriptions, type Db } from "@paperclipai/db";
-import { pushSubscriptionSchema, pushUnsubscribeSchema } from "@paperclipai/shared";
+import { pushSubscriptions, pushDeliveryPrefs, type Db } from "@paperclipai/db";
+import { pushSubscriptionSchema, pushUnsubscribeSchema, pushPrefsSchema } from "@paperclipai/shared";
 import { pushVapidService } from "../services/index.js";
 import { validate } from "../middleware/validate.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
@@ -54,6 +54,38 @@ export function pushRoutes(db: Db) {
     assertBoard(req);
     assertCompanyAccess(req, companyId);
     await db.delete(pushSubscriptions).where(and(eq(pushSubscriptions.companyId, companyId), eq(pushSubscriptions.endpoint, req.body.endpoint)));
+    res.json({ ok: true });
+  });
+
+  router.get("/companies/:companyId/push/prefs", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertBoard(req);
+    assertCompanyAccess(req, companyId);
+    const actor = getActorInfo(req);
+    const [row] = await db
+      .select()
+      .from(pushDeliveryPrefs)
+      .where(and(eq(pushDeliveryPrefs.companyId, companyId), eq(pushDeliveryPrefs.userId, actor.actorId)));
+    res.json(
+      row
+        ? { minBand: row.minBand, quietStart: row.quietStart, quietEnd: row.quietEnd, timezone: row.timezone }
+        : { minBand: "high", quietStart: null, quietEnd: null, timezone: null },
+    );
+  });
+
+  router.put("/companies/:companyId/push/prefs", validate(pushPrefsSchema), async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertBoard(req);
+    assertCompanyAccess(req, companyId);
+    const actor = getActorInfo(req);
+    const { minBand, quietStart, quietEnd, timezone } = req.body;
+    await db
+      .insert(pushDeliveryPrefs)
+      .values({ companyId, userId: actor.actorId, minBand, quietStart, quietEnd, timezone })
+      .onConflictDoUpdate({
+        target: [pushDeliveryPrefs.companyId, pushDeliveryPrefs.userId],
+        set: { minBand, quietStart, quietEnd, timezone, updatedAt: new Date() },
+      });
     res.json({ ok: true });
   });
 
