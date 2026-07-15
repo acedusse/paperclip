@@ -42,6 +42,7 @@ import { syncAgentAdapterEnvBindings } from "./agent-secret-bindings.js";
 import { normalizeAgentPermissions } from "./agent-permissions.js";
 import { REDACTED_EVENT_VALUE, sanitizeRecord } from "../redaction.js";
 import { secretService } from "./secrets.js";
+import { effectiveIntervalSec, parseHeartbeatCadenceConfig } from "./heartbeat-cadence.js";
 
 function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
@@ -273,8 +274,10 @@ export function agentService(db: Db) {
     const eligibilityAgents = allCompanyRows.map(toEligibilityAgent);
     return rows.map((row) => {
       const base = normalizeAgentBaseRow(row);
+      const cadence = parseHeartbeatCadenceConfig(row.runtimeConfig);
       return {
         ...base,
+        effectiveHeartbeatIntervalSec: effectiveIntervalSec(cadence.intervalSec, row.heartbeatIdleStreak, cadence.idleBackoff),
         orgChainHealth: getAgentWorkEligibility({
           agent: toEligibilityAgent(row),
           agents: eligibilityAgents,

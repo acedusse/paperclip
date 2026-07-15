@@ -41,6 +41,7 @@ import { autoApprovePolicyRoutes } from "./routes/auto-approve-policies.js";
 import { digestRoutes } from "./routes/digests.js";
 import { pushRoutes } from "./routes/push.js";
 import { createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
+import { workspacePathClaimRoutes } from "./routes/workspace-path-claims.js";
 import { goalRoutes } from "./routes/goals.js";
 import { boardChatRoutes } from "./routes/board-chat.js";
 import { approvalRoutes } from "./routes/approvals.js";
@@ -260,6 +261,7 @@ export async function createApp(
   api.use(autoApprovePolicyRoutes(db));
   api.use(digestRoutes(db));
   api.use(pushRoutes(db));
+  api.use(workspacePathClaimRoutes(db));
   api.use(goalRoutes(db));
   api.use(boardChatRoutes(db, { deploymentMode: opts.deploymentMode }));
   api.use(approvalRoutes(db, { pluginWorkerManager: workerManager }));

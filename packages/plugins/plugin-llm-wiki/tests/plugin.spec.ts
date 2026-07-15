@@ -508,6 +508,7 @@ function wikiMaintainerAgent(): Agent {
     pausedAt: null,
     permissions: { canCreateAgents: false },
     lastHeartbeatAt: null,
+    heartbeatIdleStreak: 0,
     metadata: {
       paperclipManagedResource: {
         pluginKey: manifest.id,

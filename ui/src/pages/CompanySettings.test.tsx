@@ -422,6 +422,12 @@ function maxRunsInput(container: HTMLDivElement): HTMLInputElement | null {
   return container.querySelector<HTMLInputElement>('[data-testid="company-max-runs-input"]');
 }
 
+function breakerHorizonInput(container: HTMLDivElement): HTMLInputElement | null {
+  return container.querySelector<HTMLInputElement>(
+    '[data-testid="company-breaker-horizon-minutes-input"]',
+  );
+}
+
 function saveChangesButton(container: HTMLDivElement): HTMLButtonElement | undefined {
   return Array.from(container.querySelectorAll("button")).find((button) =>
     /save changes/i.test(button.textContent ?? ""),
@@ -517,6 +523,56 @@ describe("CompanySettings — company cap + admission status", () => {
       "company-1",
       expect.objectContaining({ maxConcurrentRuns: null }),
     );
+
+    await act(async () => {
+      root.unmount();
+    });
+  });
+
+  it("clears a previously-set breaker horizon by sending null, not undefined", async () => {
+    mockSelectedCompanyRef.current = {
+      ...DEFAULT_TEST_COMPANY,
+      predictiveBreakerEnabled: true,
+      breakerHorizonMinutes: 30,
+    };
+    const root = createRoot(container);
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <CompanySettings />
+          </TooltipProvider>
+        </QueryClientProvider>,
+      );
+    });
+    await flushReact();
+    await flushReact();
+
+    const input = breakerHorizonInput(container);
+    expect(input).not.toBeNull();
+    expect(input!.value).toBe("30");
+
+    await act(async () => {
+      typeIntoInput(input!, "");
+    });
+    await flushReact();
+
+    await act(async () => {
+      saveChangesButton(container)!.click();
+    });
+    await flushReact();
+
+    expect(mockCompaniesApi.update).toHaveBeenCalledWith(
+      "company-1",
+      expect.objectContaining({ breakerHorizonMinutes: null }),
+    );
+    const [, sentPatch] = mockCompaniesApi.update.mock.calls[0];
+    expect(sentPatch).toHaveProperty("breakerHorizonMinutes", null);
+    expect(Object.prototype.hasOwnProperty.call(sentPatch, "breakerHorizonMinutes")).toBe(true);
 
     await act(async () => {
       root.unmount();

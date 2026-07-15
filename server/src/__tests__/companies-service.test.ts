@@ -579,6 +579,73 @@ describeEmbeddedPostgres("companyService", () => {
     expect(reactivateActivity[0]).toMatchObject({ details: { agentsRestored: 0 } });
   });
 
+  it("persists predictiveBreakerEnabled and breakerHorizonMinutes on update", async () => {
+    const companyId = randomUUID();
+
+    await db.insert(companies).values({
+      id: companyId,
+      name: "Breaker Co",
+      issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+
+    const updated = await companyService(db).update(
+      companyId,
+      { predictiveBreakerEnabled: true, breakerHorizonMinutes: 30 },
+      { actorType: "user", actorId: "test-user", agentId: null, runId: null },
+    );
+
+    expect(updated).toMatchObject({
+      predictiveBreakerEnabled: true,
+      breakerHorizonMinutes: 30,
+    });
+
+    const rows = await db
+      .select({
+        predictiveBreakerEnabled: companies.predictiveBreakerEnabled,
+        breakerHorizonMinutes: companies.breakerHorizonMinutes,
+      })
+      .from(companies)
+      .where(eq(companies.id, companyId));
+    expect(rows[0]).toMatchObject({
+      predictiveBreakerEnabled: true,
+      breakerHorizonMinutes: 30,
+    });
+  });
+
+  it("round-trips schedule windows and timezone through getById", async () => {
+    const companyId = randomUUID();
+
+    await db.insert(companies).values({
+      id: companyId,
+      name: "Sched Co",
+      issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+
+    const bare = await companyService(db).getById(companyId);
+    expect(Array.isArray(bare?.scheduleWindows)).toBe(true);
+    expect(bare?.scheduleWindows).toEqual([]);
+    expect(bare?.scheduleTimezone).toBeNull();
+
+    const win = { id: "w1", label: "Nights", days: [0, 6], startMinute: 0, endMinute: 360, maxConcurrentRuns: 8 };
+
+    const updated = await companyService(db).update(
+      companyId,
+      { scheduleWindows: [win], scheduleTimezone: "America/New_York" },
+      { actorType: "user", actorId: "test-user", agentId: null, runId: null },
+    );
+
+    expect(updated).toMatchObject({
+      scheduleWindows: [win],
+      scheduleTimezone: "America/New_York",
+    });
+
+    const fetched = await companyService(db).getById(companyId);
+    expect(fetched?.scheduleWindows).toEqual([win]);
+    expect(fetched?.scheduleTimezone).toBe("America/New_York");
+  });
+
   it("does not emit company.reactivated when paused → active restores no archive-paused agents", async () => {
     const companyId = randomUUID();
     const manualPausedAgentId = randomUUID();

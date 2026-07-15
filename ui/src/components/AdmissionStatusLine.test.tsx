@@ -35,7 +35,14 @@ describe("AdmissionStatusLine", () => {
     act(() => {
       root.render(
         <AdmissionStatusLine
-          status={{ cap: 10, source: "configured-default", running: 3, queued: 2, runExecutionState: "running" }}
+          status={{
+            cap: 10,
+            source: "configured-default",
+            running: 3,
+            queued: 2,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+          }}
           isError={false}
         />,
       );
@@ -56,7 +63,14 @@ describe("AdmissionStatusLine", () => {
     act(() => {
       root.render(
         <AdmissionStatusLine
-          status={{ cap: null, source: "none", running: 1, queued: 0, runExecutionState: "running" }}
+          status={{
+            cap: null,
+            source: "none",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+          }}
           isError={false}
         />,
       );
@@ -77,7 +91,14 @@ describe("AdmissionStatusLine", () => {
     act(() => {
       root.render(
         <AdmissionStatusLine
-          status={{ cap: 10, source: "configured-default", running: 3, queued: 2, runExecutionState: "draining" }}
+          status={{
+            cap: 10,
+            source: "configured-default",
+            running: 3,
+            queued: 2,
+            runExecutionState: "draining",
+            breakerLevel: "normal",
+          }}
           isError={false}
         />,
       );
@@ -97,7 +118,14 @@ describe("AdmissionStatusLine", () => {
     act(() => {
       root2.render(
         <AdmissionStatusLine
-          status={{ cap: 10, source: "configured-default", running: 3, queued: 2, runExecutionState: "halted" }}
+          status={{
+            cap: 10,
+            source: "configured-default",
+            running: 3,
+            queued: 2,
+            runExecutionState: "halted",
+            breakerLevel: "normal",
+          }}
           isError={false}
         />,
       );
@@ -107,6 +135,119 @@ describe("AdmissionStatusLine", () => {
 
     act(() => {
       root2.unmount();
+    });
+  });
+
+  it("shows a warning-toned badge for breaker level 'throttle'", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 10,
+            source: "predictive-breaker",
+            running: 3,
+            queued: 2,
+            runExecutionState: "running",
+            breakerLevel: "throttle",
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toContain("· breaker: throttle");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows a schedule badge when the schedule sets the cap", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 4,
+            source: "schedule",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toContain("· schedule");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows an override badge when a manual override sets the cap", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 4,
+            source: "manual-override",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toContain("· override");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the next transition when present", () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <AdmissionStatusLine
+          status={{
+            cap: 4,
+            source: "configured-default",
+            running: 1,
+            queued: 0,
+            runExecutionState: "running",
+            breakerLevel: "normal",
+            scheduleNextTransition: { at: "2026-07-13T13:00:00.000Z", cap: 2 },
+          }}
+          isError={false}
+        />,
+      );
+    });
+
+    expect(container.textContent).toMatch(/→ 2 runs/);
+
+    act(() => {
+      root.unmount();
     });
   });
 

@@ -9,7 +9,7 @@ import type { ReconcileResult, ReconcileSource } from "./admission-reconciler.js
 
 export type WindDownMode = "soft" | "hard";
 export type ResumePolicy = "when-allowed" | "no";
-export type WindDownReason = "cap-wallclock" | "cap-cost" | "panic" | "drain";
+export type WindDownReason = "cap-wallclock" | "cap-cost" | "panic" | "drain" | "predictive-breaker-halt";
 export type WindDownOutcome = "terminated" | "marked-soft" | "noop";
 
 // The minimal run shape the primitive needs. Concrete deps map the full

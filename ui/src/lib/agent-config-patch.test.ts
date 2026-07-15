@@ -51,6 +51,7 @@ function makeAgent(): Agent {
     pauseReason: null,
     pausedAt: null,
     lastHeartbeatAt: null,
+    heartbeatIdleStreak: 0,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),
     urlKey: "agent",
@@ -145,6 +146,33 @@ describe("buildAgentUpdatePatch", () => {
             enabled: true,
             maxAttempts: 3,
             delayMs: 1000,
+          },
+        },
+      },
+    });
+  });
+
+  it("writes WIP limit policy under runtimeConfig.heartbeat", () => {
+    const patch = buildAgentUpdatePatch(
+      makeAgent(),
+      makeOverlay({
+        heartbeat: {
+          wipLimit: {
+            enabled: true,
+            maxInProgress: 5,
+          },
+        },
+      }),
+    );
+
+    expect(patch).toEqual({
+      runtimeConfig: {
+        heartbeat: {
+          enabled: true,
+          intervalSec: 300,
+          wipLimit: {
+            enabled: true,
+            maxInProgress: 5,
           },
         },
       },

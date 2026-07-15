@@ -48,6 +48,7 @@ const baseAgent: AgentDetail = {
   pausedAt: null,
   permissions: { canCreateAgents: true },
   lastHeartbeatAt: null,
+  heartbeatIdleStreak: 0,
   metadata: { source: "test" },
   createdAt: new Date("2026-05-10T00:00:00.000Z"),
   updatedAt: new Date("2026-05-10T00:00:00.000Z"),

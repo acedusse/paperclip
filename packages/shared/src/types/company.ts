@@ -13,6 +13,7 @@
 // ==========================================
 // [START: module]
 import type { CompanyStatus, PauseReason } from "../constants.js";
+import type { ScheduleWindow } from "../validators/schedule.js";
 
 export interface Company {
   id: string;
@@ -31,6 +32,12 @@ export interface Company {
   maxRunCostCents?: number | null;
   maxRunTurns?: number | null;
   runExecutionState?: "running" | "draining" | "halted";
+  predictiveBreakerEnabled?: boolean;
+  breakerHorizonMinutes?: number;
+  scheduleWindows?: ScheduleWindow[];
+  scheduleTimezone?: string | null;
+  manualCapOverride?: number | null;
+  manualCapOverrideExpiresAt?: Date | null;
   requireBoardApprovalForNewAgents: boolean;
   feedbackDataSharingEnabled: boolean;
   feedbackDataSharingConsentAt: Date | null;

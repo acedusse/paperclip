@@ -377,6 +377,7 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
       running: 1,
       queued: 1,
       runExecutionState: "running",
+      breakerLevel: "normal",
     });
   });
 
@@ -393,6 +394,8 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
       running: 1,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
+      scheduleNextTransition: null,
     });
     expect(await heartbeat.getCompanyAdmissionStatus(companyB)).toEqual({
       cap: null,
@@ -400,6 +403,8 @@ describeEmbeddedPostgres("heartbeat instance-wide admission", () => {
       running: 0,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
+      scheduleNextTransition: null,
     });
   });
 

@@ -54,6 +54,10 @@ describeEmbeddedPostgres("admission-status routes", () => {
   }, 20_000);
 
   afterEach(async () => {
+    // Instance run-execution-state lives outside these tables and otherwise
+    // leaks across tests (e.g. the execution-state POST tests below leave it
+    // "draining"/"halted"), so reset it alongside the per-test data.
+    await instanceSettingsService(db).updateGeneral({ runExecutionState: "running" });
     await db.delete(heartbeatRuns);
     await db.delete(agents);
     await db.delete(activityLog);
@@ -145,6 +149,7 @@ describeEmbeddedPostgres("admission-status routes", () => {
       running: 1,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
     });
   });
 
@@ -166,6 +171,8 @@ describeEmbeddedPostgres("admission-status routes", () => {
       running: 0,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
+      scheduleNextTransition: null,
     });
   });
 
@@ -201,6 +208,8 @@ describeEmbeddedPostgres("admission-status routes", () => {
       running: 0,
       queued: 0,
       runExecutionState: "running",
+      breakerLevel: "normal",
+      scheduleNextTransition: null,
     });
 
     const clearRes = await request(app)
@@ -279,6 +288,183 @@ describeEmbeddedPostgres("admission-status routes", () => {
       .post(`/api/companies/${company}/execution-state`)
       .send({ state: "halted" });
     expect(res.status).toBe(403);
+  });
+
+  it("POST /api/companies/:id/cap-override sets a manual override and returns fresh admission status", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const res = await request(app)
+      .post(`/api/companies/${company}/cap-override`)
+      .send({ cap: 20, durationMinutes: 120 });
+    expect(res.status).toBe(200);
+    expect(res.body.source).toBe("manual-override");
+    expect(res.body.cap).toBe(20);
+
+    const statusRes = await request(app).get(`/api/companies/${company}/admission-status`);
+    expect(statusRes.status).toBe(200);
+    expect(statusRes.body.source).toBe("manual-override");
+    expect(statusRes.body.cap).toBe(20);
+  });
+
+  it("POST /api/companies/:id/cap-override rejects callers without access to the company", async () => {
+    const company = await createCompany();
+    const otherCompany = await createCompany();
+    const app = createCompanyApp({
+      type: "board",
+      userId: "user-1",
+      source: "session",
+      isInstanceAdmin: false,
+      companyIds: [otherCompany],
+    });
+    const res = await request(app)
+      .post(`/api/companies/${company}/cap-override`)
+      .send({ cap: 20, durationMinutes: 120 });
+    expect(res.status).toBe(403);
+  });
+
+  it("DELETE /api/companies/:id/cap-override clears a manual override", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const setRes = await request(app)
+      .post(`/api/companies/${company}/cap-override`)
+      .send({ cap: 20, durationMinutes: 120 });
+    expect(setRes.status).toBe(200);
+    expect(setRes.body.source).toBe("manual-override");
+
+    const clearRes = await request(app).delete(`/api/companies/${company}/cap-override`);
+    expect(clearRes.status).toBe(200);
+    expect(clearRes.body.source).not.toBe("manual-override");
+
+    const statusRes = await request(app).get(`/api/companies/${company}/admission-status`);
+    expect(statusRes.status).toBe(200);
+    expect(statusRes.body.source).not.toBe("manual-override");
+  });
+
+  it("PATCH /api/companies/:id rejects an invalid scheduleTimezone with 422", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleTimezone: "Not/A_Zone",
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(res.status).toBe(422);
+    expect(res.body.error).toMatch(/timezone/i);
+  });
+
+  it("PATCH /api/companies/:id rejects scheduleWindows without a scheduleTimezone (new and existing) with 422", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(res.status).toBe(422);
+    expect(res.body.error).toMatch(/scheduleTimezone/);
+  });
+
+  it("PATCH /api/companies/:id accepts scheduleWindows when a valid scheduleTimezone is provided", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleTimezone: "America/New_York",
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(res.status).toBe(200);
+    expect(res.body.scheduleTimezone).toBe("America/New_York");
+  });
+
+  it("PATCH /api/companies/:id rejects clearing scheduleTimezone while windows remain stored", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const setupRes = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleTimezone: "America/New_York",
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(setupRes.status).toBe(200);
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({ scheduleTimezone: null });
+    expect(res.status).toBe(422);
+    expect(res.body.error).toMatch(/scheduleTimezone/);
+  });
+
+  it("PATCH /api/companies/:id allows clearing scheduleTimezone together with scheduleWindows", async () => {
+    const company = await createCompany();
+    const app = createCompanyApp({ type: "board", source: "local_implicit", isInstanceAdmin: true });
+
+    const setupRes = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({
+        scheduleTimezone: "America/New_York",
+        scheduleWindows: [
+          {
+            id: "w1",
+            label: "Business hours",
+            days: [1, 2, 3, 4, 5],
+            startMinute: 540,
+            endMinute: 1020,
+            maxConcurrentRuns: 5,
+          },
+        ],
+      });
+    expect(setupRes.status).toBe(200);
+
+    const res = await request(app)
+      .patch(`/api/companies/${company}`)
+      .send({ scheduleWindows: [], scheduleTimezone: null });
+    expect(res.status).toBe(200);
+    expect(res.body.scheduleTimezone).toBeNull();
+    expect(res.body.scheduleWindows).toEqual([]);
   });
 });
 // [END: module]

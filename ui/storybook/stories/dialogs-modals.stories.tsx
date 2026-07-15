@@ -450,6 +450,7 @@ const HERMES_AGENT: Agent = {
   pausedAt: null,
   permissions: { canCreateAgents: false },
   lastHeartbeatAt: new Date("2026-04-29T08:30:00.000Z"),
+  heartbeatIdleStreak: 0,
   metadata: null,
   createdAt: new Date("2026-04-12T08:00:00.000Z"),
   updatedAt: new Date("2026-04-29T08:30:00.000Z"),

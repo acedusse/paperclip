@@ -13,6 +13,7 @@
 // ==========================================
 // [START: module]
 export { companies } from "./companies.js";
+export { companyBreakerState } from "./company-breaker-state.js";
 export { companyLogos } from "./company_logos.js";
 export { authUsers, authSessions, authAccounts, authVerifications } from "./auth.js";
 export { instanceSettings } from "./instance_settings.js";
@@ -41,6 +42,7 @@ export { projectWorkspaces } from "./project_workspaces.js";
 export { executionWorkspaces } from "./execution_workspaces.js";
 export { environments } from "./environments.js";
 export { environmentLeases } from "./environment_leases.js";
+export { workspacePathClaims } from "./workspace_path_claims.js";
 export { workspaceOperations } from "./workspace_operations.js";
 export { workspaceRuntimeServices } from "./workspace_runtime_services.js";
 export { projectGoals } from "./project_goals.js";

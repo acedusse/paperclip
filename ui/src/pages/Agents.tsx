@@ -24,6 +24,8 @@ import { useSidebar } from "../context/SidebarContext";
 import { queryKeys } from "../lib/queryKeys";
 import { AgentStatusBadge, AgentStatusCapsule } from "../components/StatusBadge";
 import { AgentActionButtons } from "../components/AgentActionButtons";
+import { AgentCadenceReadout } from "../components/AgentCadenceReadout";
+import { AgentWipReadout } from "../components/AgentWipReadout";
 import { MembershipAction } from "../components/MembershipAction";
 import { EntityRow } from "../components/EntityRow";
 import { EmptyState } from "../components/EmptyState";
@@ -70,6 +72,27 @@ function getConfiguredModel(agent: Agent): string | null {
   if (typeof value !== "string") return null;
   const model = value.trim();
   return model.length > 0 ? model : null;
+}
+
+/** Derive AgentCadenceReadout props from an agent's runtimeConfig.heartbeat. */
+function getCadenceReadoutProps(agent: Agent) {
+  const heartbeat = (agent.runtimeConfig as { heartbeat?: Record<string, unknown> } | null)?.heartbeat ?? {};
+  const idleBackoff = (heartbeat.idleBackoff as { enabled?: boolean } | undefined) ?? {};
+  const intervalSec = typeof heartbeat.intervalSec === "number" && heartbeat.intervalSec > 0 ? heartbeat.intervalSec : 0;
+  return {
+    heartbeatIdleStreak: agent.heartbeatIdleStreak,
+    effectiveHeartbeatIntervalSec: agent.effectiveHeartbeatIntervalSec ?? intervalSec,
+    enabled: idleBackoff.enabled === true,
+    intervalSec,
+  };
+}
+
+/** Derive AgentWipReadout props from an agent's wip/flow fields (Combo-01 Phase 4A-ii). */
+function getWipReadoutProps(agent: Agent) {
+  return {
+    wip: agent.wip ?? { limit: null, current: 0, overBy: 0, overLimit: false },
+    flow: agent.flow ?? { throughputLast7d: 0, medianCycleTimeMs: null },
+  };
 }
 
 function filterOrgTree(nodes: OrgNode[], tab: FilterTab): OrgNode[] {
@@ -486,8 +509,10 @@ function OrgTreeNode({
  * Provider/model + heartbeat columns shared by the list and org views. The
  * model and adapter label share one fixed-width cell, each line truncating with
  * an ellipsis so a long model id can never overlap the heartbeat column. The
- * heartbeat is single-line (`whitespace-nowrap`) and wide enough for a full
- * date like "Apr 30, 2026".
+ * heartbeat cell is two single-line (`whitespace-nowrap`) rows: last-heartbeat
+ * time (wide enough for a full date like "Apr 30, 2026") and, below it, the
+ * cadence readout (plain interval, or `idle ×N → <interval>` once idle backoff
+ * has kicked in — Combo-01 Phase 4A).
  */
 function AgentMetaColumns({ agent }: { agent: Agent }) {
   const model = getConfiguredModel(agent);
@@ -505,9 +530,17 @@ function AgentMetaColumns({ agent }: { agent: Agent }) {
           {adapterLabel}
         </div>
       </div>
-      <span className="w-24 whitespace-nowrap text-right text-xs text-muted-foreground">
-        {agent.lastHeartbeatAt ? relativeTime(agent.lastHeartbeatAt) : "—"}
-      </span>
+      <div className="min-w-0 leading-tight text-right">
+        <span className="w-24 whitespace-nowrap text-right text-xs text-muted-foreground">
+          {agent.lastHeartbeatAt ? relativeTime(agent.lastHeartbeatAt) : "—"}
+        </span>
+        <div className="whitespace-nowrap">
+          <AgentCadenceReadout {...getCadenceReadoutProps(agent)} />
+        </div>
+        <div className="whitespace-nowrap">
+          <AgentWipReadout {...getWipReadoutProps(agent)} />
+        </div>
+      </div>
     </>
   );
 }

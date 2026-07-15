@@ -74,6 +74,7 @@ function makeAgent(id: string, name: string, role: string): Agent {
     pausedAt: null,
     permissions: {} as Agent["permissions"],
     lastHeartbeatAt: null,
+    heartbeatIdleStreak: 0,
     metadata: null,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),

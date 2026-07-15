@@ -82,6 +82,8 @@ import type {
 } from "@paperclipai/adapter-utils";
 import { skillVersionSelectionMap } from "../services/runtime-skill-selections.js";
 import { secretService } from "../services/secrets.js";
+import { effectiveIntervalSec, parseHeartbeatCadenceConfig } from "../services/heartbeat-cadence.js";
+import { buildAgentWipFlow } from "../services/wip-flow.js";
 import {
   detectAdapterModel,
   findActiveServerAdapter,
@@ -581,9 +583,25 @@ export function agentRoutes(
       svc.getChainOfCommand(agent.id),
       buildAgentAccessState(agent),
     ]);
+    const cadence = parseHeartbeatCadenceConfig(agent.runtimeConfig);
+    const effectiveHeartbeatIntervalSec = effectiveIntervalSec(cadence.intervalSec, agent.heartbeatIdleStreak, cadence.idleBackoff);
+
+    const issuesSvc = issueService(db);
+    const sinceIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [wipCounts, completions] = await Promise.all([
+      issuesSvc.inProgressIssueCountsByAgent(agent.companyId, agent.id),
+      issuesSvc.recentCompletionsByAgent(agent.companyId, sinceIso, agent.id),
+    ]);
+    const wipFlow = buildAgentWipFlow(
+      agent.runtimeConfig,
+      wipCounts.get(agent.id) ?? 0,
+      completions.get(agent.id) ?? [],
+    );
 
     return {
       ...(options?.restricted ? redactForRestrictedAgentView(agent) : agent),
+      effectiveHeartbeatIntervalSec,
+      ...wipFlow,
       chainOfCommand,
       access: accessState,
     };
@@ -1829,11 +1847,19 @@ export function agentRoutes(
     }
     const result = await filterAgentsForActor(req, await svc.list(companyId));
     const canReadConfigs = await actorCanReadConfigurationsForCompany(req, companyId);
-    if (canReadConfigs) {
-      res.json(result);
-      return;
-    }
-    res.json(result.map((agent) => redactForRestrictedAgentView(agent)));
+    const shaped = canReadConfigs ? result : result.map((agent) => redactForRestrictedAgentView(agent)!);
+
+    const issuesSvc = issueService(db);
+    const sinceIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [wipCounts, completions] = await Promise.all([
+      issuesSvc.inProgressIssueCountsByAgent(companyId),
+      issuesSvc.recentCompletionsByAgent(companyId, sinceIso),
+    ]);
+    res.json(shaped.map((agent) => ({
+      ...agent,
+      ...buildAgentWipFlow(agent.runtimeConfig, wipCounts.get(agent.id) ?? 0, completions.get(agent.id) ?? []),
+    })));
+    return;
   });
 
   router.get("/instance/scheduler-heartbeats", async (req, res) => {

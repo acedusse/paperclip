@@ -42,6 +42,12 @@ export {
 } from "./run-execution-state.js";
 
 export {
+  BREAKER_LEVELS,
+  breakerLevelSchema,
+  type BreakerLevel,
+} from "./breaker-level.js";
+
+export {
   createCompanySchema,
   updateCompanySchema,
   updateCompanyBrandingSchema,
@@ -49,6 +55,13 @@ export {
   type UpdateCompany,
   type UpdateCompanyBranding,
 } from "./company.js";
+export {
+  scheduleWindowSchema,
+  scheduleWindowsSchema,
+  capOverrideSchema,
+  type ScheduleWindow,
+  type CapOverride,
+} from "./schedule.js";
 export {
   environmentDriverSchema,
   environmentStatusSchema,
