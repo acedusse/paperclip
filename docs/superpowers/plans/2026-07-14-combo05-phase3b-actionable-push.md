@@ -15,7 +15,7 @@
 - Pure (no-DB) tests are plain vitest files colocated as `*.test.ts`.
 - **No schema, no migration, no new routes** this cycle.
 - The deep-link URL MUST be `/approvals/{approvalId}` (the real board route; `ApprovalDetail` fetches the approval company-agnostically). NOT `/companies/{companyId}/...` (3a's bug).
-- One-tap actions POST `/api/approvals/{approvalId}/{approve|reject}` with `credentials: "include"`, `Content-Type: application/json`, `body: "{}"` (no `decisionNote`).
+- One-tap actions POST `/api/approvals/{approvalId}/{approve|reject}` with `credentials: "include"`, `Content-Type: application/json`, `body: "{}"` (no `decisionNote`). Auth: cookie session; the same-origin SW `fetch` passes `boardMutationGuard`'s Origin/Referer check (cross-origin CSRF is blocked). A guard 403 (if a browser stripped both headers) degrades to opening the card.
 - Every SW failure path (non-OK response, offline, missing `approvalId`, dropped `actions`) degrades to opening the approval card.
 - `ui/public/sw.js` has **no test harness** — validate it with `node --check ui/public/sw.js` (syntax only) and the manual checklist in the spec; do not fabricate a passing SW unit test.
 - Follow the file-header comment block convention for existing files (do not strip `sw.js`'s header).

@@ -21,9 +21,13 @@ migration, no new routes (it reuses the Phase-1 decision endpoints).
 ## Substrate findings (from exploration)
 
 - 3a's `push` handler shows the notification but there is **no `notificationclick` handler** yet.
-- The app uses **cookie-session auth** (`credentials: "include"` in `ui/src/api/client.ts`) and has **no
-  CSRF middleware** — so a service-worker `fetch` to `/api/approvals/:id/approve` carries the board
-  session and succeeds. One-tap resolve from the SW is feasible.
+- The app uses **cookie-session auth** (`credentials: "include"` in `ui/src/api/client.ts`). CSRF is
+  handled by **`boardMutationGuard()`** (applied to the whole `/api` router in `app.ts`), which 403s a
+  board-session mutation unless its `Origin`/`Referer` matches the app's own host — i.e. cross-origin
+  CSRF is **blocked**. A service-worker `fetch` to `/api/approvals/:id/approve` is **same-origin**, so
+  the browser attaches a matching `Origin` and it passes the guard (and carries the board cookie). One-tap
+  resolve from the SW is feasible; if a browser ever stripped both `Origin` and `Referer` on a
+  SW-initiated fetch, the guard would 403 and the code's failure path degrades to opening the card.
 - The board routes are **not** under `/companies/:id/`; the approval detail is `/approvals/:approvalId`
   (company comes from context, and `ApprovalDetail` fetches the approval company-agnostically via
   `approvalsApi.get(id)`). **3a's push `url` (`/companies/{companyId}/approvals/{approvalId}`) is wrong
@@ -148,7 +152,8 @@ function openApproval(url) {
 }
 ```
 - One-tap Approve/Reject POST the real Phase-1 decision endpoint (`credentials:"include"` → board
-  session; no CSRF gate). Success → confirmation notification. Any non-OK / offline → open the card.
+  session; the same-origin SW `fetch` passes `boardMutationGuard`'s Origin/Referer check). Success →
+  confirmation notification. Any non-OK / offline (incl. a hypothetical guard 403) → open the card.
 - Body-click (or unknown action) focuses an existing tab at the card if open, else opens a new one.
 
 ---
@@ -173,6 +178,9 @@ in this repo (same limitation as the 3a push handler). Coverage:
 3. Tap the notification **body** → a tab opens/focuses at `/approvals/{id}` showing the diff + buttons.
 4. Approve the same item twice (or approve an already-resolved one) → the second one-tap falls back to
    opening the card (no crash).
+5. Confirm the one-tap POST is **not** 403'd by `boardMutationGuard` in the target browsers (Chrome
+   desktop/Android) — i.e. the SW `fetch` sends a matching `Origin`. If it 403s, the tap degrades to
+   opening the card (still functional, just not one-tap).
 
 **Error handling** (all in the SW, all degrade to "open the card"): non-OK decision response
 (already-resolved / 403 / 422), offline fetch rejection, missing `approvalId`, dropped `actions`.
