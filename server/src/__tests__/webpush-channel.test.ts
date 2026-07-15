@@ -30,7 +30,7 @@ import { eq } from "drizzle-orm";
 import webpush from "web-push";
 import { companies, createDb, pushSubscriptions } from "@paperclipai/db";
 import { getEmbeddedPostgresTestSupport, startEmbeddedPostgresTestDatabase } from "./helpers/embedded-postgres.js";
-import { createWebPushChannel } from "../services/push-notifications.js";
+import { buildApprovalPushBody, createWebPushChannel } from "../services/push-notifications.js";
 
 const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
 const describeEmbeddedPostgres = embeddedPostgresSupport.supported ? describe : describe.skip;
@@ -165,6 +165,40 @@ describeEmbeddedPostgres("createWebPushChannel", () => {
     }
 
     expect((webpush as any).sendNotification).toHaveBeenCalledTimes(2);
+  });
+
+  it("sends a payload built by buildApprovalPushBody carrying approvalId and the /approvals url", async () => {
+    // Seed an independent company + single subscription (the shared `companyId` from beforeAll has
+    // accumulated subscriptions from earlier tests in this file), mirroring the fan-out test's pattern.
+    const otherCompanyId = randomUUID();
+    await db.insert(companies).values({
+      id: otherCompanyId,
+      name: "Acme Payload Co",
+      issuePrefix: `T${otherCompanyId.slice(0, 7)}`.toUpperCase(),
+      status: "active",
+    });
+    await db.insert(pushSubscriptions).values({
+      companyId: otherCompanyId,
+      userId: "user-payload",
+      endpoint: "https://push.example.com/sub-payload",
+      p256dh: "p256dh-payload",
+      auth: "auth-payload",
+    });
+
+    const channel = createWebPushChannel(db);
+    (webpush as any).sendNotification.mockClear();
+    const push = buildApprovalPushBody({
+      approvalType: "hire_agent",
+      band: "critical",
+      companyId: otherCompanyId,
+      approvalId: "ap-xyz",
+    });
+    await channel.deliver({ companyId: otherCompanyId }, { kind: "approval_high_risk", title: "t", push });
+    expect((webpush as any).sendNotification).toHaveBeenCalledTimes(1);
+    const sentBody = (webpush as any).sendNotification.mock.calls[0][1] as string;
+    const parsed = JSON.parse(sentBody);
+    expect(parsed.approvalId).toBe("ap-xyz");
+    expect(parsed.url).toBe("/approvals/ap-xyz");
   });
 });
 // [END: module]

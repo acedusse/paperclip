@@ -28,9 +28,10 @@ export function buildApprovalPushBody(input: { approvalType: string; band: strin
   return {
     title: `${input.band} risk approval`,
     body: `${input.approvalType} — tap to review`,
-    url: `/companies/${input.companyId}/approvals/${input.approvalId}`,
+    url: `/approvals/${input.approvalId}`,
     tag: `approval-${input.approvalId}`,
     band: input.band,
+    approvalId: input.approvalId,
   };
 }
 

@@ -19,7 +19,8 @@ describe("buildApprovalPushBody", () => {
   it("builds a deterministic title/body/url/tag", () => {
     const a = buildApprovalPushBody({ approvalType: "hire_agent", band: "critical", companyId: "c1", approvalId: "ap1" });
     expect(a).toEqual(buildApprovalPushBody({ approvalType: "hire_agent", band: "critical", companyId: "c1", approvalId: "ap1" }));
-    expect(a.url).toBe("/companies/c1/approvals/ap1");
+    expect(a.url).toBe("/approvals/ap1");
+    expect(a.approvalId).toBe("ap1");
     expect(a.tag).toBe("approval-ap1");
     expect(a.band).toBe("critical");
     expect(a.body).toContain("hire_agent");
