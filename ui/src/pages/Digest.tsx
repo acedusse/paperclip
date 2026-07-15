@@ -55,7 +55,9 @@ export function Digest() {
     retry: false,
   });
   const [form, setForm] = useState<PushPrefs | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const current = form ?? prefs ?? { minBand: "high" as const, quietStart: null, quietEnd: null, timezone: null };
+  const quietHalfSet = !!current.quietStart !== !!current.quietEnd;
   const savePrefs = useMutation({
     mutationFn: (p: PushPrefs) =>
       pushApi.putPrefs(companyId, {
@@ -63,6 +65,7 @@ export function Digest() {
         timezone: p.quietStart ? Intl.DateTimeFormat().resolvedOptions().timeZone : null,
       }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["push-prefs", companyId] }),
+    onError: () => setSaveError("Couldn't save settings. Please try again."),
   });
   const removeDevice = useMutation({
     mutationFn: (id: string) => pushApi.removeDevice(companyId, id),
@@ -150,9 +153,23 @@ export function Digest() {
               onChange={(e) => setForm({ ...current, quietEnd: e.target.value || null })}
             />
           </label>
-          <button className="mt-2" onClick={() => savePrefs.mutate(current)} disabled={savePrefs.isPending}>
+          {quietHalfSet && (
+            <p className="text-xs text-destructive mt-1">
+              Set both quiet-hours times, or leave both empty.
+            </p>
+          )}
+          <button
+            className="mt-2"
+            onClick={() => {
+              if (quietHalfSet) return;
+              setSaveError(null);
+              savePrefs.mutate(current);
+            }}
+            disabled={savePrefs.isPending || quietHalfSet}
+          >
             {savePrefs.isPending ? "Saving…" : "Save notification settings"}
           </button>
+          {saveError && <p className="text-xs text-destructive mt-1">{saveError}</p>}
 
           <h3 className="font-medium mt-4">Your devices</h3>
           <ul className="list-disc pl-5">

@@ -183,15 +183,21 @@ describe("Digest page", () => {
     });
     expect(container.textContent).toContain("abc12345");
 
-    const quietStartInput = Array.from(container.querySelectorAll("input[type='time']"))[0] as HTMLInputElement;
-    expect(quietStartInput).toBeTruthy();
+    const timeInputs = Array.from(
+      container.querySelectorAll("input[type='time']"),
+    ) as HTMLInputElement[];
+    expect(timeInputs.length).toBe(2);
     const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
       window.HTMLInputElement.prototype,
       "value",
     )!.set!;
     await act(async () => {
-      nativeInputValueSetter.call(quietStartInput, "22:00");
-      quietStartInput.dispatchEvent(new Event("input", { bubbles: true }));
+      nativeInputValueSetter.call(timeInputs[0], "22:00");
+      timeInputs[0].dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    await act(async () => {
+      nativeInputValueSetter.call(timeInputs[1], "07:00");
+      timeInputs[1].dispatchEvent(new Event("input", { bubbles: true }));
     });
 
     const saveButton = Array.from(container.querySelectorAll("button")).find((b) =>
@@ -209,6 +215,48 @@ describe("Digest page", () => {
       "company-1",
       expect.objectContaining({ minBand: "high", timezone: expect.any(String) }),
     );
+  });
+
+  it("does not save a half-set quiet-hours window and shows an inline hint", async () => {
+    apiMocks.digestLatest.mockResolvedValue(null);
+    apiMocks.getPrefs.mockResolvedValue({ minBand: "high", quietStart: null, quietEnd: null, timezone: null });
+    apiMocks.putPrefs.mockResolvedValue({ ok: true });
+    apiMocks.listDevices.mockResolvedValue([]);
+
+    await renderDigest();
+
+    await vi.waitFor(() => {
+      expect(container.textContent).toContain("Save notification settings");
+    });
+
+    const timeInputs = Array.from(
+      container.querySelectorAll("input[type='time']"),
+    ) as HTMLInputElement[];
+    expect(timeInputs.length).toBe(2);
+    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      "value",
+    )!.set!;
+    // Set ONLY the quiet-start input -> half-set window.
+    await act(async () => {
+      nativeInputValueSetter.call(timeInputs[0], "22:00");
+      timeInputs[0].dispatchEvent(new Event("input", { bubbles: true }));
+    });
+
+    await vi.waitFor(() => {
+      expect(container.textContent).toContain("Set both quiet-hours times, or leave both empty.");
+    });
+
+    const saveButton = Array.from(container.querySelectorAll("button")).find((b) =>
+      b.textContent?.includes("Save notification settings"),
+    ) as HTMLButtonElement;
+    expect(saveButton).toBeTruthy();
+    expect(saveButton.disabled).toBe(true);
+    await act(async () => {
+      saveButton.click();
+    });
+
+    expect(apiMocks.putPrefs).not.toHaveBeenCalled();
   });
 });
 // [END: module]
