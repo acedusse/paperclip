@@ -15,6 +15,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { digestsApi } from "../api/digests";
+import { pushApi, type PushPrefs } from "../api/push";
 import { useCompany } from "../context/CompanyContext";
 import { timeAgo } from "../lib/timeAgo";
 import { pushSupported, subscribeToPush, unsubscribeFromPush } from "../lib/push";
@@ -40,6 +41,36 @@ export function Digest() {
     () => pushEnabledSupported && Notification.permission === "granted",
   );
   const [pushPending, setPushPending] = useState(false);
+
+  const { data: prefs } = useQuery({
+    queryKey: ["push-prefs", companyId],
+    queryFn: () => pushApi.getPrefs(companyId),
+    enabled: !!companyId && pushEnabledSupported,
+    retry: false,
+  });
+  const { data: devices } = useQuery({
+    queryKey: ["push-devices", companyId],
+    queryFn: () => pushApi.listDevices(companyId),
+    enabled: !!companyId && pushEnabledSupported,
+    retry: false,
+  });
+  const [form, setForm] = useState<PushPrefs | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const current = form ?? prefs ?? { minBand: "high" as const, quietStart: null, quietEnd: null, timezone: null };
+  const quietHalfSet = !!current.quietStart !== !!current.quietEnd;
+  const savePrefs = useMutation({
+    mutationFn: (p: PushPrefs) =>
+      pushApi.putPrefs(companyId, {
+        ...p,
+        timezone: p.quietStart ? Intl.DateTimeFormat().resolvedOptions().timeZone : null,
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["push-prefs", companyId] }),
+    onError: () => setSaveError("Couldn't save settings. Please try again."),
+  });
+  const removeDevice = useMutation({
+    mutationFn: (id: string) => pushApi.removeDevice(companyId, id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["push-devices", companyId] }),
+  });
 
   const togglePush = async () => {
     if (!companyId || pushPending) return;
@@ -95,6 +126,62 @@ export function Digest() {
         </div>
       ) : (
         <p className="text-muted-foreground">No digest yet.</p>
+      )}
+      {pushEnabledSupported && (
+        <section className="notifications mt-6 border-t pt-4">
+          <h2 className="text-lg font-medium">Notifications</h2>
+          <label className="block mt-2">
+            Minimum band
+            <select
+              value={current.minBand}
+              onChange={(e) => setForm({ ...current, minBand: e.target.value as PushPrefs["minBand"] })}
+            >
+              <option value="high">High and above</option>
+              <option value="critical">Critical only</option>
+            </select>
+          </label>
+          <label className="block mt-2">
+            Quiet hours
+            <input
+              type="time"
+              value={current.quietStart ?? ""}
+              onChange={(e) => setForm({ ...current, quietStart: e.target.value || null })}
+            />
+            <input
+              type="time"
+              value={current.quietEnd ?? ""}
+              onChange={(e) => setForm({ ...current, quietEnd: e.target.value || null })}
+            />
+          </label>
+          {quietHalfSet && (
+            <p className="text-xs text-destructive mt-1">
+              Set both quiet-hours times, or leave both empty.
+            </p>
+          )}
+          <button
+            className="mt-2"
+            onClick={() => {
+              if (quietHalfSet) return;
+              setSaveError(null);
+              savePrefs.mutate(current);
+            }}
+            disabled={savePrefs.isPending || quietHalfSet}
+          >
+            {savePrefs.isPending ? "Saving…" : "Save notification settings"}
+          </button>
+          {saveError && <p className="text-xs text-destructive mt-1">{saveError}</p>}
+
+          <h3 className="font-medium mt-4">Your devices</h3>
+          <ul className="list-disc pl-5">
+            {(devices ?? []).map((d) => (
+              <li key={d.id}>
+                {d.label ?? d.userAgent ?? "Unknown device"}{" "}
+                <span className="text-xs text-muted-foreground">…{d.endpointTail}</span>{" "}
+                <button onClick={() => removeDevice.mutate(d.id)}>Remove</button>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
     </div>
   );

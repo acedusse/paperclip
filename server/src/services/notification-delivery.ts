@@ -25,7 +25,7 @@ export type NotificationPayload = {
   link?: string;
   risk?: { band: string; score: number };
   digest?: { payload: DigestPayload; periodStart: Date | null; periodEnd: Date };
-  push?: { title: string; body: string; url: string; tag?: string; band?: string };
+  push?: { title: string; body: string; url: string; tag?: string; band?: string; approvalId?: string };
 };
 export type DeliveryChannel = {
   name: "inbox" | "webpush" | "email";

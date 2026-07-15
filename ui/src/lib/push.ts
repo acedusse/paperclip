@@ -52,7 +52,8 @@ export async function unsubscribeFromPush(companyId: string): Promise<void> {
   const sub = await reg.pushManager.getSubscription();
   if (sub) {
     await pushApi.unsubscribe(companyId, sub.endpoint);
-    await sub.unsubscribe();
+    // NOTE: intentionally NOT calling sub.unsubscribe() — the browser endpoint is shared
+    // across companies; revoking it would kill push for every other company on this browser.
   }
 }
 // [END: module]

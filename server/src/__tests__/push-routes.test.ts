@@ -28,7 +28,7 @@ import express from "express";
 import request from "supertest";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { eq } from "drizzle-orm";
-import { companies, createDb, pushSubscriptions } from "@paperclipai/db";
+import { companies, createDb, pushDeliveryPrefs, pushSubscriptions } from "@paperclipai/db";
 import { getEmbeddedPostgresTestSupport, startEmbeddedPostgresTestDatabase } from "./helpers/embedded-postgres.js";
 
 vi.hoisted(() => {
@@ -96,6 +96,7 @@ describeEmbeddedPostgres("push subscription routes", () => {
 
   afterEach(async () => {
     await db.delete(pushSubscriptions);
+    await db.delete(pushDeliveryPrefs);
     await db.delete(companies);
   });
 
@@ -138,6 +139,67 @@ describeEmbeddedPostgres("push subscription routes", () => {
     // unsubscribe removes it
     expect((await request(boardApp).delete(`/api/companies/${companyId}/push/subscriptions`).send({ endpoint: body.endpoint })).status).toBe(200);
     expect((await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.companyId, companyId))).length).toBe(0);
+  });
+
+  it("returns default prefs, upserts them, and rejects a below-floor band", async () => {
+    const company = await seedCompany("Prefs");
+    const companyId = company.id;
+    const boardApp = await createApp(db, boardActor(companyId));
+
+    // default when no row
+    const def = await request(boardApp).get(`/api/companies/${companyId}/push/prefs`);
+    expect(def.status).toBe(200);
+    expect(def.body).toEqual({ minBand: "high", quietStart: null, quietEnd: null, timezone: null });
+
+    // upsert
+    const put = await request(boardApp)
+      .put(`/api/companies/${companyId}/push/prefs`)
+      .send({ minBand: "critical", quietStart: "22:00", quietEnd: "08:00", timezone: "America/New_York" });
+    expect(put.status).toBe(200);
+
+    const got = await request(boardApp).get(`/api/companies/${companyId}/push/prefs`);
+    expect(got.body).toEqual({ minBand: "critical", quietStart: "22:00", quietEnd: "08:00", timezone: "America/New_York" });
+
+    // idempotent upsert (still one row)
+    await request(boardApp).put(`/api/companies/${companyId}/push/prefs`).send({ minBand: "high", quietStart: null, quietEnd: null, timezone: null });
+    const rows = await db.select().from(pushDeliveryPrefs).where(eq(pushDeliveryPrefs.companyId, companyId));
+    expect(rows).toHaveLength(1);
+
+    // below-floor rejected by validator
+    expect((await request(boardApp).put(`/api/companies/${companyId}/push/prefs`).send({ minBand: "medium", quietStart: null, quietEnd: null, timezone: null })).status).toBe(400);
+  });
+
+  it("allows one endpoint across two companies and lists/renames the actor's devices", async () => {
+    const a = await seedCompany("Mca");
+    const b = await seedCompany("Mcb");
+    const endpoint = "https://push.example/shared";
+    const body = { endpoint, keys: { p256dh: "p", auth: "a" }, userAgent: "UA", label: "Phone" };
+
+    const appA = await createApp(db, boardActor(a.id));
+    const appB = await createApp(db, boardActor(b.id));
+    expect((await request(appA).post(`/api/companies/${a.id}/push/subscriptions`).send(body)).status).toBe(200);
+    expect((await request(appB).post(`/api/companies/${b.id}/push/subscriptions`).send(body)).status).toBe(200);
+
+    // multi-company: same endpoint → one row per company
+    const all = await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.endpoint, endpoint));
+    expect(all).toHaveLength(2);
+
+    // list is actor+company scoped
+    const list = await request(appA).get(`/api/companies/${a.id}/push/subscriptions`);
+    expect(list.status).toBe(200);
+    expect(list.body).toHaveLength(1);
+    expect(list.body[0]).toMatchObject({ label: "Phone", endpointTail: endpoint.slice(-8) });
+    expect(list.body[0].id).toBeTruthy();
+
+    // rename
+    const id = list.body[0].id;
+    expect((await request(appA).patch(`/api/companies/${a.id}/push/subscriptions/${id}`).send({ label: "Work phone" })).status).toBe(200);
+    const renamed = await request(appA).get(`/api/companies/${a.id}/push/subscriptions`);
+    expect(renamed.body[0].label).toBe("Work phone");
+
+    // remove-by-id drops company A's row but leaves company B's (shared endpoint)
+    expect((await request(appA).delete(`/api/companies/${a.id}/push/subscriptions/${id}`)).status).toBe(200);
+    expect((await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.endpoint, endpoint))).length).toBe(1);
   });
 });
 // [END: module]

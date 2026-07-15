@@ -109,20 +109,19 @@ describe("unsubscribeFromPush", () => {
     vi.clearAllMocks();
   });
 
-  it("unsubscribes locally and notifies the server when a subscription exists", async () => {
+  it("deletes the server row but does NOT call the browser sub.unsubscribe()", async () => {
     const unsubscribe = vi.fn(() => Promise.resolve(true));
-    const getSubscription = vi.fn(() =>
-      Promise.resolve({ endpoint: "https://p/x", unsubscribe }),
-    );
-    vi.stubGlobal("Notification", { requestPermission: vi.fn(), permission: "granted" });
+    const sub = { endpoint: "https://push.example/e", unsubscribe };
+    vi.stubGlobal("Notification", { permission: "granted", requestPermission: vi.fn() });
     vi.stubGlobal("navigator", {
-      serviceWorker: { ready: Promise.resolve({ pushManager: { getSubscription } }) },
+      serviceWorker: { ready: Promise.resolve({ pushManager: { getSubscription: () => Promise.resolve(sub) } }) },
     });
+    vi.mocked(pushApi.unsubscribe).mockResolvedValue({ ok: true });
 
     await unsubscribeFromPush("company-1");
 
-    expect(pushApi.unsubscribe).toHaveBeenCalledWith("company-1", "https://p/x");
-    expect(unsubscribe).toHaveBeenCalled();
+    expect(pushApi.unsubscribe).toHaveBeenCalledWith("company-1", "https://push.example/e");
+    expect(unsubscribe).not.toHaveBeenCalled();
   });
 
   it("does nothing when there is no active subscription", async () => {
