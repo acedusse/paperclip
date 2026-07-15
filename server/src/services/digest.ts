@@ -23,7 +23,7 @@ import type { Db, DigestRow } from "@paperclipai/db";
 import { companies, digests } from "@paperclipai/db";
 import { collectDigestSignals } from "./digest-signals.js";
 import { narrateDigest } from "./digest-narration.js";
-import { getChannels } from "./notification-delivery.js";
+import { deliverThroughChannels } from "./notification-delivery.js";
 import { logger } from "../middleware/logger.js";
 
 export const DIGEST_MIN_INTERVAL_HOURS = 24;
@@ -56,16 +56,10 @@ export function digestService(db: Db) {
     });
     const payload = narrateDigest(signals);
 
-    for (const channel of getChannels()) {
-      try {
-        await channel.deliver(
-          { companyId },
-          { kind: "digest", title: payload.headline, digest: { payload, periodStart: since, periodEnd: now } },
-        );
-      } catch (err) {
-        logger.warn({ err, companyId, channel: channel.name }, "digest delivery channel failed");
-      }
-    }
+    await deliverThroughChannels(
+      { companyId },
+      { kind: "digest", title: payload.headline, digest: { payload, periodStart: since, periodEnd: now } },
+    );
 
     return latest(companyId);
   }
