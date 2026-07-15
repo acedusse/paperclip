@@ -1160,6 +1160,7 @@ export {
   pushSubscriptionSchema,
   pushUnsubscribeSchema,
   pushPrefsSchema,
+  pushDeviceRenameSchema,
   type CreateApproval,
   type UpsertBudgetPolicy,
   type ResolveBudgetIncident,

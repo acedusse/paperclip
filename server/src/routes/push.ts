@@ -16,7 +16,7 @@
 import { Router } from "express";
 import { and, eq } from "drizzle-orm";
 import { pushSubscriptions, pushDeliveryPrefs, type Db } from "@paperclipai/db";
-import { pushSubscriptionSchema, pushUnsubscribeSchema, pushPrefsSchema } from "@paperclipai/shared";
+import { pushSubscriptionSchema, pushUnsubscribeSchema, pushPrefsSchema, pushDeviceRenameSchema } from "@paperclipai/shared";
 import { pushVapidService } from "../services/index.js";
 import { validate } from "../middleware/validate.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
@@ -40,11 +40,12 @@ export function pushRoutes(db: Db) {
       .insert(pushSubscriptions)
       .values({
         companyId, userId: actor.actorId, endpoint: req.body.endpoint,
-        p256dh: req.body.keys.p256dh, auth: req.body.keys.auth, userAgent: req.body.userAgent ?? null,
+        p256dh: req.body.keys.p256dh, auth: req.body.keys.auth,
+        userAgent: req.body.userAgent ?? null, label: req.body.label ?? null,
       })
       .onConflictDoUpdate({
-        target: pushSubscriptions.endpoint,
-        set: { companyId, userId: actor.actorId, p256dh: req.body.keys.p256dh, auth: req.body.keys.auth, userAgent: req.body.userAgent ?? null },
+        target: [pushSubscriptions.companyId, pushSubscriptions.endpoint],
+        set: { userId: actor.actorId, p256dh: req.body.keys.p256dh, auth: req.body.keys.auth, userAgent: req.body.userAgent ?? null, label: req.body.label ?? null },
       });
     res.json({ ok: true });
   });
@@ -86,6 +87,74 @@ export function pushRoutes(db: Db) {
         target: [pushDeliveryPrefs.companyId, pushDeliveryPrefs.userId],
         set: { minBand, quietStart, quietEnd, timezone, updatedAt: new Date() },
       });
+    res.json({ ok: true });
+  });
+
+  router.get("/companies/:companyId/push/subscriptions", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertBoard(req);
+    assertCompanyAccess(req, companyId);
+    const actor = getActorInfo(req);
+    const rows = await db
+      .select()
+      .from(pushSubscriptions)
+      .where(and(eq(pushSubscriptions.companyId, companyId), eq(pushSubscriptions.userId, actor.actorId)));
+    res.json(
+      rows.map((r) => ({
+        id: r.id,
+        label: r.label,
+        userAgent: r.userAgent,
+        lastUsedAt: r.lastUsedAt,
+        createdAt: r.createdAt,
+        endpointTail: r.endpoint.slice(-8),
+      })),
+    );
+  });
+
+  router.patch("/companies/:companyId/push/subscriptions/:id", validate(pushDeviceRenameSchema), async (req, res) => {
+    const companyId = req.params.companyId as string;
+    const id = req.params.id as string;
+    assertBoard(req);
+    assertCompanyAccess(req, companyId);
+    const actor = getActorInfo(req);
+    const updated = await db
+      .update(pushSubscriptions)
+      .set({ label: req.body.label })
+      .where(
+        and(
+          eq(pushSubscriptions.id, id),
+          eq(pushSubscriptions.companyId, companyId),
+          eq(pushSubscriptions.userId, actor.actorId),
+        ),
+      )
+      .returning();
+    if (updated.length === 0) {
+      res.status(404).json({ error: "Device not found" });
+      return;
+    }
+    res.json({ ok: true });
+  });
+
+  router.delete("/companies/:companyId/push/subscriptions/:id", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    const id = req.params.id as string;
+    assertBoard(req);
+    assertCompanyAccess(req, companyId);
+    const actor = getActorInfo(req);
+    const removed = await db
+      .delete(pushSubscriptions)
+      .where(
+        and(
+          eq(pushSubscriptions.id, id),
+          eq(pushSubscriptions.companyId, companyId),
+          eq(pushSubscriptions.userId, actor.actorId),
+        ),
+      )
+      .returning();
+    if (removed.length === 0) {
+      res.status(404).json({ error: "Device not found" });
+      return;
+    }
     res.json({ ok: true });
   });
 

@@ -40,3 +40,15 @@ describe("pushPrefsSchema", () => {
     expect(() => pushPrefsSchema.parse({ minBand: "high", quietStart: "9:00", quietEnd: "08:00", timezone: "UTC" })).toThrow();
   });
 });
+
+import { pushDeviceRenameSchema } from "./push.js";
+
+describe("push device schemas", () => {
+  it("subscription schema accepts an optional label", () => {
+    expect(pushSubscriptionSchema.parse({ endpoint: "https://push.example/x", keys: { p256dh: "p", auth: "a" }, label: "My phone" }).label).toBe("My phone");
+  });
+  it("rename schema requires a non-empty label", () => {
+    expect(pushDeviceRenameSchema.parse({ label: "Laptop" }).label).toBe("Laptop");
+    expect(() => pushDeviceRenameSchema.parse({ label: "" })).toThrow();
+  });
+});
