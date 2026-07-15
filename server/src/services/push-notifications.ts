@@ -19,9 +19,11 @@
 import { eq } from "drizzle-orm";
 import webpush from "web-push";
 import type { Db } from "@paperclipai/db";
-import { pushSubscriptions } from "@paperclipai/db";
+import { pushSubscriptions, pushDeliveryPrefs } from "@paperclipai/db";
 import type { DeliveryChannel } from "./notification-delivery.js";
 import { pushVapidService } from "./push-vapid.js";
+import { shouldPushToUser } from "./push-prefs.js";
+import type { RiskBand } from "./approval-risk.js";
 import { logger } from "../middleware/logger.js";
 
 export function buildApprovalPushBody(input: { approvalType: string; band: string; companyId: string; approvalId: string }) {
@@ -45,8 +47,21 @@ export function createWebPushChannel(db: Db): DeliveryChannel {
       if (!init) return; // push disabled
 
       const subs = await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.companyId, target.companyId));
+      const prefRows = await db
+        .select()
+        .from(pushDeliveryPrefs)
+        .where(eq(pushDeliveryPrefs.companyId, target.companyId));
+      const prefsByUser = new Map(
+        prefRows.map((r) => [
+          r.userId,
+          { minBand: r.minBand as RiskBand, quietStart: r.quietStart, quietEnd: r.quietEnd, timezone: r.timezone },
+        ]),
+      );
+      const band = (payload.push.band as RiskBand | undefined) ?? "high";
+      const now = new Date();
       const body = JSON.stringify(payload.push);
       for (const sub of subs) {
+        if (!shouldPushToUser({ prefs: prefsByUser.get(sub.userId) ?? null, band, now })) continue;
         try {
           await webpush.sendNotification({ endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } }, body);
         } catch (err) {

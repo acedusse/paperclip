@@ -25,11 +25,15 @@ export const pushSubscriptions = pgTable(
     p256dh: text("p256dh").notNull(),
     auth: text("auth").notNull(),
     userAgent: text("user_agent"),
+    label: text("label"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
   },
   (table) => ({
-    endpointUniqueIdx: uniqueIndex("push_subscriptions_endpoint_unique_idx").on(table.endpoint),
+    companyEndpointUniqueIdx: uniqueIndex("push_subscriptions_company_endpoint_unique_idx").on(
+      table.companyId,
+      table.endpoint,
+    ),
     companyIdx: index("push_subscriptions_company_idx").on(table.companyId),
   }),
 );

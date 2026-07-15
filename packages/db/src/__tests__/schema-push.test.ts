@@ -6,4 +6,10 @@ describe("push schema", () => {
     expect(pushSubscriptions).toBeDefined();
     expect(pushVapidKeys).toBeDefined();
   });
+
+  it("exposes push_delivery_prefs and a label column on push_subscriptions", async () => {
+    const { pushDeliveryPrefs } = await import("../schema/index.js");
+    expect(pushDeliveryPrefs).toBeDefined();
+    expect(pushSubscriptions.label).toBeDefined();
+  });
 });

@@ -28,7 +28,7 @@ import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { eq } from "drizzle-orm";
 import webpush from "web-push";
-import { companies, createDb, pushSubscriptions } from "@paperclipai/db";
+import { companies, createDb, pushDeliveryPrefs, pushSubscriptions } from "@paperclipai/db";
 import { getEmbeddedPostgresTestSupport, startEmbeddedPostgresTestDatabase } from "./helpers/embedded-postgres.js";
 import { buildApprovalPushBody, createWebPushChannel } from "../services/push-notifications.js";
 
@@ -199,6 +199,54 @@ describeEmbeddedPostgres("createWebPushChannel", () => {
     const parsed = JSON.parse(sentBody);
     expect(parsed.approvalId).toBe("ap-xyz");
     expect(parsed.url).toBe("/approvals/ap-xyz");
+  });
+
+  it("suppresses a user whose prefs raise the floor to critical, still sends to others", async () => {
+    // Isolated company + subs: the shared `companyId` fixture has already had user-1's
+    // subscription pruned by the earlier 404/410 tests in this file, so reusing it here
+    // would make the suppression assertion depend on prior-test ordering/state.
+    const prefsCompanyId = randomUUID();
+    await db.insert(companies).values({
+      id: prefsCompanyId,
+      name: "Acme Prefs Co",
+      issuePrefix: `T${prefsCompanyId.slice(0, 7)}`.toUpperCase(),
+      status: "active",
+    });
+    await db.insert(pushSubscriptions).values([
+      {
+        companyId: prefsCompanyId,
+        userId: "user-1",
+        endpoint: "https://push.example.com/sub-prefs-1",
+        p256dh: "p256dh-prefs-1",
+        auth: "auth-prefs-1",
+      },
+      {
+        companyId: prefsCompanyId,
+        userId: "user-2",
+        endpoint: "https://push.example.com/sub-prefs-2",
+        p256dh: "p256dh-prefs-2",
+        auth: "auth-prefs-2",
+      },
+    ]);
+
+    vi.mocked(webpush.sendNotification).mockClear();
+    await db.insert(pushDeliveryPrefs).values({
+      companyId: prefsCompanyId,
+      userId: "user-1",
+      minBand: "critical",
+    });
+    const channel = createWebPushChannel(db);
+    await channel.deliver(
+      { companyId: prefsCompanyId },
+      {
+        kind: "approval_high_risk",
+        title: "t",
+        push: buildApprovalPushBody({ approvalType: "x", band: "high", companyId: prefsCompanyId, approvalId: "a1" }),
+      },
+    );
+    // user-1 suppressed (floor=critical, band=high); user-2 has no prefs → delivered
+    expect(vi.mocked(webpush.sendNotification)).toHaveBeenCalledTimes(1);
+    await db.delete(pushDeliveryPrefs).where(eq(pushDeliveryPrefs.companyId, prefsCompanyId));
   });
 });
 // [END: module]
