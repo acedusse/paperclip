@@ -57,12 +57,60 @@ self.addEventListener("fetch", (event) => {
 
 self.addEventListener("push", (event) => {
   const data = event.data ? event.data.json() : {};
+  const isApproval = typeof data.approvalId === "string";
   event.waitUntil(
     self.registration.showNotification(data.title || "Paperclip", {
       body: data.body || "",
       tag: data.tag,
-      data: { url: data.url },
+      data: { url: data.url, approvalId: data.approvalId ?? null },
+      actions: isApproval
+        ? [
+            { action: "approve", title: "Approve" },
+            { action: "reject", title: "Reject" },
+          ]
+        : [],
     }),
   );
 });
+
+self.addEventListener("notificationclick", (event) => {
+  const data = event.notification.data || {};
+  const url = data.url;
+  const approvalId = data.approvalId;
+  event.notification.close();
+
+  if ((event.action === "approve" || event.action === "reject") && approvalId) {
+    event.waitUntil(
+      fetch(`/api/approvals/${approvalId}/${event.action}`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      })
+        .then((res) => {
+          if (res.ok) {
+            return self.registration.showNotification("Paperclip", {
+              body: event.action === "approve" ? "Approved." : "Rejected.",
+              tag: `approval-${approvalId}-done`,
+            });
+          }
+          return openApproval(url);
+        })
+        .catch(() => openApproval(url)),
+    );
+    return;
+  }
+
+  event.waitUntil(openApproval(url));
+});
+
+function openApproval(url) {
+  const target = url || "/";
+  return self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+    for (const client of clients) {
+      if (client.url.endsWith(target) && "focus" in client) return client.focus();
+    }
+    return self.clients.openWindow(target);
+  });
+}
 // [END: module]
