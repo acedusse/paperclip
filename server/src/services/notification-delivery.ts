@@ -67,7 +67,7 @@ export async function deliverThroughChannels(target: DeliveryTarget, payload: No
     try {
       await channel.deliver(target, payload);
     } catch (err) {
-      logger.warn({ err, channel: channel.name }, "delivery channel failed");
+      logger.warn({ err, channel: channel.name, companyId: target.companyId }, "delivery channel failed");
     }
   }
 }

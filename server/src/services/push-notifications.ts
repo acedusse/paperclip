@@ -48,7 +48,6 @@ export function createWebPushChannel(db: Db): DeliveryChannel {
       for (const sub of subs) {
         try {
           await webpush.sendNotification({ endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } }, body);
-          await db.update(pushSubscriptions).set({ lastUsedAt: new Date() }).where(eq(pushSubscriptions.id, sub.id));
         } catch (err) {
           const statusCode = (err as { statusCode?: number }).statusCode;
           if (statusCode === 404 || statusCode === 410) {
@@ -62,6 +61,11 @@ export function createWebPushChannel(db: Db): DeliveryChannel {
             logger.warn({ err, subscriptionId: sub.id }, "web push send failed");
           }
         }
+        await db
+          .update(pushSubscriptions)
+          .set({ lastUsedAt: new Date() })
+          .where(eq(pushSubscriptions.id, sub.id))
+          .catch((err) => logger.warn({ err, subscriptionId: sub.id }, "failed to bump push subscription lastUsedAt"));
       }
     },
   };
