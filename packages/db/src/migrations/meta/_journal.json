@@ -806,6 +806,41 @@
       "when": 1784236200000,
       "tag": "0114_workspace_path_claims",
       "breakpoints": true
+    },
+    {
+      "idx": 115,
+      "version": "7",
+      "when": 1784236300000,
+      "tag": "0115_combo05_review_cockpit",
+      "breakpoints": true
+    },
+    {
+      "idx": 116,
+      "version": "7",
+      "when": 1784236400000,
+      "tag": "0116_combo05_auto_approve_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 117,
+      "version": "7",
+      "when": 1784236500000,
+      "tag": "0117_combo05_digests",
+      "breakpoints": true
+    },
+    {
+      "idx": 118,
+      "version": "7",
+      "when": 1784236600000,
+      "tag": "0118_combo05_push_subscriptions",
+      "breakpoints": true
+    },
+    {
+      "idx": 119,
+      "version": "7",
+      "when": 1784236700000,
+      "tag": "0119_combo05_push_delivery_prefs",
+      "breakpoints": true
     }
   ]
 }

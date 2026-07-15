@@ -42,6 +42,7 @@ import { GoalDetail } from "./pages/GoalDetail";
 import { Approvals } from "./pages/Approvals";
 import { ApprovalTriage } from "./pages/ApprovalTriage";
 import { ApprovalDetail } from "./pages/ApprovalDetail";
+import { Digest } from "./pages/Digest";
 import { Costs } from "./pages/Costs";
 import { Activity } from "./pages/Activity";
 import { Inbox } from "./pages/Inbox";
@@ -166,6 +167,7 @@ function boardRoutes() {
       <Route path="approvals/all" element={<Approvals />} />
       <Route path="approvals/triage" element={<ApprovalTriage />} />
       <Route path="approvals/:approvalId" element={<ApprovalDetail />} />
+      <Route path="digest" element={<Digest />} />
       <Route path="costs" element={<Costs />} />
       <Route path="activity" element={<Activity />} />
       {/* Conference Room Chat surfaces (PAP-136/PAP-137): routes stay

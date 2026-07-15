@@ -13,8 +13,8 @@
 // ==========================================
 // [START: module]
 import { Router, type Request } from "express";
-import { eq } from "drizzle-orm";
-import { heartbeatRuns, type Db } from "@paperclipai/db";
+import { and, desc, eq } from "drizzle-orm";
+import { activityLog, heartbeatRuns, type Db } from "@paperclipai/db";
 import {
   addApprovalCommentSchema,
   bulkResolveApprovalsSchema,
@@ -29,17 +29,28 @@ import {
   approvalService,
   approvalRiskService,
   approvalTriageService,
+  autoApprovePolicyService,
   accessService,
+  bandRank,
+  buildApprovalPushBody,
   canDecide,
+  deliverThroughChannels,
   heartbeatService,
   issueApprovalService,
   logActivity,
   recordDecision,
   secretService,
+  type RiskBand,
 } from "../services/index.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
 import { redactEventPayload } from "../redaction.js";
 import type { PluginWorkerManager } from "../services/plugin-worker-manager.js";
+
+// Combo-05 Phase 2a: locked ceiling — no policy may auto-decide above this band.
+const AUTO_DECISION_MAX_BAND = "low" as const;
+
+// Combo-05 Phase 3a: high-band approvals buzz the phone.
+const PUSH_MIN_BAND = "high" as const;
 
 function redactApprovalPayload<T extends { payload: Record<string, unknown> }>(approval: T): T {
   return {
@@ -65,6 +76,7 @@ export function approvalRoutes(
   const router = Router();
   const svc = approvalService(db);
   const riskSvc = approvalRiskService(db);
+  const autoPolicySvc = autoApprovePolicyService(db);
   const triageSvc = approvalTriageService(db);
   const access = accessService(db);
   const heartbeat = heartbeatService(db, {
@@ -73,6 +85,99 @@ export function approvalRoutes(
   const issueApprovalsSvc = issueApprovalService(db);
   const secretsSvc = secretService(db);
   const strictSecretsMode = process.env.PAPERCLIP_SECRETS_STRICT_MODE === "true";
+
+  // Shared post-approval side effects for BOTH the human approve route and the Phase-2a auto-approve
+  // path: emit the `approval.approved` domain event and wake the requesting agent so it can resume.
+  // Callers add their own recordDecision (explicit_human vs auto_policy). Keep this the single owner.
+  async function applyApprovalApprovedEffects(
+    approval: {
+      id: string;
+      companyId: string;
+      type: string;
+      status: string;
+      requestedByAgentId: string | null;
+    },
+    actor: { actorType: "user" | "system"; actorId: string },
+  ): Promise<{ linkedIssueIds: string[]; primaryIssueId: string | null }> {
+    const linkedIssues = await issueApprovalsSvc.listIssuesForApproval(approval.id);
+    const linkedIssueIds = linkedIssues.map((issue) => issue.id);
+    const primaryIssueId = linkedIssueIds[0] ?? null;
+
+    await logActivity(db, {
+      companyId: approval.companyId,
+      actorType: actor.actorType,
+      actorId: actor.actorId,
+      action: "approval.approved",
+      entityType: "approval",
+      entityId: approval.id,
+      details: {
+        type: approval.type,
+        requestedByAgentId: approval.requestedByAgentId,
+        linkedIssueIds,
+      },
+    });
+
+    if (approval.requestedByAgentId) {
+      try {
+        const wakeRun = await heartbeat.wakeup(approval.requestedByAgentId, {
+          source: "automation",
+          triggerDetail: "system",
+          reason: "approval_approved",
+          payload: {
+            approvalId: approval.id,
+            approvalStatus: approval.status,
+            issueId: primaryIssueId,
+            issueIds: linkedIssueIds,
+          },
+          requestedByActorType: actor.actorType,
+          requestedByActorId: actor.actorId,
+          contextSnapshot: {
+            source: "approval.approved",
+            approvalId: approval.id,
+            approvalStatus: approval.status,
+            issueId: primaryIssueId,
+            issueIds: linkedIssueIds,
+            taskId: primaryIssueId,
+            wakeReason: "approval_approved",
+          },
+        });
+
+        await logActivity(db, {
+          companyId: approval.companyId,
+          actorType: actor.actorType,
+          actorId: actor.actorId,
+          action: "approval.requester_wakeup_queued",
+          entityType: "approval",
+          entityId: approval.id,
+          details: {
+            requesterAgentId: approval.requestedByAgentId,
+            wakeRunId: wakeRun?.id ?? null,
+            linkedIssueIds,
+          },
+        });
+      } catch (err) {
+        logger.warn(
+          { err, approvalId: approval.id, requestedByAgentId: approval.requestedByAgentId },
+          "failed to queue requester wakeup after approval",
+        );
+        await logActivity(db, {
+          companyId: approval.companyId,
+          actorType: actor.actorType,
+          actorId: actor.actorId,
+          action: "approval.requester_wakeup_failed",
+          entityType: "approval",
+          entityId: approval.id,
+          details: {
+            requesterAgentId: approval.requestedByAgentId,
+            linkedIssueIds,
+            error: err instanceof Error ? err.message : String(err),
+          },
+        });
+      }
+    }
+
+    return { linkedIssueIds, primaryIssueId };
+  }
 
   async function requireApprovalAccess(req: Request, id: string) {
     const approval = await svc.getById(id);
@@ -171,7 +276,19 @@ export function approvalRoutes(
     }
     assertCompanyAccess(req, approval.companyId);
     if (!(await assertApprovalAccessAllowed(req, res, approval.companyId))) return;
-    res.json(redactApprovalPayload(approval));
+
+    // Combo-05 Phase 2a: expose the deciding method (e.g. "auto_policy") from the latest
+    // decision-audit record so the UI can distinguish an auto-approved item from a human one.
+    const lastDecision = await db
+      .select({ details: activityLog.details })
+      .from(activityLog)
+      .where(and(eq(activityLog.entityId, approval.id), eq(activityLog.action, "approval.decision")))
+      .orderBy(desc(activityLog.createdAt))
+      .limit(1)
+      .then((r) => r[0] ?? null);
+    const decidedVia = (lastDecision?.details as { method?: string } | null)?.method ?? null;
+
+    res.json({ ...redactApprovalPayload(approval), decidedVia });
   });
 
   router.post("/companies/:companyId/approvals", validate(createApprovalSchema), async (req, res) => {
@@ -230,7 +347,68 @@ export function approvalRoutes(
       logger.warn({ err, approvalId: approval.id }, "risk compute failed on approval create");
     });
 
-    res.status(201).json(redactApprovalPayload(approval));
+    // Combo-05 Phase 2a: attempt auto-approve. Best-effort — never blocks or fails the create.
+    const auto = await autoPolicySvc.evaluateForApproval(approval.id).catch((err) => {
+      logger.warn({ err, approvalId: approval.id }, "auto-approve evaluation failed");
+      return { matched: null as null };
+    });
+    if (auto.matched) {
+      const risk = await riskSvc.getSnapshot(approval.id);
+      const gate = canDecide({
+        band: auto.matched.maxBand,
+        method: "auto_policy",
+        autoDecisionMaxBand: AUTO_DECISION_MAX_BAND,
+      });
+      if (gate.allow) {
+        try {
+          const { approval: approvedApproval, applied } = await svc.approve(approval.id, "auto_policy", null);
+          if (applied) {
+            await applyApprovalApprovedEffects(approvedApproval, {
+              actorType: "system",
+              actorId: "auto_policy",
+            });
+            try {
+              await recordDecision(db, {
+                approvalId: approval.id,
+                companyId: approval.companyId,
+                actor: { actorType: "system", actorId: "auto_policy" },
+                method: "auto_policy",
+                outcome: "approved",
+                risk: risk ? { score: risk.score, band: risk.band as any } : null,
+                note: `auto-approved by policy ${auto.matched.id}`,
+              });
+            } catch (auditErr) {
+              logger.warn({ err: auditErr, approvalId: approval.id }, "auto-approve recordDecision failed");
+            }
+          }
+        } catch (err) {
+          logger.warn({ err, approvalId: approval.id }, "auto-approve failed; leaving pending");
+        }
+      }
+    }
+
+    const finalApproval = (await svc.getById(approval.id)) ?? approval;
+
+    // Phase 3a: high-band approvals buzz the phone. Best-effort; never blocks create.
+    if (finalApproval.status !== "approved") {
+      try {
+        const pushRisk = await riskSvc.getSnapshot(approval.id);
+        if (pushRisk && bandRank(pushRisk.band as RiskBand) >= bandRank(PUSH_MIN_BAND)) {
+          void deliverThroughChannels(
+            { companyId },
+            {
+              kind: "approval_high_risk",
+              title: `${pushRisk.band} risk approval needs you`,
+              push: buildApprovalPushBody({ approvalType: approval.type, band: pushRisk.band, companyId, approvalId: approval.id }),
+            },
+          ).catch((err) => logger.warn({ err, approvalId: approval.id }, "high-risk push failed"));
+        }
+      } catch (err) {
+        logger.warn({ err, approvalId: approval.id }, "high-risk push gate failed");
+      }
+    }
+
+    res.status(201).json(redactApprovalPayload(finalApproval));
   });
 
   router.get("/approvals/:id/issues", async (req, res) => {
@@ -264,22 +442,9 @@ export function approvalRoutes(
     const { approval, applied } = await svc.approve(id, decidedByUserId, req.body.decisionNote);
 
     if (applied) {
-      const linkedIssues = await issueApprovalsSvc.listIssuesForApproval(approval.id);
-      const linkedIssueIds = linkedIssues.map((issue) => issue.id);
-      const primaryIssueId = linkedIssueIds[0] ?? null;
-
-      await logActivity(db, {
-        companyId: approval.companyId,
+      await applyApprovalApprovedEffects(approval, {
         actorType: "user",
         actorId: req.actor.userId ?? "board",
-        action: "approval.approved",
-        entityType: "approval",
-        entityId: approval.id,
-        details: {
-          type: approval.type,
-          requestedByAgentId: approval.requestedByAgentId,
-          linkedIssueIds,
-        },
       });
 
       try {
@@ -294,69 +459,6 @@ export function approvalRoutes(
         });
       } catch (auditErr) {
         logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
-      }
-
-      if (approval.requestedByAgentId) {
-        try {
-          const wakeRun = await heartbeat.wakeup(approval.requestedByAgentId, {
-            source: "automation",
-            triggerDetail: "system",
-            reason: "approval_approved",
-            payload: {
-              approvalId: approval.id,
-              approvalStatus: approval.status,
-              issueId: primaryIssueId,
-              issueIds: linkedIssueIds,
-            },
-            requestedByActorType: "user",
-            requestedByActorId: req.actor.userId ?? "board",
-            contextSnapshot: {
-              source: "approval.approved",
-              approvalId: approval.id,
-              approvalStatus: approval.status,
-              issueId: primaryIssueId,
-              issueIds: linkedIssueIds,
-              taskId: primaryIssueId,
-              wakeReason: "approval_approved",
-            },
-          });
-
-          await logActivity(db, {
-            companyId: approval.companyId,
-            actorType: "user",
-            actorId: req.actor.userId ?? "board",
-            action: "approval.requester_wakeup_queued",
-            entityType: "approval",
-            entityId: approval.id,
-            details: {
-              requesterAgentId: approval.requestedByAgentId,
-              wakeRunId: wakeRun?.id ?? null,
-              linkedIssueIds,
-            },
-          });
-        } catch (err) {
-          logger.warn(
-            {
-              err,
-              approvalId: approval.id,
-              requestedByAgentId: approval.requestedByAgentId,
-            },
-            "failed to queue requester wakeup after approval",
-          );
-          await logActivity(db, {
-            companyId: approval.companyId,
-            actorType: "user",
-            actorId: req.actor.userId ?? "board",
-            action: "approval.requester_wakeup_failed",
-            entityType: "approval",
-            entityId: approval.id,
-            details: {
-              requesterAgentId: approval.requestedByAgentId,
-              linkedIssueIds,
-              error: err instanceof Error ? err.message : String(err),
-            },
-          });
-        }
       }
     }
 

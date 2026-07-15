@@ -102,4 +102,9 @@ export { pluginWebhookDeliveries } from "./plugin_webhooks.js";
 export { pluginLogs } from "./plugin_logs.js";
 export { runChangesets, type RunChangesetFile, type RunChangesetCommand } from "./run_changesets.js";
 export { approvalRisk } from "./approval_risk.js";
+export { autoApprovePolicies, type AutoApprovePolicyRow } from "./auto_approve_policies.js";
+export { digests, type DigestRow } from "./digests.js";
+export { pushSubscriptions, type PushSubscriptionRow } from "./push_subscriptions.js";
+export { pushVapidKeys, type PushVapidKeyRow } from "./push_vapid_keys.js";
+export { pushDeliveryPrefs, type PushDeliveryPrefsRow } from "./push_delivery_prefs.js";
 // [END: module]

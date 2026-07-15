@@ -36,6 +36,11 @@ import { fileResourceRoutes } from "./routes/file-resources.js";
 import { routineRoutes } from "./routes/routines.js";
 import { environmentRoutes } from "./routes/environments.js";
 import { executionWorkspaceRoutes } from "./routes/execution-workspaces.js";
+import { runChangesetRoutes } from "./routes/run-changesets.js";
+import { autoApprovePolicyRoutes } from "./routes/auto-approve-policies.js";
+import { digestRoutes } from "./routes/digests.js";
+import { pushRoutes } from "./routes/push.js";
+import { createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
 import { workspacePathClaimRoutes } from "./routes/workspace-path-claims.js";
 import { goalRoutes } from "./routes/goals.js";
 import { boardChatRoutes } from "./routes/board-chat.js";
@@ -220,6 +225,9 @@ export async function createApp(
   const hostServicesDisposers = new Map<string, () => void>();
   const workerManager = opts.pluginWorkerManager ?? createPluginWorkerManager();
 
+  registerChannel(createInboxDigestChannel(db));
+  registerChannel(createWebPushChannel(db));
+
   // Mount API routes
   const api = Router();
   api.use(boardMutationGuard());
@@ -249,6 +257,10 @@ export async function createApp(
   api.use(routineRoutes(db, { pluginWorkerManager: workerManager }));
   api.use(environmentRoutes(db, { pluginWorkerManager: workerManager }));
   api.use(executionWorkspaceRoutes(db));
+  api.use(runChangesetRoutes(db));
+  api.use(autoApprovePolicyRoutes(db));
+  api.use(digestRoutes(db));
+  api.use(pushRoutes(db));
   api.use(workspacePathClaimRoutes(db));
   api.use(goalRoutes(db));
   api.use(boardChatRoutes(db, { deploymentMode: opts.deploymentMode }));

@@ -233,7 +233,17 @@ export function ApprovalDetail() {
               <p className="text-xs text-muted-foreground font-mono">{approval.id}</p>
             </div>
           </div>
-          <StatusBadge status={approval.status} />
+          <div className="flex items-center gap-2">
+            {approval.decidedVia === "auto_policy" && (
+              <span
+                className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
+                title="Auto-approved by policy"
+              >
+                Auto-approved
+              </span>
+            )}
+            <StatusBadge status={approval.status} />
+          </div>
         </div>
         <div className="text-sm space-y-1">
           {approval.requestedByAgentId && (

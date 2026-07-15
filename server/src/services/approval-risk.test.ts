@@ -13,7 +13,7 @@
 // ==========================================
 // [START: module]
 import { describe, it, expect } from "vitest";
-import { riskScore } from "./approval-risk.js";
+import { riskScore, bandRank, hasSensitiveBoundary, impliedSpendFromApproval } from "./approval-risk.js";
 
 describe("riskScore", () => {
   it("is deterministic and low for a trivial trusted doc edit", () => {
@@ -40,6 +40,23 @@ describe("riskScore", () => {
     expect(r.score).toBeGreaterThanOrEqual(75);
     expect(r.band).toBe("critical");
     expect(r.reasons.join(" ")).toMatch(/sensitive|spend|trust/i);
+  });
+});
+
+describe("risk helpers", () => {
+  it("ranks bands low<medium<high<critical", () => {
+    expect(bandRank("low")).toBe(0);
+    expect(bandRank("critical")).toBe(3);
+    expect(bandRank("high")).toBeGreaterThan(bandRank("medium"));
+  });
+  it("flags sensitive type or sensitive payload key", () => {
+    expect(hasSensitiveBoundary({ type: "hire_agent", payload: {} })).toBe(true);
+    expect(hasSensitiveBoundary({ type: "work_product", payload: { secretRef: "x" } })).toBe(true);
+    expect(hasSensitiveBoundary({ type: "work_product", payload: {} })).toBe(false);
+  });
+  it("reads implied spend from budgetMonthlyCents, else 0", () => {
+    expect(impliedSpendFromApproval({ budgetMonthlyCents: 500 })).toBe(500);
+    expect(impliedSpendFromApproval({})).toBe(0);
   });
 });
 // [END: module]

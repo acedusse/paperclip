@@ -52,6 +52,7 @@ import {
   feedbackService,
   backfillPrincipalAccessCompatibility,
   bootstrapExecutionPolicyFromEnv,
+  digestService,
   heartbeatService,
   instanceSettingsService,
   reconcileCloudUpstreamRunsOnStartup,
@@ -796,6 +797,7 @@ export async function startServer(): Promise<StartedServer> {
   if (config.heartbeatSchedulerEnabled) {
     const heartbeat = heartbeatService(db as any, { pluginWorkerManager });
     const routines = routineService(db as any, { pluginWorkerManager });
+    let digestSweepInFlight = false;
 
     // Reap orphaned runs before timer ticks start so wakeups cannot coalesce
     // into a dead "running" row during startup recovery.
@@ -893,7 +895,24 @@ export async function startServer(): Promise<StartedServer> {
         .catch((err) => {
           logger.error({ err }, "routine scheduler tick failed");
         });
-  
+
+      if (!digestSweepInFlight) {
+        digestSweepInFlight = true;
+        void digestService(db)
+          .sweep(new Date())
+          .then((result) => {
+            if (result.generated.length > 0) {
+              logger.info({ generated: result.generated.length }, "digest sweep generated digests");
+            }
+          })
+          .catch((err) => {
+            logger.error({ err }, "digest sweep failed");
+          })
+          .finally(() => {
+            digestSweepInFlight = false;
+          });
+      }
+
       // Periodically reconcile leaked admission state (Phase-1 source: run-liveness,
       // which reaps orphaned runs at the 5-min staleness threshold) and make sure
       // persisted queued work is still being driven forward.

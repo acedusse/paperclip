@@ -8,8 +8,8 @@ describe("canDecide", () => {
   it("allows explicit_human at any band", () => {
     expect(canDecide({ band: "critical", method: "explicit_human" }).allow).toBe(true);
   });
-  it("denies every non-registered method in phase 1", () => {
-    for (const m of ["delegated_human", "coverage_escalation", "bounded_agent", "auto_policy"] as const) {
+  it("denies every non-registered method", () => {
+    for (const m of ["delegated_human", "coverage_escalation", "bounded_agent"] as const) {
       expect(canDecide({ band: "low", method: m }).allow).toBe(false);
     }
   });
@@ -17,5 +17,19 @@ describe("canDecide", () => {
     const r = canDecide({ band: "high", method: "auto_policy", autoDecisionMaxBand: "low" });
     expect(r.allow).toBe(false);
     expect(r.deny).toMatch(/band/i);
+  });
+});
+
+describe("canDecide — auto_policy (phase 2a)", () => {
+  it("allows auto_policy at or below the max band", () => {
+    expect(canDecide({ band: "low", method: "auto_policy", autoDecisionMaxBand: "low" }).allow).toBe(true);
+  });
+  it("still denies auto_policy above the max band", () => {
+    const r = canDecide({ band: "medium", method: "auto_policy", autoDecisionMaxBand: "low" });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toMatch(/band/i);
+  });
+  it("leaves explicit_human unaffected", () => {
+    expect(canDecide({ band: "critical", method: "explicit_human" }).allow).toBe(true);
   });
 });

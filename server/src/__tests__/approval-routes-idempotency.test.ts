@@ -32,6 +32,14 @@ const mockHeartbeatService = vi.hoisted(() => ({
   wakeup: vi.fn(),
 }));
 
+const mockAutoApprovePolicyService = vi.hoisted(() => ({
+  evaluateForApproval: vi.fn().mockResolvedValue({ matched: null }),
+  listActive: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  deactivate: vi.fn(),
+}));
+
 const mockIssueApprovalService = vi.hoisted(() => ({
   listIssuesForApproval: vi.fn(),
   linkManyForApproval: vi.fn(),
@@ -64,6 +72,7 @@ function registerModuleMocks() {
     approvalService: () => mockApprovalService,
     approvalRiskService: () => mockRiskService,
     approvalTriageService: () => mockTriageService,
+    autoApprovePolicyService: () => mockAutoApprovePolicyService,
     canDecide: mockCanDecide,
     recordDecision: mockRecordDecision,
     heartbeatService: () => mockHeartbeatService,
