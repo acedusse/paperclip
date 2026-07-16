@@ -32,8 +32,10 @@ import {
   autoApprovePolicyService,
   accessService,
   bandRank,
+  boundedAgentApproverService,
   buildApprovalPushBody,
   canDecide,
+  canDecideAsBoundedAgent,
   canDecideUnderDelegation,
   delegationService,
   deliverThroughChannels,
@@ -79,6 +81,7 @@ export function approvalRoutes(
   const router = Router();
   const svc = approvalService(db);
   const delegationSvc = delegationService(db);
+  const boundedAgentSvc = boundedAgentApproverService(db);
 
   // Combo-05 Phase 4a: resolve which decision method applies to a board decision
   // on this approval — the delegated path (grant present + valid), coverage
@@ -88,35 +91,74 @@ export function approvalRoutes(
   // into an HTTP response; never trusts client-asserted attribution.
   async function resolveDecisionMethod(
     req: Request,
-    approval: { id: string; companyId: string; type: string; payload: Record<string, unknown> },
+    approval: {
+      id: string;
+      companyId: string;
+      type: string;
+      payload: Record<string, unknown>;
+      requestedByAgentId?: string | null;
+    },
     band: RiskBand,
-  ): Promise<{ method: "explicit_human" | "delegated_human" | "coverage_escalation"; details: Record<string, unknown> }> {
+  ): Promise<{ method: "explicit_human" | "delegated_human" | "coverage_escalation" | "bounded_agent"; details: Record<string, unknown> }> {
     const grantId = (req.body as { actingUnderGrantId?: string }).actingUnderGrantId;
     const actorUserId = req.actor.userId ?? "board";
 
     if (grantId) {
       const grant = await delegationSvc.getGrant(grantId);
-      if (!grant || grant.companyId !== approval.companyId) {
-        throw { status: 404, error: "Delegation grant not found" };
+      if (grant) {
+        if (grant.companyId !== approval.companyId) {
+          throw { status: 404, error: "Delegation grant not found" };
+        }
+        const gate = canDecideUnderDelegation({
+          approvalType: approval.type,
+          band,
+          impliedSpendCents: impliedSpendFromApproval(approval.payload),
+          grant: {
+            approvalTypes: grant.approvalTypes,
+            maxBand: grant.maxBand as RiskBand,
+            maxSpendCents: grant.maxSpendCents,
+            validFrom: grant.validFrom,
+            validUntil: grant.validUntil,
+            revokedAt: grant.revokedAt,
+            delegateUserId: grant.delegateUserId,
+          },
+          actorUserId,
+          now: new Date(),
+        });
+        if (!gate.allow) throw { status: 422, error: gate.deny };
+        return { method: "delegated_human", details: { grantId: grant.id, onBehalfOf: grant.grantorUserId } };
       }
-      const gate = canDecideUnderDelegation({
-        approvalType: approval.type,
-        band,
-        impliedSpendCents: impliedSpendFromApproval(approval.payload),
-        grant: {
-          approvalTypes: grant.approvalTypes,
-          maxBand: grant.maxBand as RiskBand,
-          maxSpendCents: grant.maxSpendCents,
-          validFrom: grant.validFrom,
-          validUntil: grant.validUntil,
-          revokedAt: grant.revokedAt,
-          delegateUserId: grant.delegateUserId,
-        },
-        actorUserId,
-        now: new Date(),
-      });
-      if (!gate.allow) throw { status: 422, error: gate.deny };
-      return { method: "delegated_human", details: { grantId: grant.id, onBehalfOf: grant.grantorUserId } };
+
+      const baGrant = await boundedAgentSvc.getGrant(grantId);
+      if (baGrant) {
+        if (baGrant.companyId !== approval.companyId) {
+          throw { status: 404, error: "Bounded-agent grant not found" };
+        }
+        const gate = canDecideAsBoundedAgent({
+          approvalType: approval.type,
+          band,
+          impliedSpendCents: impliedSpendFromApproval(approval.payload),
+          deciderAgentId: req.actor.agentId ?? null,
+          requestedByAgentId: (approval as { requestedByAgentId?: string | null }).requestedByAgentId ?? null,
+          grant: {
+            approvalTypes: baGrant.approvalTypes,
+            maxBand: baGrant.maxBand as RiskBand,
+            maxSpendCents: baGrant.maxSpendCents,
+            validFrom: baGrant.validFrom,
+            validUntil: baGrant.validUntil,
+            revokedAt: baGrant.revokedAt,
+            delegateAgentId: baGrant.delegateAgentId,
+          },
+          now: new Date(),
+        });
+        if (!gate.allow) throw { status: 422, error: gate.deny };
+        return {
+          method: "bounded_agent",
+          details: { grantId: baGrant.id, onBehalfOf: baGrant.grantorUserId, deciderAgentId: req.actor.agentId ?? null },
+        };
+      }
+
+      throw { status: 404, error: "Delegation grant not found" };
     }
 
     // Non-delegated board decision: attribute coverage_escalation if this actor is
@@ -138,6 +180,16 @@ export function approvalRoutes(
       }
     }
     return { method: "explicit_human", details: {} };
+  }
+
+  // Combo-05 Phase 4b: attribute the decision to the acting agent when the
+  // resolved method is bounded_agent; otherwise the existing human/board actor.
+  function decisionActor(
+    req: Request,
+    method: "explicit_human" | "delegated_human" | "coverage_escalation" | "bounded_agent",
+  ): { actorType: "user" | "agent"; actorId: string } {
+    if (method === "bounded_agent") return { actorType: "agent", actorId: req.actor.agentId ?? "agent" };
+    return { actorType: "user", actorId: req.actor.userId ?? "board" };
   }
 
   const riskSvc = approvalRiskService(db);
@@ -162,7 +214,7 @@ export function approvalRoutes(
       status: string;
       requestedByAgentId: string | null;
     },
-    actor: { actorType: "user" | "system"; actorId: string },
+    actor: { actorType: "user" | "system" | "agent"; actorId: string },
   ): Promise<{ linkedIssueIds: string[]; primaryIssueId: string | null }> {
     const linkedIssues = await issueApprovalsSvc.listIssuesForApproval(approval.id);
     const linkedIssueIds = linkedIssues.map((issue) => issue.id);
@@ -497,7 +549,6 @@ export function approvalRoutes(
       res.status(404).json({ error: "Approval not found" });
       return;
     }
-    const decidedByUserId = req.actor.userId ?? "board";
     const approvalForGate = await svc.getById(id);
     const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
     const band = ((risk?.band as RiskBand) ?? "low") as RiskBand;
@@ -512,7 +563,13 @@ export function approvalRoutes(
     try {
       decision = await resolveDecisionMethod(
         req,
-        { id, companyId: approvalForGate!.companyId, type: approvalForGate!.type, payload: approvalForGate!.payload },
+        {
+          id,
+          companyId: approvalForGate!.companyId,
+          type: approvalForGate!.type,
+          payload: approvalForGate!.payload,
+          requestedByAgentId: approvalForGate!.requestedByAgentId ?? null,
+        },
         band,
       );
     } catch (e) {
@@ -520,19 +577,17 @@ export function approvalRoutes(
       res.status(err.status ?? 500).json({ error: err.error ?? "internal error" });
       return;
     }
-    const { approval, applied } = await svc.approve(id, decidedByUserId, req.body.decisionNote);
+    const actor = decisionActor(req, decision.method);
+    const { approval, applied } = await svc.approve(id, actor.actorId, req.body.decisionNote);
 
     if (applied) {
-      await applyApprovalApprovedEffects(approval, {
-        actorType: "user",
-        actorId: req.actor.userId ?? "board",
-      });
+      await applyApprovalApprovedEffects(approval, actor);
 
       try {
         await recordDecision(db, {
           approvalId: approval.id,
           companyId: approval.companyId,
-          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          actor,
           method: decision.method,
           outcome: "approved",
           risk: risk ? { score: risk.score, band: risk.band as any } : null,
@@ -555,7 +610,6 @@ export function approvalRoutes(
       res.status(404).json({ error: "Approval not found" });
       return;
     }
-    const decidedByUserId = req.actor.userId ?? "board";
     const approvalForGate = await svc.getById(id);
     const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
     const band = ((risk?.band as RiskBand) ?? "low") as RiskBand;
@@ -570,7 +624,13 @@ export function approvalRoutes(
     try {
       decision = await resolveDecisionMethod(
         req,
-        { id, companyId: approvalForGate!.companyId, type: approvalForGate!.type, payload: approvalForGate!.payload },
+        {
+          id,
+          companyId: approvalForGate!.companyId,
+          type: approvalForGate!.type,
+          payload: approvalForGate!.payload,
+          requestedByAgentId: approvalForGate!.requestedByAgentId ?? null,
+        },
         band,
       );
     } catch (e) {
@@ -578,13 +638,14 @@ export function approvalRoutes(
       res.status(err.status ?? 500).json({ error: err.error ?? "internal error" });
       return;
     }
-    const { approval, applied } = await svc.reject(id, decidedByUserId, req.body.decisionNote);
+    const actor = decisionActor(req, decision.method);
+    const { approval, applied } = await svc.reject(id, actor.actorId, req.body.decisionNote);
 
     if (applied) {
       await logActivity(db, {
         companyId: approval.companyId,
-        actorType: "user",
-        actorId: req.actor.userId ?? "board",
+        actorType: actor.actorType,
+        actorId: actor.actorId,
         action: "approval.rejected",
         entityType: "approval",
         entityId: approval.id,
@@ -595,7 +656,7 @@ export function approvalRoutes(
         await recordDecision(db, {
           approvalId: approval.id,
           companyId: approval.companyId,
-          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          actor,
           method: decision.method,
           outcome: "rejected",
           risk: risk ? { score: risk.score, band: risk.band as any } : null,
@@ -621,7 +682,6 @@ export function approvalRoutes(
         res.status(404).json({ error: "Approval not found" });
         return;
       }
-      const decidedByUserId = req.actor.userId ?? "board";
       const approvalForGate = await svc.getById(id);
       const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
       const band = ((risk?.band as RiskBand) ?? "low") as RiskBand;
@@ -636,7 +696,13 @@ export function approvalRoutes(
       try {
         decision = await resolveDecisionMethod(
           req,
-          { id, companyId: approvalForGate!.companyId, type: approvalForGate!.type, payload: approvalForGate!.payload },
+          {
+            id,
+            companyId: approvalForGate!.companyId,
+            type: approvalForGate!.type,
+            payload: approvalForGate!.payload,
+            requestedByAgentId: approvalForGate!.requestedByAgentId ?? null,
+          },
           band,
         );
       } catch (e) {
@@ -644,12 +710,13 @@ export function approvalRoutes(
         res.status(err.status ?? 500).json({ error: err.error ?? "internal error" });
         return;
       }
-      const approval = await svc.requestRevision(id, decidedByUserId, req.body.decisionNote);
+      const actor = decisionActor(req, decision.method);
+      const approval = await svc.requestRevision(id, actor.actorId, req.body.decisionNote);
 
       await logActivity(db, {
         companyId: approval.companyId,
-        actorType: "user",
-        actorId: req.actor.userId ?? "board",
+        actorType: actor.actorType,
+        actorId: actor.actorId,
         action: "approval.revision_requested",
         entityType: "approval",
         entityId: approval.id,
@@ -660,7 +727,7 @@ export function approvalRoutes(
         await recordDecision(db, {
           approvalId: approval.id,
           companyId: approval.companyId,
-          actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
+          actor,
           method: decision.method,
           outcome: "revision_requested",
           risk: risk ? { score: risk.score, band: risk.band as any } : null,
