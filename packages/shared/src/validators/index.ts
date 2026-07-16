@@ -471,6 +471,11 @@ export {
 } from "./auto-approve-policy.js";
 
 export {
+  createBoundedAgentApproverSchema,
+  type CreateBoundedAgentApprover,
+} from "./bounded-agent-approver.js";
+
+export {
   envBindingPlainSchema,
   envBindingSecretRefSchema,
   envBindingSchema,

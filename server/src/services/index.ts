@@ -58,11 +58,12 @@ export {
   impliedSpendFromApproval,
   type RiskBand,
 } from "./approval-risk.js";
-export { canDecide, canDecideUnderDelegation, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-authority.js";
+export { canDecide, canDecideUnderDelegation, canDecideAsBoundedAgent, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-authority.js";
 export { recordDecision } from "./approval-decision-audit.js";
 export { evaluateAutoApprove, autoApprovePolicyService, type AutoApprovePolicy } from "./auto-approve-policy.js";
 export { approvalTriageService } from "./approval-triage.js";
 export { delegationService } from "./delegation.js";
+export { boundedAgentApproverService } from "./bounded-agent-approver.js";
 export { coverageSweepService, slaMinutesForBand } from "./coverage-sweep.js";
 export { registerChannel, getChannels, deliverThroughChannels, type DeliveryChannel } from "./notification-delivery.js";
 export { digestService, DIGEST_MIN_INTERVAL_HOURS } from "./digest.js";

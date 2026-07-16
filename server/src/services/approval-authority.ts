@@ -7,8 +7,9 @@ const REGISTERED: ReadonlySet<DecisionMethod> = new Set([
   "explicit_human",
   "delegated_human",
   "coverage_escalation",
+  "bounded_agent",
   "auto_policy",
-]); // phase 2a + 4a
+]); // phase 2a + 4a + 4b
 const NON_HUMAN: ReadonlySet<DecisionMethod> = new Set(["bounded_agent", "auto_policy"]);
 
 function bandRank(b: RiskBand): number { return RISK_BAND_ORDER.indexOf(b); }
@@ -51,6 +52,44 @@ export function canDecideUnderDelegation(input: {
   }
   if (bandRank(input.band) > bandRank(g.maxBand)) {
     return { allow: false, deny: `delegation may not decide items above band ${g.maxBand}` };
+  }
+  if (g.maxSpendCents !== null && input.impliedSpendCents > g.maxSpendCents) {
+    return { allow: false, deny: `implied spend ${input.impliedSpendCents} exceeds delegation limit ${g.maxSpendCents}` };
+  }
+  return { allow: true };
+}
+
+export function canDecideAsBoundedAgent(input: {
+  approvalType: string;
+  band: RiskBand;
+  impliedSpendCents: number;
+  deciderAgentId: string | null;
+  requestedByAgentId: string | null;
+  grant: {
+    approvalTypes: string[];
+    maxBand: RiskBand;
+    maxSpendCents: number | null;
+    validFrom: Date;
+    validUntil: Date;
+    revokedAt: Date | null;
+    delegateAgentId: string;
+  };
+  now: Date;
+}): { allow: boolean; deny?: string } {
+  const g = input.grant;
+  if (!input.deciderAgentId) return { allow: false, deny: "actor is not an agent" };
+  if (input.deciderAgentId !== g.delegateAgentId) return { allow: false, deny: "actor is not this grant's delegate agent" };
+  if (input.requestedByAgentId !== null && input.deciderAgentId === input.requestedByAgentId) {
+    return { allow: false, deny: "a bounded agent may not approve its own work" };
+  }
+  if (g.revokedAt !== null) return { allow: false, deny: "bounded-agent grant is revoked" };
+  if (input.now < g.validFrom) return { allow: false, deny: "bounded-agent grant is not yet active" };
+  if (input.now > g.validUntil) return { allow: false, deny: "bounded-agent grant has expired" };
+  if (g.approvalTypes.length > 0 && !g.approvalTypes.includes(input.approvalType)) {
+    return { allow: false, deny: `approval type ${input.approvalType} is outside the delegation scope` };
+  }
+  if (bandRank(input.band) > bandRank(g.maxBand)) {
+    return { allow: false, deny: `bounded-agent grant may not decide items above band ${g.maxBand}` };
   }
   if (g.maxSpendCents !== null && input.impliedSpendCents > g.maxSpendCents) {
     return { allow: false, deny: `implied spend ${input.impliedSpendCents} exceeds delegation limit ${g.maxSpendCents}` };

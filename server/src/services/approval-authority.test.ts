@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { canDecide, canDecideUnderDelegation, METHOD_PRECEDENCE } from "./approval-authority.js";
+import { canDecide, canDecideUnderDelegation, canDecideAsBoundedAgent, METHOD_PRECEDENCE } from "./approval-authority.js";
 
 describe("canDecide", () => {
   it("locks the precedence order", () => {
@@ -8,9 +8,9 @@ describe("canDecide", () => {
   it("allows explicit_human at any band", () => {
     expect(canDecide({ band: "critical", method: "explicit_human" }).allow).toBe(true);
   });
-  it("denies every non-registered method", () => {
-    for (const m of ["bounded_agent"] as const) {
-      expect(canDecide({ band: "low", method: m }).allow).toBe(false);
+  it("every precedence method is registered", () => {
+    for (const method of METHOD_PRECEDENCE) {
+      expect(canDecide({ band: "low", method }).allow).toBe(true);
     }
   });
   it("denies non-human methods above autoDecisionMaxBand (guards the hard rule)", () => {
@@ -131,5 +131,77 @@ describe("canDecideUnderDelegation", () => {
   });
   it("boundary: now === validFrom -> allow (comparison is strict <, so equal is still within window)", () => {
     expect(canDecideUnderDelegation({ ...baseInput, now: baseGrant.validFrom }).allow).toBe(true);
+  });
+});
+
+describe("bounded_agent registration", () => {
+  it("bounded_agent is enabled for in-band items", () => {
+    expect(canDecide({ band: "low", method: "bounded_agent" }).allow).toBe(true);
+  });
+  it("bounded_agent still cannot decide above the auto ceiling", () => {
+    const r = canDecide({ band: "high", method: "bounded_agent", autoDecisionMaxBand: "low" });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("may not decide items above band");
+  });
+});
+
+describe("canDecideAsBoundedAgent", () => {
+  const base = {
+    approvalType: "work_product",
+    band: "low" as const,
+    impliedSpendCents: 100,
+    deciderAgentId: "mgr-agent",
+    requestedByAgentId: "worker-agent",
+    grant: {
+      approvalTypes: ["work_product"],
+      maxBand: "low" as const,
+      maxSpendCents: 1000,
+      validFrom: new Date("2026-01-01T00:00:00Z"),
+      validUntil: new Date("2026-12-31T00:00:00Z"),
+      revokedAt: null as Date | null,
+      delegateAgentId: "mgr-agent",
+    },
+    now: new Date("2026-07-15T00:00:00Z"),
+  };
+
+  it("allows an in-scope, in-band, in-budget decision by the granted agent", () => {
+    expect(canDecideAsBoundedAgent(base).allow).toBe(true);
+  });
+  it("denies when the acting agent is not the grant's delegate", () => {
+    const r = canDecideAsBoundedAgent({ ...base, deciderAgentId: "other-agent" });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("not this grant's delegate agent");
+  });
+  it("denies a non-agent actor", () => {
+    expect(canDecideAsBoundedAgent({ ...base, deciderAgentId: null }).allow).toBe(false);
+  });
+  it("denies self-approval (decider is the requester)", () => {
+    const r = canDecideAsBoundedAgent({ ...base, requestedByAgentId: "mgr-agent" });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("own work");
+  });
+  it("denies a revoked grant", () => {
+    const r = canDecideAsBoundedAgent({ ...base, grant: { ...base.grant, revokedAt: new Date("2026-07-01T00:00:00Z") } });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("revoked");
+  });
+  it("denies before validFrom and after validUntil", () => {
+    expect(canDecideAsBoundedAgent({ ...base, now: new Date("2025-12-01T00:00:00Z") }).allow).toBe(false);
+    expect(canDecideAsBoundedAgent({ ...base, now: new Date("2027-01-01T00:00:00Z") }).allow).toBe(false);
+  });
+  it("denies an out-of-scope approval type", () => {
+    const r = canDecideAsBoundedAgent({ ...base, approvalType: "budget_change" });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("outside the delegation scope");
+  });
+  it("denies above the grant band", () => {
+    const r = canDecideAsBoundedAgent({ ...base, band: "high" });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("above band");
+  });
+  it("denies over the spend cap", () => {
+    const r = canDecideAsBoundedAgent({ ...base, impliedSpendCents: 5000 });
+    expect(r.allow).toBe(false);
+    expect(r.deny).toContain("exceeds delegation limit");
   });
 });

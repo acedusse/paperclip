@@ -66,7 +66,11 @@ const mockAccessService = vi.hoisted(() => ({
 const mockCanDecide = vi.hoisted(() => vi.fn());
 const mockRecordDecision = vi.hoisted(() => vi.fn());
 const mockCanDecideUnderDelegation = vi.hoisted(() => vi.fn());
+const mockCanDecideAsBoundedAgent = vi.hoisted(() => vi.fn());
 const mockDelegationService = vi.hoisted(() => ({
+  getGrant: vi.fn(),
+}));
+const mockBoundedAgentApproverService = vi.hoisted(() => ({
   getGrant: vi.fn(),
 }));
 const mockImpliedSpendFromApproval = vi.hoisted(() => vi.fn(() => 0));
@@ -80,7 +84,9 @@ function registerModuleMocks() {
     autoApprovePolicyService: () => mockAutoApprovePolicyService,
     canDecide: mockCanDecide,
     canDecideUnderDelegation: mockCanDecideUnderDelegation,
+    canDecideAsBoundedAgent: mockCanDecideAsBoundedAgent,
     delegationService: () => mockDelegationService,
+    boundedAgentApproverService: () => mockBoundedAgentApproverService,
     impliedSpendFromApproval: mockImpliedSpendFromApproval,
     recordDecision: mockRecordDecision,
     heartbeatService: () => mockHeartbeatService,

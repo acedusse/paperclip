@@ -72,6 +72,28 @@ export type OutOfOfficeResult = {
   revokedIds: string[];
 };
 
+export type BoundedAgentApprover = {
+  id: string;
+  companyId: string;
+  grantorUserId: string;
+  delegateAgentId: string;
+  approvalTypes: string[];
+  maxBand: DelegationBand;
+  maxSpendCents: number | null;
+  validFrom: string;
+  validUntil: string;
+  revokedAt: string | null;
+  createdAt: string;
+};
+
+export type CreateBoundedAgentApproverBody = {
+  delegateAgentId: string;
+  approvalTypes: string[];
+  maxBand: DelegationBand;
+  maxSpendCents: number | null;
+  validUntil: string;
+};
+
 export const delegationsApi = {
   listGrants: (companyId: string) =>
     api.get<DelegationGrant[]>(`/companies/${companyId}/delegations`),
@@ -84,5 +106,11 @@ export const delegationsApi = {
     api.put<CoverageConfig>(`/companies/${companyId}/coverage-config`, body),
   setOutOfOffice: (companyId: string, body: OutOfOfficeUpdate) =>
     api.post<OutOfOfficeResult>(`/companies/${companyId}/out-of-office`, body),
+  listBoundedAgents: (companyId: string) =>
+    api.get<BoundedAgentApprover[]>(`/companies/${companyId}/bounded-agent-approvers`),
+  createBoundedAgent: (companyId: string, body: CreateBoundedAgentApproverBody) =>
+    api.post<BoundedAgentApprover>(`/companies/${companyId}/bounded-agent-approvers`, body),
+  revokeBoundedAgent: (id: string) =>
+    api.post<BoundedAgentApprover>(`/bounded-agent-approvers/${id}/revoke`, {}),
 };
 // [END: module]
