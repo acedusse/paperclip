@@ -39,6 +39,7 @@ import { executionWorkspaceRoutes } from "./routes/execution-workspaces.js";
 import { runChangesetRoutes } from "./routes/run-changesets.js";
 import { autoApprovePolicyRoutes } from "./routes/auto-approve-policies.js";
 import { digestRoutes } from "./routes/digests.js";
+import { delegationRoutes } from "./routes/delegations.js";
 import { pushRoutes } from "./routes/push.js";
 import { createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
 import { workspacePathClaimRoutes } from "./routes/workspace-path-claims.js";
@@ -260,6 +261,7 @@ export async function createApp(
   api.use(runChangesetRoutes(db));
   api.use(autoApprovePolicyRoutes(db));
   api.use(digestRoutes(db));
+  api.use(delegationRoutes(db));
   api.use(pushRoutes(db));
   api.use(workspacePathClaimRoutes(db));
   api.use(goalRoutes(db));
