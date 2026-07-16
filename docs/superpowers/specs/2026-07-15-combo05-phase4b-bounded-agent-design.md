@@ -136,10 +136,13 @@ Mirrors Phase 4a's `/delegations`:
   `validators/index.ts` **and** the top-level `packages/shared/src/index.ts` barrel (the two-export
   requirement — a validator missing from the top-level barrel resolves to `undefined` at runtime and
   500s a `validate(undefined)` middleware).
-- **Management page** listing active grants with a create form (agent picker, approval types, band
-  capped at "low", spend cap, time-box) and a revoke button; company-scoped route under `boardRoutes()`
-  and a sidebar entry in `ui/src/components/Sidebar.tsx`. UI test uses the jsdom + `createRoot` + `act`
-  pattern (no `@testing-library/react`), mirroring `ui/src/pages/ApprovalDetail.autoApprove.test.tsx`.
+- **Management UI folded into the existing `/delegations` page** (not a separate route): a second
+  "Bounded agent approvers" section on the 4a delegations page, listing active bounded-agent grants
+  with a create form (agent picker, approval types, band capped at "low", spend cap, time-box) and a
+  revoke button. No new sidebar entry — it lives under the existing Delegations nav item. UI test uses
+  the jsdom + `createRoot` + `act` pattern (no `@testing-library/react`), mirroring
+  `ui/src/pages/ApprovalDetail.autoApprove.test.tsx`; extend the existing delegations page test rather
+  than adding a new page test file.
 
 ## Testing
 
