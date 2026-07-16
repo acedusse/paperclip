@@ -32,6 +32,9 @@ const apiMocks = vi.hoisted(() => ({
   getCoverageConfig: vi.fn(),
   updateCoverageConfig: vi.fn(),
   setOutOfOffice: vi.fn(),
+  listBoundedAgents: vi.fn(),
+  createBoundedAgent: vi.fn(),
+  revokeBoundedAgent: vi.fn(),
 }));
 
 vi.mock("../api/delegations", () => ({
@@ -42,6 +45,9 @@ vi.mock("../api/delegations", () => ({
     getCoverageConfig: apiMocks.getCoverageConfig,
     updateCoverageConfig: apiMocks.updateCoverageConfig,
     setOutOfOffice: apiMocks.setOutOfOffice,
+    listBoundedAgents: apiMocks.listBoundedAgents,
+    createBoundedAgent: apiMocks.createBoundedAgent,
+    revokeBoundedAgent: apiMocks.revokeBoundedAgent,
   },
 }));
 
@@ -107,9 +113,13 @@ describe("Delegations page", () => {
     apiMocks.getCoverageConfig.mockReset();
     apiMocks.updateCoverageConfig.mockReset();
     apiMocks.setOutOfOffice.mockReset();
+    apiMocks.listBoundedAgents.mockReset();
+    apiMocks.createBoundedAgent.mockReset();
+    apiMocks.revokeBoundedAgent.mockReset();
 
     apiMocks.getCoverageConfig.mockResolvedValue(buildCoverageConfig());
     apiMocks.listGrants.mockResolvedValue([buildGrant()]);
+    apiMocks.listBoundedAgents.mockResolvedValue([]);
 
     queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false, staleTime: 0, gcTime: 0 } },
@@ -330,6 +340,57 @@ describe("Delegations page", () => {
         slaHighMinutes: 240,
         slaMediumMinutes: 1440,
         slaLowMinutes: 4320,
+      }),
+    );
+  });
+
+  it("renders the bounded agent approvers section and creates a grant", async () => {
+    apiMocks.createBoundedAgent.mockResolvedValue({
+      id: "ba-1",
+      companyId: "company-1",
+      grantorUserId: "user-board",
+      delegateAgentId: "agent-manager",
+      approvalTypes: ["hire_agent"],
+      maxBand: "low",
+      maxSpendCents: null,
+      validFrom: "2026-07-01T00:00:00.000Z",
+      validUntil: "2026-08-01T00:00:00.000Z",
+      revokedAt: null,
+      createdAt: "2026-07-01T00:00:00.000Z",
+    });
+    await renderDelegations();
+    await vi.waitFor(() => {
+      expect(container.textContent).toContain("Bounded agent approvers");
+    });
+
+    const agentInput = container.querySelector<HTMLInputElement>('input[name="delegateAgentId"]');
+    expect(agentInput).toBeTruthy();
+
+    await act(async () => {
+      setInputValue(agentInput!, "agent-manager");
+    });
+
+    const untilInput = container.querySelector<HTMLInputElement>('input[name="baValidUntil"]');
+    expect(untilInput).toBeTruthy();
+    await act(async () => {
+      setInputValue(untilInput!, "2026-09-01");
+    });
+
+    const submitButton = findButton("Create approver");
+    expect(submitButton).toBeTruthy();
+    await act(async () => {
+      submitButton!.click();
+    });
+
+    await vi.waitFor(() => {
+      expect(apiMocks.createBoundedAgent).toHaveBeenCalled();
+    });
+    expect(apiMocks.createBoundedAgent).toHaveBeenCalledWith(
+      "company-1",
+      expect.objectContaining({
+        delegateAgentId: "agent-manager",
+        maxBand: "low",
+        validUntil: expect.any(String),
       }),
     );
   });

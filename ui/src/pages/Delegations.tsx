@@ -160,6 +160,63 @@ export function Delegations() {
 
   const activeGrants = (grants ?? []).filter((g) => !g.revokedAt);
 
+  type BoundedAgentForm = {
+    delegateAgentId: string;
+    approvalTypes: string[];
+    maxBand: DelegationBand;
+    maxSpendCents: string;
+    validUntil: string;
+  };
+  const defaultBoundedAgentForm: BoundedAgentForm = {
+    delegateAgentId: "",
+    approvalTypes: [],
+    maxBand: "low",
+    maxSpendCents: "",
+    validUntil: "",
+  };
+  const [baForm, setBaForm] = useState<BoundedAgentForm>(defaultBoundedAgentForm);
+  const [baError, setBaError] = useState<string | null>(null);
+
+  const { data: boundedAgents } = useQuery({
+    queryKey: ["bounded-agent-approvers", companyId],
+    queryFn: () => delegationsApi.listBoundedAgents(companyId),
+    enabled: !!companyId,
+    retry: false,
+  });
+
+  const createBoundedAgent = useMutation({
+    mutationFn: () =>
+      delegationsApi.createBoundedAgent(companyId, {
+        delegateAgentId: baForm.delegateAgentId,
+        approvalTypes: baForm.approvalTypes,
+        maxBand: baForm.maxBand,
+        maxSpendCents: baForm.maxSpendCents ? Number(baForm.maxSpendCents) : null,
+        validUntil: toIsoDateTime(baForm.validUntil) ?? "",
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["bounded-agent-approvers", companyId] });
+      setBaForm(defaultBoundedAgentForm);
+      setBaError(null);
+    },
+    onError: () => setBaError("Couldn't create the bounded-agent approver. Please try again."),
+  });
+
+  const revokeBoundedAgent = useMutation({
+    mutationFn: (id: string) => delegationsApi.revokeBoundedAgent(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["bounded-agent-approvers", companyId] }),
+  });
+
+  const toggleBaApprovalType = (type: string) => {
+    setBaForm((f) => ({
+      ...f,
+      approvalTypes: f.approvalTypes.includes(type)
+        ? f.approvalTypes.filter((t) => t !== type)
+        : [...f.approvalTypes, type],
+    }));
+  };
+
+  const activeBoundedAgents = (boundedAgents ?? []).filter((g) => !g.revokedAt);
+
   return (
     <div className="delegations-page space-y-4">
       <div className="flex items-center justify-between">
@@ -385,6 +442,84 @@ export function Delegations() {
           ))}
           {activeGrants.length === 0 && (
             <p className="text-sm text-muted-foreground">No active grants.</p>
+          )}
+        </ul>
+      </section>
+
+      <section className="bounded-agents mt-6 border-t pt-4">
+        <h2 className="text-lg font-medium">Bounded agent approvers</h2>
+        <p className="text-xs text-muted-foreground">
+          Authorize a manager-agent to decide low-band approvals it did not itself request. Band is
+          capped at the auto-decision ceiling; a manager-agent can never approve its own work.
+        </p>
+        <label className="block mt-2">
+          Manager agent
+          <input
+            type="text"
+            name="delegateAgentId"
+            value={baForm.delegateAgentId}
+            onChange={(e) => setBaForm({ ...baForm, delegateAgentId: e.target.value })}
+          />
+        </label>
+        <fieldset className="mt-2">
+          <legend>Approval types</legend>
+          {APPROVAL_TYPES.map((type) => (
+            <label key={type} className="block">
+              <input
+                type="checkbox"
+                value={type}
+                checked={baForm.approvalTypes.includes(type)}
+                onChange={() => toggleBaApprovalType(type)}
+              />{" "}
+              {type}
+            </label>
+          ))}
+        </fieldset>
+        <label className="block mt-2">
+          Spend cap (cents)
+          <input
+            type="number"
+            name="baMaxSpendCents"
+            value={baForm.maxSpendCents}
+            onChange={(e) => setBaForm({ ...baForm, maxSpendCents: e.target.value })}
+          />
+        </label>
+        <label className="block mt-2">
+          Valid until
+          <input
+            type="date"
+            name="baValidUntil"
+            value={baForm.validUntil}
+            onChange={(e) => setBaForm({ ...baForm, validUntil: e.target.value })}
+          />
+        </label>
+        <button
+          className="mt-2"
+          onClick={() => {
+            setBaError(null);
+            createBoundedAgent.mutate();
+          }}
+          disabled={!companyId || createBoundedAgent.isPending || !baForm.delegateAgentId || !baForm.validUntil}
+        >
+          {createBoundedAgent.isPending ? "Creating…" : "Create approver"}
+        </button>
+        {baError && <p className="text-xs text-destructive mt-1">{baError}</p>}
+
+        <h3 className="font-medium mt-4">Active approvers</h3>
+        <ul className="list-disc pl-5">
+          {activeBoundedAgents.map((g) => (
+            <li key={g.id}>
+              {g.delegateAgentId}{" "}
+              <span className="text-xs text-muted-foreground">
+                ({g.maxBand}, expires {new Date(g.validUntil).toLocaleDateString()})
+              </span>{" "}
+              <button onClick={() => revokeBoundedAgent.mutate(g.id)} disabled={revokeBoundedAgent.isPending}>
+                Revoke
+              </button>
+            </li>
+          ))}
+          {activeBoundedAgents.length === 0 && (
+            <p className="text-sm text-muted-foreground">No active approvers.</p>
           )}
         </ul>
       </section>
