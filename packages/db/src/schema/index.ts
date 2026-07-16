@@ -107,4 +107,8 @@ export { digests, type DigestRow } from "./digests.js";
 export { pushSubscriptions, type PushSubscriptionRow } from "./push_subscriptions.js";
 export { pushVapidKeys, type PushVapidKeyRow } from "./push_vapid_keys.js";
 export { pushDeliveryPrefs, type PushDeliveryPrefsRow } from "./push_delivery_prefs.js";
+export { delegationGrants, type DelegationGrantRow } from "./delegation_grants.js";
+export { companyCoverageConfig, type CompanyCoverageConfigRow } from "./company_coverage_config.js";
+export { approvalCoverageEscalations, type ApprovalCoverageEscalationRow } from "./approval_coverage_escalations.js";
+export { boundedAgentApprovers, type BoundedAgentApproverRow } from "./bounded_agent_approvers.js";
 // [END: module]

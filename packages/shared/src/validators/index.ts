@@ -454,12 +454,26 @@ export {
 } from "./approval.js";
 
 export {
+  createDelegationGrantSchema,
+  coverageConfigSchema,
+  outOfOfficeSchema,
+  type CreateDelegationGrant,
+  type CoverageConfigUpdate,
+  type OutOfOfficeUpdate,
+} from "./delegation.js";
+
+export {
   AUTO_DECISION_MAX_BAND,
   createAutoApprovePolicySchema,
   updateAutoApprovePolicySchema,
   type CreateAutoApprovePolicy,
   type UpdateAutoApprovePolicy,
 } from "./auto-approve-policy.js";
+
+export {
+  createBoundedAgentApproverSchema,
+  type CreateBoundedAgentApprover,
+} from "./bounded-agent-approver.js";
 
 export {
   envBindingPlainSchema,
