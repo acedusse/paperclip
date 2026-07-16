@@ -516,8 +516,8 @@ export function approvalRoutes(
         band,
       );
     } catch (e) {
-      const err = e as { status: number; error?: string };
-      res.status(err.status).json({ error: err.error ?? "not allowed" });
+      const err = e as { status?: number; error?: string };
+      res.status(err.status ?? 500).json({ error: err.error ?? "internal error" });
       return;
     }
     const { approval, applied } = await svc.approve(id, decidedByUserId, req.body.decisionNote);
@@ -574,8 +574,8 @@ export function approvalRoutes(
         band,
       );
     } catch (e) {
-      const err = e as { status: number; error?: string };
-      res.status(err.status).json({ error: err.error ?? "not allowed" });
+      const err = e as { status?: number; error?: string };
+      res.status(err.status ?? 500).json({ error: err.error ?? "internal error" });
       return;
     }
     const { approval, applied } = await svc.reject(id, decidedByUserId, req.body.decisionNote);
@@ -640,8 +640,8 @@ export function approvalRoutes(
           band,
         );
       } catch (e) {
-        const err = e as { status: number; error?: string };
-        res.status(err.status).json({ error: err.error ?? "not allowed" });
+        const err = e as { status?: number; error?: string };
+        res.status(err.status ?? 500).json({ error: err.error ?? "internal error" });
         return;
       }
       const approval = await svc.requestRevision(id, decidedByUserId, req.body.decisionNote);

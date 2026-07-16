@@ -91,4 +91,45 @@ describe("canDecideUnderDelegation", () => {
     const grant = { ...baseGrant, maxSpendCents: null };
     expect(canDecideUnderDelegation({ ...baseInput, impliedSpendCents: 999_999, grant }).allow).toBe(true);
   });
+
+  // Deny-message assertions: lock the exact wording, not just allow === false.
+  it("deny message: actor is not the delegate", () => {
+    const result = canDecideUnderDelegation({ ...baseInput, actorUserId: "carol" });
+    expect(result.allow).toBe(false);
+    expect(result.deny).toBe("actor is not this grant's delegate");
+  });
+  it("deny message: band above the ceiling", () => {
+    const result = canDecideUnderDelegation({ ...baseInput, band: "high" });
+    expect(result.allow).toBe(false);
+    expect(result.deny).toBe(`delegation may not decide items above band ${baseGrant.maxBand}`);
+  });
+  it("deny message: spend over the limit", () => {
+    const result = canDecideUnderDelegation({ ...baseInput, impliedSpendCents: 50_001 });
+    expect(result.allow).toBe(false);
+    expect(result.deny).toBe(
+      `implied spend 50001 exceeds delegation limit ${baseGrant.maxSpendCents}`,
+    );
+  });
+
+  // Exact-boundary cases: lock the current comparison operators (spend uses `>`,
+  // window bounds use strict `<` / `>`, so equality at either edge is still allowed).
+  it("boundary: impliedSpendCents === maxSpendCents -> allow (spend comparison is strict >)", () => {
+    expect(
+      canDecideUnderDelegation({ ...baseInput, impliedSpendCents: baseGrant.maxSpendCents as number }).allow,
+    ).toBe(true);
+  });
+  it("boundary: impliedSpendCents === maxSpendCents + 1 -> deny", () => {
+    expect(
+      canDecideUnderDelegation({
+        ...baseInput,
+        impliedSpendCents: (baseGrant.maxSpendCents as number) + 1,
+      }).allow,
+    ).toBe(false);
+  });
+  it("boundary: now === validUntil -> allow (comparison is strict >, so equal is still within window)", () => {
+    expect(canDecideUnderDelegation({ ...baseInput, now: baseGrant.validUntil }).allow).toBe(true);
+  });
+  it("boundary: now === validFrom -> allow (comparison is strict <, so equal is still within window)", () => {
+    expect(canDecideUnderDelegation({ ...baseInput, now: baseGrant.validFrom }).allow).toBe(true);
+  });
 });
