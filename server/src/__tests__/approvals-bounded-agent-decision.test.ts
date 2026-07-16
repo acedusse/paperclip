@@ -207,6 +207,34 @@ describeEmbeddedPostgres("bounded_agent decision path + agent-typed audit attrib
     expect(decisionRow!.actorId).toBe(mgrAgent.id);
   });
 
+  it("1b. a granted manager-agent rejects a low-band item it did not request, audited as agent", async () => {
+    const company = await seedCompany(db, "Happy1b");
+    const mgrAgent = await seedAgent(db, company.id, "Manager");
+    const approval = await seedPendingApproval(db, company.id, "low", null);
+    const grant = await seedGrant(db, company.id, mgrAgent.id, { maxBand: "low" });
+
+    const app = await createApp(db, agentActor(company.id, mgrAgent.id));
+    const res = await request(app)
+      .post(`/api/approvals/${approval.id}/reject`)
+      .send({ actingUnderGrantId: grant.id, decisionNote: "on behalf of alice" });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.status).toBe("rejected");
+
+    const [decisionRow] = await db
+      .select()
+      .from(activityLog)
+      .where(and(eq(activityLog.entityId, approval.id), eq(activityLog.action, "approval.decision")));
+    expect(decisionRow!.details).toMatchObject({
+      method: "bounded_agent",
+      outcome: "rejected",
+      onBehalfOf: "alice",
+      grantId: grant.id,
+    });
+    expect(decisionRow!.actorType).toBe("agent");
+    expect(decisionRow!.actorId).toBe(mgrAgent.id);
+  });
+
   it("2. denies self-approval (agent approving its own requested item) with 422", async () => {
     const company = await seedCompany(db, "Self2");
     const workerAgent = await seedAgent(db, company.id, "Worker");

@@ -152,6 +152,10 @@ export function approvalRoutes(
           now: new Date(),
         });
         if (!gate.allow) throw { status: 422, error: gate.deny };
+        // Defense-in-depth: the NON_HUMAN above-ceiling hard rule must also hold at
+        // decision time, independent of the grant's own maxBand.
+        const hardRule = canDecide({ band, method: "bounded_agent", autoDecisionMaxBand: AUTO_DECISION_MAX_BAND });
+        if (!hardRule.allow) throw { status: 422, error: hardRule.deny };
         return {
           method: "bounded_agent",
           details: { grantId: baGrant.id, onBehalfOf: baGrant.grantorUserId, deciderAgentId: req.actor.agentId ?? null },
