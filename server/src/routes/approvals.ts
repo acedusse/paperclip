@@ -14,7 +14,7 @@
 // [START: module]
 import { Router, type Request } from "express";
 import { and, desc, eq } from "drizzle-orm";
-import { activityLog, heartbeatRuns, type Db } from "@paperclipai/db";
+import { activityLog, approvalCoverageEscalations, companyCoverageConfig, heartbeatRuns, type Db } from "@paperclipai/db";
 import {
   addApprovalCommentSchema,
   bulkResolveApprovalsSchema,
@@ -34,8 +34,11 @@ import {
   bandRank,
   buildApprovalPushBody,
   canDecide,
+  canDecideUnderDelegation,
+  delegationService,
   deliverThroughChannels,
   heartbeatService,
+  impliedSpendFromApproval,
   issueApprovalService,
   logActivity,
   recordDecision,
@@ -75,6 +78,68 @@ export function approvalRoutes(
 ) {
   const router = Router();
   const svc = approvalService(db);
+  const delegationSvc = delegationService(db);
+
+  // Combo-05 Phase 4a: resolve which decision method applies to a board decision
+  // on this approval — the delegated path (grant present + valid), coverage
+  // attribution (server-derived: an escalation row exists for this approval AND
+  // the acting user is the company's configured backup), or the existing
+  // explicit_human path. Throws { status, error } for the caller to translate
+  // into an HTTP response; never trusts client-asserted attribution.
+  async function resolveDecisionMethod(
+    req: Request,
+    approval: { id: string; companyId: string; type: string; payload: Record<string, unknown> },
+    band: RiskBand,
+  ): Promise<{ method: "explicit_human" | "delegated_human" | "coverage_escalation"; details: Record<string, unknown> }> {
+    const grantId = (req.body as { actingUnderGrantId?: string }).actingUnderGrantId;
+    const actorUserId = req.actor.userId ?? "board";
+
+    if (grantId) {
+      const grant = await delegationSvc.getGrant(grantId);
+      if (!grant || grant.companyId !== approval.companyId) {
+        throw { status: 404, error: "Delegation grant not found" };
+      }
+      const gate = canDecideUnderDelegation({
+        approvalType: approval.type,
+        band,
+        impliedSpendCents: impliedSpendFromApproval(approval.payload),
+        grant: {
+          approvalTypes: grant.approvalTypes,
+          maxBand: grant.maxBand as RiskBand,
+          maxSpendCents: grant.maxSpendCents,
+          validFrom: grant.validFrom,
+          validUntil: grant.validUntil,
+          revokedAt: grant.revokedAt,
+          delegateUserId: grant.delegateUserId,
+        },
+        actorUserId,
+        now: new Date(),
+      });
+      if (!gate.allow) throw { status: 422, error: gate.deny };
+      return { method: "delegated_human", details: { grantId: grant.id, onBehalfOf: grant.grantorUserId } };
+    }
+
+    // Non-delegated board decision: attribute coverage_escalation if this actor is
+    // the configured backup AND the item was escalated. Both facts are read from
+    // the database — the client cannot assert this attribution itself.
+    const [esc] = await db
+      .select()
+      .from(approvalCoverageEscalations)
+      .where(eq(approvalCoverageEscalations.approvalId, approval.id))
+      .limit(1);
+    if (esc) {
+      const [cfg] = await db
+        .select()
+        .from(companyCoverageConfig)
+        .where(eq(companyCoverageConfig.companyId, approval.companyId))
+        .limit(1);
+      if (cfg?.backupUserId && cfg.backupUserId === actorUserId) {
+        return { method: "coverage_escalation", details: {} };
+      }
+    }
+    return { method: "explicit_human", details: {} };
+  }
+
   const riskSvc = approvalRiskService(db);
   const autoPolicySvc = autoApprovePolicyService(db);
   const triageSvc = approvalTriageService(db);
@@ -425,7 +490,8 @@ export function approvalRoutes(
   });
 
   router.post("/approvals/:id/approve", validate(resolveApprovalSchema), async (req, res) => {
-    assertBoard(req);
+    const hasGrant = Boolean((req.body as { actingUnderGrantId?: string }).actingUnderGrantId);
+    if (!hasGrant) assertBoard(req);
     const id = req.params.id as string;
     if (!(await requireApprovalAccess(req, id))) {
       res.status(404).json({ error: "Approval not found" });
@@ -434,9 +500,24 @@ export function approvalRoutes(
     const decidedByUserId = req.actor.userId ?? "board";
     const approvalForGate = await svc.getById(id);
     const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
-    const gate = canDecide({ band: (risk?.band as any) ?? "low", method: "explicit_human" });
-    if (!gate.allow) {
-      res.status(422).json({ error: gate.deny });
+    const band = ((risk?.band as RiskBand) ?? "low") as RiskBand;
+    if (!hasGrant) {
+      const gate = canDecide({ band, method: "explicit_human" });
+      if (!gate.allow) {
+        res.status(422).json({ error: gate.deny });
+        return;
+      }
+    }
+    let decision;
+    try {
+      decision = await resolveDecisionMethod(
+        req,
+        { id, companyId: approvalForGate!.companyId, type: approvalForGate!.type, payload: approvalForGate!.payload },
+        band,
+      );
+    } catch (e) {
+      const err = e as { status: number; error?: string };
+      res.status(err.status).json({ error: err.error ?? "not allowed" });
       return;
     }
     const { approval, applied } = await svc.approve(id, decidedByUserId, req.body.decisionNote);
@@ -452,10 +533,11 @@ export function approvalRoutes(
           approvalId: approval.id,
           companyId: approval.companyId,
           actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
-          method: "explicit_human",
+          method: decision.method,
           outcome: "approved",
           risk: risk ? { score: risk.score, band: risk.band as any } : null,
           note: req.body.decisionNote ?? null,
+          details: decision.details,
         });
       } catch (auditErr) {
         logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
@@ -466,7 +548,8 @@ export function approvalRoutes(
   });
 
   router.post("/approvals/:id/reject", validate(resolveApprovalSchema), async (req, res) => {
-    assertBoard(req);
+    const hasGrant = Boolean((req.body as { actingUnderGrantId?: string }).actingUnderGrantId);
+    if (!hasGrant) assertBoard(req);
     const id = req.params.id as string;
     if (!(await requireApprovalAccess(req, id))) {
       res.status(404).json({ error: "Approval not found" });
@@ -475,9 +558,24 @@ export function approvalRoutes(
     const decidedByUserId = req.actor.userId ?? "board";
     const approvalForGate = await svc.getById(id);
     const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
-    const gate = canDecide({ band: (risk?.band as any) ?? "low", method: "explicit_human" });
-    if (!gate.allow) {
-      res.status(422).json({ error: gate.deny });
+    const band = ((risk?.band as RiskBand) ?? "low") as RiskBand;
+    if (!hasGrant) {
+      const gate = canDecide({ band, method: "explicit_human" });
+      if (!gate.allow) {
+        res.status(422).json({ error: gate.deny });
+        return;
+      }
+    }
+    let decision;
+    try {
+      decision = await resolveDecisionMethod(
+        req,
+        { id, companyId: approvalForGate!.companyId, type: approvalForGate!.type, payload: approvalForGate!.payload },
+        band,
+      );
+    } catch (e) {
+      const err = e as { status: number; error?: string };
+      res.status(err.status).json({ error: err.error ?? "not allowed" });
       return;
     }
     const { approval, applied } = await svc.reject(id, decidedByUserId, req.body.decisionNote);
@@ -498,10 +596,11 @@ export function approvalRoutes(
           approvalId: approval.id,
           companyId: approval.companyId,
           actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
-          method: "explicit_human",
+          method: decision.method,
           outcome: "rejected",
           risk: risk ? { score: risk.score, band: risk.band as any } : null,
           note: req.body.decisionNote ?? null,
+          details: decision.details,
         });
       } catch (auditErr) {
         logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");
@@ -515,7 +614,8 @@ export function approvalRoutes(
     "/approvals/:id/request-revision",
     validate(requestApprovalRevisionSchema),
     async (req, res) => {
-      assertBoard(req);
+      const hasGrant = Boolean((req.body as { actingUnderGrantId?: string }).actingUnderGrantId);
+      if (!hasGrant) assertBoard(req);
       const id = req.params.id as string;
       if (!(await requireApprovalAccess(req, id))) {
         res.status(404).json({ error: "Approval not found" });
@@ -524,9 +624,24 @@ export function approvalRoutes(
       const decidedByUserId = req.actor.userId ?? "board";
       const approvalForGate = await svc.getById(id);
       const risk = approvalForGate ? await riskSvc.getSnapshot(id) : null;
-      const gate = canDecide({ band: (risk?.band as any) ?? "low", method: "explicit_human" });
-      if (!gate.allow) {
-        res.status(422).json({ error: gate.deny });
+      const band = ((risk?.band as RiskBand) ?? "low") as RiskBand;
+      if (!hasGrant) {
+        const gate = canDecide({ band, method: "explicit_human" });
+        if (!gate.allow) {
+          res.status(422).json({ error: gate.deny });
+          return;
+        }
+      }
+      let decision;
+      try {
+        decision = await resolveDecisionMethod(
+          req,
+          { id, companyId: approvalForGate!.companyId, type: approvalForGate!.type, payload: approvalForGate!.payload },
+          band,
+        );
+      } catch (e) {
+        const err = e as { status: number; error?: string };
+        res.status(err.status).json({ error: err.error ?? "not allowed" });
         return;
       }
       const approval = await svc.requestRevision(id, decidedByUserId, req.body.decisionNote);
@@ -546,10 +661,11 @@ export function approvalRoutes(
           approvalId: approval.id,
           companyId: approval.companyId,
           actor: { actorType: "user", actorId: req.actor.userId ?? "board" },
-          method: "explicit_human",
+          method: decision.method,
           outcome: "revision_requested",
           risk: risk ? { score: risk.score, band: risk.band as any } : null,
           note: req.body.decisionNote ?? null,
+          details: decision.details,
         });
       } catch (auditErr) {
         logger.warn({ err: auditErr, approvalId: approval.id }, "recordDecision failed");

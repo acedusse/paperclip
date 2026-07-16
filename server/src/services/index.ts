@@ -50,8 +50,15 @@ export {
 export { goalService } from "./goals.js";
 export { activityService, type ActivityFilters } from "./activity.js";
 export { approvalService } from "./approvals.js";
-export { approvalRiskService, riskScore, RISK_BAND_ORDER, bandRank, type RiskBand } from "./approval-risk.js";
-export { canDecide, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-authority.js";
+export {
+  approvalRiskService,
+  riskScore,
+  RISK_BAND_ORDER,
+  bandRank,
+  impliedSpendFromApproval,
+  type RiskBand,
+} from "./approval-risk.js";
+export { canDecide, canDecideUnderDelegation, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-authority.js";
 export { recordDecision } from "./approval-decision-audit.js";
 export { evaluateAutoApprove, autoApprovePolicyService, type AutoApprovePolicy } from "./auto-approve-policy.js";
 export { approvalTriageService } from "./approval-triage.js";

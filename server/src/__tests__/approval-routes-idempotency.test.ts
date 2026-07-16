@@ -65,6 +65,11 @@ const mockAccessService = vi.hoisted(() => ({
 }));
 const mockCanDecide = vi.hoisted(() => vi.fn());
 const mockRecordDecision = vi.hoisted(() => vi.fn());
+const mockCanDecideUnderDelegation = vi.hoisted(() => vi.fn());
+const mockDelegationService = vi.hoisted(() => ({
+  getGrant: vi.fn(),
+}));
+const mockImpliedSpendFromApproval = vi.hoisted(() => vi.fn(() => 0));
 
 function registerModuleMocks() {
   vi.doMock("../services/index.js", () => ({
@@ -74,6 +79,9 @@ function registerModuleMocks() {
     approvalTriageService: () => mockTriageService,
     autoApprovePolicyService: () => mockAutoApprovePolicyService,
     canDecide: mockCanDecide,
+    canDecideUnderDelegation: mockCanDecideUnderDelegation,
+    delegationService: () => mockDelegationService,
+    impliedSpendFromApproval: mockImpliedSpendFromApproval,
     recordDecision: mockRecordDecision,
     heartbeatService: () => mockHeartbeatService,
     issueApprovalService: () => mockIssueApprovalService,
@@ -115,11 +123,16 @@ function createRouteDb(contextSnapshot: Record<string, unknown> = {}, runId = "r
   return {
     select: vi.fn((selection: Record<string, unknown> = {}) => ({
       from: vi.fn(() => ({
-        where: vi.fn(() => ({
-          then: async (resolve: (rows: unknown[]) => unknown) => resolve(
-            Object.keys(selection).includes("contextSnapshot") ? runRows : [],
-          ),
-        })),
+        where: vi.fn(() => {
+          const rows = Object.keys(selection).includes("contextSnapshot") ? runRows : [];
+          return {
+            then: async (resolve: (rows: unknown[]) => unknown) => resolve(rows),
+            // Combo-05 Phase 4a: resolveDecisionMethod's coverage-escalation lookups
+            // chain .limit(1) after .where(...). None of these fixtures test
+            // coverage attribution, so resolve empty (falls through to explicit_human).
+            limit: vi.fn(() => Promise.resolve(rows)),
+          };
+        }),
       })),
     })),
   } as any;

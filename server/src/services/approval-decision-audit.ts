@@ -36,6 +36,10 @@ export async function recordDecision(
     outcome: "approved" | "rejected" | "revision_requested";
     risk?: { score: number; band: RiskBand } | null;
     note?: string | null;
+    // Combo-05 Phase 4a: extra attribution fields (e.g. delegated_human's
+    // { grantId, onBehalfOf }) merged into the audit row's details. Never
+    // allowed to clobber the fixed fields below.
+    details?: Record<string, unknown>;
   },
 ): Promise<void> {
   await logActivity(db, {
@@ -47,6 +51,7 @@ export async function recordDecision(
     entityType: "approval",
     entityId: input.approvalId,
     details: {
+      ...input.details,
       method: input.method,
       outcome: input.outcome,
       riskBand: input.risk?.band ?? null,
