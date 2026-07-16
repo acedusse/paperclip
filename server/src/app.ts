@@ -41,7 +41,7 @@ import { autoApprovePolicyRoutes } from "./routes/auto-approve-policies.js";
 import { digestRoutes } from "./routes/digests.js";
 import { delegationRoutes } from "./routes/delegations.js";
 import { pushRoutes } from "./routes/push.js";
-import { createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
+import { coverageSweepService, createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
 import { workspacePathClaimRoutes } from "./routes/workspace-path-claims.js";
 import { goalRoutes } from "./routes/goals.js";
 import { boardChatRoutes } from "./routes/board-chat.js";
@@ -92,6 +92,7 @@ import { COMPANY_IMPORT_API_PATH } from "./routes/company-import-paths.js";
 
 type UiMode = "none" | "static" | "vite-dev";
 const FEEDBACK_EXPORT_FLUSH_INTERVAL_MS = 5_000;
+const COVERAGE_SWEEP_INTERVAL_MS = 5 * 60_000;
 const VITE_DEV_ASSET_PREFIXES = [
   "/@fs/",
   "/@id/",
@@ -502,6 +503,13 @@ export async function createApp(
   if (opts.feedbackExportService) {
     void flushPendingFeedbackExports();
   }
+
+  const coverageSweep = coverageSweepService(db);
+  const coverageSweepTimer = setInterval(() => {
+    void coverageSweep.sweep(new Date()).catch((err) => logger.error({ err }, "coverage sweep tick failed"));
+  }, COVERAGE_SWEEP_INTERVAL_MS);
+  coverageSweepTimer?.unref?.();
+
   void toolDispatcher.initialize().catch((err) => {
     logger.error({ err }, "Failed to initialize plugin tool dispatcher");
   });
@@ -584,6 +592,7 @@ export async function createApp(
     if (appServicesShutdown) return;
     appServicesShutdown = true;
     disableFeedbackExportFlushes();
+    clearInterval(coverageSweepTimer);
     devWatcher?.close();
     viteHtmlRenderer?.dispose();
     hostServiceCleanup.disposeAll();
