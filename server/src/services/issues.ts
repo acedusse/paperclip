@@ -16,6 +16,7 @@ import { Buffer } from "node:buffer";
 import { createHash } from "node:crypto";
 import { and, asc, desc, eq, gt, gte, inArray, isNotNull, isNull, like, lt, ne, notInArray, or, sql, type SQL } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
+import { WIP_NEW_START_STATUSES } from "./wip-flow.js";
 import {
   activityLog,
   agentWakeupRequests,
@@ -6490,6 +6491,17 @@ export function issueService(db: Db) {
         if (row.agentId) map.set(row.agentId, Number(row.count ?? 0));
       }
       return map;
+    },
+    startableIssueCountForAgent: async (companyId: string, agentId: string): Promise<number> => {
+      const rows = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(issues)
+        .where(and(
+          eq(issues.companyId, companyId),
+          eq(issues.assigneeAgentId, agentId),
+          inArray(issues.status, [...WIP_NEW_START_STATUSES]),
+        ));
+      return Number(rows[0]?.count ?? 0);
     },
     recentCompletionsByAgent: async (
       companyId: string,
