@@ -74,6 +74,21 @@ import {
   requestApprovalRevisionSchema,
   resubmitApprovalSchema,
   addApprovalCommentSchema,
+  bulkResolveApprovalsSchema,
+  // Review cockpit — auto-approve policies
+  createAutoApprovePolicySchema,
+  updateAutoApprovePolicySchema,
+  // Review cockpit — push notifications
+  pushSubscriptionSchema,
+  pushUnsubscribeSchema,
+  pushPrefsSchema,
+  pushDeviceRenameSchema,
+  // Review cockpit — delegation + coverage
+  createDelegationGrantSchema,
+  coverageConfigSchema,
+  outOfOfficeSchema,
+  // Review cockpit — bounded agent approvers
+  createBoundedAgentApproverSchema,
   // Cost / budget
   createCostEventSchema,
   createFinanceEventSchema,
@@ -596,6 +611,31 @@ const BOARD_ONLY_OPERATIONS = new Set([
   "POST /api/issues/{id}/interactions/{interactionId}/accept",
   "POST /api/issues/{id}/interactions/{interactionId}/reject",
   "POST /api/issues/{id}/interactions/{interactionId}/respond",
+  // Review cockpit (combo-05)
+  "POST /api/companies/{companyId}/approvals/bulk",
+  "POST /api/runs/{runId}/changeset/capture",
+  "GET /api/companies/{companyId}/auto-approve-policies",
+  "POST /api/companies/{companyId}/auto-approve-policies",
+  "PATCH /api/companies/{companyId}/auto-approve-policies/{id}",
+  "GET /api/companies/{companyId}/digests",
+  "GET /api/companies/{companyId}/digests/latest",
+  "POST /api/companies/{companyId}/digests/generate",
+  "GET /api/companies/{companyId}/push/subscriptions",
+  "POST /api/companies/{companyId}/push/subscriptions",
+  "DELETE /api/companies/{companyId}/push/subscriptions",
+  "PATCH /api/companies/{companyId}/push/subscriptions/{id}",
+  "DELETE /api/companies/{companyId}/push/subscriptions/{id}",
+  "GET /api/companies/{companyId}/push/prefs",
+  "PUT /api/companies/{companyId}/push/prefs",
+  "GET /api/companies/{companyId}/delegations",
+  "POST /api/companies/{companyId}/delegations",
+  "POST /api/delegations/{id}/revoke",
+  "GET /api/companies/{companyId}/coverage-config",
+  "PUT /api/companies/{companyId}/coverage-config",
+  "POST /api/companies/{companyId}/out-of-office",
+  "GET /api/companies/{companyId}/bounded-agent-approvers",
+  "POST /api/companies/{companyId}/bounded-agent-approvers",
+  "POST /api/bounded-agent-approvers/{id}/revoke",
 ]);
 
 const INSTANCE_ADMIN_OPERATIONS = new Set([
@@ -648,6 +688,7 @@ const CREATED_OPERATIONS = new Set([
   "POST /api/admin/users/{userId}/promote-instance-admin",
   "POST /api/plugins/install",
   "POST /api/instance/database-backups",
+  "POST /api/companies/{companyId}/workspace-path-claims",
 ]);
 
 const ACCEPTED_OPERATIONS = new Set([
@@ -2269,6 +2310,313 @@ registry.registerPath({
     params: z.object({ id: z.string() }),
     body: jsonBody(addApprovalCommentSchema),
   },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/approvals/triage",
+  tags: ["approvals"],
+  summary: "List the approval triage queue for a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/approvals/bulk",
+  tags: ["approvals"],
+  summary: "Bulk resolve approvals",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(bulkResolveApprovalsSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+// ─── Review cockpit — run changesets ──────────────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/runs/{runId}/changeset",
+  tags: ["approvals"],
+  summary: "Get the captured changeset for a run",
+  request: { params: z.object({ runId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/runs/{runId}/changeset/capture",
+  tags: ["approvals"],
+  summary: "Capture the changeset for a run",
+  request: { params: z.object({ runId: z.string() }) },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+// ─── Review cockpit — auto-approve policies ───────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/auto-approve-policies",
+  tags: ["approvals"],
+  summary: "List auto-approve policies in a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/auto-approve-policies",
+  tags: ["approvals"],
+  summary: "Create an auto-approve policy",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(createAutoApprovePolicySchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "patch",
+  path: "/api/companies/{companyId}/auto-approve-policies/{id}",
+  tags: ["approvals"],
+  summary: "Update an auto-approve policy",
+  request: {
+    params: z.object({ companyId: z.string(), id: z.string() }),
+    body: jsonBody(updateAutoApprovePolicySchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+// ─── Review cockpit — digests ─────────────────────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/digests",
+  tags: ["approvals"],
+  summary: "List generated digests for a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/digests/latest",
+  tags: ["approvals"],
+  summary: "Get the most recent digest for a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/digests/generate",
+  tags: ["approvals"],
+  summary: "Generate a digest for a company on demand",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+// ─── Review cockpit — web push ────────────────────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/push/vapid-public-key",
+  tags: ["approvals"],
+  summary: "Get the VAPID public key for web push subscription",
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/push/subscriptions",
+  tags: ["approvals"],
+  summary: "List the caller's push devices in a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/push/subscriptions",
+  tags: ["approvals"],
+  summary: "Register a web push subscription",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(pushSubscriptionSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/api/companies/{companyId}/push/subscriptions",
+  tags: ["approvals"],
+  summary: "Remove a web push subscription by endpoint",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(pushUnsubscribeSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "patch",
+  path: "/api/companies/{companyId}/push/subscriptions/{id}",
+  tags: ["approvals"],
+  summary: "Rename one of the caller's push devices",
+  request: {
+    params: z.object({ companyId: z.string(), id: z.string() }),
+    body: jsonBody(pushDeviceRenameSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/api/companies/{companyId}/push/subscriptions/{id}",
+  tags: ["approvals"],
+  summary: "Remove one of the caller's push devices by id",
+  request: { params: z.object({ companyId: z.string(), id: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/push/prefs",
+  tags: ["approvals"],
+  summary: "Get the caller's push delivery preferences",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/api/companies/{companyId}/push/prefs",
+  tags: ["approvals"],
+  summary: "Update the caller's push delivery preferences",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(pushPrefsSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+// ─── Review cockpit — delegation & coverage ───────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/delegations",
+  tags: ["approvals"],
+  summary: "List delegation grants in a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/delegations",
+  tags: ["approvals"],
+  summary: "Create a bounded delegation grant",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(createDelegationGrantSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/delegations/{id}/revoke",
+  tags: ["approvals"],
+  summary: "Revoke a delegation grant",
+  request: { params: z.object({ id: z.string() }) },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/coverage-config",
+  tags: ["approvals"],
+  summary: "Get the approval SLA coverage configuration",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/api/companies/{companyId}/coverage-config",
+  tags: ["approvals"],
+  summary: "Update the approval SLA coverage configuration",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(coverageConfigSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/out-of-office",
+  tags: ["approvals"],
+  summary: "Set or clear an out-of-office delegation preset",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(outOfOfficeSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+// ─── Review cockpit — bounded agent approvers ─────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/bounded-agent-approvers",
+  tags: ["approvals"],
+  summary: "List bounded manager-agent approver grants in a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/bounded-agent-approvers",
+  tags: ["approvals"],
+  summary: "Grant a manager agent bounded approver authority",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(createBoundedAgentApproverSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/bounded-agent-approvers/{id}/revoke",
+  tags: ["approvals"],
+  summary: "Revoke a bounded manager-agent approver grant",
+  request: { params: z.object({ id: z.string() }) },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+// ─── Workspace path claims ────────────────────────────────────────────────────
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/workspace-path-claims",
+  tags: ["execution-workspaces"],
+  summary: "Claim workspace paths for a run",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 409: r.conflict },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/workspace-path-claims/release",
+  tags: ["execution-workspaces"],
+  summary: "Release workspace path claims held by a run",
+  request: { params: z.object({ companyId: z.string() }) },
   responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
 });
 
