@@ -69,15 +69,16 @@ export async function gatherStakeholderSignals(
 
   if (toggles.showShippedWork) {
     const rows = (await db
-      .select({ title: issues.title, updatedAt: issues.updatedAt })
+      .select({ title: issues.title, completedAt: issues.completedAt, updatedAt: issues.updatedAt })
       .from(issues)
       .where(and(eq(issues.companyId, companyId), eq(issues.status, "done")))
-      .orderBy(desc(issues.updatedAt))
-      .limit(SHIPPED_WORK_LIMIT)) as Array<{ title: string; updatedAt: unknown }>;
+      .orderBy(desc(issues.completedAt))
+      .limit(SHIPPED_WORK_LIMIT)) as Array<{ title: string; completedAt: unknown; updatedAt: unknown }>;
 
     signals.shippedWork = rows.map<StakeholderShippedItem>((row) => ({
       title: row.title,
-      completedAt: toIso(row.updatedAt),
+      // completed_at is nullable on older rows; fall back so the date is never blank.
+      completedAt: toIso(row.completedAt ?? row.updatedAt),
     }));
   }
 

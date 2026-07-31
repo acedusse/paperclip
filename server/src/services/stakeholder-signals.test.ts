@@ -103,7 +103,7 @@ describe("gatherStakeholderSignals — shaping", () => {
     const completedAt = new Date("2026-07-30T00:00:00.000Z");
     const { db } = makeSpyDb([
       ...COMPANY_ROWS,
-      [{ title: "Shipped billing v2", updatedAt: completedAt, description: "internal detail" }],
+      [{ title: "Shipped billing v2", completedAt, description: "internal detail" }],
     ]);
 
     const signals = await gatherStakeholderSignals(db, "company-1", {
@@ -115,5 +115,22 @@ describe("gatherStakeholderSignals — shaping", () => {
       { title: "Shipped billing v2", completedAt: completedAt.toISOString() },
     ]);
     expect(JSON.stringify(signals.shippedWork)).not.toContain("internal detail");
+  });
+
+  it("falls back to updatedAt when completed_at is null on older rows", async () => {
+    const updatedAt = new Date("2026-07-29T00:00:00.000Z");
+    const { db } = makeSpyDb([
+      ...COMPANY_ROWS,
+      [{ title: "Legacy item", completedAt: null, updatedAt }],
+    ]);
+
+    const signals = await gatherStakeholderSignals(db, "company-1", {
+      ...allOff,
+      showShippedWork: true,
+    });
+
+    expect(signals.shippedWork).toEqual([
+      { title: "Legacy item", completedAt: updatedAt.toISOString() },
+    ]);
   });
 });
