@@ -64,6 +64,7 @@ export { evaluateAutoApprove, autoApprovePolicyService, type AutoApprovePolicy }
 export { approvalTriageService } from "./approval-triage.js";
 export { delegationService } from "./delegation.js";
 export { boundedAgentApproverService } from "./bounded-agent-approver.js";
+export { stakeholderShareService, toShareSummary, generateShareToken } from "./stakeholder-share.js";
 export { coverageSweepService, slaMinutesForBand } from "./coverage-sweep.js";
 export { registerChannel, getChannels, deliverThroughChannels, type DeliveryChannel } from "./notification-delivery.js";
 export { digestService, DIGEST_MIN_INTERVAL_HOURS } from "./digest.js";
