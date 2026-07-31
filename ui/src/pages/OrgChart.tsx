@@ -16,6 +16,8 @@ import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { agentsApi, type OrgNode } from "../api/agents";
+import { healthSentinelApi } from "../api/healthSentinel";
+import { heatStyleFor, heatTooltip } from "../lib/org-heat";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { queryKeys } from "../lib/queryKeys";
@@ -200,6 +202,19 @@ export function OrgChart() {
     queryFn: () => agentsApi.list(selectedCompanyId!),
     enabled: !!selectedCompanyId,
   });
+
+  // Idea 006: bottleneck heatmap overlay. Failing to load it must not take
+  // out the org chart, so heat is treated as optional decoration.
+  const { data: healthReport } = useQuery({
+    queryKey: queryKeys.healthSentinel(selectedCompanyId!),
+    queryFn: () => healthSentinelApi.report(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
+  });
+
+  const heatByAgentId = useMemo(
+    () => new Map((healthReport?.heat ?? []).map((entry) => [entry.agentId, entry])),
+    [healthReport],
+  );
 
   const agentMap = useMemo(() => {
     const m = new Map<string, Agent>();
@@ -574,12 +589,16 @@ export function OrgChart() {
           {allNodes.map((node) => {
             const agent = agentMap.get(node.id);
             const dotColor = statusDotColor[node.status] ?? defaultDotColor;
+            const heat = heatStyleFor(heatByAgentId.get(node.id));
+            const heatTitle = heatTooltip(heatByAgentId.get(node.id));
 
             return (
               <div
                 key={node.id}
                 data-org-card
-                className="absolute bg-card border border-border rounded-lg shadow-sm hover:shadow-md hover:border-foreground/20 transition-[box-shadow,border-color] duration-150 cursor-pointer select-none"
+                data-heat={heat.kind === "none" ? undefined : `${heat.kind}-${heat.intensity}`}
+                title={heatTitle || undefined}
+                className={`absolute bg-card border border-border rounded-lg shadow-sm hover:shadow-md hover:border-foreground/20 transition-[box-shadow,border-color] duration-150 cursor-pointer select-none ${heat.className}`}
                 style={{
                   left: node.x,
                   top: node.y,
