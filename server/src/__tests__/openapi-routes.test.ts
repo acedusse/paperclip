@@ -37,6 +37,7 @@ const apiPrefixes: Record<string, string> = {
   "bounded-agent-approvers.ts": "/api",
   "cloud-upstreams.ts": "/api",
   "companies.ts": "/api/companies",
+  "company-preflight.ts": "/api",
   "company-skills.ts": "/api",
   "costs.ts": "/api",
   "dashboard.ts": "/api",

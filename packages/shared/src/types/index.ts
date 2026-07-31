@@ -582,4 +582,10 @@ export type {
   PluginDatabaseNamespaceMode,
   PluginDatabaseNamespaceStatus,
 } from "./plugin.js";
+export type {
+  PreflightCode,
+  PreflightFinding,
+  PreflightLevel,
+  PreflightReport,
+} from "./company-preflight.js";
 // [END: module]

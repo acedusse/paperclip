@@ -815,6 +815,10 @@ export type {
   PluginWebhookDeliveryRecord,
   QuotaWindow,
   ProviderQuotaResult,
+  PreflightCode,
+  PreflightFinding,
+  PreflightLevel,
+  PreflightReport,
 } from "./types/index.js";
 export { COMPANY_SEARCH_SCOPES } from "./types/index.js";
 export {
