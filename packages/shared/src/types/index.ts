@@ -587,6 +587,7 @@ export type {
   IssueRunSignals,
 } from "./run-signals.js";
 export type {
+  AgentHeat,
   AgentRunSignals,
   HealthFinding,
   HealthFindingKind,

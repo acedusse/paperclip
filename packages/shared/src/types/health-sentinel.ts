@@ -46,11 +46,31 @@ export interface HealthFinding {
   goalIds: string[];
 }
 
+/**
+ * Idea 006 — per-agent pressure for the org-chart bottleneck overlay.
+ *
+ * Two distinct pressures, deliberately kept separate rather than summed into
+ * one number: an agent jammed behind blockers ("hot") and an agent working on
+ * goal-decoupled work ("cold") are opposite problems with opposite fixes, and
+ * a single score would render them identically.
+ */
+export interface AgentHeat {
+  agentId: string;
+  /** Blocked/deadlocked/unreliable pressure. Higher = more jammed. */
+  blockedScore: number;
+  /** Decoupled-from-goal pressure. Higher = more work adrift. */
+  driftScore: number;
+  /** Finding kinds contributing to this agent's heat, for tooltips. */
+  reasons: HealthFindingKind[];
+}
+
 export interface HealthReport {
   companyId: string;
   generatedAt: string;
   status: "healthy" | "warn" | "unhealthy";
   findings: HealthFinding[];
+  /** Per-agent rollup for the org-chart heatmap. Only agents with pressure appear. */
+  heat: AgentHeat[];
 }
 
 /**

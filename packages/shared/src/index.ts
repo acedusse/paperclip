@@ -817,6 +817,7 @@ export type {
   ProviderQuotaResult,
   IssueRunSignalScope,
   IssueRunSignals,
+  AgentHeat,
   AgentRunSignals,
   HealthFinding,
   HealthFindingKind,

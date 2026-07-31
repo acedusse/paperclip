@@ -21,11 +21,13 @@ import { detectDeadlocks, type BlockerEdge, type DeadlockIssue } from "./deadloc
 import { detectDecompositionGaps, type DecompositionRecord } from "./decomposition.js";
 import { detectGoalDrift, type DriftGoal, type DriftIssue } from "./goal-drift.js";
 import { detectReliabilityBreaches, type ReliabilitySlo } from "./reliability.js";
+import { rollUpAgentHeat } from "./heat.js";
 
 export { detectDeadlocks, findBlockedDeadEnds, findBlockerCycles } from "./deadlock.js";
 export { detectDecompositionGaps } from "./decomposition.js";
 export { detectGoalDrift, findOrphanIssues, resolveIssueGoalId } from "./goal-drift.js";
 export { detectReliabilityBreaches, DEFAULT_RELIABILITY_SLO } from "./reliability.js";
+export { rollUpAgentHeat } from "./heat.js";
 
 /** Reliability is judged over a rolling window, not all history. */
 const DEFAULT_RELIABILITY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
@@ -50,6 +52,7 @@ export function healthSentinelService(db: Db) {
           status: issues.status,
           parentId: issues.parentId,
           goalId: issues.goalId,
+          assigneeAgentId: issues.assigneeAgentId,
         })
         .from(issues)
         .where(eq(issues.companyId, companyId)),
@@ -139,6 +142,9 @@ export function healthSentinelService(db: Db) {
     // before the warnings.
     findings.sort((a, b) => FINDING_LEVEL_RANK[b.level] - FINDING_LEVEL_RANK[a.level]);
 
+    const assigneeByIssueId = new Map(issueRows.map((row) => [row.id, row.assigneeAgentId]));
+    const heat = rollUpAgentHeat(findings, assigneeByIssueId);
+
     const hasError = findings.some((finding) => finding.level === "error");
     const hasWarn = findings.some((finding) => finding.level === "warn");
 
@@ -147,6 +153,7 @@ export function healthSentinelService(db: Db) {
       generatedAt: now.toISOString(),
       status: hasError ? "unhealthy" : hasWarn ? "warn" : "healthy",
       findings,
+      heat,
     };
   }
 
