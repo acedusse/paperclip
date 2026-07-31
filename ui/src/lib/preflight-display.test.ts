@@ -35,6 +35,15 @@ const report = (overrides: Partial<PreflightReport>): PreflightReport => ({
   generatedAt: "2026-07-31T12:00:00.000Z",
   status: "pass",
   findings: [],
+  projection: {
+    agentCount: 0,
+    cycles: 0,
+    lowCents: 0,
+    expectedCents: 0,
+    highCents: 0,
+    confidence: "none",
+    basis: "No cost history yet.",
+  },
   ...overrides,
 });
 
