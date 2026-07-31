@@ -49,11 +49,23 @@ export interface PreflightFinding {
   agentIds: string[];
 }
 
+/** Combo-10 Phase 4 — projected spend for the first N heartbeat cycles. */
+export interface PreflightCostProjection {
+  agentCount: number;
+  cycles: number;
+  lowCents: number;
+  expectedCents: number;
+  highCents: number;
+  confidence: "none" | "low" | "medium";
+  basis: string;
+}
+
 export interface PreflightReport {
   companyId: string;
   generatedAt: string;
   /** `fail` if any error, `warn` if any warning, else `pass`. */
   status: "pass" | "warn" | "fail";
   findings: PreflightFinding[];
+  projection: PreflightCostProjection;
 }
 // [END: module]

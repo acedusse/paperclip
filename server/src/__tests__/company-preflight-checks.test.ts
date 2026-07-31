@@ -42,6 +42,7 @@ function context(overrides: Partial<PreflightContext> = {}): PreflightContext {
     ],
     medianRunCostCents: 50,
     costEventCount: 10,
+    runCostPercentiles: { p10Cents: 30, medianCents: 50, p90Cents: 90, sampleSize: 10 },
     ...overrides,
   };
 }
@@ -74,6 +75,7 @@ describe("preflight checks", () => {
         budgetPolicies: [],
         costEventCount: 0,
         medianRunCostCents: null,
+        runCostPercentiles: null,
       }),
     );
 
@@ -211,13 +213,14 @@ describe("preflight checks", () => {
           ],
           medianRunCostCents: null,
           costEventCount: 0,
+          runCostPercentiles: null,
         }),
       );
       expect(found).not.toContain("budget_below_one_run");
     });
 
     it("reports missing cost history as info, not a failure", () => {
-      const finding = runAll(context({ costEventCount: 0, medianRunCostCents: null }))
+      const finding = runAll(context({ costEventCount: 0, medianRunCostCents: null, runCostPercentiles: null }))
         .find((f) => f.code === "no_cost_history");
       expect(finding!.level).toBe("info");
     });

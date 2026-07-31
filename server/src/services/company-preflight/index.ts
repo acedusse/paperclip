@@ -26,11 +26,16 @@ import type { PreflightFinding, PreflightReport } from "@paperclipai/shared";
 import { listEnabledServerAdapters } from "../../adapters/registry.js";
 import { computeObservedAmount } from "../budgets.js";
 import { PREFLIGHT_CHECKS, type PreflightContext } from "./checks.js";
+import { projectCost, type RunCostPercentiles } from "./projection.js";
 
 export { PREFLIGHT_CHECKS } from "./checks.js";
 export type { PreflightCheck, PreflightContext } from "./checks.js";
+export { projectCost, describeProjection, formatCents } from "./projection.js";
 
 const LEVEL_RANK = { info: 0, warn: 1, error: 2 } as const;
+
+/** One hour at the default heartbeat cadence. */
+const DEFAULT_PROJECTION_CYCLES = 4;
 
 /** Issue statuses that represent live, assignable work. */
 const OPEN_ISSUE_STATUSES = ["backlog", "todo", "in_progress", "in_review", "blocked"];
@@ -80,10 +85,12 @@ export async function loadPreflightContext(db: Db, companyId: string): Promise<P
         median: sql<
           number | null
         >`percentile_cont(0.5) within group (order by ${costEvents.costCents})`,
+        p10: sql<number | null>`percentile_cont(0.1) within group (order by ${costEvents.costCents})`,
+        p90: sql<number | null>`percentile_cont(0.9) within group (order by ${costEvents.costCents})`,
       })
       .from(costEvents)
       .where(eq(costEvents.companyId, companyId))
-      .then((rows) => rows[0] ?? { count: 0, median: null }),
+      .then((rows) => rows[0] ?? { count: 0, median: null, p10: null, p90: null }),
   ]);
 
   const agentIds = agentRows.map((row) => row.id);
@@ -143,6 +150,15 @@ export async function loadPreflightContext(db: Db, companyId: string): Promise<P
     budgetPolicies: policies,
     medianRunCostCents: costRow.median === null ? null : Math.round(Number(costRow.median)),
     costEventCount: costRow.count,
+    runCostPercentiles:
+      costRow.median === null
+        ? null
+        : {
+            p10Cents: Math.round(Number(costRow.p10 ?? costRow.median)),
+            medianCents: Math.round(Number(costRow.median)),
+            p90Cents: Math.round(Number(costRow.p90 ?? costRow.median)),
+            sampleSize: costRow.count,
+          },
   };
 }
 
@@ -168,6 +184,14 @@ export function companyPreflightService(db: Db) {
 
     findings.sort((a, b) => LEVEL_RANK[b.level] - LEVEL_RANK[a.level]);
 
+    // Phase 4: project the first hour, i.e. one heartbeat per invokable agent
+    // per cycle. Agents that cannot be invoked cost nothing, so they are
+    // excluded rather than inflating the band.
+    const invokableCount = ctx.agents.filter(
+      (agent) => agent.status !== "terminated" && agent.status !== "pending_approval" && agent.status !== "paused",
+    ).length;
+    const projection = projectCost(ctx.runCostPercentiles, invokableCount, DEFAULT_PROJECTION_CYCLES);
+
     const hasError = findings.some((finding) => finding.level === "error");
     const hasWarn = findings.some((finding) => finding.level === "warn");
 
@@ -176,6 +200,7 @@ export function companyPreflightService(db: Db) {
       generatedAt: now.toISOString(),
       status: hasError ? "fail" : hasWarn ? "warn" : "pass",
       findings,
+      projection,
     };
   }
 

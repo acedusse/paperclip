@@ -587,6 +587,7 @@ export type {
   PreflightFinding,
   PreflightLevel,
   PreflightReport,
+  PreflightCostProjection,
 } from "./company-preflight.js";
 export type {
   BlueprintManifest,

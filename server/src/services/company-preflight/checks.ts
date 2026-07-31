@@ -14,6 +14,7 @@
 // [START: module]
 import { getAgentOrgChainHealth, type AgentEligibilityAgent } from "@paperclipai/shared";
 import type { PreflightFinding } from "@paperclipai/shared";
+import type { RunCostPercentiles } from "./projection.js";
 
 export interface PreflightAgent extends AgentEligibilityAgent {
   name: string;
@@ -50,6 +51,8 @@ export interface PreflightContext {
   /** Median observed cost per run, or null when there is no history. */
   medianRunCostCents: number | null;
   costEventCount: number;
+  /** Percentile spread for the Phase 4 projection; null with no history. */
+  runCostPercentiles: RunCostPercentiles | null;
 }
 
 export interface PreflightCheck {

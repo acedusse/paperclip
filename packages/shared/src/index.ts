@@ -819,6 +819,7 @@ export type {
   PreflightFinding,
   PreflightLevel,
   PreflightReport,
+  PreflightCostProjection,
   BlueprintManifest,
   BlueprintResolution,
   BlueprintValidationIssue,
