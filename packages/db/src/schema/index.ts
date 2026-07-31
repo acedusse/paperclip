@@ -111,4 +111,5 @@ export { delegationGrants, type DelegationGrantRow } from "./delegation_grants.j
 export { companyCoverageConfig, type CompanyCoverageConfigRow } from "./company_coverage_config.js";
 export { approvalCoverageEscalations, type ApprovalCoverageEscalationRow } from "./approval_coverage_escalations.js";
 export { boundedAgentApprovers, type BoundedAgentApproverRow } from "./bounded_agent_approvers.js";
+export { stakeholderShares, type StakeholderShareRow } from "./stakeholder_shares.js";
 // [END: module]
