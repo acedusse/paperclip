@@ -582,4 +582,8 @@ export type {
   PluginDatabaseNamespaceMode,
   PluginDatabaseNamespaceStatus,
 } from "./plugin.js";
+export type {
+  IssueRunSignalScope,
+  IssueRunSignals,
+} from "./run-signals.js";
 // [END: module]
