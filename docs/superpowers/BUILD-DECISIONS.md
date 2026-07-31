@@ -28,6 +28,12 @@ run status sets), `issue-signals.ts` (batched per-issue aggregation), `index.ts`
   ordering, batch `Map` shape, per-issue cost, cross-agent isolation, cross-company isolation, and
   empty-input short-circuit.
 - No new tables, no migration, no new runtime dependency, no route, no UI — as designed.
+- Full server suite: **3577 passed, 1 skipped, 2 failed** (432 files). Both failures are in
+  `paperclip-skill-utils.test.ts` and are **pre-existing on `master`** — verified by checking out
+  `58eacd1` and reproducing them with the identical invocation. They are cwd-sensitive: the test
+  does `path.resolve("skills/paperclip/SKILL.md")`, which resolves against `server/` when vitest is
+  run from that directory instead of the repo root. Nothing on this branch touches the files it
+  reads. Worth fixing separately — a test that only passes from one cwd is a latent CI trap.
 
 **Two corrections made during execution** (both now in the spec):
 
