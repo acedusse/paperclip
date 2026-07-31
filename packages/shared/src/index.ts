@@ -817,6 +817,11 @@ export type {
   ProviderQuotaResult,
   IssueRunSignalScope,
   IssueRunSignals,
+  AgentRunSignals,
+  HealthFinding,
+  HealthFindingKind,
+  HealthFindingLevel,
+  HealthReport,
 } from "./types/index.js";
 export { COMPANY_SEARCH_SCOPES } from "./types/index.js";
 export {

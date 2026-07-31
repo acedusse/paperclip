@@ -586,4 +586,11 @@ export type {
   IssueRunSignalScope,
   IssueRunSignals,
 } from "./run-signals.js";
+export type {
+  AgentRunSignals,
+  HealthFinding,
+  HealthFindingKind,
+  HealthFindingLevel,
+  HealthReport,
+} from "./health-sentinel.js";
 // [END: module]
