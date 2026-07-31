@@ -9,6 +9,64 @@ Source build order: [`.ideas/combinations/README.md`](../../.ideas/combinations/
 
 ---
 
+## [2026-07-31] Completed — Combo 03 Phases 2 & 3 (detectors, heatmap, semantic seam)
+
+**Branch:** `feat/combo03-phase2-detectors` (off `feat/combo03-phase1-run-signals`)
+
+**Phase 2 — deterministic detectors + heatmap. Complete.**
+
+| Idea | Delivered |
+|------|-----------|
+| 010 | `health-sentinel/deadlock.ts` — iterative Tarjan SCC over the `issue_relations` blocks graph + cancelled-blocker dead ends |
+| 026 | `health-sentinel/goal-drift.ts` — parent-chain walk to a live goal; orphan work and empty company/team goals |
+| 059 | `health-sentinel/decomposition.ts` — accepted plans that under-delivered children |
+| 044 | `health-sentinel/reliability.ts` + `run-signals/agent-signals.ts` — rolling failure rate vs an error budget |
+| 006 | `health-sentinel/heat.ts` + `ui/src/lib/org-heat.ts` + `OrgChart.tsx` overlay |
+| — | `GET /api/companies/:companyId/health-sentinel`, registered in `app.ts`, `routes/index.ts`, `openapi.ts` **and** the `apiPrefixes` map |
+
+Design decisions worth keeping:
+
+- **Detectors are pure functions over plain graphs**, with a thin DB loader. They unit-test without
+  a database, which is why the deadlock detector could be tested against a 20,000-node graph.
+- **Tarjan is iterative, not recursive.** A stack overflow inside a health check would take out the
+  thing meant to report problems.
+- **Dead ends report only the direct victim.** Every transitive chain has one, so nothing is lost,
+  and one fix produces one finding instead of one per affected issue.
+- **`remediation` is a required field** on every finding. A detector that can only say "something is
+  wrong here" is not actionable enough to escalate.
+- **Heat keeps blocked and drift as separate channels.** A jammed agent and an adrift agent are
+  opposite problems with opposite fixes; one summed score renders them identically.
+- The end-to-end service tests caught a bug the pure tests could not: `getAgentRunSignals` bound a
+  `Date` into a raw SQL comparison, which the driver rejects.
+
+**Phase 3 — semantic tier. Seam shipped; model tier BLOCKED on combo 02.**
+
+The combo asks for semantic tiers "on a free local model behind confidence thresholds". **There is
+no inference API in this codebase.** `ServerAdapterModule.execute` (`packages/adapter-utils/src/types.ts`)
+runs a whole agent session — spawns a CLI, manages a workspace, sessions, streaming — not a prompt
+completion. Nothing else offers one; `routes/llms.ts` is `llms.txt`-style documentation, not
+inference. A general inference contract across adapters is **combo 02's** job (Model Economy Fabric,
+build-order rank 5, currently "Partial").
+
+Precedent followed: Combo 05 hit the identical wall and solved it in `digest-narration.ts` by
+injecting a narrator interface with a deterministic default. So `health-sentinel/semantic.ts` ships
+the **seam** — `SemanticJudge`, confidence thresholds, `HealthSentinelOptions.semanticJudge` — with a
+deterministic Jaccard-over-titles default. A model-backed judge drops in with no caller change.
+
+What the deterministic judge honestly cannot do: it catches "Add login form" vs "Add the login form",
+not "Add login form" vs "Build authentication UI". A test documents that limit rather than hiding it.
+The 026 semantic drift tier is **not** built — unlike overlap, it has no useful deterministic
+approximation, and shipping a keyword heuristic as "drift detection" would be worse than shipping
+nothing.
+
+**Exit criteria:** Phase 2 met in full. Phase 3 met structurally; the model tier is deferred to
+combo 02 with the integration point built and tested.
+
+**Next:** combo 02 (inference contract) unblocks the 026/059 model tiers. Combo 10 Phase 1 is
+designed and awaiting its spec.
+
+---
+
 ## [2026-07-31] Completed — Combo 03 Phase 1 (run-signal read model)
 
 **Outcome:** Shipped `server/src/services/run-signals/` — `scope.ts` (the run↔issue predicate and
@@ -152,7 +210,7 @@ confirms it is not already done on the target branch.
 |-------|-----------|------------------|----------------------|-------|
 | **01** Runtime Control Plane | 9 | 1 | **Complete** | All phases 1–4 (incl. 4A cadence/WIP + 4B workspace claims). See `docs/superpowers/specs/2026-07-13-claim-aware-run-selection-design.md` — "Combo 01 is functionally complete." Code: `effective-cap-resolver.ts`, `predictive-breaker.ts`, `run-execution-state.ts`, `run-caps.ts`, `wip-flow.ts`, `workspace-path-claims.ts`, etc. |
 | **05** Review Cockpit | 9 | 2 | **Complete** | All phases 1–4c merged to `master` @ `58eacd1` (2026-07-31): PR #28 landed 4a+4b, PR #30 landed 4c (stakeholder transparency page / idea 033). One deferred deliverable: access-logging of stakeholder page views to the audit path. |
-| **03** Health Sentinel | 9 | 3 | **Phase 1 complete** | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 is fully built (`productivity-review.ts`), 010/059 have substrate. Phase 1 redefined away from OTel spans and shipped as `server/src/services/run-signals/` — see log entry. Phases 2–3 pending. |
+| **03** Health Sentinel | 9 | 3 | **Complete** (phase 3 model tier deferred to combo 02) | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 was already fully built (`productivity-review.ts`). Phase 1 redefined away from OTel spans → `run-signals/`; phase 2 detectors + heatmap → `health-sentinel/`; phase 3 semantic **seam** shipped, model tier blocked on combo 02 (no inference API exists). See log entries. |
 | **10** Day-One Adoption | 8 | 4 | Queued after Combo 03 | Pre-flight run 2026-07-31; **not uniformly greenfield** (see log entry). Phase 1 (Dry-Run Estimator static checks) designed, spec not yet written. |
 | **04** CFO Suite | 8 | 5 | Partial / scattered | Ideas 013/019/030 have some substrate (`costs.ts`, budgets) but combo not built as unified feature. |
 | **02** Model Economy | 8 | 5 | Partial | Idea 008 (local LLM) largely config; combo fabric not unified. |
