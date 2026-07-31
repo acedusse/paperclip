@@ -12,6 +12,29 @@ export function effectiveIntervalSec(baseSec: number, streak: number, cfg: IdleB
   return Math.min(grown, cap);
 }
 
+/**
+ * Whether an idle-streak change moves the agent's *effective* interval, and
+ * which way. `changed` is false when the interval is unchanged (streak grew
+ * but already pinned at the cap, no streak change, or backoff disabled) — the
+ * caller uses this to emit a cadence-transition audit only on real transitions.
+ * `direction` is only meaningful when `changed` is true.
+ */
+export function cadenceTransition(
+  baseSec: number,
+  oldStreak: number,
+  newStreak: number,
+  cfg: IdleBackoffConfig,
+): { changed: boolean; direction: "backoff" | "reset"; oldIntervalSec: number; newIntervalSec: number } {
+  const oldIntervalSec = effectiveIntervalSec(baseSec, oldStreak, cfg);
+  const newIntervalSec = effectiveIntervalSec(baseSec, newStreak, cfg);
+  return {
+    changed: newIntervalSec !== oldIntervalSec,
+    direction: newIntervalSec > oldIntervalSec ? "backoff" : "reset",
+    oldIntervalSec,
+    newIntervalSec,
+  };
+}
+
 /** Parse just the fields idle-backoff needs from an agent's runtimeConfig blob. */
 export function parseHeartbeatCadenceConfig(runtimeConfig: unknown): { intervalSec: number; idleBackoff: IdleBackoffConfig } {
   const hb = (runtimeConfig as { heartbeat?: Record<string, unknown> } | null)?.heartbeat ?? {};
