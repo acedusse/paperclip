@@ -17,6 +17,12 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     environment: "node",
+    // Never collect build output. `tsc -b server` emits compiled copies of the
+    // test files into dist/, and picking those up runs every suite twice
+    // against stale JS — which surfaces as failures in tests nobody touched.
+    // Vitest's default exclude is replaced, not merged, whenever `include` or
+    // `exclude` is set anywhere, so state it explicitly here.
+    exclude: ["**/node_modules/**", "**/dist/**"],
     isolate: true,
     maxConcurrency: 1,
     maxWorkers: 1,
