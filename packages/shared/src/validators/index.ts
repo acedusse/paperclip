@@ -476,6 +476,13 @@ export {
 } from "./bounded-agent-approver.js";
 
 export {
+  createStakeholderShareSchema,
+  updateStakeholderShareSchema,
+  type CreateStakeholderShare,
+  type UpdateStakeholderShare,
+} from "./stakeholder-share.js";
+
+export {
   envBindingPlainSchema,
   envBindingSecretRefSchema,
   envBindingSchema,

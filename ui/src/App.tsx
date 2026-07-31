@@ -76,6 +76,7 @@ import { AuthPage } from "./pages/Auth";
 import { BoardClaimPage } from "./pages/BoardClaim";
 import { CliAuthPage } from "./pages/CliAuth";
 import { InviteLandingPage } from "./pages/InviteLanding";
+import { StakeholderPage } from "./pages/StakeholderPage";
 import { JoinRequestQueue } from "./pages/JoinRequestQueue";
 import { NotFoundPage } from "./pages/NotFound";
 import { useCompany } from "./context/CompanyContext";
@@ -377,6 +378,8 @@ export function App() {
         <Route path="board-claim/:token" element={<BoardClaimPage />} />
         <Route path="cli-auth/:id" element={<CliAuthPage />} />
         <Route path="invite/:token" element={<InviteLandingPage />} />
+        {/* Public stakeholder page — outside CloudAccessGate: the share token is the credential. */}
+        <Route path="s/:token" element={<StakeholderPage />} />
         <Route path="tests/perf/long-thread" element={<IssueChatLongThreadPerf />} />
         <Route path="ux-lab/cloud-upstream" element={<CloudUpstreamUxLab />} />
         <Route path="ux-lab/bootstrap-setup" element={<BootstrapSetupUxLab />} />

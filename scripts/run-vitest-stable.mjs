@@ -47,6 +47,7 @@ const additionalSerializedServerTests = new Set([
   "server/src/__tests__/project-routes-env.test.ts",
   "server/src/__tests__/redaction.test.ts",
   "server/src/__tests__/routines-e2e.test.ts",
+  "server/src/__tests__/stakeholder-share-service.test.ts",
 ]);
 let invocationIndex = 0;
 const serializedModeName = "serialized";

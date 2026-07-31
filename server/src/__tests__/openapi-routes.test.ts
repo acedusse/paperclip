@@ -64,6 +64,7 @@ const apiPrefixes: Record<string, string> = {
   "secrets.ts": "/api",
   "sidebar-badges.ts": "/api",
   "sidebar-preferences.ts": "/api",
+  "stakeholder-shares.ts": "/api",
   "teams-catalog.ts": "/api",
   "user-profiles.ts": "/api",
   "workspace-path-claims.ts": "/api",
@@ -207,6 +208,20 @@ describe("openapi routes", () => {
     expect(spec.paths["/api/invites/{token}/accept"].post.responses["202"]).toBeDefined();
     expect(spec.paths["/api/board-api-keys"].post.responses["201"]).toBeDefined();
     expect(spec.paths["/api/companies/import"].post.responses["202"]).toBeDefined();
+
+    // Phase 4c: the stakeholder page is the only unauthenticated read path added
+    // by the review cockpit, and its management routes must stay board-only.
+    expect(spec.paths["/api/stakeholder/{token}"].get.security).toEqual([]);
+    expect(spec.paths["/api/stakeholder/{token}"].get["x-paperclip-authorization"]).toEqual({
+      actor: "public",
+    });
+    expect(spec.paths["/api/stakeholder/{token}"].post).toBeUndefined();
+    expect(spec.paths["/api/companies/{companyId}/stakeholder-shares"].post["x-paperclip-authorization"]).toEqual({
+      actor: "board",
+    });
+    expect(spec.paths["/api/stakeholder-shares/{id}/revoke"].post["x-paperclip-authorization"]).toEqual({
+      actor: "board",
+    });
   });
 });
 // [END: module]
