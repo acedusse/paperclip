@@ -120,6 +120,16 @@ export function stakeholderShareService(db: Db) {
         .orderBy(desc(stakeholderShares.createdAt));
     },
 
+    /** Id-only lookup used by routes to resolve the owning company before authorizing. */
+    async getById(id: string): Promise<StakeholderShareRow | null> {
+      const [row] = await db
+        .select()
+        .from(stakeholderShares)
+        .where(eq(stakeholderShares.id, id))
+        .limit(1);
+      return row ?? null;
+    },
+
     async get(companyId: string, id: string): Promise<StakeholderShareRow | null> {
       const [row] = await db
         .select()
