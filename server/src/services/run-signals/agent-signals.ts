@@ -12,7 +12,7 @@
 // JSON_FLOW: {"file": "server/src/services/run-signals/agent-signals.ts", "imports": "drizzle-orm, @paperclipai/db", "exports": "getAgentRunSignals"}
 // ==========================================
 // [START: module]
-import { and, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { heartbeatRuns } from "@paperclipai/db";
 import type { AgentRunSignals } from "@paperclipai/shared";
@@ -46,10 +46,9 @@ export async function getAgentRunSignals(
       and(
         eq(heartbeatRuns.companyId, companyId),
         inArray(heartbeatRuns.agentId, agentIds),
-        gte(
-          sql`coalesce(${heartbeatRuns.startedAt}, ${heartbeatRuns.createdAt})`,
-          window.since,
-        ),
+        // Explicit ISO string + cast: binding a Date directly into a raw SQL
+        // comparison fails in the driver.
+        sql`coalesce(${heartbeatRuns.startedAt}, ${heartbeatRuns.createdAt}) >= ${window.since.toISOString()}::timestamptz`,
       ),
     )
     .groupBy(heartbeatRuns.agentId, heartbeatRuns.status);
