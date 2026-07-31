@@ -22,12 +22,25 @@ import { detectDecompositionGaps, type DecompositionRecord } from "./decompositi
 import { detectGoalDrift, type DriftGoal, type DriftIssue } from "./goal-drift.js";
 import { detectReliabilityBreaches, type ReliabilitySlo } from "./reliability.js";
 import { rollUpAgentHeat } from "./heat.js";
+import {
+  deterministicOverlapJudge,
+  judgeDecompositionOverlap,
+  DEFAULT_CONFIDENCE_THRESHOLD,
+  type SemanticJudge,
+} from "./semantic.js";
 
 export { detectDeadlocks, findBlockedDeadEnds, findBlockerCycles } from "./deadlock.js";
 export { detectDecompositionGaps } from "./decomposition.js";
 export { detectGoalDrift, findOrphanIssues, resolveIssueGoalId } from "./goal-drift.js";
 export { detectReliabilityBreaches, DEFAULT_RELIABILITY_SLO } from "./reliability.js";
 export { rollUpAgentHeat } from "./heat.js";
+export {
+  deterministicOverlapJudge,
+  judgeDecompositionOverlap,
+  titleSimilarity,
+  DEFAULT_CONFIDENCE_THRESHOLD,
+  type SemanticJudge,
+} from "./semantic.js";
 
 /** Reliability is judged over a rolling window, not all history. */
 const DEFAULT_RELIABILITY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
@@ -38,6 +51,9 @@ export interface HealthSentinelOptions {
   now?: Date;
   reliabilitySlo?: ReliabilitySlo;
   reliabilityWindowMs?: number;
+  /** Phase 3 seam — swap in a model-backed judge when one exists. */
+  semanticJudge?: SemanticJudge;
+  semanticConfidenceThreshold?: number;
 }
 
 export function healthSentinelService(db: Db) {
@@ -49,6 +65,7 @@ export function healthSentinelService(db: Db) {
         .select({
           id: issues.id,
           identifier: issues.identifier,
+          title: issues.title,
           status: issues.status,
           parentId: issues.parentId,
           goalId: issues.goalId,
@@ -91,6 +108,7 @@ export function healthSentinelService(db: Db) {
       : [];
 
     const identifierById = new Map(issueRows.map((row) => [row.id, row.identifier]));
+    const titleById = new Map(issueRows.map((row) => [row.id, row.title]));
 
     const deadlockIssues: DeadlockIssue[] = issueRows.map((row) => ({
       id: row.id,
@@ -136,6 +154,17 @@ export function healthSentinelService(db: Db) {
       ...detectGoalDrift(driftIssues, driftGoals),
       ...detectDecompositionGaps(decompositions),
       ...detectReliabilityBreaches(agentRows, agentSignals, opts.reliabilitySlo),
+      ...decompositions.flatMap((record) =>
+        judgeDecompositionOverlap(
+          record.sourceIssueIdentifier ?? record.sourceIssueId,
+          record.childIssueIds.map((childId) => ({
+            issueId: childId,
+            title: titleById.get(childId) ?? "",
+          })),
+          opts.semanticJudge ?? deterministicOverlapJudge,
+          opts.semanticConfidenceThreshold ?? DEFAULT_CONFIDENCE_THRESHOLD,
+        ),
+      ),
     ];
 
     // Most severe first — an operator reading top-down should hit the errors

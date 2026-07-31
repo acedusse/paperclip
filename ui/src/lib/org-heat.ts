@@ -62,6 +62,7 @@ const REASON_LABELS: Record<HealthFindingKind, string> = {
   orphan_issue: "work not linked to a live goal",
   goal_without_work: "goal with no open work",
   decomposition_incomplete: "incomplete plan decomposition",
+  decomposition_overlap: "duplicated sub-issues",
   agent_error_budget_burned: "over its error budget",
 };
 

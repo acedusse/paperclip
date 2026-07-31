@@ -26,6 +26,8 @@ export type HealthFindingKind =
   | "goal_without_work"
   /** 059 — a decomposition that produced fewer children than it promised. */
   | "decomposition_incomplete"
+  /** 059 semantic tier — sibling sub-issues that duplicate each other. */
+  | "decomposition_overlap"
   /** 044 — an agent whose failure rate has burned its error budget. */
   | "agent_error_budget_burned";
 
