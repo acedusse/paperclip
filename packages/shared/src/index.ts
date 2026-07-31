@@ -825,6 +825,14 @@ export type {
   BlueprintValidationIssue,
   BlueprintVariable,
   BlueprintVariableType,
+  IssueRunSignalScope,
+  IssueRunSignals,
+  AgentHeat,
+  AgentRunSignals,
+  HealthFinding,
+  HealthFindingKind,
+  HealthFindingLevel,
+  HealthReport,
 } from "./types/index.js";
 export { COMPANY_SEARCH_SCOPES } from "./types/index.js";
 export {

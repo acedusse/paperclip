@@ -596,4 +596,15 @@ export type {
   BlueprintVariable,
   BlueprintVariableType,
 } from "./blueprint.js";
+  IssueRunSignalScope,
+  IssueRunSignals,
+} from "./run-signals.js";
+export type {
+  AgentHeat,
+  AgentRunSignals,
+  HealthFinding,
+  HealthFindingKind,
+  HealthFindingLevel,
+  HealthReport,
+} from "./health-sentinel.js";
 // [END: module]

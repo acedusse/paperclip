@@ -126,4 +126,7 @@ export {
 export { reconcilePersistedRuntimeServicesOnStartup, restartDesiredRuntimeServicesOnStartup } from "./workspace-runtime.js";
 export { companyPreflightService } from "./company-preflight/index.js";
 export { createStorageServiceFromConfig, getStorageService } from "../storage/index.js";
+export { getIssueRunSignals, runSignalsService } from "./run-signals/index.js";
+export { getAgentRunSignals } from "./run-signals/agent-signals.js";
+export { healthSentinelService } from "./health-sentinel/index.js";
 // [END: module]

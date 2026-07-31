@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { IdleBackoffConfig } from "@paperclipai/shared";
 import {
+  cadenceTransition,
   effectiveIntervalSec,
   isEmptyTimerHeartbeat,
   nextIdleStreak,
@@ -61,5 +62,36 @@ describe("isEmptyTimerHeartbeat", () => {
   });
   it("is false for non-success outcomes", () => {
     expect(isEmptyTimerHeartbeat({ wakeReason: "heartbeat_timer", outcome: "failed", livenessState: "empty_response" })).toBe(false);
+  });
+});
+
+describe("cadenceTransition", () => {
+  const cfg = { enabled: true, multiplier: 2, maxIntervalSec: 480 };
+
+  it("flags a backoff when the interval grows (streak 0 -> 1)", () => {
+    const t = cadenceTransition(60, 0, 1, cfg);
+    expect(t).toEqual({ changed: true, direction: "backoff", oldIntervalSec: 60, newIntervalSec: 120 });
+  });
+
+  it("flags a reset when the interval snaps back (streak 3 -> 0)", () => {
+    const t = cadenceTransition(60, 3, 0, cfg);
+    expect(t.changed).toBe(true);
+    expect(t.direction).toBe("reset");
+    expect(t.oldIntervalSec).toBe(480); // 60*2^3=480 capped at 480
+    expect(t.newIntervalSec).toBe(60);
+  });
+
+  it("reports no change once the interval is pinned at the cap (streak 3 -> 4)", () => {
+    const t = cadenceTransition(60, 3, 4, cfg);
+    expect(t.changed).toBe(false); // both capped at 480
+  });
+
+  it("reports no change when the streak is unchanged (0 -> 0)", () => {
+    expect(cadenceTransition(60, 0, 0, cfg).changed).toBe(false);
+  });
+
+  it("reports no change when backoff is disabled", () => {
+    const t = cadenceTransition(60, 0, 5, { enabled: false, multiplier: 2, maxIntervalSec: 480 });
+    expect(t.changed).toBe(false); // effectiveIntervalSec returns base when disabled
   });
 });
