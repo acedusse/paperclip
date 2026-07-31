@@ -60,6 +60,7 @@ import { CompanySkills } from "./pages/CompanySkills";
 import { Secrets } from "./pages/Secrets";
 import { CompanyExport } from "./pages/CompanyExport";
 import { CompanyImport } from "./pages/CompanyImport";
+import { CompanyPreflight } from "./pages/CompanyPreflight";
 import { DesignGuide } from "./pages/DesignGuide";
 import { InstanceGeneralSettings } from "./pages/InstanceGeneralSettings";
 import { InstanceAccess } from "./pages/InstanceAccess";
@@ -105,6 +106,7 @@ function boardRoutes() {
       <Route path="company/settings/invites" element={<CompanyInvites />} />
       <Route path="company/export/*" element={<CompanyExport />} />
       <Route path="company/import" element={<CompanyImport />} />
+      <Route path="company/preflight" element={<CompanyPreflight />} />
       <Route path="company/settings/secrets" element={<Secrets />} />
       <Route path="company/settings/instance" element={<Navigate to="general" replace />} />
       <Route path="company/settings/instance/profile" element={<ProfileSettings />} />

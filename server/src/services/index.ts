@@ -124,6 +124,7 @@ export {
   type CodexAuthReconciliationSummary,
 } from "./codex-auth-reconciliation.js";
 export { reconcilePersistedRuntimeServicesOnStartup, restartDesiredRuntimeServicesOnStartup } from "./workspace-runtime.js";
+export { companyPreflightService } from "./company-preflight/index.js";
 export { createStorageServiceFromConfig, getStorageService } from "../storage/index.js";
 export { getIssueRunSignals, runSignalsService } from "./run-signals/index.js";
 export { getAgentRunSignals } from "./run-signals/agent-signals.js";

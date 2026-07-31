@@ -583,6 +583,19 @@ export type {
   PluginDatabaseNamespaceStatus,
 } from "./plugin.js";
 export type {
+  PreflightCode,
+  PreflightFinding,
+  PreflightLevel,
+  PreflightReport,
+  PreflightCostProjection,
+} from "./company-preflight.js";
+export type {
+  BlueprintManifest,
+  BlueprintResolution,
+  BlueprintValidationIssue,
+  BlueprintVariable,
+  BlueprintVariableType,
+} from "./blueprint.js";
   IssueRunSignalScope,
   IssueRunSignals,
 } from "./run-signals.js";

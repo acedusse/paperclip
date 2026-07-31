@@ -54,6 +54,7 @@ import { activityRoutes } from "./routes/activity.js";
 import { dashboardRoutes } from "./routes/dashboard.js";
 import { userProfileRoutes } from "./routes/user-profiles.js";
 import { sidebarBadgeRoutes } from "./routes/sidebar-badges.js";
+import { companyPreflightRoutes } from "./routes/company-preflight.js";
 import { healthSentinelRoutes } from "./routes/health-sentinel.js";
 import { sidebarPreferenceRoutes } from "./routes/sidebar-preferences.js";
 import { resourceMembershipRoutes } from "./routes/resource-memberships.js";
@@ -279,6 +280,7 @@ export async function createApp(
   api.use(dashboardRoutes(db));
   api.use(userProfileRoutes(db));
   api.use(sidebarBadgeRoutes(db));
+  api.use(companyPreflightRoutes(db));
   api.use(healthSentinelRoutes(db));
   api.use(sidebarPreferenceRoutes(db));
   api.use(resourceMembershipRoutes(db));
