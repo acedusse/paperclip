@@ -19,6 +19,7 @@ import { pushApi, type PushPrefs } from "../api/push";
 import { useCompany } from "../context/CompanyContext";
 import { timeAgo } from "../lib/timeAgo";
 import { pushSupported, subscribeToPush, unsubscribeFromPush } from "../lib/push";
+import { StakeholderShares } from "../components/stakeholder/StakeholderShares";
 
 export function Digest() {
   const { selectedCompanyId } = useCompany();
@@ -183,6 +184,7 @@ export function Digest() {
           </ul>
         </section>
       )}
+      {companyId && <StakeholderShares companyId={companyId} />}
     </div>
   );
 }
