@@ -89,17 +89,20 @@ export async function getIssueRunSignals(
 
   // Bucket by (issue, agent): a run matched by the batch predicate may belong
   // to a different scope's agent, so the pair must be re-checked here.
+  //
+  // The bucket is deliberately uncapped. Window counts and comment counts are
+  // computed over every matching run; only the streak walk and the exposed
+  // `runIds` are capped (below). Capping the counts too would silently
+  // under-report an issue with more than MAX_RUNS_FOR_STREAK runs — exactly
+  // the thrashing case these signals exist to catch.
   const runsByScope = new Map<string, RunRow[]>();
   for (const row of runRows) {
     if (!row.issueId) continue;
     const key = scopeKey(row.issueId, row.agentId);
     const bucket = runsByScope.get(key);
-    if (bucket) {
-      // Newest-first from the ORDER BY; the cap bounds the streak walk.
-      if (bucket.length < MAX_RUNS_FOR_STREAK) bucket.push(row);
-    } else {
-      runsByScope.set(key, [row]);
-    }
+    // Newest-first from the ORDER BY.
+    if (bucket) bucket.push(row);
+    else runsByScope.set(key, [row]);
   }
 
   const allRunIds = runRows.map((row) => row.id);
@@ -139,17 +142,20 @@ export async function getIssueRunSignals(
     const runs = runsByScope.get(scopeKey(scope.issueId, scope.agentId));
     if (!runs || runs.length === 0) continue;
 
+    // The streak is only meaningful over a bounded window of recent runs.
+    const streakWindow = runs.slice(0, MAX_RUNS_FOR_STREAK);
+
     // Newest-first walk over terminal runs, stopping at the first that spoke.
     // Order matters — a plain count would be wrong.
     let noCommentStreak = 0;
-    for (const run of runs) {
+    for (const run of streakWindow) {
       if (!isTerminalRunStatus(run.status)) continue;
       if (commentingRunIds.has(run.id)) break;
       noCommentStreak += 1;
     }
 
     // Only this agent's comments, and only those created by a run attributed
-    // to this issue — matching the original inner-join semantics.
+    // to this issue — matching the original inner-join semantics. Uncapped.
     const runIds = new Set(runs.map((run) => run.id));
     const scopedComments = commentRows.filter(
       (row) =>
@@ -164,7 +170,7 @@ export async function getIssueRunSignals(
     result.set(scope.issueId, {
       issueId: scope.issueId,
       agentId: scope.agentId,
-      runIds: runs.map((run) => run.id),
+      runIds: streakWindow.map((run) => run.id),
       terminalRunCount: runs.filter((run) => isTerminalRunStatus(run.status)).length,
       activeRunCount: runs.filter((run) => isActiveRunStatus(run.status)).length,
       runCountLastHour: runs.filter((run) => new Date(run.effectiveAt) >= oneHourAgo).length,

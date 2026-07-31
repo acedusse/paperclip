@@ -18,7 +18,6 @@ import { clampIssueRequestDepth } from "@paperclipai/shared";
 import {
   agents,
   companies,
-  costEvents,
   heartbeatRuns,
   issueComments,
   issues,
@@ -33,6 +32,7 @@ import {
   withRecoveryModelProfileHint,
 } from "./recovery/model-profile-hint.js";
 import { RECOVERY_ORIGIN_KINDS } from "./recovery/origins.js";
+import { getIssueRunSignals } from "./run-signals/index.js";
 
 export const PRODUCTIVITY_REVIEW_ORIGIN_KIND = RECOVERY_ORIGIN_KINDS.issueProductivityReview;
 export const DEFAULT_PRODUCTIVITY_REVIEW_NO_COMMENT_STREAK_RUNS = 10;
@@ -45,10 +45,7 @@ export const DEFAULT_PRODUCTIVITY_REVIEW_MAX_REFRESH_COMMENTS = 3;
 export const DEFAULT_PRODUCTIVITY_REVIEW_CREATION_WINDOW_MS = 24 * 60 * 60 * 1000;
 export const DEFAULT_PRODUCTIVITY_REVIEW_MAX_CREATIONS_PER_WINDOW = 3;
 
-const TERMINAL_RUN_STATUSES = ["succeeded", "failed", "cancelled", "timed_out"] as const;
-const ACTIVE_RUN_STATUSES = ["queued", "running", "scheduled_retry"] as const;
 const MAX_CANDIDATE_ISSUES = 250;
-const MAX_RUNS_FOR_STREAK = 100;
 const MAX_PARENT_WALK_DEPTH = 25;
 export const PRODUCTIVITY_REVIEW_REFRESH_COMMENT_PREFIX = "Productivity review evidence refreshed.";
 
@@ -108,14 +105,6 @@ type EnqueueWakeup = (
 
 function productivityReviewFingerprint(sourceIssueId: string) {
   return `productivity-review:${sourceIssueId}`;
-}
-
-function issueRunScopeSql(issueId: string) {
-  return sql`(
-    ${heartbeatRuns.contextSnapshot}->>'issueId' = ${issueId}
-    or ${heartbeatRuns.contextSnapshot}->>'taskId' = ${issueId}
-    or ${heartbeatRuns.contextSnapshot}->>'taskKey' = ${issueId}
-  )`;
 }
 
 function msToHuman(ms: number | null) {
@@ -360,130 +349,65 @@ export function productivityReviewService(db: Db, deps?: { enqueueWakeup?: Enque
     return comment;
   }
 
-  async function countIssueRunsSince(companyId: string, agentId: string, issueId: string, since: Date) {
-    return db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(heartbeatRuns)
-      .where(
-        and(
-          eq(heartbeatRuns.companyId, companyId),
-          eq(heartbeatRuns.agentId, agentId),
-          issueRunScopeSql(issueId),
-          sql`coalesce(${heartbeatRuns.startedAt}, ${heartbeatRuns.createdAt}) >= ${since.toISOString()}::timestamptz`,
-        ),
-      )
-      .then((rows) => rows[0]?.count ?? 0);
-  }
-
-  async function countIssueCommentsSince(companyId: string, issueId: string, agentId: string, since?: Date) {
-    return db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(issueComments)
-      .innerJoin(heartbeatRuns, eq(heartbeatRuns.id, issueComments.createdByRunId))
-      .where(
-        and(
-          eq(issueComments.companyId, companyId),
-          eq(issueComments.issueId, issueId),
-          eq(issueComments.authorAgentId, agentId),
-          eq(heartbeatRuns.companyId, companyId),
-          eq(heartbeatRuns.agentId, agentId),
-          issueRunScopeSql(issueId),
-          since ? sql`${issueComments.createdAt} >= ${since.toISOString()}::timestamptz` : undefined,
-        ),
-      )
-      .then((rows) => rows[0]?.count ?? 0);
-  }
-
   async function collectEvidence(
     sourceIssue: IssueRow,
     sourceAgent: AgentRow,
     thresholds: ProductivityReviewThresholds,
     now: Date,
   ): Promise<ProductivityReviewEvidence | null> {
-    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
-    const sixHoursAgo = new Date(now.getTime() - 6 * 60 * 60 * 1000);
-
-    const latestRuns = await db
-      .select()
-      .from(heartbeatRuns)
-      .where(
-        and(
-          eq(heartbeatRuns.companyId, sourceIssue.companyId),
-          eq(heartbeatRuns.agentId, sourceAgent.id),
-          issueRunScopeSql(sourceIssue.id),
-        ),
-      )
-      .orderBy(desc(heartbeatRuns.createdAt), desc(heartbeatRuns.id))
-      .limit(MAX_RUNS_FOR_STREAK);
-
-    const runIds = latestRuns.map((run) => run.id);
-    const commentRunIds = new Set<string>();
-    if (runIds.length > 0) {
-      const commentRows = await db
-        .select({ createdByRunId: issueComments.createdByRunId })
-        .from(issueComments)
-        .where(
-          and(
-            eq(issueComments.companyId, sourceIssue.companyId),
-            eq(issueComments.issueId, sourceIssue.id),
-            inArray(issueComments.createdByRunId, runIds),
-          ),
-        );
-      for (const row of commentRows) {
-        if (row.createdByRunId) commentRunIds.add(row.createdByRunId);
-      }
-    }
-
-    const terminalRuns = latestRuns.filter((run) =>
-      TERMINAL_RUN_STATUSES.includes(run.status as (typeof TERMINAL_RUN_STATUSES)[number]),
+    // Combo-03 Phase 1: run/comment/cost aggregation lives in the shared
+    // run-signals read model so the other Health Sentinel detectors read the
+    // same numbers. Thresholds and escalation stay here.
+    const signalsByIssue = await getIssueRunSignals(
+      db,
+      sourceIssue.companyId,
+      [{ issueId: sourceIssue.id, agentId: sourceAgent.id }],
+      now,
     );
-    let noCommentStreak = 0;
-    for (const run of terminalRuns) {
-      if (commentRunIds.has(run.id)) break;
-      noCommentStreak += 1;
-    }
+    const signals = signalsByIssue.get(sourceIssue.id);
 
-    const [
-      runCountLastHour,
-      runCountLastSixHours,
-      assigneeRunCommentCount,
-      assigneeRunCommentCountLastHour,
-      assigneeRunCommentCountLastSixHours,
-      latestComments,
-      costRow,
-    ] = await Promise.all([
-      countIssueRunsSince(sourceIssue.companyId, sourceAgent.id, sourceIssue.id, oneHourAgo),
-      countIssueRunsSince(sourceIssue.companyId, sourceAgent.id, sourceIssue.id, sixHoursAgo),
-      countIssueCommentsSince(sourceIssue.companyId, sourceIssue.id, sourceAgent.id),
-      countIssueCommentsSince(sourceIssue.companyId, sourceIssue.id, sourceAgent.id, oneHourAgo),
-      countIssueCommentsSince(sourceIssue.companyId, sourceIssue.id, sourceAgent.id, sixHoursAgo),
-      db
-        .select({ comment: issueComments })
-        .from(issueComments)
-        .innerJoin(heartbeatRuns, eq(heartbeatRuns.id, issueComments.createdByRunId))
-        .where(
-          and(
-            eq(issueComments.companyId, sourceIssue.companyId),
-            eq(issueComments.issueId, sourceIssue.id),
-            eq(issueComments.authorAgentId, sourceAgent.id),
-            eq(heartbeatRuns.companyId, sourceIssue.companyId),
-            eq(heartbeatRuns.agentId, sourceAgent.id),
-            issueRunScopeSql(sourceIssue.id),
-          ),
-        )
-        .orderBy(desc(issueComments.createdAt), desc(issueComments.id))
-        .limit(5)
-        .then((rows) => rows.map((row) => row.comment)),
-      db
-        .select({ costCents: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::int` })
-        .from(costEvents)
-        .where(and(eq(costEvents.companyId, sourceIssue.companyId), eq(costEvents.issueId, sourceIssue.id)))
-        .then((rows) => rows[0] ?? { costCents: 0 }),
+    const noCommentStreak = signals?.noCommentStreak ?? 0;
+    const runCountLastHour = signals?.runCountLastHour ?? 0;
+    const runCountLastSixHours = signals?.runCountLastSixHours ?? 0;
+    const assigneeRunCommentCount = signals?.commentCount ?? 0;
+    const assigneeRunCommentCountLastHour = signals?.commentCountLastHour ?? 0;
+    const assigneeRunCommentCountLastSixHours = signals?.commentCountLastSixHours ?? 0;
+    const activeRunCount = signals?.activeRunCount ?? 0;
+    const costRow = { costCents: signals?.costCents ?? 0 };
+    const runIds = signals?.runIds ?? [];
+
+    // Still fetched here: these feed evidence *formatting* (run links, comment
+    // excerpts), which is presentation rather than signal.
+    const [latestRuns, latestComments] = await Promise.all([
+      runIds.length
+        ? db
+            .select()
+            .from(heartbeatRuns)
+            .where(
+              and(
+                eq(heartbeatRuns.companyId, sourceIssue.companyId),
+                inArray(heartbeatRuns.id, runIds),
+              ),
+            )
+            .orderBy(desc(heartbeatRuns.createdAt), desc(heartbeatRuns.id))
+        : Promise.resolve([] as HeartbeatRunRow[]),
+      runIds.length
+        ? db
+            .select({ comment: issueComments })
+            .from(issueComments)
+            .where(
+              and(
+                eq(issueComments.companyId, sourceIssue.companyId),
+                eq(issueComments.issueId, sourceIssue.id),
+                eq(issueComments.authorAgentId, sourceAgent.id),
+                inArray(issueComments.createdByRunId, runIds),
+              ),
+            )
+            .orderBy(desc(issueComments.createdAt), desc(issueComments.id))
+            .limit(5)
+            .then((rows) => rows.map((row) => row.comment))
+        : Promise.resolve([] as Array<typeof issueComments.$inferSelect>),
     ]);
-
-    const activeRunCount = latestRuns.filter((run) =>
-      ACTIVE_RUN_STATUSES.includes(run.status as (typeof ACTIVE_RUN_STATUSES)[number]),
-    ).length;
     const activeStartedAt = sourceIssue.startedAt ?? sourceIssue.executionLockedAt ?? null;
     const elapsedMs = sourceIssue.status === "in_progress" && activeStartedAt
       ? Math.max(0, now.getTime() - activeStartedAt.getTime())
@@ -515,7 +439,7 @@ export function productivityReviewService(db: Db, deps?: { enqueueWakeup?: Enque
       sourceAgent,
       noCommentStreak,
       totalRunCount: latestRuns.length,
-      terminalRunCount: terminalRuns.length,
+      terminalRunCount: signals?.terminalRunCount ?? 0,
       activeRunCount,
       runCountLastHour,
       runCountLastSixHours,
