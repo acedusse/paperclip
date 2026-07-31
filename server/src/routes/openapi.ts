@@ -89,6 +89,9 @@ import {
   outOfOfficeSchema,
   // Review cockpit — bounded agent approvers
   createBoundedAgentApproverSchema,
+  // Review cockpit — stakeholder transparency shares
+  createStakeholderShareSchema,
+  updateStakeholderShareSchema,
   // Cost / budget
   createCostEventSchema,
   createFinanceEventSchema,
@@ -555,6 +558,9 @@ const PUBLIC_OPERATIONS = new Set([
   "GET /api/invites/{token}/test-resolution",
   "POST /api/invites/{token}/accept",
   "POST /api/join-requests/{requestId}/claim-api-key",
+  // Phase 4c: the stakeholder page is deliberately unauthenticated — the token
+  // is the credential. It is read-only and renders only curated fields.
+  "GET /api/stakeholder/{token}",
 ]);
 
 const BOARD_ONLY_PREFIXES = [
@@ -636,6 +642,11 @@ const BOARD_ONLY_OPERATIONS = new Set([
   "GET /api/companies/{companyId}/bounded-agent-approvers",
   "POST /api/companies/{companyId}/bounded-agent-approvers",
   "POST /api/bounded-agent-approvers/{id}/revoke",
+  "GET /api/companies/{companyId}/stakeholder-shares",
+  "POST /api/companies/{companyId}/stakeholder-shares",
+  "PATCH /api/stakeholder-shares/{id}",
+  "POST /api/stakeholder-shares/{id}/revoke",
+  "POST /api/stakeholder-shares/{id}/rotate",
 ]);
 
 const INSTANCE_ADMIN_OPERATIONS = new Set([
@@ -2598,6 +2609,68 @@ registry.registerPath({
   summary: "Revoke a bounded manager-agent approver grant",
   request: { params: z.object({ id: z.string() }) },
   responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+// ─── Review cockpit — stakeholder transparency shares ─────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/stakeholder-shares",
+  tags: ["approvals"],
+  summary: "List stakeholder transparency shares in a company",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/stakeholder-shares",
+  tags: ["approvals"],
+  summary: "Create a stakeholder transparency share",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(createStakeholderShareSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "patch",
+  path: "/api/stakeholder-shares/{id}",
+  tags: ["approvals"],
+  summary: "Update a stakeholder share's label, expiry or exposure toggles",
+  request: {
+    params: z.object({ id: z.string() }),
+    body: jsonBody(updateStakeholderShareSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/stakeholder-shares/{id}/revoke",
+  tags: ["approvals"],
+  summary: "Revoke a stakeholder share immediately",
+  request: { params: z.object({ id: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/stakeholder-shares/{id}/rotate",
+  tags: ["approvals"],
+  summary: "Rotate a stakeholder share token, invalidating the previous one",
+  request: { params: z.object({ id: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/stakeholder/{token}",
+  tags: ["approvals"],
+  summary: "Render a public stakeholder transparency page by share token",
+  request: { params: z.object({ token: z.string() }) },
+  responses: { 200: r.ok(), 404: r.notFound },
 });
 
 // ─── Workspace path claims ────────────────────────────────────────────────────
