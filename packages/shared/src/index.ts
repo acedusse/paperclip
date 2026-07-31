@@ -819,6 +819,11 @@ export type {
   PreflightFinding,
   PreflightLevel,
   PreflightReport,
+  BlueprintManifest,
+  BlueprintResolution,
+  BlueprintValidationIssue,
+  BlueprintVariable,
+  BlueprintVariableType,
 } from "./types/index.js";
 export { COMPANY_SEARCH_SCOPES } from "./types/index.js";
 export {

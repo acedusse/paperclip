@@ -588,4 +588,11 @@ export type {
   PreflightLevel,
   PreflightReport,
 } from "./company-preflight.js";
+export type {
+  BlueprintManifest,
+  BlueprintResolution,
+  BlueprintValidationIssue,
+  BlueprintVariable,
+  BlueprintVariableType,
+} from "./blueprint.js";
 // [END: module]
