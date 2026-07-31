@@ -73,9 +73,8 @@ scheduling. Detectors own their thresholds and escalation; this layer only answe
 
 ```
 run-signals/
-  scope.ts          — owns the run↔issue join predicate. One definition.
-  issue-signals.ts  — getIssueRunSignals(db, companyId, issueIds[])  → Map<issueId, IssueRunSignals>
-  agent-signals.ts  — getAgentRunSignals(db, companyId, agentIds[], window) → Map<agentId, AgentRunSignals>
+  scope.ts          — owns the run↔issue join predicate + run status sets. One definition.
+  issue-signals.ts  — getIssueRunSignals(db, companyId, scopes[], now) → Map<issueId, IssueRunSignals>
   index.ts          — runSignalsService(db) facade
 ```
 
@@ -90,34 +89,38 @@ not one query per id.
 
 Per-issue progress fingerprint — what 003 consumes today and what 010/026/059 need.
 
-| Field | Source |
-|---|---|
-| `totalRunCount`, `terminalRunCount`, `activeRunCount` | `heartbeat_runs` grouped by status |
-| `runCountLastHour`, `runCountLastSixHours` | windowed counts |
-| `commentCount`, `commentCountLastHour`, `commentCountLastSixHours` | `issue_comments` |
-| `noCommentStreak` | runs since the most recent comment |
-| `firstRunAt`, `lastRunAt`, `elapsedMs` | min/max `startedAt` |
-| `costCents`, `inputTokens`, `cachedInputTokens`, `outputTokens` | `cost_events` |
-| `retryRunCount` | runs with non-null `retryOfRunId` |
-| `lastUsefulActionAt`, `nextAction` | latest run |
+Scope is a **`{ issueId, agentId }` pair**, not an issue alone. This is not a simplification that can
+be dropped: `productivity-review.ts` counts runs and comments *for this issue by its assignee*, and
+widening that to all agents would change which issues trip the detector. The batch API therefore
+takes an array of pairs.
 
-### `AgentRunSignals`
+| Field | Source | Semantics to preserve exactly |
+|---|---|---|
+| `latestRuns` | `heartbeat_runs` matching the scope predicate, `createdAt desc`, **capped at 100** | The cap (`MAX_RUNS_FOR_STREAK`) bounds the streak walk; it is not an incidental limit |
+| `terminalRunCount`, `activeRunCount` | counted over `latestRuns` by status set | terminal = `succeeded\|failed\|cancelled\|timed_out`; active = `queued\|running\|scheduled_retry` |
+| `runCountLastHour`, `runCountLastSixHours` | windowed counts, agent-scoped | window uses `coalesce(startedAt, createdAt)`, **not** `startedAt` alone |
+| `commentCount`, `commentCountLastHour`, `commentCountLastSixHours` | `issue_comments` **inner-joined to `heartbeat_runs`** on `createdByRunId` | counts only comments authored by the scoped agent *from a run attributed to this issue* — not all issue comments |
+| `noCommentStreak` | walk `latestRuns` filtered to terminal, newest-first, stop at the first run that produced a comment | order matters; a naive `count` is wrong |
+| `costCents` | `cost_events` by `issueId` | **not** agent-scoped — cost is per issue |
 
-Per-agent rolling reliability over a caller-supplied window — the substrate 044 needs, computed but
-not yet thresholded. `window` is an explicit `{ since: Date; until?: Date }`; there is no default,
-because a silent default window is exactly the kind of hidden assumption that makes two detectors
-disagree about the same agent.
+`elapsedMs` is deliberately **not** in this model. It derives from `issues.startedAt` /
+`issues.executionLockedAt`, not from runs, so it stays in `productivity-review.ts`. Pulling
+issue-lifecycle fields into a *run*-signal model would blur the boundary the phase exists to draw.
 
-| Field | Source |
-|---|---|
-| `runCount`, `succeededCount`, `failedCount` | `heartbeat_runs` by terminal status |
-| `errorCodeCounts` | grouped `errorCode` |
-| `retriedRunCount`, `processLossRetryTotal` | retry lineage columns |
-| `medianDurationMs`, `p90DurationMs` | `finishedAt - startedAt` over terminal runs |
-| `costCents` | `cost_events` |
+### `AgentRunSignals` — deferred to Phase 2
 
-`succeededCount / runCount` is left to the caller — 044 defines what an error budget is; this layer
-does not.
+An earlier draft of this spec put per-agent reliability aggregates (success/failure counts, retry
+rates, duration percentiles) in Phase 1 as "substrate for 044".
+
+**Dropped, deliberately.** Nothing consumes it until 044 is built in Phase 2, so its interface would
+be a guess — and an unconsumed API is exactly the failure mode this spec rejects in
+[Why not spans](#why-not-spans). The argument against building the detectors on a data source no
+detector can read applies equally to building a read model no detector has asked for.
+
+`getIssueRunSignals` earns its place in Phase 1 because porting `productivity-review.ts` onto it
+proves the interface against a real consumer. Agent signals get the same treatment when 044 exists
+to define them — including what "success" means, which is a policy question this layer should not
+answer unilaterally.
 
 ## The productivity-review refactor
 
