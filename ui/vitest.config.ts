@@ -25,6 +25,12 @@ export default defineConfig({
   test: {
     environment: "node",
     setupFiles: ["./vitest.setup.ts"],
+    // Pin the timezone. Components format dates for display, so an unpinned
+    // TZ makes those assertions pass or fail depending on where the suite
+    // runs — e.g. a midnight-UTC fixture renders as the previous day in any
+    // negative-offset zone. Pinning here fixes the whole class of failure
+    // rather than one fixture at a time.
+    env: { TZ: "UTC" },
   },
 });
 // [END: module]
