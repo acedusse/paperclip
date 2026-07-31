@@ -9,6 +9,46 @@ Source build order: [`.ideas/combinations/README.md`](../../.ideas/combinations/
 
 ---
 
+## [2026-07-31] Completed — Combo 03 Phase 1 (run-signal read model)
+
+**Outcome:** Shipped `server/src/services/run-signals/` — `scope.ts` (the run↔issue predicate and
+run status sets), `issue-signals.ts` (batched per-issue aggregation), `index.ts` (facade).
+`productivity-review.ts` now consumes it; its private `issueRunScopeSql`, `countIssueRunsSince` and
+`countIssueCommentsSince` are gone.
+
+**Branch:** `feat/combo03-phase1-run-signals` (off `master` @ `58eacd1`)
+
+**Exit criteria met:** yes.
+
+- Shared read model consumed by a real detector — yes.
+- **The 11 existing `productivity-review-service.test.ts` tests pass unmodified** (verified via
+  `git status` showing the test file untouched). This is the behaviour-preservation proof.
+- 17 new tests on embedded-postgres (4 scope + 13 aggregation), covering all three `contextSnapshot`
+  key variants, window boundaries, the queued-run `coalesce(startedAt, createdAt)` case, streak
+  ordering, batch `Map` shape, per-issue cost, cross-agent isolation, cross-company isolation, and
+  empty-input short-circuit.
+- No new tables, no migration, no new runtime dependency, no route, no UI — as designed.
+
+**Two corrections made during execution** (both now in the spec):
+
+1. The scope is an **(issue, agent) pair**, not an issue. `productivity-review` counts runs and
+   comments for an issue *by its assignee*; widening that would change which issues trip the
+   detector. The batch bucketing has to re-check the pair, because the batched `or` predicate can
+   match another scope's agent — caught by a test added beyond the plan.
+2. Window and comment counts are computed over the **uncapped** run set; only the streak walk and
+   the exposed `runIds` are capped at `MAX_RUNS_FOR_STREAK`. The original counted uncapped, and
+   capping the counts would under-report an issue with >100 runs — precisely the thrashing case
+   these signals exist to catch.
+
+**Also dropped from the phase:** `AgentRunSignals`. Nothing consumes it until 044 in Phase 2, so its
+interface would have been a guess — the same objection this phase raises against building detectors
+on OTel spans. It lands with 044, which defines what "success" means.
+
+**Next:** Phase 2 — deterministic detectors (010 global SCC/deadlock, 026 orphan walk, 059
+decomposition checks, 044 SLOs) + the 006 heatmap overlay on `org-chart-svg.ts`.
+
+---
+
 ## [2026-07-31] Started — Combo 03 Phase 1 (run-signal read model)
 
 **Context:** Operator ordered the work "combo #3 then combo #10". Pre-flight run against `master`.
@@ -106,7 +146,7 @@ confirms it is not already done on the target branch.
 |-------|-----------|------------------|----------------------|-------|
 | **01** Runtime Control Plane | 9 | 1 | **Complete** | All phases 1–4 (incl. 4A cadence/WIP + 4B workspace claims). See `docs/superpowers/specs/2026-07-13-claim-aware-run-selection-design.md` — "Combo 01 is functionally complete." Code: `effective-cap-resolver.ts`, `predictive-breaker.ts`, `run-execution-state.ts`, `run-caps.ts`, `wip-flow.ts`, `workspace-path-claims.ts`, etc. |
 | **05** Review Cockpit | 9 | 2 | **Complete** | All phases 1–4c merged to `master` @ `58eacd1` (2026-07-31): PR #28 landed 4a+4b, PR #30 landed 4c (stakeholder transparency page / idea 033). One deferred deliverable: access-logging of stakeholder page views to the audit path. |
-| **03** Health Sentinel | 9 | 3 | In progress — Phase 1 | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 is fully built (`productivity-review.ts`), 010/059 have substrate. Phase 1 redefined away from OTel spans — see log entry. |
+| **03** Health Sentinel | 9 | 3 | **Phase 1 complete** | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 is fully built (`productivity-review.ts`), 010/059 have substrate. Phase 1 redefined away from OTel spans and shipped as `server/src/services/run-signals/` — see log entry. Phases 2–3 pending. |
 | **10** Day-One Adoption | 8 | 4 | Queued after Combo 03 | Pre-flight run 2026-07-31; **not uniformly greenfield** (see log entry). Phase 1 (Dry-Run Estimator static checks) designed, spec not yet written. |
 | **04** CFO Suite | 8 | 5 | Partial / scattered | Ideas 013/019/030 have some substrate (`costs.ts`, budgets) but combo not built as unified feature. |
 | **02** Model Economy | 8 | 5 | Partial | Idea 008 (local LLM) largely config; combo fabric not unified. |
