@@ -246,7 +246,27 @@ function selectSerializedSuites(routeTests, shardIndex, shardCount) {
   return routeTests.filter((_, index) => index % shardCount === shardIndex);
 }
 
+// Populated instead of spawning when --dry-run is set, so the planned vitest argv is
+// inspectable. The file *selection* was never the bug — `generalServerTestFiles` was always
+// correct; what broke was the argv built from it. A dry run that only reports the selection
+// cannot see that class of defect at all.
+const plannedInvocations = [];
+let dryRunRequested = false;
+
+// Progress chatter must not land on stdout during a dry run: the JSON report is the only
+// thing there, so consumers can parse it.
+function logProgress(message) {
+  if (dryRunRequested) {
+    return;
+  }
+  console.log(message);
+}
+
 function runVitest(args, label) {
+  if (dryRunRequested) {
+    plannedInvocations.push({ label, args });
+    return;
+  }
   console.log(`\n[test:run] ${label}`);
   invocationIndex += 1;
   const tempRootParent = process.platform === "win32" ? os.tmpdir() : "/tmp";
@@ -293,7 +313,7 @@ function runGeneralGroup(routeTests, groupName, shardIndex = null, shardCount = 
       const shardFiles = generalServerTestFiles.filter(
         (_, index) => index % shardCount === shardIndex,
       );
-      console.log(
+      logProgress(
         `\n[test:run] general-server shard ${shardIndex + 1}/${shardCount} running ${shardFiles.length} of ${generalServerTestFiles.length} suites`,
       );
       if (shardFiles.length === 0) {
@@ -352,7 +372,7 @@ function runGeneralGroup(routeTests, groupName, shardIndex = null, shardCount = 
 
 function runSerializedSuites(routeTests, shardIndex, shardCount) {
   const shardTests = selectSerializedSuites(routeTests, shardIndex, shardCount);
-  console.log(
+  logProgress(
     `\n[test:run] serialized shard ${shardIndex + 1}/${shardCount} running ${shardTests.length} of ${routeTests.length} suites`,
   );
 
@@ -390,6 +410,22 @@ const generalServerTestFiles = walk(serverSrcDir)
   .sort((a, b) => a.localeCompare(b));
 
 const options = parseCliOptions(process.argv.slice(2));
+dryRunRequested = options.dryRun;
+
+// Dispatch first, even for a dry run: runVitest records the planned argv instead of
+// spawning, so what gets reported is produced by the code path that would really run.
+if (options.mode === generalModeName || options.mode === allModeName) {
+  if (options.group) {
+    runGeneralGroup(routeTests, options.group, options.shardIndex, options.shardCount);
+  } else {
+    runGeneralSuites(routeTests);
+  }
+}
+
+if (options.mode === serializedModeName || options.mode === allModeName) {
+  runSerializedSuites(routeTests, options.shardIndex ?? 0, options.shardCount ?? 1);
+}
+
 if (options.dryRun) {
   const serializedSuites =
     options.mode === serializedModeName
@@ -406,30 +442,22 @@ if (options.dryRun) {
         serializedSuiteCount: routeTests.length,
         selectedSerializedSuites: serializedSuites.map((routeTest) => routeTest.repoPath),
         generalServerSuiteCount: generalServerTestFiles.length,
+        // Reported for the unsharded run too, not just shards. The unsharded path is the
+        // one release.yml and a local `pnpm test` take, and it was the one that silently
+        // collected every server suite; leaving it unreportable is what kept it untested.
         selectedGeneralServerSuites:
-          options.mode === generalModeName &&
-          options.group === generalServerGroupName &&
-          options.shardCount !== null
-            ? generalServerTestFiles.filter(
-                (_, index) => index % options.shardCount === options.shardIndex,
-              )
+          options.mode === generalModeName && options.group === generalServerGroupName
+            ? options.shardCount !== null
+              ? generalServerTestFiles.filter(
+                  (_, index) => index % options.shardCount === options.shardIndex,
+                )
+              : generalServerTestFiles
             : null,
+        plannedInvocations,
       },
       null,
       2,
     ),
   );
   process.exit(0);
-}
-
-if (options.mode === generalModeName || options.mode === allModeName) {
-  if (options.group) {
-    runGeneralGroup(routeTests, options.group, options.shardIndex, options.shardCount);
-  } else {
-    runGeneralSuites(routeTests);
-  }
-}
-
-if (options.mode === serializedModeName || options.mode === allModeName) {
-  runSerializedSuites(routeTests, options.shardIndex ?? 0, options.shardCount ?? 1);
 }
