@@ -61,6 +61,11 @@ describeEmbeddedPostgres("boundedAgentApproverService", () => {
       approvalTypes: ["work_product"],
       maxBand: "low",
       maxSpendCents: 1000,
+      // Pin validFrom rather than letting createGrant default it to its own `new Date()`.
+      // The active filter is `validFrom <= activeAt`, and `now` is captured before this
+      // call, so the default only satisfies it when the insert lands in the same
+      // millisecond — which holds on a warm run and stops holding under load.
+      validFrom: now,
       validUntil: new Date(now.getTime() + 86_400_000),
     });
     expect(grant.delegateAgentId).toBe("mgr-agent");

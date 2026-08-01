@@ -57,6 +57,37 @@ test("a route/authz suite never leaks into the general-server shards", () => {
   }
 });
 
+test("the unsharded general-server group passes its suites to vitest positionally", () => {
+  // Asserts the planned argv, not the file selection. The selection was never wrong —
+  // `generalServerTestFiles` has always been correct — so a selection-only assertion cannot
+  // see this bug. What broke was the argv: the unsharded branch excluded the serialized
+  // suites with `--exclude`, which vitest ignores when invoked from the repo root with
+  // `--project`, so the group collected all 405 server suites instead of 295 and every
+  // serialized suite ran twice. PR CI always shards this group, so only release.yml and a
+  // local `pnpm test` took the broken path.
+  const run = dryRunJson(["--mode", "general", "--group", "general-server"]);
+
+  assert.equal(run.plannedInvocations.length, 1, "expected exactly one vitest invocation");
+  const [{ args }] = run.plannedInvocations;
+
+  assert.ok(
+    !args.includes("--exclude"),
+    "must not rely on --exclude, which vitest ignores from the repo root with --project",
+  );
+
+  const positional = args.filter((arg) => arg.endsWith(".test.ts"));
+  assert.deepEqual(
+    positional,
+    run.selectedGeneralServerSuites,
+    "the argv must carry exactly the suites this group owns",
+  );
+
+  const serialized = new Set(run.selectedSerializedSuites);
+  for (const file of positional) {
+    assert.ok(!serialized.has(file), `serialized suite must not run here too: ${file}`);
+  }
+});
+
 test("shard flags are rejected for the parallel workspace groups", () => {
   const result = dryRun(["--mode", "general", "--group", "general-workspaces-a", "--shard-index", "0", "--shard-count", "3"]);
   assert.notEqual(result.status, 0, "workspace groups must not accept shard flags");
