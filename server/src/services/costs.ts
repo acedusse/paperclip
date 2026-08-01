@@ -27,8 +27,62 @@ export interface CostDateRange {
 const METERED_BILLING_TYPE = "metered_api";
 const SUBSCRIPTION_BILLING_TYPES = ["subscription_included", "subscription_overage"] as const;
 
-function sumAsNumber(column: typeof costEvents.costCents | typeof costEvents.inputTokens | typeof costEvents.cachedInputTokens | typeof costEvents.outputTokens) {
+/**
+ * Local inference: the operator's own hardware, $0 marginal cost.
+ *
+ * Deliberately NOT folded into SUBSCRIPTION_BILLING_TYPES. Both are token-denominated —
+ * dollars say nothing useful about either — but they meter different resources. A
+ * subscription window is scarce and capped, and operators track consumption against that
+ * cap (see quota-windows.ts); local throughput is uncapped and costs electricity, not quota.
+ * Merging them would overstate how much of the subscription window has been spent, which is
+ * the same signal the provider-fallback path reads to decide when to shed load.
+ */
+const LOCAL_BILLING_TYPE = "local";
+
+type TokenColumn =
+  | typeof costEvents.inputTokens
+  | typeof costEvents.cachedInputTokens
+  | typeof costEvents.outputTokens;
+
+function sumAsNumber(column: typeof costEvents.costCents | TokenColumn) {
   return sql<number>`coalesce(sum(${column}), 0)::double precision`;
+}
+
+function billingTypeList(types: readonly string[]) {
+  return sql.join(types.map((value) => sql`${value}`), sql`, `);
+}
+
+/**
+ * Tokens for one billing tier.
+ *
+ * Where cost is zero or subscription-denominated, tokens ARE the cost — a $0 total is not
+ * the same as no consumption, and a tier that reports only dollars disappears from every
+ * breakdown. These per-tier sums are what make that consumption legible.
+ */
+function sumTokensForBillingTypes(column: TokenColumn, types: readonly string[]) {
+  return sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${billingTypeList(types)}) then ${column} else 0 end), 0)::double precision`;
+}
+
+function countRunsForBillingTypes(types: readonly string[]) {
+  return sql<number>`count(distinct case when ${costEvents.billingType} in (${billingTypeList(types)}) then ${costEvents.heartbeatRunId} end)::int`;
+}
+
+/** The per-tier columns every cost rollup exposes, so the three queries cannot drift apart. */
+function billingTierBreakdown() {
+  return {
+    apiRunCount: countRunsForBillingTypes([METERED_BILLING_TYPE]),
+    subscriptionRunCount: countRunsForBillingTypes(SUBSCRIPTION_BILLING_TYPES),
+    subscriptionCachedInputTokens: sumTokensForBillingTypes(
+      costEvents.cachedInputTokens,
+      SUBSCRIPTION_BILLING_TYPES,
+    ),
+    subscriptionInputTokens: sumTokensForBillingTypes(costEvents.inputTokens, SUBSCRIPTION_BILLING_TYPES),
+    subscriptionOutputTokens: sumTokensForBillingTypes(costEvents.outputTokens, SUBSCRIPTION_BILLING_TYPES),
+    localRunCount: countRunsForBillingTypes([LOCAL_BILLING_TYPE]),
+    localCachedInputTokens: sumTokensForBillingTypes(costEvents.cachedInputTokens, [LOCAL_BILLING_TYPE]),
+    localInputTokens: sumTokensForBillingTypes(costEvents.inputTokens, [LOCAL_BILLING_TYPE]),
+    localOutputTokens: sumTokensForBillingTypes(costEvents.outputTokens, [LOCAL_BILLING_TYPE]),
+  };
 }
 
 function currentUtcMonthWindow(now = new Date()) {
@@ -316,16 +370,7 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}, costHo
           inputTokens: sumAsNumber(costEvents.inputTokens),
           cachedInputTokens: sumAsNumber(costEvents.cachedInputTokens),
           outputTokens: sumAsNumber(costEvents.outputTokens),
-          apiRunCount:
-            sql<number>`count(distinct case when ${costEvents.billingType} = ${METERED_BILLING_TYPE} then ${costEvents.heartbeatRunId} end)::int`,
-          subscriptionRunCount:
-            sql<number>`count(distinct case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.heartbeatRunId} end)::int`,
-          subscriptionCachedInputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.cachedInputTokens} else 0 end), 0)::double precision`,
-          subscriptionInputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.inputTokens} else 0 end), 0)::double precision`,
-          subscriptionOutputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.outputTokens} else 0 end), 0)::double precision`,
+          ...billingTierBreakdown(),
         })
         .from(costEvents)
         .leftJoin(agents, eq(costEvents.agentId, agents.id))
@@ -349,16 +394,7 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}, costHo
           inputTokens: sumAsNumber(costEvents.inputTokens),
           cachedInputTokens: sumAsNumber(costEvents.cachedInputTokens),
           outputTokens: sumAsNumber(costEvents.outputTokens),
-          apiRunCount:
-            sql<number>`count(distinct case when ${costEvents.billingType} = ${METERED_BILLING_TYPE} then ${costEvents.heartbeatRunId} end)::int`,
-          subscriptionRunCount:
-            sql<number>`count(distinct case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.heartbeatRunId} end)::int`,
-          subscriptionCachedInputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.cachedInputTokens} else 0 end), 0)::double precision`,
-          subscriptionInputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.inputTokens} else 0 end), 0)::double precision`,
-          subscriptionOutputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.outputTokens} else 0 end), 0)::double precision`,
+          ...billingTierBreakdown(),
         })
         .from(costEvents)
         .where(and(...conditions))
@@ -378,16 +414,7 @@ export function costService(db: Db, budgetHooks: BudgetServiceHooks = {}, costHo
           inputTokens: sumAsNumber(costEvents.inputTokens),
           cachedInputTokens: sumAsNumber(costEvents.cachedInputTokens),
           outputTokens: sumAsNumber(costEvents.outputTokens),
-          apiRunCount:
-            sql<number>`count(distinct case when ${costEvents.billingType} = ${METERED_BILLING_TYPE} then ${costEvents.heartbeatRunId} end)::int`,
-          subscriptionRunCount:
-            sql<number>`count(distinct case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.heartbeatRunId} end)::int`,
-          subscriptionCachedInputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.cachedInputTokens} else 0 end), 0)::double precision`,
-          subscriptionInputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.inputTokens} else 0 end), 0)::double precision`,
-          subscriptionOutputTokens:
-            sql<number>`coalesce(sum(case when ${costEvents.billingType} in (${sql.join(SUBSCRIPTION_BILLING_TYPES.map((value) => sql`${value}`), sql`, `)}) then ${costEvents.outputTokens} else 0 end), 0)::double precision`,
+          ...billingTierBreakdown(),
           providerCount: sql<number>`count(distinct ${costEvents.provider})::int`,
           modelCount: sql<number>`count(distinct ${costEvents.model})::int`,
         })

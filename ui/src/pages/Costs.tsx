@@ -763,13 +763,22 @@ export function Costs() {
                                 <div className="text-xs text-muted-foreground">
                                   in {formatTokens(row.inputTokens + row.cachedInputTokens)} · out {formatTokens(row.outputTokens)}
                                 </div>
-                                {(row.apiRunCount > 0 || row.subscriptionRunCount > 0) ? (
+                                {(row.apiRunCount > 0 || row.subscriptionRunCount > 0 || row.localRunCount > 0) ? (
                                   <div className="text-xs text-muted-foreground">
                                     {row.apiRunCount > 0 ? `${row.apiRunCount} api` : "0 api"}
                                     {" · "}
                                     {row.subscriptionRunCount > 0
                                       ? `${row.subscriptionRunCount} subscription`
                                       : "0 subscription"}
+                                    {row.localRunCount > 0 ? ` · ${row.localRunCount} local` : null}
+                                  </div>
+                                ) : null}
+                                {row.localRunCount > 0 ? (
+                                  // $0 by definition, so tokens are the only real measure here.
+                                  <div className="text-xs text-muted-foreground">
+                                    local in {formatTokens(row.localInputTokens + row.localCachedInputTokens)}
+                                    {" · out "}
+                                    {formatTokens(row.localOutputTokens)}
                                   </div>
                                 ) : null}
                               </div>
