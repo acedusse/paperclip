@@ -116,8 +116,21 @@ async function createEmbeddedPostgresTestInstance(tempDirPrefix: string) {
   return { dataDir, port, instance };
 }
 
-function cleanupEmbeddedPostgresTestDirs(dataDir: string) {
-  fs.rmSync(dataDir, { recursive: true, force: true });
+/**
+ * Deletes a temporary PGDATA tree.
+ *
+ * Async on purpose. This runs from test hooks, and a Postgres data directory is
+ * thousands of files; the synchronous form blocks the event loop for the whole
+ * worker while it unlinks them. Under a loaded suite that starved sibling work
+ * badly enough to trip vitest's hook timeout, reporting passing tests as failures
+ * in their own teardown.
+ *
+ * Never throws: cleanup runs in `finally` blocks and from `afterAll`, so a failure
+ * to remove a temp dir must not mask the real error or fail an otherwise green test.
+ * The directory is under the OS temp dir either way.
+ */
+async function cleanupEmbeddedPostgresTestDirs(dataDir: string): Promise<void> {
+  await fs.promises.rm(dataDir, { recursive: true, force: true }).catch(() => {});
 }
 
 function formatEmbeddedPostgresError(error: unknown): string {
@@ -146,7 +159,7 @@ async function probeEmbeddedPostgresSupport(): Promise<EmbeddedPostgresTestSuppo
     };
   } finally {
     await instance?.stop().catch(() => {});
-    if (dataDir) cleanupEmbeddedPostgresTestDirs(dataDir);
+    if (dataDir) await cleanupEmbeddedPostgresTestDirs(dataDir);
   }
 }
 
@@ -180,12 +193,12 @@ export async function startEmbeddedPostgresTestDatabase(
       connectionString,
       cleanup: async () => {
         await instance?.stop().catch(() => {});
-        if (dataDir) cleanupEmbeddedPostgresTestDirs(dataDir);
+        if (dataDir) await cleanupEmbeddedPostgresTestDirs(dataDir);
       },
     };
   } catch (error) {
     await instance?.stop().catch(() => {});
-    if (dataDir) cleanupEmbeddedPostgresTestDirs(dataDir);
+    if (dataDir) await cleanupEmbeddedPostgresTestDirs(dataDir);
     throw new Error(
       `Failed to start embedded PostgreSQL test database: ${formatEmbeddedPostgresError(error)}`,
     );
