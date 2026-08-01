@@ -9,6 +9,44 @@ Source build order: [`.ideas/combinations/README.md`](../../.ideas/combinations/
 
 ---
 
+## [2026-08-01] Started — Combo 04 Phase 1 (token budgets 019 + cache-hit metric 037)
+
+**Branch:** `feat/combo04-phase1-token-budgets` (off `master` @ `e8e001c`)
+**Spec:** `specs/2026-08-01-combo04-phase1-token-budgets-design.md`
+**Plan:** to be written next.
+
+Acting on the recommendation in the pre-flight entry below. Entry appended at branch-cut time per
+the process note further down this file.
+
+**Two corrections to that pre-flight entry**, both found while designing:
+
+1. **"No migration" was wrong.** `budget_policies.amount` and `budget_incidents.amount_limit` /
+   `amount_observed` are `integer` — a ceiling of 2 147 483 647. Ample for cents ($21.4 M), reachable
+   for a monthly token budget on a real fleet, and it fails as a Postgres `integer out of range` 500.
+   One additive migration widens all three to `bigint`, converging on `agent_runtime_state`, which
+   already stores token totals as `bigint({ mode: "number" })`.
+2. **"Five sites" undercounts the work**, though it counts the *pins* correctly. Three of the five
+   are `getInvocationBlock` lookups that fetch **one** policy per scope via `rows[0]`; the query
+   *shape*, not just the metric filter, assumes a single policy per scope. They collapse into one
+   `findBlockingPolicy` helper that evaluates all active policies and returns the first breach.
+
+**Also found: a latent UI bug** independent of this phase. `Costs.tsx:949` calls the policy upsert
+without `metric`, which the validator defaults to `billed_cents`. Harmless while one metric exists;
+the moment a second ships, editing a token policy from the Costs tab would upsert a *dollar* policy
+at the same scope rather than editing the one on screen. Fixed as part of this phase.
+
+**Design decisions taken by the operator:** cached tokens count **fully** toward `total_tokens`
+(neutral on caching, honest about what the provider window saw); token budgets get the **same
+enforcement teeth** as dollars on day one (opt-in twice over — no policy exists until created, and
+`hardStopEnabled` is per-policy); widen to bigint; cache-hit rate as a **pure shared function**
+derived client-side from data already on the wire, no new endpoint; and a **dollars|tokens toggle**
+on the existing AgentDetail / ProjectDetail budget controls, since there is currently no UI path to
+create a non-dollar policy at all.
+
+**Exit criteria:** see the spec's Exit criteria section.
+
+---
+
 ## [2026-08-01] Pre-flight — what is next after Combo 02 Phase 2
 
 **Run against `master` @ `60d5fb1`.** No work started; this entry records the survey only.
