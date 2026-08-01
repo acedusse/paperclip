@@ -85,6 +85,16 @@ export type {
   RuntimeProgressReporterOptions,
 } from "./runtime-progress.js";
 export { inferOpenAiCompatibleBiller } from "./billing.js";
+export {
+  LOCAL_BILLER,
+  LOCAL_INFERENCE_ENV_VAR,
+  classifyLocalInference,
+  isLocalInferenceEnv,
+  localBillingOverride,
+  type LocalBillingOverride,
+  type LocalInferenceClassification,
+  type LocalInferenceRuntime,
+} from "./local-inference.js";
 // Keep the root adapter-utils entry browser-safe because the UI imports it.
 // The sandbox callback bridge stays available via its dedicated subpath export.
 export type {

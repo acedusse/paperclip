@@ -16,7 +16,12 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from "@paperclipai/adapter-utils";
+import {
+  inferOpenAiCompatibleBiller,
+  localBillingOverride,
+  type AdapterExecutionContext,
+  type AdapterExecutionResult,
+} from "@paperclipai/adapter-utils";
 import {
   adapterExecutionTargetIsRemote,
   adapterExecutionTargetRemoteCwd,
@@ -332,6 +337,8 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         (entry): entry is [string, string] => typeof entry[1] === "string",
       ),
     );
+    // Local inference is billed as $0; spread over the billing fields of the result below.
+    const localBilling = localBillingOverride(runtimeEnv);
     const timeoutSec = resolveAdapterExecutionTargetTimeoutSec(
       executionTarget,
       asNumber(config.timeoutSec, 0),
@@ -685,11 +692,13 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         sessionId: resolvedSessionId,
         sessionParams: resolvedSessionParams,
         sessionDisplayId: resolvedSessionId,
-        provider: parseModelProvider(modelId),
+        provider: localBilling ? "local" : parseModelProvider(modelId),
         biller: resolveOpenCodeBiller(runtimeEnv, parseModelProvider(modelId)),
         model: modelId,
         billingType: "unknown",
         costUsd: attempt.parsed.costUsd,
+        // $0 for a declared local endpoint, overriding the CLI's own price-table estimate.
+        ...(localBilling ?? {}),
         resultJson: {
           stdout: attempt.proc.stdout,
           stderr: attempt.proc.stderr,

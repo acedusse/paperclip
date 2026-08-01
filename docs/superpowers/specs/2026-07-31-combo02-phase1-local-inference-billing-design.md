@@ -3,7 +3,7 @@
 **Date:** 2026-07-31
 **Combo:** 02 — Mixed-Economy Model & Provider Fabric
 **Phase:** 1 of 4 (idea 008, reinterpreted after pre-flight)
-**Status:** design approved, implementing
+**Status:** implemented — see `BUILD-DECISIONS.md` entry for the outcome record
 
 ---
 
@@ -130,16 +130,21 @@ export function isLocalInferenceEnv(env): boolean;
 export function localBillingOverride(env): { biller: "local"; billingType: "local"; costUsd: 0 } | null;
 ```
 
-`reason` is a short string (`"opt-in + loopback host"`, `"opt-in but host is not local"`,
-`"local host but no opt-in"`, …). It is what makes a wrong verdict diagnosable in a log instead of
-requiring a repro.
+`reason` is a short string — `"opt-in and local host localhost"`, `"PAPERCLIP_LOCAL_INFERENCE is set
+but host api.openai.com is not local"`, `"local host but no opt-in — set PAPERCLIP_LOCAL_INFERENCE=1
+to bill this endpoint as free"`, `"explicit opt-out via PAPERCLIP_LOCAL_INFERENCE"`, `"no
+OpenAI-compatible base URL configured"`. It is what makes a wrong verdict diagnosable from a log
+instead of requiring a repro, and it is asserted non-empty for every branch.
 
 **`billing.ts`** — `inferOpenAiCompatibleBiller` gains a local branch **ahead of** the OpenRouter
 checks, so a stale `OPENROUTER_API_KEY` in the environment cannot mislabel a genuinely local run.
 Because the branch only fires when the opt-in flag is set, all three existing tests are unaffected.
 
-**`types.ts`** — `AdapterBillingType` gains `"local"`. Verified safe: the type has no exhaustive
-`switch` anywhere in the repo; it is only used as an annotation.
+**`types.ts`** — `AdapterBillingType` gains `"local"`. Safe: it is only ever used as an annotation,
+and its one consumer (`normalizeLedgerBillingType`) is a non-exhaustive `switch` with a `default`
+arm, so it cannot fail to compile — which is precisely why the ledger case below must be added by
+hand rather than being caught by the type checker. The *ledger* `BillingType` is different: it has
+an exhaustive `Record<BillingType, string>` in the UI, so that one does fail loudly.
 
 **`packages/shared/src/constants.ts`** — `BILLING_TYPES` gains `"local"`. Required because
 `packages/shared/src/validators/cost.ts:27` validates the ledger field with `z.enum(BILLING_TYPES)`.
@@ -147,11 +152,18 @@ Because the branch only fires when the opt-in flag is set, all three existing te
 **No migration:** `cost_events.billing_type` is `text(...).notNull().default("unknown")`
 (`packages/db/src/schema/cost_events.ts:36`) — no enum, no check constraint.
 
-**`server/src/services/heartbeat.ts`** — two edits at the ledger boundary:
+**`server/src/services/run-billing-ledger.ts`** (new) — the ledger boundary, extracted from the
+10k-line `heartbeat.ts` so it can be tested in isolation. Holds `normalizeLedgerBillingType`,
+`normalizeBilledCostCents` and `resolveLedgerBiller`, previously private module functions.
+
 - `normalizeLedgerBillingType` gains `case "local": return "local"`. Without this the new type hits
   `default:` and degrades to `"unknown"`, silently undoing the whole phase.
 - `normalizeBilledCostCents` gains `if (billingType === "local") return 0;` — an explicit invariant
   so a local run cannot bill money even if an adapter reports a bogus `costUsd`.
+
+**`ui/src/lib/utils.ts`** — three coupled spots the type checker surfaced: the
+`Record<BillingType, string>` label map, the `coerceBillingType` allow-list, and `visibleRunCostUsd`,
+which must return 0 for local runs the same way it does for subscription-included usage.
 
 **The four adapters** — each `resolve*Biller` consults `localBillingOverride(effectiveEnv)` **first**.
 This ordering matters and is not cosmetic: `codex-local:145` returns `"chatgpt"` whenever
@@ -212,8 +224,16 @@ Every failure mode falls back to current behaviour rather than to `$0`:
 regression proof), plus: local opt-in wins over `OPENROUTER_API_KEY`; local opt-in wins over an
 OpenRouter base URL; no opt-in leaves OpenRouter inference exactly as it was.
 
-Adapter-level: assert the override beats the `subscription` path in `codex-local` and `cursor-local`
-— the specific bug the ordering exists to prevent.
+Adapter-level: `local-inference-adapter-coverage.test.ts` asserts that every adapter calling
+`inferOpenAiCompatibleBiller` also calls `localBillingOverride`. This is a source scan rather than a
+behavioural test, chosen deliberately — the regression it guards is an *omission* in a fifth
+OpenAI-compatible adapter added later, which no typecheck and no unit test can detect. It also
+asserts it found sources at all, so a directory move cannot make it vacuously pass.
+
+Behavioural coverage of the four adapters' result composition is bounded by what exists today: the
+adapters have no billing-level execution tests, and adding a harness that spawns and mocks four
+CLIs is out of proportion to this phase. The override itself is fully unit-tested, and the ordering
+requirement it depends on is documented at each call site.
 
 Ledger-level: `"local"` survives `normalizeLedgerBillingType`; `normalizeBilledCostCents` returns 0
 for `billingType: "local"` even when handed a non-zero `costUsd`.

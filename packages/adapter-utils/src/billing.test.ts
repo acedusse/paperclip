@@ -14,6 +14,7 @@
 // [START: module]
 import { describe, expect, it } from "vitest";
 import { inferOpenAiCompatibleBiller } from "./billing.js";
+import { LOCAL_INFERENCE_ENV_VAR } from "./local-inference.js";
 
 describe("inferOpenAiCompatibleBiller", () => {
   it("returns openrouter when OPENROUTER_API_KEY is present", () => {
@@ -35,6 +36,51 @@ describe("inferOpenAiCompatibleBiller", () => {
     expect(
       inferOpenAiCompatibleBiller(
         { OPENAI_BASE_URL: "https://api.openai.com/v1" } as NodeJS.ProcessEnv,
+        "openai",
+      ),
+    ).toBe("openai");
+  });
+
+  // Local classification is checked ahead of the OpenRouter markers: a stale
+  // OPENROUTER_API_KEY left in the environment must not mislabel a genuinely local run.
+  it("returns local when a declared local endpoint is configured", () => {
+    expect(
+      inferOpenAiCompatibleBiller(
+        {
+          [LOCAL_INFERENCE_ENV_VAR]: "1",
+          OPENAI_BASE_URL: "http://localhost:11434/v1",
+        } as NodeJS.ProcessEnv,
+        "openai",
+      ),
+    ).toBe("local");
+  });
+
+  it("prefers local over a stale OPENROUTER_API_KEY", () => {
+    expect(
+      inferOpenAiCompatibleBiller(
+        {
+          [LOCAL_INFERENCE_ENV_VAR]: "1",
+          OPENAI_BASE_URL: "http://localhost:11434/v1",
+          OPENROUTER_API_KEY: "sk-or-123",
+        } as NodeJS.ProcessEnv,
+        "openai",
+      ),
+    ).toBe("local");
+  });
+
+  it("leaves OpenRouter inference untouched when there is no local opt-in", () => {
+    expect(
+      inferOpenAiCompatibleBiller(
+        { OPENAI_BASE_URL: "http://localhost:11434/v1", OPENROUTER_API_KEY: "sk-or-123" } as NodeJS.ProcessEnv,
+        "openai",
+      ),
+    ).toBe("openrouter");
+  });
+
+  it("does not claim local for a loopback proxy that never opted in", () => {
+    expect(
+      inferOpenAiCompatibleBiller(
+        { OPENAI_BASE_URL: "http://localhost:4000/v1" } as NodeJS.ProcessEnv,
         "openai",
       ),
     ).toBe("openai");
