@@ -596,6 +596,7 @@ export type {
   BlueprintVariable,
   BlueprintVariableType,
 } from "./blueprint.js";
+export type {
   IssueRunSignalScope,
   IssueRunSignals,
 } from "./run-signals.js";

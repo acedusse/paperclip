@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "packageName": "@paperclipai/skills-catalog",
   "packageVersion": "0.3.1",
-  "generatedAt": "2026-06-04T19:57:14.020Z",
+  "generatedAt": "2026-07-31T23:29:12.657Z",
   "skills": [
     {
       "id": "paperclipai:bundled:docs:doc-maintenance",
@@ -144,8 +144,8 @@
         {
           "path": "assets/site-template.html",
           "kind": "asset",
-          "sizeBytes": 14791,
-          "sha256": "8886ad77c386c17b0457f11624aab136c33db7f28dcd6f10fc18e9d833d0950f"
+          "sizeBytes": 15480,
+          "sha256": "059ba298d3880558b6fbf73a04b2b577f5720a66e3cc50cb35200df62166646e"
         },
         {
           "path": "assets/template-mobile.svg",
@@ -178,7 +178,7 @@
           "sha256": "017260d2216859d57e5fa869e0efc6b88c7ed4d8a8a4f5af04fe89a3ef2445bd"
         }
       ],
-      "contentHash": "sha256:0bd9a9fdc656d529e3f97c00cd504dcf72d3a4fecb8b0504ca2fe3e00d63287f"
+      "contentHash": "sha256:7fc5b1e907031815dac707c3b1e861d972f7add39c76eafdd8ffc02c1fe89c7f"
     },
     {
       "id": "paperclipai:bundled:quality:qa-acceptance",

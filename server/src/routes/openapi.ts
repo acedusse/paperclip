@@ -2869,6 +2869,10 @@ registry.registerPath({
   path: "/api/companies/{companyId}/preflight",
   tags: ["preflight"],
   summary: "Get the company launch-readiness (dry-run) report",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
 // ─── Health Sentinel ─────────────────────────────────────────────────────────
 
 registry.registerPath({
