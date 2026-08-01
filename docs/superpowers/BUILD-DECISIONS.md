@@ -9,6 +9,78 @@ Source build order: [`.ideas/combinations/README.md`](../../.ideas/combinations/
 
 ---
 
+## [2026-08-01] Pre-flight — what is next after Combo 02 Phase 2
+
+**Run against `master` @ `60d5fb1`.** No work started; this entry records the survey only.
+
+| Candidate | Status | Evidence |
+|-----------|--------|----------|
+| **02** Phase 3 (049 credential fair-share) | **Not started** | Zero hits on `credentialPool`, `fairShare`, `weightedFair`, `rpmCapacity`/`tpmCapacity` across `server/src`, `packages/*/src`, `ui/src`. |
+| **02** Phase 4 (041 host resource probe) | **Not started** | Zero hits on `os.freemem`, `os.loadavg`, `totalmem()`, `nvidia-smi`. Still the one piece the repo entirely lacks. |
+| **04** Phase 1 (019 token budgets + 037 cache metric) | **Substrate already built** | See below. |
+| **08** Phase 1 (023 tamper-evident audit log) | **Not started** | `activity_log` columns are `id/companyId/actorType/actorId/action/entityType/entityId/agentId/runId/details/createdAt` — no `prevHash`/chain column, and no `createHash` anywhere in the audit path. |
+
+**The status table's "Partial / scattered" for Combo 04 understates Phase 1 considerably.** The
+budget engine is already generic over a metric; it is held at one metric on purpose.
+
+- `budget_policies` carries a **`metric`** column, and windows, soft/hard thresholds, incidents,
+  pause and notify are all written generically over it.
+- `BUDGET_METRICS = ["billed_cents"]` (`packages/shared/src/constants.ts:626`) is a
+  **single-element union**, and `computeObservedAmount` hard-returns `0` for any other metric
+  (`server/src/services/budgets.ts:161`). The same guard repeats at `:682`, plus three
+  `eq(budgetPolicies.metric, "billed_cents")` filters at `:779`, `:813`, `:854`. **That is the
+  "short-circuit" the phasing doc says to remove** — five sites, not an architecture change.
+- `cost_events` already persists `inputTokens`, `cachedInputTokens` and `outputTokens`, and they
+  are genuinely written from adapter usage (`heartbeat.ts:2135–2157`), not defaulted.
+
+So 019 is: widen the union, add a token branch summing columns that already exist, clear the four
+hardcoded filters. **No migration, no new table.**
+
+For **037's cache-hit metric**, the raw data is already captured *and displayed* — `Costs.tsx` sums
+`cachedInputTokens` into token totals in six places, and `costs.ts` aggregates it. What is missing
+is only the **rate** (`cached / (cached + input)`): zero hits on `cacheHitRate` repo-wide. A derived
+metric over existing data, not an ingestion change.
+
+**Recommendation: Combo 04 Phase 1 next**, ahead of Combo 02 Phase 3. It is mostly removing a
+deliberate stop rather than building, and it builds directly on Phase 1's billing truth. Combo 02
+Phase 3 is greenfield and concurrency-sensitive (capacity accounting under contention) — a much
+larger bite for less immediate insight.
+
+---
+
+## [2026-08-01] Completed — Combo 02 Phase 2 (quota-aware provider fallback chains)
+
+**Recorded from artifacts after the fact — this entry was not written by whoever executed the
+phase.** It reconstructs the merged diff and the design doc; execution-time decisions not captured
+in those two sources are not represented here.
+
+**PR #40**, branch `feat/combo02-phase2-fallback-chains`, merged to `master` 2026-08-01 (`f93cb83`).
+**Spec:** `specs/2026-08-01-combo02-phase2-fallback-chains-design.md`. No plan file was written.
+
+**Shipped:** `server/src/services/fallback-chain.ts` (276 lines) + `fallback-chain.test.ts`
+(466 lines, pure/no-DB), `heartbeat.ts` integration (+90), `costs.ts` (89 changed),
+`packages/shared/src/types/cost.ts` (+30), `costs-service.test.ts` (+85), and UI surfacing
+(`ProviderQuotaCard.tsx`, `BillerSpendCard.tsx`, `Costs.tsx`, a storybook story).
+**No migration** — no new table.
+
+Design shape worth keeping: a failure is classified into `do_not_retry` / `retry_same` /
+`fall_back`; only `fall_back` advances a hop, and **chain exhaustion degrades to the existing retry
+ladder rather than failing the run**, so fallback is strictly an improvement over prior behaviour.
+`now` is an explicit parameter, never `Date.now()`, so the classifier is testable at exact
+boundaries. Unrecognised input classifies as `retry_same` — the fail-safe direction, asserted
+explicitly. An agent with no `fallbackChain` is bit-identical to `master` at hop 0.
+
+**Explicitly out of scope** (per the design doc, still open): inbox nudge for chronic fallback
+(needs a rolling per-agent fallback-rate signal — combo 03's `run-signals` territory, should reuse
+it rather than grow a private counter); UI surfacing of "served by fallback" beyond the run event;
+and predictive-breaker integration (preferring the cheap tier under budget pressure is a
+scheduling-time decision, not a failure-time one — belongs with combo 04).
+
+**Correction to the Phase 1 entry below:** it says "**Next:** combo 02 Phase 2". That is now done;
+the next decision point is the pre-flight entry above.
+
+---
+
 ## [2026-07-31] Completed — Combo 02 Phase 1 (local inference billing truth)
 
 **Branch:** `feat/combo02-phase1-local-inference-billing` (off `master` @ `07a6813`)
@@ -290,8 +362,8 @@ confirms it is not already done on the target branch.
 | **05** Review Cockpit | 9 | 2 | **Complete** | All phases 1–4c merged to `master` @ `58eacd1` (2026-07-31): PR #28 landed 4a+4b, PR #30 landed 4c (stakeholder transparency page / idea 033). One deferred deliverable: access-logging of stakeholder page views to the audit path. |
 | **03** Health Sentinel | 9 | 3 | **Complete** (phase 3 model tier deferred to combo 02) | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 was already fully built (`productivity-review.ts`). Phase 1 redefined away from OTel spans → `run-signals/`; phase 2 detectors + heatmap → `health-sentinel/`; phase 3 semantic **seam** shipped, model tier blocked on combo 02 (no inference API exists). See log entries. |
 | **10** Day-One Adoption | 8 | 4 | **Complete** (2 deliberate non-implementations) | All 4 phases merged via PR #32. Pre-flight found it **not uniformly greenfield** — `teams-catalog` and `OnboardingWizard` already existed. Preflight checks, blueprint variables, work templates/DoD, demo company, CSV import, cost projection. Not built: seeded cold-start price table, and the shadow-heartbeat `planOnly` tier (blocked — adapters spawn external CLIs, so "no side effects" cannot be guaranteed). Full record: `specs/2026-07-31-combo10-day-one-adoption-design.md`. |
-| **04** CFO Suite | 8 | 5 | Partial / scattered | Ideas 013/019/030 have some substrate (`costs.ts`, budgets) but combo not built as unified feature. |
-| **02** Model Economy | 8 | 5 | **Phase 1 complete** (of 4) | Pre-flight found idea 008 half-built *and* actively corrupting cost data: local runs billed as OpenAI. Phase 1 shipped local billing truth (`local-inference.ts`, `run-billing-ledger.ts`, `BILLING_TYPES += "local"`). No `local_llm` adapter — a local endpoint is first-class *config*, not a wrapper adapter. Phases 2–4 (fallback chains, credential fair-share, host resource probe) verified not started. **Does not and will not provide an inference API** — see log entry. |
+| **04** CFO Suite | 8 | 5 | **Phase 1 substrate already built** (was "Partial / scattered" — an understatement) | Pre-flight 2026-08-01: the budget engine is already generic over `budget_policies.metric`; it is held at one metric by a **five-site short-circuit** (`BUDGET_METRICS` single-element union + `computeObservedAmount` early return + three `eq(metric,"billed_cents")` filters). `cost_events` already persists input/cached/output tokens from real adapter usage. 019 needs no migration. 037's cache data is captured and displayed; only the *rate* is missing. See the 2026-08-01 pre-flight entry. |
+| **02** Model Economy | 8 | 5 | **Phases 1–2 complete** (of 4) | Pre-flight found idea 008 half-built *and* actively corrupting cost data: local runs billed as OpenAI. Phase 1 shipped local billing truth (`local-inference.ts`, `run-billing-ledger.ts`, `BILLING_TYPES += "local"`). No `local_llm` adapter — a local endpoint is first-class *config*, not a wrapper adapter. **Phase 2 (012 fallback chains) merged 2026-08-01 via PR #40** — `fallback-chain.ts`, exhaustion degrades to the retry ladder, no migration. Phases 3–4 (credential fair-share 049, host resource probe 041) re-verified not started 2026-08-01. **Does not and will not provide an inference API** — see log entry. |
 | **08** Zero-Trust Governance | 8 | 6 | Not started | — |
 | **06–07, 09, 11–13** | 6–7 | 7+ | Not started | Mature later. |
 
@@ -304,8 +376,17 @@ confirms it is not already done on the target branch.
 2. ~~**Merge PR #30**~~ — merged 2026-07-31. Optionally pick up the deferred 4c fast-follow
    (access logging of stakeholder page views to the audit path — the one Phase-4 deliverable
    not satisfied).
-3. **Then Combo 03** (Health Sentinel) — first combo in build order that is genuinely greenfield.
+3. ~~**Then Combo 03** (Health Sentinel)~~ — done 2026-07-31 (phase 3 model tier deferred).
 4. Re-run pre-flight before each phase; update the status table in this file.
+
+**Superseded 2026-08-01.** Combos 01, 03, 05 and 10 are complete and combo 02 is through Phase 2, so
+this list is spent. The live next-action is the **[2026-08-01] Pre-flight** entry at the top of this
+file: Combo 04 Phase 1 recommended, nothing started.
+
+**Process note (2026-08-01):** Combo 02 Phase 2 was built and merged without a log entry, leaving
+this file claiming "Next: combo 02 Phase 2" after it had already shipped. The pre-flight gate reads
+this file, so a missing entry actively misleads the next phase. **Append the "Started" entry when a
+branch is cut, not after the PR lands.**
 
 ### Deferred (Path A — documentation)
 
