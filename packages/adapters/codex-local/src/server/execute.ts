@@ -15,7 +15,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from "@paperclipai/adapter-utils";
+import {
+  inferOpenAiCompatibleBiller,
+  localBillingOverride,
+  type AdapterExecutionContext,
+  type AdapterExecutionResult,
+} from "@paperclipai/adapter-utils";
 import {
   adapterExecutionTargetIsRemote,
   adapterExecutionTargetRemoteCwd,
@@ -604,6 +609,10 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       ),
     );
     const billingType = resolveCodexBillingType(effectiveEnv);
+    // Local inference is billed as $0. Spread over the billing fields of each result below,
+    // because resolveCodexBiller() returns "chatgpt" for subscription-shaped auth and a local
+    // run has no OPENAI_API_KEY, so it would otherwise be mislabelled as ChatGPT spend.
+    const localBilling = localBillingOverride(effectiveEnv);
     const runtimeEnv = Object.fromEntries(
       Object.entries(ensurePathInEnv(effectiveEnv)).filter(
         (entry): entry is [string, string] => typeof entry[1] === "string",
@@ -949,11 +958,12 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
           sessionId: null,
           sessionParams: null,
           sessionDisplayId: null,
-          provider: "openai",
+          provider: localBilling ? "local" : "openai",
           biller: resolveCodexBiller(effectiveEnv, billingType),
           model,
           billingType,
           costUsd: null,
+          ...(localBilling ?? {}),
           resultJson: {
             stdout: attempt.proc.stdout,
             stderr: attempt.proc.stderr,
@@ -1036,11 +1046,12 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
         sessionId: resolvedSessionId,
         sessionParams: resolvedSessionParams,
         sessionDisplayId: resolvedSessionId,
-        provider: "openai",
+        provider: localBilling ? "local" : "openai",
         biller: resolveCodexBiller(effectiveEnv, billingType),
         model,
         billingType,
         costUsd: null,
+        ...(localBilling ?? {}),
         resultJson: {
           stdout: attempt.proc.stdout,
           stderr: attempt.proc.stderr,

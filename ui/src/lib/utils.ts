@@ -150,6 +150,7 @@ export function billingTypeDisplayName(billingType: BillingType): string {
     subscription_overage: "Subscription overage",
     credits: "Credits",
     fixed: "Fixed",
+    local: "Local",
     unknown: "Unknown",
   };
   return map[billingType];
@@ -173,6 +174,7 @@ function coerceBillingType(value: unknown): BillingType | null {
     value === "subscription_overage" ||
     value === "credits" ||
     value === "fixed" ||
+    value === "local" ||
     value === "unknown"
   ) {
     return value;
@@ -195,6 +197,8 @@ export function visibleRunCostUsd(
 ): number {
   const billingType = coerceBillingType(usage?.billingType) ?? coerceBillingType(result?.billingType);
   if (billingType === "subscription_included") return 0;
+  // Local inference runs on the operator's own hardware — no provider spend to display.
+  if (billingType === "local") return 0;
   return readRunCostUsd(usage) || readRunCostUsd(result);
 }
 

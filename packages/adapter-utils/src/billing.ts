@@ -12,6 +12,8 @@
 // JSON_FLOW: {"file": "packages/adapter-utils/src/billing.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import { LOCAL_BILLER, isLocalInferenceEnv } from "./local-inference.js";
+
 function readEnv(env: NodeJS.ProcessEnv, key: string): string | null {
   const value = env[key];
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
@@ -21,6 +23,10 @@ export function inferOpenAiCompatibleBiller(
   env: NodeJS.ProcessEnv,
   fallback: string | null = "openai",
 ): string | null {
+  // Checked first: a declared local endpoint outranks provider markers that may be stale
+  // leftovers in the environment (e.g. an OPENROUTER_API_KEY from a previous config).
+  if (isLocalInferenceEnv(env)) return LOCAL_BILLER;
+
   const explicitOpenRouterKey = readEnv(env, "OPENROUTER_API_KEY");
   if (explicitOpenRouterKey) return "openrouter";
 
