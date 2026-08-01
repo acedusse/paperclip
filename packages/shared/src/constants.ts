@@ -578,6 +578,8 @@ export const BILLING_TYPES = [
   "subscription_overage",
   "credits",
   "fixed",
+  // local inference on the operator's own hardware: always $0, token counts still recorded
+  "local",
   "unknown",
 ] as const;
 export type BillingType = (typeof BILLING_TYPES)[number];

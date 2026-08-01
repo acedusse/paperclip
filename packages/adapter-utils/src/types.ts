@@ -54,6 +54,8 @@ export type AdapterBillingType =
   | "subscription_included"
   | "subscription_overage"
   | "credits"
+  /** local inference on the operator's own hardware — always $0, tokens still recorded */
+  | "local"
   | "fixed"
   | "unknown";
 

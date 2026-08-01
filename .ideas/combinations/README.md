@@ -85,6 +85,12 @@ A few primitives are depended on by many combinations — build them well, once:
 - **A `planOnly`/shadow side-effect-free execution mode** — combos 04, 06, 07, 10.
 - **A free local model** (combo 02 / idea 008) — powers cheap evals, embeddings, summaries, judging
   across combos 03, 05, 06, 11.
+  **Caveat found while building combo 02 phase 1:** this substrate is really *two* things, and only
+  one belongs to combo 02. Combo 02 delivers a free *agent-run* tier (an adapter pointed at a local
+  endpoint, billed $0). The evals/embeddings/summaries/judging use cases need a **prompt-completion
+  API**, which no combo currently owns — `ServerAdapterModule.execute` runs a whole agent session,
+  not a completion. Combos depending on the second thing (03's semantic tier, 05's narration, 11)
+  are not unblocked by combo 02.
 - **The lease/claim pattern** (`environmentLeases`) — secrets (08), workspace locks (01).
 - **The company-portability serializer** — blueprints/demo/import (10), snapshots/rewind (09).
 - **The tamper-evident audit log** (combo 08) — the trustworthy record every governed action lands in.

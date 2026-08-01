@@ -16,7 +16,12 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { inferOpenAiCompatibleBiller, type AdapterExecutionContext, type AdapterExecutionResult } from "@paperclipai/adapter-utils";
+import {
+  inferOpenAiCompatibleBiller,
+  localBillingOverride,
+  type AdapterExecutionContext,
+  type AdapterExecutionResult,
+} from "@paperclipai/adapter-utils";
 import {
   adapterExecutionTargetIsRemote,
   adapterExecutionTargetRemoteCwd,
@@ -455,6 +460,10 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     ),
   );
   const billingType = resolveCursorBillingType(effectiveEnv);
+  // Local inference is billed as $0. Spread over the billing fields of the result below,
+  // because resolveCursorBiller() returns "cursor" for subscription-shaped auth and a local
+  // run would otherwise be mislabelled as Cursor subscription spend.
+  const localBilling = localBillingOverride(effectiveEnv);
   const runtimeEnv = ensurePathInEnv(effectiveEnv);
   await ensureAdapterExecutionTargetCommandResolvable(command, executionTarget, cwd, runtimeEnv, {
     installCommand: SANDBOX_INSTALL_COMMAND,
@@ -725,11 +734,12 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       sessionId: resolvedSessionId,
       sessionParams: resolvedSessionParams,
       sessionDisplayId: resolvedSessionId,
-      provider: providerFromModel,
+      provider: localBilling ? "local" : providerFromModel,
       biller: resolveCursorBiller(effectiveEnv, billingType, providerFromModel),
       model,
       billingType,
       costUsd: attempt.parsed.costUsd,
+      ...(localBilling ?? {}),
       resultJson: {
         stdout: attempt.proc.stdout,
         stderr: attempt.proc.stderr,

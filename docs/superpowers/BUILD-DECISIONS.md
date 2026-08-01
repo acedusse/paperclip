@@ -9,6 +9,84 @@ Source build order: [`.ideas/combinations/README.md`](../../.ideas/combinations/
 
 ---
 
+## [2026-07-31] Completed — Combo 02 Phase 1 (local inference billing truth)
+
+**Branch:** `feat/combo02-phase1-local-inference-billing` (off `master` @ `07a6813`)
+
+**Spec:** `specs/2026-07-31-combo02-phase1-local-inference-billing-design.md`
+
+**Pre-flight corrected the status table twice, in opposite directions.**
+
+1. "Idea 008 largely config" **understated a live bug.** The four OpenAI-compatible adapters
+   (`codex_local`, `pi_local`, `opencode_local`, `cursor`) already accept a local base URL, so
+   running an agent on Ollama works today — that part is true. But `inferOpenAiCompatibleBiller`
+   knew exactly one non-default case (OpenRouter), so a `localhost:11434` endpoint fell through to
+   the caller's fallback. Local runs were recording `biller: "openai"` with unknown cost, landing
+   in `costs/by-biller` and `finance-by-biller` as **fabricated OpenAI spend**. Combo 04 (CFO
+   Suite) is next in build order and reads exactly those endpoints, so this was about to become
+   load-bearing.
+2. Ideas 012, 049 and 041 are **genuinely not started** — zero hits on `fallbackChain`,
+   `credentialPool`/`fairShare`, and `os.freemem`/`loadavg`/`nvidia-smi` respectively.
+
+**The design rejects idea 008's literal rule.** 008 §3 says map loopback/LAN to `local` @ $0.
+That is unsafe: gateways run on loopback and forward to *paid* providers — the repo already knows
+this, since `openclaw_gateway` carries its own `isLoopbackHost()` (`execute.ts:173`, duplicated at
+`test.ts:36`) for exactly that reason, and LiteLLM on `:4000` is the same shape. A blanket rule
+would silently zero out real spend: the same corruption this phase fixes, inverted and much harder
+to notice. **$0 is never inferred, only declared** — classification requires an operator opt-in
+(`PAPERCLIP_LOCAL_INFERENCE`) *and* a genuinely local host. Port heuristics (11434/1234/8080)
+populate a runtime hint and never grant $0; `8080` is at least as common a proxy port.
+
+**No new `local_llm` adapter, deliberately.** In this repo an adapter is an agent *session runner*
+that spawns a CLI owning tools, workspace and sessions; the `http` adapter is a webhook-poker that
+reports no usage or cost. A `local_llm` adapter would have to delegate to pi/opencode and would be
+a pure wrapper carrying registry, UI, docs and drift cost for no capability. A local endpoint is
+made first-class as *configuration* instead. The opt-in rides the existing adapter-config `env`
+map, which already flows into `effectiveEnv` in all four adapters — no signature churn.
+
+**Shipped:**
+
+- `packages/adapter-utils/src/local-inference.ts` — the whole decision in one total function.
+- `inferOpenAiCompatibleBiller` gains a local branch **ahead of** the OpenRouter checks, so a stale
+  `OPENROUTER_API_KEY` cannot mislabel a local run.
+- `AdapterBillingType` and `BILLING_TYPES` gain `"local"`. **No migration** —
+  `cost_events.billing_type` is plain `text` with no enum or check constraint.
+- `server/src/services/run-billing-ledger.ts` — `normalizeLedgerBillingType`,
+  `normalizeBilledCostCents` and `resolveLedgerBiller` extracted out of the 10k-line
+  `heartbeat.ts` so the ledger boundary is testable in isolation.
+- All four adapters apply the override, plus `provider: "local"`.
+- `docs/guides/local-inference.md`.
+
+**Two things the type system caught that the design had not listed:** `normalizeLedgerBillingType`
+has a `default: "unknown"` arm, so without an explicit `case "local"` the entire phase would have
+silently reverted at the ledger boundary; and `ui/src/lib/utils.ts` holds a
+`Record<BillingType, string>` label map plus a `coerceBillingType` allow-list and a
+`visibleRunCostUsd` zeroing rule, all three of which needed the new type.
+
+**Exit criteria met:** yes. The three pre-existing `billing.test.ts` cases pass **unmodified** —
+that is the regression proof, since local classification only fires on explicit opt-in.
+
+**Test note:** `local-inference-adapter-coverage.test.ts` asserts that every adapter calling
+`inferOpenAiCompatibleBiller` also calls `localBillingOverride`. It is a source scan, chosen
+deliberately: the regression it guards is an *omission* in a fifth adapter added later, which no
+typecheck and no unit test can see.
+
+**Not built this phase:** UI presets (Ollama/LM Studio/llama.cpp) writing both variables together,
+and an endpoint reachability + model-list probe. Both are UX across four separate
+`config-fields.tsx` files; the correctness fix should not wait behind them. Idea 008 §4 and §5
+remain open.
+
+**Correction to the combo 03 log below:** that entry says combo 02 will unblock its Phase 3
+semantic tier by providing an inference API. **It will not.** A prompt-completion contract is
+orthogonal to all four of combo 02's ideas (008/012/049/041), and none of phases 1–4 produces one.
+Combo 03's model tier is still blocked — on a general inference contract that no combo currently
+owns, not on combo 02.
+
+**Next:** combo 02 Phase 2 (quota-aware provider fallback chains), which needs Phase 1's free
+last-resort tier to be worth having.
+
+---
+
 ## [2026-07-31] Completed — Combo 03 Phases 2 & 3 (detectors, heatmap, semantic seam)
 
 **Branch:** `feat/combo03-phase2-detectors` (off `feat/combo03-phase1-run-signals`)
@@ -211,9 +289,9 @@ confirms it is not already done on the target branch.
 | **01** Runtime Control Plane | 9 | 1 | **Complete** | All phases 1–4 (incl. 4A cadence/WIP + 4B workspace claims). See `docs/superpowers/specs/2026-07-13-claim-aware-run-selection-design.md` — "Combo 01 is functionally complete." Code: `effective-cap-resolver.ts`, `predictive-breaker.ts`, `run-execution-state.ts`, `run-caps.ts`, `wip-flow.ts`, `workspace-path-claims.ts`, etc. |
 | **05** Review Cockpit | 9 | 2 | **Complete** | All phases 1–4c merged to `master` @ `58eacd1` (2026-07-31): PR #28 landed 4a+4b, PR #30 landed 4c (stakeholder transparency page / idea 033). One deferred deliverable: access-logging of stakeholder page views to the audit path. |
 | **03** Health Sentinel | 9 | 3 | **Complete** (phase 3 model tier deferred to combo 02) | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 was already fully built (`productivity-review.ts`). Phase 1 redefined away from OTel spans → `run-signals/`; phase 2 detectors + heatmap → `health-sentinel/`; phase 3 semantic **seam** shipped, model tier blocked on combo 02 (no inference API exists). See log entries. |
-| **10** Day-One Adoption | 8 | 4 | Queued after Combo 03 | Pre-flight run 2026-07-31; **not uniformly greenfield** (see log entry). Phase 1 (Dry-Run Estimator static checks) designed, spec not yet written. |
+| **10** Day-One Adoption | 8 | 4 | **Complete** (2 deliberate non-implementations) | All 4 phases merged via PR #32. Pre-flight found it **not uniformly greenfield** — `teams-catalog` and `OnboardingWizard` already existed. Preflight checks, blueprint variables, work templates/DoD, demo company, CSV import, cost projection. Not built: seeded cold-start price table, and the shadow-heartbeat `planOnly` tier (blocked — adapters spawn external CLIs, so "no side effects" cannot be guaranteed). Full record: `specs/2026-07-31-combo10-day-one-adoption-design.md`. |
 | **04** CFO Suite | 8 | 5 | Partial / scattered | Ideas 013/019/030 have some substrate (`costs.ts`, budgets) but combo not built as unified feature. |
-| **02** Model Economy | 8 | 5 | Partial | Idea 008 (local LLM) largely config; combo fabric not unified. |
+| **02** Model Economy | 8 | 5 | **Phase 1 complete** (of 4) | Pre-flight found idea 008 half-built *and* actively corrupting cost data: local runs billed as OpenAI. Phase 1 shipped local billing truth (`local-inference.ts`, `run-billing-ledger.ts`, `BILLING_TYPES += "local"`). No `local_llm` adapter — a local endpoint is first-class *config*, not a wrapper adapter. Phases 2–4 (fallback chains, credential fair-share, host resource probe) verified not started. **Does not and will not provide an inference API** — see log entry. |
 | **08** Zero-Trust Governance | 8 | 6 | Not started | — |
 | **06–07, 09, 11–13** | 6–7 | 7+ | Not started | Mature later. |
 
