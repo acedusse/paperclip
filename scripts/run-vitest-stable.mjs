@@ -312,15 +312,27 @@ function runGeneralGroup(routeTests, groupName, shardIndex = null, shardCount = 
       return;
     }
 
-    const excludeRouteArgs = routeTests.flatMap((file) => ["--exclude", file.serverPath]);
+    // Pass the files this group owns positionally rather than excluding the serialized
+    // ones. `--exclude` is silently ignored when vitest is invoked from the repo root with
+    // `--project` — verified directly: the same pattern filters correctly when run from
+    // `server/`, and does nothing from the root, in every path form. The result was that
+    // this group collected all 406 server test files instead of 296, so every serialized
+    // suite ran twice per full run: once here, once in its own shard. Those are the
+    // embedded-Postgres suites, the slowest in the repo.
+    //
+    // Positional filtering is what the sharded branch above and runSerializedSuites already
+    // use, and both work, so this makes the three paths consistent.
+    if (generalServerTestFiles.length === 0) {
+      return;
+    }
     runVitest(
       [
         "--project",
         "@paperclipai/server",
         ...serializedServerVitestArgs,
-        ...excludeRouteArgs,
+        ...generalServerTestFiles,
       ],
-      `${groupName} server suites excluding ${routeTests.length} serialized suites`,
+      `${groupName} ${generalServerTestFiles.length} server suites (${routeTests.length} serialized suites run separately)`,
     );
     return;
   }
