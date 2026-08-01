@@ -107,9 +107,23 @@ export function BillerSpendCard({
           {row.subscriptionRunCount > 0
             ? `${row.subscriptionRunCount} subscription run${row.subscriptionRunCount === 1 ? "" : "s"}`
             : "0 subscription runs"}
+          {row.localRunCount > 0 ? (
+            <>
+              {" · "}
+              {`${row.localRunCount} local run${row.localRunCount === 1 ? "" : "s"}`}
+            </>
+          ) : null}
           {" · "}
           {formatCents(weekSpendCents)} this week
         </div>
+
+        {row.localRunCount > 0 && (
+          <div className="text-xs text-muted-foreground">
+            {/* Local runs cost $0, so tokens are the only honest measure of what they consumed. */}
+            Local usage: {formatTokens(row.localInputTokens + row.localCachedInputTokens)} in ·{" "}
+            {formatTokens(row.localOutputTokens)} out
+          </div>
+        )}
 
         {billingTypeBreakdown.length > 0 && (
           <>

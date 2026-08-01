@@ -77,6 +77,7 @@ import { logger } from "../middleware/logger.js";
 import { publishLiveEvent } from "./live-events.js";
 import { getRunLogStore, type RunLogHandle } from "./run-log-store.js";
 import { getServerAdapter, listAdapterModelProfiles, runningProcesses } from "../adapters/index.js";
+import { listServerAdapters } from "../adapters/registry.js";
 import type {
   AdapterExecutionResult,
   AdapterInvocationMeta,
@@ -92,6 +93,14 @@ import {
   normalizeLedgerBillingType,
   resolveLedgerBiller,
 } from "./run-billing-ledger.js";
+import {
+  buildFallbackContext,
+  classifyFallbackTrigger,
+  parseFallbackChain,
+  readFallbackState,
+  resolveEffectiveAdapter,
+  selectFallbackTarget,
+} from "./fallback-chain.js";
 import { trackAgentFirstHeartbeat } from "@paperclipai/shared/telemetry";
 import { getTelemetryClient } from "../telemetry.js";
 import { companySkillService } from "./company-skills.js";
@@ -382,6 +391,15 @@ function resolveCodexTransientFallbackMode(attempt: number): CodexTransientFallb
   if (attempt === 2) return "safer_invocation";
   if (attempt === 3) return "fresh_session";
   return "fresh_session_safer_invocation";
+}
+
+/**
+ * Adapter types a fallback chain may name. Read from the live registry rather than a constant
+ * so a chain naming a plugin adapter that is not installed on this host is dropped at selection
+ * time instead of being dispatched into a missing module.
+ */
+function knownAdapterTypesForFallback(): ReadonlySet<string> {
+  return new Set(listServerAdapters().map((adapter) => adapter.type));
 }
 
 function readHeartbeatRunErrorFamily(
@@ -6545,7 +6563,38 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       }
     }
     const taskKey = deriveTaskKeyWithHeartbeatFallback(contextSnapshot, null);
-    const sessionBefore = await resolveSessionBeforeForWakeup(agent, taskKey);
+    const resolvedSessionBefore = await resolveSessionBeforeForWakeup(agent, taskKey);
+
+    // Quota-aware provider fallback (combo 02 phase 2, idea 012). The bounded ladder above
+    // is right for a blip and wrong for quota exhaustion: a 429 with an hour-long reset
+    // burns 2m/10m/30m/2h retrying a credential that cannot succeed. When the provider tells
+    // us the wait is long, hop to the next chain entry instead.
+    const fallbackSelection = (() => {
+      if (retryReason !== BOUNDED_TRANSIENT_HEARTBEAT_RETRY_REASON) return null;
+      const verdict = classifyFallbackTrigger({
+        errorFamily: transientRecovery?.errorFamily ?? null,
+        errorCode: run.errorCode,
+        retryNotBefore: transientRetryNotBefore,
+        now,
+      });
+      if (verdict !== "fall_back") return null;
+
+      const currentState = readFallbackState(contextSnapshot);
+      const currentAdapterType = currentState?.adapterType ?? agent.adapterType;
+      // Chain entries naming an adapter that is not installed on this host are dropped
+      // rather than dispatched into a missing module.
+      return selectFallbackTarget({
+        chain: parseFallbackChain(parseObject(agent.adapterConfig), {
+          knownAdapterTypes: knownAdapterTypesForFallback(),
+        }),
+        currentHop: currentState?.hop ?? 0,
+        currentAdapterType,
+      });
+    })();
+
+    // Session ids are adapter-specific, so a hop across adapters cannot resume the old one.
+    const sessionBefore = fallbackSelection?.clearSession ? null : resolvedSessionBefore;
+
     const retryContextSnapshot: Record<string, unknown> = withRecoveryModelProfileHint({
       ...contextSnapshot,
       retryOfRunId: run.id,
@@ -6556,6 +6605,7 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       scheduledRetryAt: schedule.dueAt.toISOString(),
       ...(transientRetryNotBefore ? { transientRetryNotBefore: transientRetryNotBefore.toISOString() } : {}),
       ...(codexTransientFallbackMode ? { codexTransientFallbackMode } : {}),
+      ...(fallbackSelection ? buildFallbackContext(fallbackSelection) : {}),
     }, "normal_model");
     const maxTurnContinuationIdempotencyKey = retryReason === MAX_TURN_CONTINUATION_RETRY_REASON
       ? `max-turn-continuation:${run.companyId}:${issueId ?? "no-issue"}:${run.id}:${schedule.attempt}`
@@ -9017,8 +9067,8 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
     activeRunExecutions.add(run.id);
 
     try {
-    const agent = await getAgent(run.agentId);
-    if (!agent) {
+    const configuredAgent = await getAgent(run.agentId);
+    if (!configuredAgent) {
       await setRunStatus(runId, "failed", {
         error: "Agent not found",
         errorCode: "agent_not_found",
@@ -9031,6 +9081,40 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
       const failedRun = await getRun(runId);
       if (failedRun) await releaseIssueExecutionAndPromote(failedRun);
       return;
+    }
+
+    // Provider fallback (combo 02 phase 2). Resolved once, here, so every downstream read of
+    // agent.adapterType — dispatch, JWT minting, session codec, workspace policy, and phase 1's
+    // billing — sees one consistent adapter. Threading an override through each call site
+    // instead would risk a run that executes on one adapter and bills to another.
+    // With no fallback state this returns the configured agent untouched.
+    const fallbackState = readFallbackState(run.contextSnapshot);
+    const effectiveAdapter = resolveEffectiveAdapter({
+      adapterType: configuredAgent.adapterType,
+      adapterConfig: parseObject(configuredAgent.adapterConfig),
+      fallbackState,
+    });
+    const agent = effectiveAdapter.isFallback
+      ? {
+          ...configuredAgent,
+          adapterType: effectiveAdapter.adapterType,
+          adapterConfig: effectiveAdapter.adapterConfig,
+        }
+      : configuredAgent;
+
+    if (effectiveAdapter.isFallback) {
+      await appendRunEvent(run, await nextRunEventSeq(run.id), {
+        eventType: "lifecycle",
+        stream: "system",
+        level: "info",
+        message: `Serving this run on fallback provider ${effectiveAdapter.adapterType} (hop ${effectiveAdapter.hop}); primary ${configuredAgent.adapterType} was quota-limited`,
+        payload: {
+          fallbackHop: effectiveAdapter.hop,
+          fallbackAdapterType: effectiveAdapter.adapterType,
+          primaryAdapterType: configuredAgent.adapterType,
+          model: effectiveAdapter.adapterConfig.model ?? null,
+        },
+      });
     }
 
     const runtime = await ensureRuntimeState(agent);

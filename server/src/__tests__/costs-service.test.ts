@@ -446,6 +446,91 @@ describeEmbeddedPostgres("cost and finance aggregate overflow handling", () => {
     await tempDb?.cleanup();
   });
 
+  it("reports local inference as token usage, kept out of the subscription tier", async () => {
+    // Where cost is $0, tokens are the cost. A local run that reports only dollars is
+    // invisible in every breakdown; and folding it into the subscription tier would
+    // overstate consumption of a capped provider window that local inference never touches.
+    const companyId = randomUUID();
+    const agentId = randomUUID();
+    const projectId = randomUUID();
+
+    await db.insert(companies).values({
+      id: companyId,
+      name: "Paperclip",
+      issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+    await db.insert(agents).values({
+      id: agentId,
+      companyId,
+      name: "Local Agent",
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: {},
+      permissions: {},
+    });
+    await db.insert(projects).values({
+      id: projectId,
+      companyId,
+      name: "Local Project",
+      status: "active",
+    });
+
+    await db.insert(costEvents).values([
+      {
+        companyId,
+        agentId,
+        projectId,
+        provider: "local",
+        biller: "local",
+        billingType: "local",
+        model: "qwen3-coder",
+        inputTokens: 900,
+        cachedInputTokens: 100,
+        outputTokens: 400,
+        costCents: 0,
+        occurredAt: new Date("2026-05-10T00:00:00.000Z"),
+      },
+      {
+        companyId,
+        agentId,
+        projectId,
+        provider: "anthropic",
+        biller: "anthropic",
+        billingType: "subscription_included",
+        model: "claude",
+        inputTokens: 50,
+        cachedInputTokens: 0,
+        outputTokens: 20,
+        costCents: 0,
+        occurredAt: new Date("2026-05-11T00:00:00.000Z"),
+      },
+    ]);
+
+    const range = {
+      from: new Date("2026-05-01T00:00:00.000Z"),
+      to: new Date("2026-05-15T23:59:59.999Z"),
+    };
+
+    const [byAgentRow] = await costs.byAgent(companyId, range);
+    expect(byAgentRow?.localInputTokens).toBe(900);
+    expect(byAgentRow?.localCachedInputTokens).toBe(100);
+    expect(byAgentRow?.localOutputTokens).toBe(400);
+
+    // The whole point: $0 spend, but consumption is visible.
+    expect(byAgentRow?.costCents).toBe(0);
+
+    // Local must not leak into the subscription window's accounting.
+    expect(byAgentRow?.subscriptionInputTokens).toBe(50);
+    expect(byAgentRow?.subscriptionOutputTokens).toBe(20);
+
+    const localBiller = (await costs.byBiller(companyId, range)).find((r) => r.biller === "local");
+    expect(localBiller?.localOutputTokens).toBe(400);
+    expect(localBiller?.subscriptionOutputTokens).toBe(0);
+  });
+
   it("aggregates cost event sums above int32 without raising Postgres integer overflow", async () => {
     const companyId = randomUUID();
     const agentId = randomUUID();

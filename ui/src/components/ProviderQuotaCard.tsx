@@ -68,6 +68,7 @@ export function ProviderQuotaCard({
   const totals = useMemo(() => {
     let inputTokens = 0, outputTokens = 0, costCents = 0;
     let apiRunCount = 0, subRunCount = 0, subInputTokens = 0, subOutputTokens = 0;
+    let localRunCount = 0, localInputTokens = 0, localOutputTokens = 0;
     for (const r of rows) {
       inputTokens += r.inputTokens;
       outputTokens += r.outputTokens;
@@ -76,10 +77,17 @@ export function ProviderQuotaCard({
       subRunCount += r.subscriptionRunCount;
       subInputTokens += r.subscriptionInputTokens;
       subOutputTokens += r.subscriptionOutputTokens;
+      localRunCount += r.localRunCount;
+      localInputTokens += r.localInputTokens;
+      localOutputTokens += r.localOutputTokens;
     }
     const totalTokens = inputTokens + outputTokens;
     const subTokens = subInputTokens + subOutputTokens;
+    const localTokens = localInputTokens + localOutputTokens;
     // denominator: api-billed tokens (from cost_events) + subscription tokens (from heartbeat_runs)
+    // Local tokens are deliberately excluded: this share drives provider quota pressure, and
+    // local inference consumes no provider quota. Counting it would understate how close a
+    // shared credential is to its cap.
     const allTokens = totalTokens + subTokens;
     return {
       totalInputTokens: inputTokens,
@@ -92,6 +100,8 @@ export function ProviderQuotaCard({
       totalSubOutputTokens: subOutputTokens,
       totalSubTokens: subTokens,
       subSharePct: allTokens > 0 ? (subTokens / allTokens) * 100 : 0,
+      totalLocalRuns: localRunCount,
+      totalLocalTokens: localTokens,
     };
   }, [rows]);
 

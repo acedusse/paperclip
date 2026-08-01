@@ -70,6 +70,16 @@ export interface CostByAgent {
   subscriptionCachedInputTokens: number;
   subscriptionInputTokens: number;
   subscriptionOutputTokens: number;
+  /**
+   * Local inference on the operator's own hardware. Kept separate from the subscription
+   * tier: both are token-denominated, but a subscription window is a capped resource
+   * consumption is tracked against, while local throughput is uncapped. Where cost is $0,
+   * these token counts are the cost signal.
+   */
+  localRunCount: number;
+  localCachedInputTokens: number;
+  localInputTokens: number;
+  localOutputTokens: number;
 }
 
 export interface CostByProviderModel {
@@ -86,6 +96,16 @@ export interface CostByProviderModel {
   subscriptionCachedInputTokens: number;
   subscriptionInputTokens: number;
   subscriptionOutputTokens: number;
+  /**
+   * Local inference on the operator's own hardware. Kept separate from the subscription
+   * tier: both are token-denominated, but a subscription window is a capped resource
+   * consumption is tracked against, while local throughput is uncapped. Where cost is $0,
+   * these token counts are the cost signal.
+   */
+  localRunCount: number;
+  localCachedInputTokens: number;
+  localInputTokens: number;
+  localOutputTokens: number;
 }
 
 export interface CostByBiller {
@@ -99,6 +119,16 @@ export interface CostByBiller {
   subscriptionCachedInputTokens: number;
   subscriptionInputTokens: number;
   subscriptionOutputTokens: number;
+  /**
+   * Local inference on the operator's own hardware. Kept separate from the subscription
+   * tier: both are token-denominated, but a subscription window is a capped resource
+   * consumption is tracked against, while local throughput is uncapped. Where cost is $0,
+   * these token counts are the cost signal.
+   */
+  localRunCount: number;
+  localCachedInputTokens: number;
+  localInputTokens: number;
+  localOutputTokens: number;
   providerCount: number;
   modelCount: number;
 }
