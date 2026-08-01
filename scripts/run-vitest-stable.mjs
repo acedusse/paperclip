@@ -336,7 +336,7 @@ function runGeneralGroup(routeTests, groupName, shardIndex = null, shardCount = 
     // ones. `--exclude` is silently ignored when vitest is invoked from the repo root with
     // `--project` — verified directly: the same pattern filters correctly when run from
     // `server/`, and does nothing from the root, in every path form. The result was that
-    // this group collected all 406 server test files instead of 296, so every serialized
+    // this group collected all 405 server test files instead of 295, so every serialized
     // suite ran twice per full run: once here, once in its own shard. Those are the
     // embedded-Postgres suites, the slowest in the repo.
     //
