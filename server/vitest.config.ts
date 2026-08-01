@@ -16,6 +16,12 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
+    // Embedded-Postgres lifecycle runs inside hooks: beforeAll does initdb, start,
+    // and applyPendingMigrations; afterAll stops the server and recursively deletes
+    // the whole data directory. Under a loaded suite that routinely exceeds vitest's
+    // 10s default, which surfaces as "Hook timed out" on tests that themselves pass.
+    // Long enough to absorb that, short enough that a genuinely hung hook still fails.
+    hookTimeout: 60_000,
     environment: "node",
     // Never collect build output. `tsc -b server` emits compiled copies of the
     // test files into dist/, and picking those up runs every suite twice
