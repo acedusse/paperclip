@@ -16,6 +16,12 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
+    // Never collect build output. `tsc -b` emits compiled copies of the test
+    // files into dist/, and collecting those runs every suite twice against
+    // stale JS. Vitest's default exclude is replaced rather than merged once a
+    // project sets its own test options, and a root-level exclude does not
+    // propagate into projects, so each project must state it.
+    exclude: ["**/node_modules/**", "**/dist/**"],
     // Embedded-Postgres lifecycle runs inside hooks: beforeAll does initdb, start,
     // and applyPendingMigrations; afterAll stops the server and recursively deletes
     // the whole data directory. Under a loaded suite that routinely exceeds vitest's
