@@ -1570,8 +1570,8 @@ the volume floor it renders an em dash rather than a misleading percentage."
 ## Final verification
 
 - [ ] Run the full test suite: `pnpm test`
-- [ ] Run `pnpm typecheck` and `pnpm lint`
+- [ ] Run `pnpm typecheck`. (There is **no root `lint` script** in this monorepo — an earlier draft of this plan listed one. `typecheck` and `test` are the gates.)
 - [ ] Run `pnpm --filter @paperclipai/db check:migrations`
-- [ ] Confirm `ui/src/components/artifacts/ArtifactCard.test.tsx` is the only pre-existing failure (two date-dependent assertions hardcoding "Last edited Jun 1, 2026"). Verify those files are unchanged versus `master` before attributing the failure elsewhere.
+- [ ] Expect a fully green suite. (Earlier notes flagged `ui/src/components/artifacts/ArtifactCard.test.tsx` as a known date-dependent failure; it did **not** fail on 2026-08-02 — all 254 UI files passed. Do not excuse a failure there on the strength of that note.)
 - [ ] Walk the spec's Exit criteria section and check each box against the running app.
 - [ ] Append a `## [YYYY-MM-DD] Completed — Combo 04 Phase 1` entry to `docs/superpowers/BUILD-DECISIONS.md`, and update the status table row for Combo 04 from "Phase 1 substrate already built" to the real state.

@@ -154,6 +154,11 @@ async function resolveScopeRecord(db: Db, scopeType: BudgetScopeType, scopeId: s
   };
 }
 
+/** Human noun for a metric, used in operator-facing block reasons. */
+function metricNoun(metric: string) {
+  return metric === "total_tokens" ? "token budget" : "budget";
+}
+
 /**
  * SQL sum expression for a budget metric, or null when the metric is unrecognised.
  *
@@ -162,11 +167,6 @@ async function resolveScopeRecord(db: Db, scopeType: BudgetScopeType, scopeId: s
  * usage windows. This is neutral on caching rather than punitive — caching shows
  * up as lower `billed_cents` and in the cache-hit rate, not as budget headroom.
  */
-/** Human noun for a metric, used in operator-facing block reasons. */
-function metricNoun(metric: string) {
-  return metric === "total_tokens" ? "token budget" : "budget";
-}
-
 function observedAmountExpression(metric: string) {
   if (metric === "billed_cents") {
     return sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision`;

@@ -9,11 +9,59 @@ Source build order: [`.ideas/combinations/README.md`](../../.ideas/combinations/
 
 ---
 
-## [2026-08-01] Started — Combo 04 Phase 1 (token budgets 019 + cache-hit metric 037)
+## [2026-08-02] Built — Combo 04 Phase 1 (token budgets 019 + cache-hit metric 037)
 
-**Branch:** `feat/combo04-phase1-token-budgets` (off `master` @ `e8e001c`)
+**Branch:** `feat/combo04-phase1-token-budgets` (off `master` @ `e8e001c`), 8 task commits.
 **Spec:** `specs/2026-08-01-combo04-phase1-token-budgets-design.md`
-**Plan:** to be written next.
+**Plan:** `plans/2026-08-01-combo04-phase1-token-budgets.md`
+**Migration:** `0123_combo04_token_budget_amounts` (widening only, no new table).
+
+**Shipped:** `total_tokens` as a second budget metric enforced with the same teeth as dollars
+(`observedAmountExpression` metric→SQL map; `evaluateCostEvent` no longer skips non-dollar policies;
+`findBlockingPolicy` evaluates every active policy at a scope so the hardest-binding one wins, and
+block reasons name the breaching metric). `BUDGET_METRIC_META` in shared carries unit, labels, input
+scale and raise increment per metric, consumed by `BudgetPolicyCard`, `BudgetIncidentCard` and
+`ApprovalPayload`, which had all hardcoded `formatCents`. A dollars|tokens toggle on AgentDetail and
+ProjectDetail is the creation path — there was none before. Plus `computeCacheHitRate` (pure, shared)
+surfaced per company and per agent on Costs.
+
+**`heartbeat.ts:7460` and `projects.ts:398` keep their `billed_cents` filters deliberately** — the
+predictive breaker and the project spend bar are about *remaining cents*; generalising them would be
+a category error. Only `budgets.ts` was de-pinned.
+
+**Three corrections to the plan and spec, found while executing:**
+
+1. **The `Costs.tsx` bug was structural, not a missing argument.** `policyMutation`'s own input type
+   had no `metric` field, so the call site *could not* have passed one — adding it produced TS2353
+   until the mutation's parameter type was widened. The spec described an omission; it was an
+   impossibility.
+2. **There is no root `lint` script** in this monorepo. The plan's final-verification list invented
+   one. `typecheck` and `test` are the gates.
+3. **`budget_incidents` stopped using `integer` entirely** after the widening, so that import had to
+   be dropped; `budget_policies` keeps it for `warnPercent`, which is a percentage, not an amount.
+
+**Whole-branch verification:** `pnpm test` green — `PNPM_TEST_EXIT=0`, **6 138 tests passed, 0
+failed** across the general-server lane (297 suites), the serialized lane (110 suites) and the UI
+project (254 files / 1 765 tests). Plus `pnpm typecheck` and `check:migrations`.
+
+**Verification caveat, recorded honestly:** the *first* full-suite run was invoked as
+`pnpm test 2>&1 | tail -80`. A pipeline's exit status is its *last* command, so the reported exit 0
+came from `tail` and proved nothing, and the 80-line window hid everything earlier in a ~23-minute
+run. It was re-run capturing `pnpm`'s own status, which is where the numbers above come from.
+**Never pipe a verification command through `tail`** — capture the status, then read the file.
+
+**The `ArtifactCard` "known flaky" note is stale.** Prior sessions recorded two date-dependent
+assertions there (hardcoded "Last edited Jun 1, 2026") as an expected pre-existing failure. All 254
+UI files passed on 2026-08-02, so it either was fixed or never fails the way the note claims. Do not
+pre-emptively excuse an ArtifactCard failure on the strength of that note.
+
+**Not verified by hand:** the plan called for launching the app to confirm a token budget persists
+and round-trips through the toggle. That was covered by types and tests only.
+
+**Still deferred** (unchanged from the spec): provider-rate-limit window alignment (019 §3, needs
+`quota-windows.ts`), imputed/shadow dollar cost (019 §5, belongs with 013 in phase 2), cache-buster
+diagnosis and stable-prefix assembly (037 §1/§3, phase 4), and the `input_tokens` / `output_tokens` /
+`run_count` metrics — the enum and descriptor take them with no further surgery.
 
 Acting on the recommendation in the pre-flight entry below. Entry appended at branch-cut time per
 the process note further down this file.
@@ -400,7 +448,7 @@ confirms it is not already done on the target branch.
 | **05** Review Cockpit | 9 | 2 | **Complete** | All phases 1–4c merged to `master` @ `58eacd1` (2026-07-31): PR #28 landed 4a+4b, PR #30 landed 4c (stakeholder transparency page / idea 033). One deferred deliverable: access-logging of stakeholder page views to the audit path. |
 | **03** Health Sentinel | 9 | 3 | **Complete** (phase 3 model tier deferred to combo 02) | Pre-flight run 2026-07-31. **"Not started" was wrong**: idea 003 was already fully built (`productivity-review.ts`). Phase 1 redefined away from OTel spans → `run-signals/`; phase 2 detectors + heatmap → `health-sentinel/`; phase 3 semantic **seam** shipped, model tier blocked on combo 02 (no inference API exists). See log entries. |
 | **10** Day-One Adoption | 8 | 4 | **Complete** (2 deliberate non-implementations) | All 4 phases merged via PR #32. Pre-flight found it **not uniformly greenfield** — `teams-catalog` and `OnboardingWizard` already existed. Preflight checks, blueprint variables, work templates/DoD, demo company, CSV import, cost projection. Not built: seeded cold-start price table, and the shadow-heartbeat `planOnly` tier (blocked — adapters spawn external CLIs, so "no side effects" cannot be guaranteed). Full record: `specs/2026-07-31-combo10-day-one-adoption-design.md`. |
-| **04** CFO Suite | 8 | 5 | **Phase 1 substrate already built** (was "Partial / scattered" — an understatement) | Pre-flight 2026-08-01: the budget engine is already generic over `budget_policies.metric`; it is held at one metric by a **five-site short-circuit** (`BUDGET_METRICS` single-element union + `computeObservedAmount` early return + three `eq(metric,"billed_cents")` filters). `cost_events` already persists input/cached/output tokens from real adapter usage. 019 needs no migration. 037's cache data is captured and displayed; only the *rate* is missing. See the 2026-08-01 pre-flight entry. |
+| **04** CFO Suite | 8 | 5 | **Phase 1 built** (2026-08-02, branch `feat/combo04-phase1-token-budgets`); phases 2–4 not started | Pre-flight 2026-08-01: the budget engine is already generic over `budget_policies.metric`; it is held at one metric by a **five-site short-circuit** (`BUDGET_METRICS` single-element union + `computeObservedAmount` early return + three `eq(metric,"billed_cents")` filters). `cost_events` already persists input/cached/output tokens from real adapter usage. 019 needs no migration. 037's cache data is captured and displayed; only the *rate* is missing. See the 2026-08-01 pre-flight entry. |
 | **02** Model Economy | 8 | 5 | **Phases 1–2 complete** (of 4) | Pre-flight found idea 008 half-built *and* actively corrupting cost data: local runs billed as OpenAI. Phase 1 shipped local billing truth (`local-inference.ts`, `run-billing-ledger.ts`, `BILLING_TYPES += "local"`). No `local_llm` adapter — a local endpoint is first-class *config*, not a wrapper adapter. **Phase 2 (012 fallback chains) merged 2026-08-01 via PR #40** — `fallback-chain.ts`, exhaustion degrades to the retry ladder, no migration. Phases 3–4 (credential fair-share 049, host resource probe 041) re-verified not started 2026-08-01. **Does not and will not provide an inference API** — see log entry. |
 | **08** Zero-Trust Governance | 8 | 6 | Not started | — |
 | **06–07, 09, 11–13** | 6–7 | 7+ | Not started | Mature later. |
