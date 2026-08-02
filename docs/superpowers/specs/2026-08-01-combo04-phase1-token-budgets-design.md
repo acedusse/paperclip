@@ -20,7 +20,7 @@ Verified on `master` @ `e8e001c`.
 | `cost_events` carries real token data | **Yes.** `inputTokens` / `cachedInputTokens` / `outputTokens`, written from actual adapter usage (`heartbeat.ts:2135–2157`), not defaulted. |
 | The blocker is one short-circuit | **No — it is five sites.** See below. |
 | No migration needed | **Wrong.** The amount columns are `integer`, a ceiling of 2 147 483 647. See §2. |
-| A UI path exists to create a non-dollar policy | **No.** `AgentDetail.tsx:752` and `ProjectDetail.tsx:630` both hardcode `metric: "billed_cents"`. |
+| A UI path exists to create a non-dollar policy | **No.** Both detail pages match an existing policy by scope alone and fall back to a synthetic summary hardcoding `metric: "billed_cents"` (`AgentDetail.tsx:752`, `ProjectDetail.tsx:630`), and their `upsertPolicy` mutations (`AgentDetail.tsx:836`, `ProjectDetail.tsx:650`) omit `metric` entirely, so the validator defaults it to dollars. |
 
 ### The five pinned sites
 
@@ -86,7 +86,7 @@ Four changes in `budgets.ts`, all of them removing a special case rather than ad
 | `billed_cents` | `sum(costCents)` |
 | `total_tokens` | `sum(inputTokens + cachedInputTokens + outputTokens)` |
 
-An unrecognised metric returns `0` and logs a warning. This is a deliberate asymmetry: enforcement is real, but a budget the engine cannot *compute* must never halt the fleet. The failure direction is "do not block", matching how `fallback-chain.ts` treats unrecognised input as `retry_same`.
+An unrecognised metric returns `0`. This is a deliberate asymmetry: enforcement is real, but a budget the engine cannot *compute* must never halt the fleet. The failure direction is "do not block", matching how `fallback-chain.ts` treats unrecognised input as `retry_same`. It is documented with a code comment rather than a log line — `server/src/services/` has no structured logger, and an unrecognised metric can only arise from a hand-written row or a rolled-back deploy.
 
 **`evaluateCostEvent`** drops `policy.metric !== "billed_cents"` from its skip condition, keeping the `amount <= 0` guard.
 
