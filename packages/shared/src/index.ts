@@ -14,6 +14,13 @@
 // [START: module]
 export { agentAdapterTypeSchema, optionalAgentAdapterTypeSchema } from "./adapter-type.js";
 export {
+  CACHE_HIT_RATE_BANDS,
+  CACHE_HIT_RATE_VOLUME_FLOOR,
+  computeCacheHitRate,
+  type CacheHitBand,
+  type CacheHitRateResult,
+} from "./cache-metrics.js";
+export {
   getAgentOrgChainHealth,
   getAgentWorkEligibility,
   isAgentAssignableToWork,
