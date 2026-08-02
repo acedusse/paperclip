@@ -17,7 +17,7 @@ import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { agents, budgetPolicies, companies, costEvents, createDb } from "@paperclipai/db";
 import { getEmbeddedPostgresTestSupport, startEmbeddedPostgresTestDatabase } from "../__tests__/helpers/embedded-postgres.js";
-import { computeObservedAmount } from "./budgets.js";
+import { budgetService, computeObservedAmount } from "./budgets.js";
 
 const embeddedPostgresSupport = await getEmbeddedPostgresTestSupport();
 const describeEmbeddedPostgres = embeddedPostgresSupport.supported ? describe : describe.skip;
@@ -138,6 +138,63 @@ describeEmbeddedPostgres("budget token metric", () => {
 
     const [row] = await db.select().from(budgetPolicies).where(eq(budgetPolicies.id, policyId));
     expect(row?.amount).toBe(hugeAmount);
+  });
+
+  it("blocks invocation on a breached token policy while the dollar policy is fine", async () => {
+    const blockCompanyId = randomUUID();
+    await db.insert(companies).values({
+      id: blockCompanyId,
+      name: "Mixed Metric Co",
+      issuePrefix: "MIX",
+    });
+    const blockAgentId = randomUUID();
+    await db.insert(agents).values({
+      id: blockAgentId,
+      companyId: blockCompanyId,
+      name: "Mixed Agent",
+    });
+
+    await db.insert(costEvents).values({
+      companyId: blockCompanyId,
+      agentId: blockAgentId,
+      provider: "anthropic",
+      biller: "anthropic",
+      billingType: "subscription_included",
+      model: "claude-opus-5",
+      inputTokens: 6_000,
+      cachedInputTokens: 3_000,
+      outputTokens: 1_000,
+      costCents: 5,
+      occurredAt: new Date(),
+    });
+
+    // Dollars: 5 cents observed against a 10_000 cent cap — nowhere near.
+    await db.insert(budgetPolicies).values({
+      companyId: blockCompanyId,
+      scopeType: "agent",
+      scopeId: blockAgentId,
+      metric: "billed_cents",
+      windowKind: "calendar_month_utc",
+      amount: 10_000,
+      hardStopEnabled: true,
+    });
+    // Tokens: 10_000 observed against a 5_000 cap — breached.
+    await db.insert(budgetPolicies).values({
+      companyId: blockCompanyId,
+      scopeType: "agent",
+      scopeId: blockAgentId,
+      metric: "total_tokens",
+      windowKind: "calendar_month_utc",
+      amount: 5_000,
+      hardStopEnabled: true,
+    });
+
+    const service = budgetService(db);
+    const block = await service.getInvocationBlock(blockCompanyId, blockAgentId);
+
+    expect(block).not.toBeNull();
+    expect(block?.scopeType).toBe("agent");
+    expect(block?.reason).toContain("token");
   });
 });
 // [END: module]
