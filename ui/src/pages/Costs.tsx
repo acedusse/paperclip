@@ -14,8 +14,10 @@
 // [START: module]
 import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { computeCacheHitRate } from "@paperclipai/shared";
 import type {
   BudgetPolicySummary,
+  CacheHitBand,
   CostByAgentModel,
   CostByBiller,
   CostByProviderModel,
@@ -56,6 +58,40 @@ function currentWeekRange(): { from: string; to: string } {
   const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMon, 0, 0, 0, 0);
   const sun = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 6, 23, 59, 59, 999);
   return { from: mon.toISOString(), to: sun.toISOString() };
+}
+
+const CACHE_BAND_TONE: Record<CacheHitBand, string> = {
+  insufficient_data: "text-muted-foreground",
+  low: "text-amber-300",
+  moderate: "text-sky-300",
+  good: "text-emerald-300",
+};
+
+const CACHE_BAND_LABEL: Record<CacheHitBand, string> = {
+  insufficient_data: "not enough data",
+  low: "low",
+  moderate: "moderate",
+  good: "good",
+};
+
+/**
+ * Prompt-cache hit rate for a set of rows. Derived client-side: the costs API
+ * already returns both token columns, so serving the ratio would duplicate state.
+ */
+export function CacheHitRate({
+  cachedInputTokens,
+  inputTokens,
+}: {
+  cachedInputTokens: number;
+  inputTokens: number;
+}) {
+  const { rate, band } = computeCacheHitRate(cachedInputTokens, inputTokens);
+  return (
+    <span className={cn("tabular-nums", CACHE_BAND_TONE[band])}>
+      {rate === null ? "—" : `${Math.round(rate * 100)}%`}
+      <span className="ml-1 text-xs text-muted-foreground">{CACHE_BAND_LABEL[band]}</span>
+    </span>
+  );
 }
 
 function ProviderTabLabel({ provider, rows }: { provider: string; rows: CostByProviderModel[] }) {
@@ -536,6 +572,8 @@ export function Costs() {
       (sum, row) => sum + row.inputTokens + row.cachedInputTokens + row.outputTokens,
       0,
     );
+  const totalCachedInputTokens = (spendData?.byAgent ?? []).reduce((sum, row) => sum + row.cachedInputTokens, 0);
+  const totalFreshInputTokens = (spendData?.byAgent ?? []).reduce((sum, row) => sum + row.inputTokens, 0);
 
   const topFinanceEvents = (financeData?.events ?? []) as FinanceEvent[];
   const budgetPolicies = budgetData?.policies ?? [];
@@ -697,6 +735,13 @@ export function Costs() {
                         <div className="mt-1 text-lg font-medium tabular-nums">
                           {formatTokens(inferenceTokenTotal)}
                         </div>
+                        <div className="mt-1 text-sm">
+                          <span className="text-muted-foreground">cache </span>
+                          <CacheHitRate
+                            cachedInputTokens={totalCachedInputTokens}
+                            inputTokens={totalFreshInputTokens}
+                          />
+                        </div>
                       </div>
                     </div>
                     {spendData?.summary.budgetCents && spendData.summary.budgetCents > 0 ? (
@@ -766,6 +811,8 @@ export function Costs() {
                                 <div className="font-medium">{formatCents(row.costCents)}</div>
                                 <div className="text-xs text-muted-foreground">
                                   in {formatTokens(row.inputTokens + row.cachedInputTokens)} · out {formatTokens(row.outputTokens)}
+                                  {" · cache "}
+                                  <CacheHitRate cachedInputTokens={row.cachedInputTokens} inputTokens={row.inputTokens} />
                                 </div>
                                 {(row.apiRunCount > 0 || row.subscriptionRunCount > 0 || row.localRunCount > 0) ? (
                                   <div className="text-xs text-muted-foreground">
