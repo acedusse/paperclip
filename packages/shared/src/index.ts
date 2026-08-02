@@ -14,6 +14,13 @@
 // [START: module]
 export { agentAdapterTypeSchema, optionalAgentAdapterTypeSchema } from "./adapter-type.js";
 export {
+  CACHE_HIT_RATE_BANDS,
+  CACHE_HIT_RATE_VOLUME_FLOOR,
+  computeCacheHitRate,
+  type CacheHitBand,
+  type CacheHitRateResult,
+} from "./cache-metrics.js";
+export {
   getAgentOrgChainHealth,
   getAgentWorkEligibility,
   isAgentAssignableToWork,
@@ -145,6 +152,7 @@ export {
   FINANCE_UNITS,
   BUDGET_SCOPE_TYPES,
   BUDGET_METRICS,
+  BUDGET_METRIC_META,
   BUDGET_WINDOW_KINDS,
   BUDGET_THRESHOLD_TYPES,
   BUDGET_INCIDENT_STATUSES,
@@ -270,6 +278,7 @@ export {
   type FinanceUnit,
   type BudgetScopeType,
   type BudgetMetric,
+  type BudgetMetricMeta,
   type BudgetWindowKind,
   type BudgetThresholdType,
   type BudgetIncidentStatus,

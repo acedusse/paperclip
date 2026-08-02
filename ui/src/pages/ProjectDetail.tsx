@@ -15,7 +15,7 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Link, useParams, useNavigate, useLocation, Navigate } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { PROJECT_COLORS, PROJECT_ICON_NAMES, isUuidLike, type BudgetPolicySummary } from "@paperclipai/shared";
+import { BUDGET_METRIC_META, PROJECT_COLORS, PROJECT_ICON_NAMES, isUuidLike, type BudgetMetric, type BudgetPolicySummary } from "@paperclipai/shared";
 import { budgetsApi } from "../api/budgets";
 import { executionWorkspacesApi } from "../api/execution-workspaces";
 import { instanceSettingsApi } from "../api/instanceSettings";
@@ -367,6 +367,7 @@ export function ProjectDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const [fieldSaveStates, setFieldSaveStates] = useState<Partial<Record<ProjectConfigFieldKey, ProjectFieldSaveState>>>({});
+  const [budgetMetric, setBudgetMetric] = useState<BudgetMetric>("billed_cents");
   const [dismissedLeftProjectIds, setDismissedLeftProjectIds] = useState<Set<string>>(() => new Set());
   const fieldSaveRequestIds = useRef<Partial<Record<ProjectConfigFieldKey, number>>>({});
   const fieldSaveTimers = useRef<Partial<Record<ProjectConfigFieldKey, ReturnType<typeof setTimeout>>>>({});
@@ -618,7 +619,10 @@ export function ProjectDetail() {
 
   const projectBudgetSummary = useMemo(() => {
     const matched = budgetOverview?.policies.find(
-      (policy) => policy.scopeType === "project" && policy.scopeId === (project?.id ?? routeProjectRef),
+      (policy) =>
+        policy.scopeType === "project" &&
+        policy.scopeId === (project?.id ?? routeProjectRef) &&
+        policy.metric === budgetMetric,
     );
     if (matched) return matched;
     return {
@@ -627,7 +631,7 @@ export function ProjectDetail() {
       scopeType: "project",
       scopeId: project?.id ?? routeProjectRef,
       scopeName: project?.name ?? "Project",
-      metric: "billed_cents",
+      metric: budgetMetric,
       windowKind: "lifetime",
       amount: 0,
       observedAmount: 0,
@@ -643,13 +647,14 @@ export function ProjectDetail() {
       windowStart: new Date(),
       windowEnd: new Date(),
     } satisfies BudgetPolicySummary;
-  }, [budgetOverview?.policies, project, resolvedCompanyId, routeProjectRef]);
+  }, [budgetMetric, budgetOverview?.policies, project, resolvedCompanyId, routeProjectRef]);
 
   const budgetMutation = useMutation({
     mutationFn: (amount: number) =>
       budgetsApi.upsertPolicy(resolvedCompanyId!, {
         scopeType: "project",
         scopeId: project?.id ?? routeProjectRef,
+        metric: budgetMetric,
         amount,
         windowKind: "lifetime",
       }),
@@ -907,7 +912,24 @@ export function ProjectDetail() {
       )}
 
       {activeTab === "budget" && resolvedCompanyId ? (
-        <div className="max-w-3xl">
+        <div className="max-w-3xl space-y-4">
+          <div className="inline-flex rounded-lg border border-border/70 p-1">
+            {(Object.keys(BUDGET_METRIC_META) as BudgetMetric[]).map((metric) => (
+              <button
+                key={metric}
+                type="button"
+                onClick={() => setBudgetMetric(metric)}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition-colors",
+                  budgetMetric === metric
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {BUDGET_METRIC_META[metric].label}
+              </button>
+            ))}
+          </div>
           <BudgetPolicyCard
             summary={projectBudgetSummary}
             variant="plain"

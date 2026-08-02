@@ -12,7 +12,7 @@
 // JSON_FLOW: {"file": "packages/db/src/schema/budget_policies.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-import { boolean, index, integer, pgTable, text, timestamp, uuid, uniqueIndex } from "drizzle-orm/pg-core";
+import { bigint, boolean, index, integer, pgTable, text, timestamp, uuid, uniqueIndex } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 
 export const budgetPolicies = pgTable(
@@ -24,7 +24,7 @@ export const budgetPolicies = pgTable(
     scopeId: uuid("scope_id").notNull(),
     metric: text("metric").notNull().default("billed_cents"),
     windowKind: text("window_kind").notNull(),
-    amount: integer("amount").notNull().default(0),
+    amount: bigint("amount", { mode: "number" }).notNull().default(0),
     warnPercent: integer("warn_percent").notNull().default(80),
     hardStopEnabled: boolean("hard_stop_enabled").notNull().default(true),
     notifyEnabled: boolean("notify_enabled").notNull().default(true),

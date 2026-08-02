@@ -106,6 +106,8 @@ import {
   type AgentRuntimeState,
   type LiveEvent,
   type WorkspaceOperation,
+  BUDGET_METRIC_META,
+  type BudgetMetric,
 } from "@paperclipai/shared";
 import { buildPermissionsForTrustPreset, getTrustPreset } from "../lib/trust-policy-ui";
 import { redactHomePathUserSegments, redactHomePathUserSegmentsInValue } from "@paperclipai/adapter-utils";
@@ -664,6 +666,7 @@ export function AgentDetail() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [actionError, setActionError] = useState<string | null>(null);
+  const [budgetMetric, setBudgetMetric] = useState<BudgetMetric>("billed_cents");
   const [dismissedLeftAgentIds, setDismissedLeftAgentIds] = useState<Set<string>>(() => new Set());
   const activeView = urlRunId ? "runs" as AgentDetailView : parseAgentDetailView(urlTab ?? null);
   const needsDashboardData = activeView === "dashboard";
@@ -738,18 +741,23 @@ export function AgentDetail() {
   const directReports = (allAgents ?? []).filter((a) => a.reportsTo === agent?.id && a.status !== "terminated");
   const agentBudgetSummary = useMemo(() => {
     const matched = budgetOverview?.policies.find(
-      (policy) => policy.scopeType === "agent" && policy.scopeId === (agent?.id ?? routeAgentRef),
+      (policy) =>
+        policy.scopeType === "agent" &&
+        policy.scopeId === (agent?.id ?? routeAgentRef) &&
+        policy.metric === budgetMetric,
     );
     if (matched) return matched;
-    const budgetMonthlyCents = agent?.budgetMonthlyCents ?? 0;
-    const spentMonthlyCents = agent?.spentMonthlyCents ?? 0;
+    // The legacy agent columns are cents-denominated, so they may only seed the
+    // dollar metric's synthetic summary.
+    const budgetMonthlyCents = budgetMetric === "billed_cents" ? (agent?.budgetMonthlyCents ?? 0) : 0;
+    const spentMonthlyCents = budgetMetric === "billed_cents" ? (agent?.spentMonthlyCents ?? 0) : 0;
     return {
       policyId: "",
       companyId: resolvedCompanyId ?? "",
       scopeType: "agent",
       scopeId: agent?.id ?? routeAgentRef,
       scopeName: agent?.name ?? "Agent",
-      metric: "billed_cents",
+      metric: budgetMetric,
       windowKind: "calendar_month_utc",
       amount: budgetMonthlyCents,
       observedAmount: spentMonthlyCents,
@@ -766,7 +774,7 @@ export function AgentDetail() {
       windowStart: new Date(),
       windowEnd: new Date(),
     } satisfies BudgetPolicySummary;
-  }, [agent, budgetOverview?.policies, resolvedCompanyId, routeAgentRef]);
+  }, [agent, budgetMetric, budgetOverview?.policies, resolvedCompanyId, routeAgentRef]);
   const mobileLiveRun = useMemo(
     () => (heartbeats ?? []).find((r) => r.status === "running" || r.status === "queued") ?? null,
     [heartbeats],
@@ -836,6 +844,7 @@ export function AgentDetail() {
       budgetsApi.upsertPolicy(resolvedCompanyId!, {
         scopeType: "agent",
         scopeId: agent?.id ?? routeAgentRef,
+        metric: budgetMetric,
         amount,
         windowKind: "calendar_month_utc",
       }),
@@ -1185,7 +1194,24 @@ export function AgentDetail() {
       )}
 
       {activeView === "budget" && resolvedCompanyId ? (
-        <div className="max-w-3xl">
+        <div className="max-w-3xl space-y-4">
+          <div className="inline-flex rounded-lg border border-border/70 p-1">
+            {(Object.keys(BUDGET_METRIC_META) as BudgetMetric[]).map((metric) => (
+              <button
+                key={metric}
+                type="button"
+                onClick={() => setBudgetMetric(metric)}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition-colors",
+                  budgetMetric === metric
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {BUDGET_METRIC_META[metric].label}
+              </button>
+            ))}
+          </div>
           <BudgetPolicyCard
             summary={agentBudgetSummary}
             isSaving={budgetMutation.isPending}

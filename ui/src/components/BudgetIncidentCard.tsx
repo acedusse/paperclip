@@ -13,22 +13,22 @@
 // ==========================================
 // [START: module]
 import { useState } from "react";
-import type { BudgetIncident } from "@paperclipai/shared";
+import { BUDGET_METRIC_META, type BudgetIncident } from "@paperclipai/shared";
 import { AlertOctagon, ArrowUpRight, PauseCircle } from "lucide-react";
-import { formatCents } from "../lib/utils";
+import { formatBudgetAmount } from "../lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-function centsInputValue(value: number) {
-  return (value / 100).toFixed(2);
+function amountInputValue(value: number, inputScale: number) {
+  return inputScale === 100 ? (value / 100).toFixed(2) : String(value);
 }
 
-function parseDollarInput(value: string) {
+function parseAmountInput(value: string, inputScale: number) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || parsed < 0) return null;
-  return Math.round(parsed * 100);
+  return Math.round(parsed * inputScale);
 }
 
 function incidentStateLabel(incident: BudgetIncident) {
@@ -46,14 +46,18 @@ export function BudgetIncidentCard({
   isMutating,
 }: {
   incident: BudgetIncident;
-  onRaiseAndResume: (amountCents: number) => void;
+  onRaiseAndResume: (amount: number) => void;
   onKeepPaused: () => void;
   isMutating?: boolean;
 }) {
+  const meta = BUDGET_METRIC_META[incident.metric];
   const [draftAmount, setDraftAmount] = useState(
-    centsInputValue(Math.max(incident.amountObserved + 1000, incident.amountLimit)),
+    amountInputValue(
+      Math.max(incident.amountObserved + meta.raiseIncrement, incident.amountLimit),
+      meta.inputScale,
+    ),
   );
-  const parsed = parseDollarInput(draftAmount);
+  const parsed = parseAmountInput(draftAmount, meta.inputScale);
   const stateLabel = incidentStateLabel(incident);
 
   return (
@@ -71,7 +75,7 @@ export function BudgetIncidentCard({
             </div>
             <CardTitle className="mt-1 text-base text-red-50">{incident.scopeName}</CardTitle>
             <CardDescription className="mt-1 text-red-100/70">
-              Spending reached {formatCents(incident.amountObserved)} against a limit of {formatCents(incident.amountLimit)}.
+              Usage reached {formatBudgetAmount(incident.metric, incident.amountObserved)} against a limit of {formatBudgetAmount(incident.metric, incident.amountLimit)}.
             </CardDescription>
           </div>
           <div className="rounded-full border border-red-400/30 bg-red-500/10 p-2 text-red-200">
@@ -91,14 +95,14 @@ export function BudgetIncidentCard({
 
         <div className="rounded-xl border border-border/60 bg-background/60 p-3">
           <label className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            New budget (USD)
+            {meta.inputLabel.replace("Budget", "New budget")}
           </label>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
             <Input
               value={draftAmount}
               onChange={(event) => setDraftAmount(event.target.value)}
-              inputMode="decimal"
-              placeholder="0.00"
+              inputMode={meta.unit === "tokens" ? "numeric" : "decimal"}
+              placeholder={meta.inputPlaceholder}
             />
             <Button
               className="gap-2"
@@ -113,7 +117,7 @@ export function BudgetIncidentCard({
           </div>
           {parsed !== null && parsed <= incident.amountObserved ? (
             <p className="mt-2 text-xs text-red-200/80">
-              The new budget must exceed current observed spend.
+              The new budget must exceed current observed usage.
             </p>
           ) : null}
         </div>

@@ -12,8 +12,9 @@
 // JSON_FLOW: {"file": "ui/src/components/ApprovalPayload.tsx", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import { BUDGET_METRIC_META, type BudgetMetric } from "@paperclipai/shared";
 import { UserPlus, Lightbulb, ShieldAlert, ShieldCheck } from "lucide-react";
-import { formatCents } from "../lib/utils";
+import { formatBudgetAmount } from "../lib/utils";
 
 export const typeLabel: Record<string, string> = {
   hire_agent: "Hire Agent",
@@ -145,14 +146,21 @@ export function CeoStrategyPayload({ payload }: { payload: Record<string, unknow
 export function BudgetOverridePayload({ payload }: { payload: Record<string, unknown> }) {
   const budgetAmount = typeof payload.budgetAmount === "number" ? payload.budgetAmount : null;
   const observedAmount = typeof payload.observedAmount === "number" ? payload.observedAmount : null;
+  // Approval payloads are stored JSON and may predate any metric change, so an
+  // unrecognised value must fall back rather than crash the card.
+  const metric: BudgetMetric =
+    typeof payload.metric === "string" && payload.metric in BUDGET_METRIC_META
+      ? (payload.metric as BudgetMetric)
+      : "billed_cents";
+  const meta = BUDGET_METRIC_META[metric];
   return (
     <div className="mt-3 space-y-1.5 text-sm">
       <PayloadField label="Scope" value={payload.scopeName ?? payload.scopeType} />
       <PayloadField label="Window" value={payload.windowKind} />
-      <PayloadField label="Metric" value={payload.metric} />
+      <PayloadField label="Metric" value={meta.label} />
       {(budgetAmount !== null || observedAmount !== null) ? (
         <div className="rounded-md bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-          Limit {budgetAmount !== null ? formatCents(budgetAmount) : "—"} · Observed {observedAmount !== null ? formatCents(observedAmount) : "—"}
+          Limit {budgetAmount !== null ? formatBudgetAmount(metric, budgetAmount) : "—"} · Observed {observedAmount !== null ? formatBudgetAmount(metric, observedAmount) : "—"}
         </div>
       ) : null}
       {!!payload.guidance && (
