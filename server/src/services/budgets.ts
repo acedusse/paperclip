@@ -154,11 +154,33 @@ async function resolveScopeRecord(db: Db, scopeType: BudgetScopeType, scopeId: s
   };
 }
 
+/**
+ * SQL sum expression for a budget metric, or null when the metric is unrecognised.
+ *
+ * `total_tokens` counts cached input tokens at full weight: the metric models the
+ * subscription / rate-limit constraint, and providers count cache reads against
+ * usage windows. This is neutral on caching rather than punitive — caching shows
+ * up as lower `billed_cents` and in the cache-hit rate, not as budget headroom.
+ */
+function observedAmountExpression(metric: string) {
+  if (metric === "billed_cents") {
+    return sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision`;
+  }
+  if (metric === "total_tokens") {
+    return sql<number>`coalesce(sum(${costEvents.inputTokens} + ${costEvents.cachedInputTokens} + ${costEvents.outputTokens}), 0)::double precision`;
+  }
+  return null;
+}
+
 export async function computeObservedAmount(
   db: Db,
   policy: Pick<PolicyRow, "companyId" | "scopeType" | "scopeId" | "windowKind" | "metric">,
 ) {
-  if (policy.metric !== "billed_cents") return 0;
+  // An unrecognised metric can only reach here from a hand-written row or a rolled-back
+  // deploy. Return 0 rather than throwing: enforcement is real, but a budget the engine
+  // cannot compute must never halt the fleet. The failure direction is "do not block".
+  const totalExpression = observedAmountExpression(policy.metric);
+  if (!totalExpression) return 0;
 
   const conditions = [eq(costEvents.companyId, policy.companyId)];
   if (policy.scopeType === "agent") conditions.push(eq(costEvents.agentId, policy.scopeId));
@@ -170,9 +192,7 @@ export async function computeObservedAmount(
   }
 
   const [row] = await db
-    .select({
-      total: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::double precision`,
-    })
+    .select({ total: totalExpression })
     .from(costEvents)
     .where(and(...conditions));
 
@@ -679,7 +699,7 @@ export function budgetService(db: Db, hooks: BudgetServiceHooks = {}) {
       });
 
       for (const policy of relevantPolicies) {
-        if (policy.metric !== "billed_cents" || policy.amount <= 0) continue;
+        if (policy.amount <= 0) continue;
         const observedAmount = await computeObservedAmount(db, policy);
         const softThreshold = Math.ceil((policy.amount * policy.warnPercent) / 100);
 
