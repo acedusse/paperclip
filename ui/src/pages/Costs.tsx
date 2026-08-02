@@ -225,12 +225,16 @@ export function Costs() {
     mutationFn: (input: {
       scopeType: BudgetPolicySummary["scopeType"];
       scopeId: string;
+      metric: BudgetPolicySummary["metric"];
       amount: number;
       windowKind: BudgetPolicySummary["windowKind"];
     }) =>
       budgetsApi.upsertPolicy(companyId, {
         scopeType: input.scopeType,
         scopeId: input.scopeId,
+        // Without this the validator defaults to billed_cents, so editing a token
+        // policy would upsert a dollar policy at the same scope instead.
+        metric: input.metric,
         amount: input.amount,
         windowKind: input.windowKind,
       }),
@@ -949,6 +953,7 @@ export function Costs() {
                               policyMutation.mutate({
                                 scopeType: summary.scopeType,
                                 scopeId: summary.scopeId,
+                                metric: summary.metric,
                                 amount,
                                 windowKind: summary.windowKind,
                               })}
