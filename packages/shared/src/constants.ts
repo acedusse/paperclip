@@ -623,8 +623,52 @@ export type FinanceUnit = (typeof FINANCE_UNITS)[number];
 export const BUDGET_SCOPE_TYPES = ["company", "agent", "project"] as const;
 export type BudgetScopeType = (typeof BUDGET_SCOPE_TYPES)[number];
 
-export const BUDGET_METRICS = ["billed_cents"] as const;
+export const BUDGET_METRICS = ["billed_cents", "total_tokens"] as const;
 export type BudgetMetric = (typeof BUDGET_METRICS)[number];
+
+export interface BudgetMetricMeta {
+  /** unit the stored amount is denominated in */
+  unit: "cents" | "tokens";
+  /** short noun for the metric in headings and payload fields */
+  label: string;
+  /** label above the amount input */
+  inputLabel: string;
+  /** placeholder for the amount input */
+  inputPlaceholder: string;
+  /** stored units per unit the operator types: 100 for cents (they type dollars), 1 for tokens */
+  inputScale: number;
+  /** default bump offered when raising a budget to resolve a hard-stop incident */
+  raiseIncrement: number;
+  /** validation message when the typed amount does not parse */
+  invalidInputMessage: string;
+}
+
+/**
+ * Presentation metadata per budget metric. Typed as a total Record so adding a
+ * metric to BUDGET_METRICS without a descriptor is a compile error rather than a
+ * runtime surprise. The metric-to-SQL mapping deliberately lives server-side in
+ * budgets.ts: this package has no dependency on @paperclipai/db and must not gain one.
+ */
+export const BUDGET_METRIC_META: Record<BudgetMetric, BudgetMetricMeta> = {
+  billed_cents: {
+    unit: "cents",
+    label: "Spend",
+    inputLabel: "Budget (USD)",
+    inputPlaceholder: "0.00",
+    inputScale: 100,
+    raiseIncrement: 1_000,
+    invalidInputMessage: "Enter a valid non-negative dollar amount.",
+  },
+  total_tokens: {
+    unit: "tokens",
+    label: "Tokens",
+    inputLabel: "Budget (tokens)",
+    inputPlaceholder: "0",
+    inputScale: 1,
+    raiseIncrement: 1_000_000,
+    invalidInputMessage: "Enter a valid non-negative token count.",
+  },
+};
 
 export const BUDGET_WINDOW_KINDS = ["calendar_month_utc", "lifetime"] as const;
 export type BudgetWindowKind = (typeof BUDGET_WINDOW_KINDS)[number];
