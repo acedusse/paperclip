@@ -4,7 +4,17 @@
 **Idea:** 066 — built-in chat channel (Telegram half)
 **Phase:** A of C (A: console · B: Mini App · C: the company as a Telegram org)
 **Depends on:** `f501374` (user-identity binding + channel widening) — on `feat/telegram-approval-channel`, unpushed
-**Status:** design, approved
+**Status:** **superseded, not built** — see `2026-08-06-telegram-mini-app-design.md`
+
+> **Superseded the same day.** The requirement turned out to be a UI version of Paperclip per company
+> — Dashboard, Tasks, Triage, Digest, Artifacts and Wikis — and two of those are documents that a
+> chat message cannot render. The Mini App serves the board itself and delivers all of them at once,
+> so a chat grammar answering four of them in a worse form was not worth building first.
+>
+> Kept for the record because its findings survive: approvals have no human-readable id (so no
+> command could ever offer `/approve PAP-142`), and the `/triage` volume reasoning still applies if a
+> command grammar is ever revisited. Its `resolveActingBinding` extraction does **not** carry over as
+> written — the Mini App resolves a binding by Telegram *user* id, not by chat id.
 
 ---
 
