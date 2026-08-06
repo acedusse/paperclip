@@ -125,22 +125,27 @@ export function telegramLinkService(db: Db) {
     },
 
     async revokeBinding(input: { companyId: string; id: string }): Promise<boolean> {
-      const revoked = await db
-        .update(telegramChatBindings)
-        .set({ revokedAt: new Date() })
-        .where(
-          and(
-            eq(telegramChatBindings.id, input.id),
-            eq(telegramChatBindings.companyId, input.companyId),
-            isNull(telegramChatBindings.revokedAt),
-          ),
-        )
-        .returning();
-      if (revoked.length === 0) return false;
-      // Unlinking a chat must also end every Mini App session it produced, or the board's kill
-      // switch would only stop the buttons and leave the webview holding a working board session.
-      await miniappSessions.revokeForBinding(input.id);
-      return true;
+      // Both writes run in one transaction: unlinking a chat must also end every Mini App session it
+      // produced, or the board's kill switch would only stop the buttons and leave the webview
+      // holding a working board session. A crash between two unwrapped writes could leave exactly
+      // that half-revoked state, so the binding update and the session revocation must commit -- or
+      // fail -- together.
+      return db.transaction(async (tx) => {
+        const revoked = await tx
+          .update(telegramChatBindings)
+          .set({ revokedAt: new Date() })
+          .where(
+            and(
+              eq(telegramChatBindings.id, input.id),
+              eq(telegramChatBindings.companyId, input.companyId),
+              isNull(telegramChatBindings.revokedAt),
+            ),
+          )
+          .returning();
+        if (revoked.length === 0) return false;
+        await miniappSessions.revokeForBinding(input.id, tx);
+        return true;
+      });
     },
 
     async touchBinding(id: string): Promise<void> {

@@ -129,8 +129,13 @@ export function telegramMiniappSessionService(db: Db) {
         .where(eq(telegramMiniappSessions.id, id));
     },
 
-    async revokeForBinding(bindingId: string): Promise<void> {
-      await db
+    // Accepts an optional transaction handle so a caller (telegram-link.ts's revokeBinding) can run
+    // this in the same transaction as the binding update it must be atomic with. Defaulting to the
+    // outer `db` keeps this callable standalone too. Typed `any` to match this codebase's existing
+    // dbOrTx convention (see document-annotations.ts, issue-references.ts) -- the transaction handle
+    // drizzle hands a callback is not structurally identical to `Db`.
+    async revokeForBinding(bindingId: string, dbOrTx: any = db): Promise<void> {
+      await dbOrTx
         .update(telegramMiniappSessions)
         .set({ revokedAt: new Date() })
         .where(and(eq(telegramMiniappSessions.bindingId, bindingId), isNull(telegramMiniappSessions.revokedAt)));
