@@ -46,6 +46,7 @@ const mockSetPeeking = vi.hoisted(() => vi.fn());
 const mockSidebarState = vi.hoisted(() => ({
   sidebarOpen: true,
   isMobile: false,
+  isTelegram: false,
   collapsed: false,
   peeking: false,
 }));
@@ -111,6 +112,10 @@ vi.mock("./ToastViewport", () => ({
 
 vi.mock("./MobileBottomNav", () => ({
   MobileBottomNav: () => null,
+}));
+
+vi.mock("./TelegramBottomNav", () => ({
+  TelegramBottomNav: () => null,
 }));
 
 vi.mock("./WorktreeBanner", () => ({
@@ -191,6 +196,7 @@ vi.mock("../context/SidebarContext", () => ({
     peeking: mockSidebarState.peeking,
     setPeeking: mockSetPeeking,
     isMobile: mockSidebarState.isMobile,
+    isTelegram: mockSidebarState.isTelegram,
     forceCollapsed: false,
     setForceCollapsed: mockSetForceCollapsed,
     routeRequestsCollapsed: false,

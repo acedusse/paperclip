@@ -320,6 +320,38 @@ function CompanyRootRedirect() {
   return <Navigate to={`/${targetCompany.issuePrefix}/dashboard`} replace />;
 }
 
+/**
+ * Landing target for the Telegram Mini App's stable entry URL (`/telegram/app?c=X`). Same company
+ * resolution as CompanyRootRedirect, but always lands on `dashboard` specifically rather than whatever
+ * path was requested (there is only ever one such request: the Mini App's fixed entry URL), and
+ * preserves the query string so a later session-bootstrap step can still read `?c=`.
+ */
+function TelegramAppRedirect() {
+  const location = useLocation();
+  const { companies, selectedCompany, loading } = useCompany();
+
+  if (loading) {
+    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">Loading...</div>;
+  }
+
+  const targetCompany = selectedCompany ?? companies[0] ?? null;
+  if (!targetCompany) {
+    if (
+      shouldRedirectCompanylessRouteToOnboarding({
+        pathname: location.pathname,
+        hasCompanies: false,
+      })
+    ) {
+      return <Navigate to="/onboarding" replace />;
+    }
+    return <NoCompaniesStartPage />;
+  }
+
+  return (
+    <Navigate to={`/${targetCompany.issuePrefix}/dashboard${location.search}${location.hash}`} replace />
+  );
+}
+
 function UnprefixedBoardRedirect() {
   const location = useLocation();
   const { companies, selectedCompany, loading } = useCompany();
@@ -388,6 +420,13 @@ export function App() {
 
         <Route element={<CloudAccessGate />}>
           <Route index element={<CompanyRootRedirect />} />
+          {/* Telegram opens the Mini App at a stable, company-carrying URL: /telegram/app?c=X. The
+              board has no such page — land on the resolved company's dashboard, preserving the query
+              string so the session bootstrap can read ?c=. This mirrors CompanyRootRedirect/
+              UnprefixedBoardRedirect below rather than a bare `Navigate to="/dashboard"`: there is no
+              unprefixed `/dashboard` route in this table, only `:companyPrefix/dashboard` inside
+              boardRoutes(), so the destination has to be built from the resolved company prefix. */}
+          <Route path="telegram/app" element={<TelegramAppRedirect />} />
           <Route path="onboarding" element={<OnboardingRoutePage />} />
           <Route path="instance" element={<LegacySettingsRedirect />} />
           <Route path="instance/settings" element={<LegacySettingsRedirect />} />

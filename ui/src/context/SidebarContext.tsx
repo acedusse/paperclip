@@ -21,6 +21,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { isTelegramWebApp } from "../telegram/webapp";
 
 interface SidebarContextValue {
   // Mobile drawer + back-compat (existing behavior, unchanged).
@@ -28,6 +29,9 @@ interface SidebarContextValue {
   setSidebarOpen: (open: boolean) => void;
   toggleSidebar: () => void;
   isMobile: boolean;
+  // True when the board is running inside a Telegram Mini App webview. Drives the bottom nav choice
+  // in Layout (TelegramBottomNav vs MobileBottomNav) — see ui/src/telegram/webapp.ts.
+  isTelegram: boolean;
   // Pinned desktop mode: expanded | collapsed. Desktop-only.
   collapsed: boolean;
   setCollapsed: (next: boolean) => void;
@@ -105,6 +109,9 @@ function readPointerCanPeek(): boolean {
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < MOBILE_BREAKPOINT);
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= MOBILE_BREAKPOINT);
+  // Constant for the life of the page: Telegram injects its WebApp object before our bundle runs, and
+  // a page cannot move into or out of a Mini App without reloading.
+  const [isTelegram] = useState(() => isTelegramWebApp());
 
   // `null` = unpinned; an explicit user pin takes precedence over route request.
   const [userCollapsed, setUserCollapsed] = useState<boolean | null>(() => readStoredCollapsed());
@@ -168,6 +175,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
       setSidebarOpen,
       toggleSidebar,
       isMobile,
+      isTelegram,
       collapsed,
       setCollapsed,
       toggleCollapsed,
@@ -184,6 +192,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
       setSidebarOpen,
       toggleSidebar,
       isMobile,
+      isTelegram,
       collapsed,
       setCollapsed,
       toggleCollapsed,
