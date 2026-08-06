@@ -12,6 +12,8 @@
 // JSON_FLOW: {"file": "ui/src/api/client.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import { getTelegramBearer } from "../telegram/useTelegramSession";
+
 const BASE = "/api";
 
 export class ApiError extends Error {
@@ -31,6 +33,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const body = init?.body;
   if (!(body instanceof FormData) && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
+  }
+  // Outside Telegram this is always null and the header is never set, so nothing changes for the
+  // ordinary board (which authenticates via the session cookie sent through credentials: "include").
+  const telegramBearer = getTelegramBearer();
+  if (telegramBearer && !headers.has("authorization")) {
+    headers.set("authorization", `Bearer ${telegramBearer}`);
   }
 
   const res = await fetch(`${BASE}${path}`, {
