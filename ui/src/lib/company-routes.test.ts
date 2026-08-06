@@ -96,5 +96,20 @@ describe("company routes", () => {
     // Already-prefixed paths are returned untouched.
     expect(applyCompanyPrefix("/PAP/artifacts", "PAP")).toBe("/PAP/artifacts");
   });
+
+  // Every route root rendered inside boardRoutes() is company-scoped. A root missing from
+  // BOARD_ROUTE_ROOTS is read as a company prefix instead, so its sidebar link never gets the
+  // company segment and the router hunts for a company by that name ("No company matches
+  // prefix DIGEST"). Regression for the /digest, /delegations and /onboarding nav links.
+  it.each(["digest", "delegations", "onboarding"])(
+    "treats /%s as a board route that needs a company prefix",
+    (root) => {
+      expect(isBoardPathWithoutPrefix(`/${root}`)).toBe(true);
+      expect(extractCompanyPrefixFromPath(`/${root}`)).toBeNull();
+      expect(applyCompanyPrefix(`/${root}`, "PAP")).toBe(`/PAP/${root}`);
+      expect(toCompanyRelativePath(`/PAP/${root}`)).toBe(`/${root}`);
+    },
+  );
 });
 // [END: module]
+
