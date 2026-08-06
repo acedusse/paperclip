@@ -12,7 +12,7 @@
 // JSON_FLOW: {"file": "ui/src/api/client.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-import { getTelegramBearer } from "../telegram/useTelegramSession";
+import { applyTelegramAuthHeader, getTelegramBearer, refreshTelegramBearer } from "../telegram/useTelegramSession";
 
 const BASE = "/api";
 
@@ -29,23 +29,39 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const headers = new Headers(init?.headers ?? undefined);
-  const body = init?.body;
-  if (!(body instanceof FormData) && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }
-  // Outside Telegram this is always null and the header is never set, so nothing changes for the
-  // ordinary board (which authenticates via the session cookie sent through credentials: "include").
-  const telegramBearer = getTelegramBearer();
-  if (telegramBearer && !headers.has("authorization")) {
-    headers.set("authorization", `Bearer ${telegramBearer}`);
-  }
+  // Outside Telegram, applyTelegramAuthHeader is always a no-op, so nothing changes for the ordinary
+  // board (which authenticates via the session cookie sent through credentials: "include").
+  const buildHeaders = (): Headers => {
+    const headers = new Headers(init?.headers ?? undefined);
+    const body = init?.body;
+    if (!(body instanceof FormData) && !headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
+    applyTelegramAuthHeader(headers);
+    return headers;
+  };
 
-  const res = await fetch(`${BASE}${path}`, {
-    headers,
+  const hadBearer = getTelegramBearer() !== null;
+  let res = await fetch(`${BASE}${path}`, {
+    headers: buildHeaders(),
     credentials: "include",
     ...init,
   });
+
+  // The Mini App's 12-hour bearer can expire mid-session. Re-mint once from the initData the webview
+  // still holds and retry this same request -- outside Telegram, or if the binding was revoked,
+  // refreshTelegramBearer() returns null and this falls through to the ordinary 401 handling below.
+  if (res.status === 401 && hadBearer) {
+    const fresh = await refreshTelegramBearer();
+    if (fresh) {
+      res = await fetch(`${BASE}${path}`, {
+        headers: buildHeaders(),
+        credentials: "include",
+        ...init,
+      });
+    }
+  }
+
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null);
     throw new ApiError(
