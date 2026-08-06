@@ -117,7 +117,7 @@ Checked against [core.telegram.org/bots/webapps](https://core.telegram.org/bots/
 | --- | --- |
 | `initData` HMAC key derivation: `secret = HMAC_SHA256(key="WebAppData", message=botToken)`, `data_check_string` is remaining fields as `key=value`, sorted by key, newline-joined | ✅ confirmed — "the HMAC-SHA-256 signature of the bot's token with the constant string `WebAppData` used as a key" and "Data-check-string is a chain of all received fields, sorted alphabetically, in the format `key=<value>` with a line feed character... used as separator" |
 | `auth_date` is a Unix timestamp the server must range-check itself (Telegram does not expire it) | ✅ confirmed — "_auth_date_ field, which contains a Unix timestamp of when it was received by the Mini App" |
-| `web_app` inline-keyboard buttons work in group chats | ⚠️ **the opposite is documented.** The Bot API's `InlineKeyboardButton.web_app` field description (mirrored verbatim by aiogram and python-telegram-bot, since `core.telegram.org/bots/api` is too large for automated fetch to reach that section directly): *"Description of the Web App that will be launched when the user presses the button... **Available only in private chats between a user and the bot.**"* A `web_app` button on a group card would silently fail to open. This is why the "Review in full" button is currently `url`, not `web_app` — see Known gaps. |
+| `web_app` inline-keyboard buttons work in group chats | ⚠️ **the opposite is documented.** The Bot API's `InlineKeyboardButton.web_app` field description (mirrored verbatim by aiogram and python-telegram-bot, since `core.telegram.org/bots/api` is too large for automated fetch to reach that section directly): *"Description of the Web App that will be launched when the user presses the button... **Available only in private chats between a user and the bot.**"* A `web_app` button on a group card would silently fail to open — which is why the card's **🔎 Review in full** `web_app` button (built in `telegram-format.ts`) is not yet wired into delivery; the **🔗 Open in Paperclip** `url` button ships instead. See Known gaps. |
 | `setChatMenuButton` is set once per bot vs. per chat | ✅ confirmed as **per-chat with a global fallback**, not "once per bot": *"Use this method to change the bot's menu button in a private chat, or the default menu button."* Its `chat_id` parameter: *"Unique identifier for the target private chat. If not specified, default bot's menu button will be changed."* |
 | Mini Apps are restricted to the same ports as webhooks (443/80/88/8443) | ⚠️ **not stated either way.** The docs require HTTPS for a Mini App URL but state no port restriction anywhere on the Mini Apps page — the 443/80/88/8443 restriction appears only in the webhook section. Absence of a stated restriction is not proof none exists; treat "any HTTPS port works for Mini Apps" as likely but unconfirmed, not as a verified fact. |
 
@@ -168,9 +168,21 @@ and read approval traffic — treat the row as a credential and rotate via **Rep
 
 ## Mini App
 
-The bot's menu button and an approval card's **🔎 Review in full** button open Paperclip *inside*
-Telegram, at `{publicBaseUrl}/telegram/app?c=<COMPANY_ID>`. It is the board itself — same build, same
-API — with a six-item bottom nav: Dashboard, Tasks, Triage, Digest, Artifacts, Wikis.
+The bot's menu button opens Paperclip *inside* Telegram, at
+`{publicBaseUrl}/telegram/app?c=<COMPANY_ID>`. It is the board itself — same build, same API — with a
+six-item bottom nav: Dashboard, Tasks, Triage, Digest, Artifacts, Wikis.
+
+**The approval card's in-app button is built but not wired up yet.** `buildApprovalMessage`
+(`telegram-format.ts`) can render a **🔎 Review in full** `web_app` button that opens this same session,
+but its sole production caller, `telegram-channel.ts`, never passes the `miniAppUrl` needed to trigger
+that branch — so a real approval card always falls through to the plain **🔗 Open in Paperclip** `url`
+button instead, which opens an external link and needs its own separate login rather than the
+authenticated in-app session. This isn't an oversight: `web_app` inline buttons are documented as
+*"Available only in private chats between a user and the bot"* (see the verification table below), and
+Paperclip's chat binding explicitly supports group chats (see "Chat vs. user" above). Wiring
+`miniAppUrl` in unconditionally would put a `web_app` button on group cards too, where it would silently
+fail to open, replacing a `url` button that currently works everywhere. Making the card vary by chat
+type is the open work; see Known gaps.
 
 **How it authenticates.** Telegram hands the webview a signed `initData` blob. The page posts it to
 `POST /api/telegram/miniapp/session` with the company id from the URL. The server verifies the HMAC
@@ -243,6 +255,10 @@ live bindings if a leak is suspected.
   questions with more room. See `docs/superpowers/specs/2026-08-06-telegram-command-grammar-design.md`.
 - Proposals — the pick-one-of-N gate for choosing between agent-produced candidates — does not exist in
   core yet, so the Mini App ships with six surfaces rather than seven.
+- The Mini App is reachable from the bot's menu button; the **🔎 Review in full** `web_app` button on
+  approval cards is built (`telegram-format.ts`) but not wired into delivery (`telegram-channel.ts`
+  never passes `miniAppUrl`), because `web_app` buttons are private-chat-only and the send path does not
+  yet vary by chat type. A bound group chat would otherwise get a silently-dead button.
 - No inbound intake (a forwarded message does not become an issue).
 - `setWebhook` is a manual step; Paperclip does not register the webhook for you.
 - WhatsApp is not implemented; its opt-in and 24-hour template rules make it a separate slice.
