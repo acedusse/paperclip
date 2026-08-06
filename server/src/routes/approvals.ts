@@ -199,7 +199,6 @@ export function approvalRoutes(
 
   const riskSvc = approvalRiskService(db);
   const autoPolicySvc = autoApprovePolicyService(db);
-  const triageSvc = approvalTriageService(db);
   const access = accessService(db);
   const issueApprovalsSvc = issueApprovalService(db);
   const secretsSvc = secretService(db);
@@ -209,10 +208,15 @@ export function approvalRoutes(
   // path: emit the `approval.approved` domain event and wake the requesting agent so it can resume.
   // Callers add their own recordDecision (explicit_human vs auto_policy). approvalEffectsService is the
   // single owner — the Telegram inline-button path in routes/telegram.ts calls the very same code.
-  const { applyApprovalApprovedEffects } = approvalEffectsService(db, {
+  const approvalEffects = approvalEffectsService(db, {
     pluginWorkerManager: options.pluginWorkerManager,
     heartbeat: heartbeatService(db, { pluginWorkerManager: options.pluginWorkerManager }),
   });
+  const { applyApprovalApprovedEffects } = approvalEffects;
+
+  // Bulk resolve runs the same effects as every other decision path — share this one instance so the
+  // injected heartbeat (and the services-barrel seam these tests stub) covers the triage route too.
+  const triageSvc = approvalTriageService(db, { effects: approvalEffects });
 
   async function requireApprovalAccess(req: Request, id: string) {
     const approval = await svc.getById(id);
