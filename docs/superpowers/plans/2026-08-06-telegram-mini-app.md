@@ -144,7 +144,7 @@ Create `packages/db/src/schema/telegram_miniapp_sessions.ts`:
 // JSON_FLOW: {"file": "packages/db/src/schema/telegram_miniapp_sessions.ts", "imports": "drizzle-orm/pg-core, ./companies.js, ./telegram_chat_bindings.js", "exports": "telegramMiniappSessions, TelegramMiniappSessionRow"}
 // ==========================================
 // [START: module]
-import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.js";
 import { telegramChatBindings } from "./telegram_chat_bindings.js";
 
@@ -166,7 +166,8 @@ export const telegramMiniappSessions = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
-    tokenHashIdx: index("telegram_miniapp_sessions_token_hash_idx").on(table.tokenHash),
+    // Unique: a session token hash must be provably one row. Matches the CREATE UNIQUE INDEX above.
+    tokenHashIdx: uniqueIndex("telegram_miniapp_sessions_token_hash_idx").on(table.tokenHash),
     bindingIdx: index("telegram_miniapp_sessions_binding_idx").on(table.bindingId),
   }),
 );
