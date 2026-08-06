@@ -139,6 +139,17 @@ export function telegramRoutes(
           updatedAt: new Date(),
         },
       });
+    // Give the chat a persistent way into the board. Best-effort: the registration is saved either
+    // way, and a transport failure here must not look like a failed save.
+    if (publicBaseUrl) {
+      await transport
+        .setChatMenuButton({
+          botToken,
+          text: "Open Paperclip",
+          url: `${publicBaseUrl.replace(/\/$/, "")}/telegram/app?c=${companyId}`,
+        })
+        .catch((err) => logger.warn({ err, companyId }, "failed to set telegram chat menu button"));
+    }
     res.json({
       ok: true,
       webhookPath: `/api/telegram/webhook/${companyId}`,

@@ -36,8 +36,13 @@ const BAND_CHIP: Record<string, string> = {
 };
 
 export type ApprovalOutcome = keyof typeof OUTCOME_CODES;
-/** InlineKeyboardButton: `text` plus exactly one action field — callback_data or url. */
-export type TelegramInlineButton = { text: string; callback_data?: string; url?: string };
+/** InlineKeyboardButton: `text` plus exactly one action field — callback_data, url, or web_app. */
+export type TelegramInlineButton = {
+  text: string;
+  callback_data?: string;
+  url?: string;
+  web_app?: { url: string };
+};
 export type TelegramMessage = {
   text: string;
   parseMode?: "HTML";
@@ -104,6 +109,7 @@ export function buildApprovalMessage(input: {
   requestedBy?: string | null;
   linkedIssues?: string[];
   asCaption?: boolean;
+  miniAppUrl?: string | null;
 }): TelegramMessage {
   const limit = input.asCaption ? TELEGRAM_CAPTION_LIMIT : TELEGRAM_TEXT_LIMIT;
   const chip = BAND_CHIP[input.band ?? ""] ?? "⚪️";
@@ -126,7 +132,13 @@ export function buildApprovalMessage(input: {
   ];
   // A url button is a plain deep link, so the board is one tap away without spending the message body
   // on a raw URL. Only offered when the company told us its public base URL.
-  if (link) controls.push([{ text: "🔗 Open in Paperclip", url: link }]);
+  if (input.miniAppUrl) {
+    // Opens the board inside Telegram, already authenticated — the escape hatch for an approval two
+    // buttons cannot settle.
+    controls.push([{ text: "🔎 Review in full", web_app: { url: input.miniAppUrl } }]);
+  } else if (link) {
+    controls.push([{ text: "🔗 Open in Paperclip", url: link }]);
+  }
 
   return {
     text: truncateForTelegram(lines.join("\n"), limit),

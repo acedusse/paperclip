@@ -87,6 +87,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       async editMessageReplyMarkup(input) {
         edited.push({ chatId: input.chatId, messageId: input.messageId });
       },
+      async setChatMenuButton() {},
     };
   });
 

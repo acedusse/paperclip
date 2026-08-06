@@ -143,6 +143,44 @@ describe("buildApprovalMessage", () => {
     expect(rows).toHaveLength(1);
   });
 
+  it("adds a Review in full web_app button when a mini app url is given", () => {
+    const msg = buildApprovalMessage({
+      title: "Critical risk approval",
+      body: "Increase the cap",
+      url: `/approvals/${APPROVAL_ID}`,
+      approvalId: APPROVAL_ID,
+      band: "critical",
+      baseUrl: "https://paperclip.example",
+      miniAppUrl: "https://paperclip.example/telegram/app?c=abc",
+    });
+    const flat = msg.replyMarkup!.inline_keyboard.flat();
+    const webApp = flat.find((b) => b.web_app);
+    expect(webApp?.web_app?.url).toBe("https://paperclip.example/telegram/app?c=abc");
+    expect(webApp?.text).toMatch(/review in full/i);
+  });
+
+  it("keeps the Approve and Reject controls alongside the web_app button", () => {
+    const msg = buildApprovalMessage({
+      title: "Critical risk approval",
+      body: "Increase the cap",
+      url: `/approvals/${APPROVAL_ID}`,
+      approvalId: APPROVAL_ID,
+      miniAppUrl: "https://paperclip.example/telegram/app?c=abc",
+    });
+    const flat = msg.replyMarkup!.inline_keyboard.flat();
+    expect(flat.filter((b) => b.callback_data)).toHaveLength(2);
+  });
+
+  it("omits the web_app button when no mini app url is given", () => {
+    const msg = buildApprovalMessage({
+      title: "Critical risk approval",
+      body: "Increase the cap",
+      url: `/approvals/${APPROVAL_ID}`,
+      approvalId: APPROVAL_ID,
+    });
+    expect(JSON.stringify(msg.replyMarkup)).not.toContain("web_app");
+  });
+
   it("names the requester and linked issues when they are known", () => {
     const msg = buildApprovalMessage({
       ...base,

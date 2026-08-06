@@ -101,6 +101,7 @@ describeEmbeddedPostgres("createTelegramChannel", () => {
       },
       async answerCallbackQuery() {},
       async editMessageReplyMarkup() {},
+      async setChatMenuButton() {},
       async sendPhoto(input) {
         if (failFor.has(input.chatId)) throw new Error("chat blocked the bot");
         photos.push(input);

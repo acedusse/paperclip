@@ -61,6 +61,8 @@ export type TelegramTransport = {
   sendDocument(input: TelegramSendMedia): Promise<void>;
   /** Album of 2-10 photos. Note: the Bot API accepts no reply_markup here — send controls separately. */
   sendMediaGroup(input: { botToken: string; chatId: string; files: TelegramUploadFile[] }): Promise<void>;
+  /** Put a persistent "open the board" button on the bot's chat. Best-effort; never blocks a save. */
+  setChatMenuButton(input: { botToken: string; text: string; url: string }): Promise<void>;
 };
 
 function methodUrl(botToken: string, method: string): string {
@@ -158,6 +160,12 @@ export function createFetchTelegramTransport(): TelegramTransport {
       });
       form.set("media", JSON.stringify(media));
       await callBotApiMultipart(input.botToken, "sendMediaGroup", form);
+    },
+
+    async setChatMenuButton(input) {
+      await callBotApi(input.botToken, "setChatMenuButton", {
+        menu_button: { type: "web_app", text: input.text, web_app: { url: input.url } },
+      });
     },
   };
 }
