@@ -20,6 +20,7 @@ import { useCompany } from "../context/CompanyContext";
 import { timeAgo } from "../lib/timeAgo";
 import { pushSupported, subscribeToPush, unsubscribeFromPush } from "../lib/push";
 import { StakeholderShares } from "../components/stakeholder/StakeholderShares";
+import { TelegramChannel } from "../components/telegram/TelegramChannel";
 
 export function Digest() {
   const { selectedCompanyId } = useCompany();
@@ -184,6 +185,7 @@ export function Digest() {
           </ul>
         </section>
       )}
+      {companyId && <TelegramChannel companyId={companyId} />}
       {companyId && <StakeholderShares companyId={companyId} />}
     </div>
   );

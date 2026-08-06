@@ -74,6 +74,12 @@ const mockBoundedAgentApproverService = vi.hoisted(() => ({
   getGrant: vi.fn(),
 }));
 const mockImpliedSpendFromApproval = vi.hoisted(() => vi.fn(() => 0));
+// The route delegates post-decision side effects (approval.approved event + requester wakeup) to
+// approvalEffectsService; that service owns its own coverage in approval-effects.test.ts.
+const mockApprovalEffects = vi.hoisted(() => ({
+  applyApprovalApprovedEffects: vi.fn(),
+  applyApprovalRejectedEffects: vi.fn(),
+}));
 
 function registerModuleMocks() {
   vi.doMock("../services/index.js", () => ({
@@ -89,6 +95,7 @@ function registerModuleMocks() {
     boundedAgentApproverService: () => mockBoundedAgentApproverService,
     impliedSpendFromApproval: mockImpliedSpendFromApproval,
     recordDecision: mockRecordDecision,
+    approvalEffectsService: () => mockApprovalEffects,
     heartbeatService: () => mockHeartbeatService,
     issueApprovalService: () => mockIssueApprovalService,
     logActivity: mockLogActivity,
@@ -186,6 +193,10 @@ describe("approval routes idempotent retries", () => {
     mockApprovalService.listComments.mockReset();
     mockApprovalService.addComment.mockReset();
     mockHeartbeatService.wakeup.mockReset();
+    mockApprovalEffects.applyApprovalApprovedEffects.mockReset();
+    mockApprovalEffects.applyApprovalRejectedEffects.mockReset();
+    mockApprovalEffects.applyApprovalApprovedEffects.mockResolvedValue({ linkedIssueIds: [], primaryIssueId: null });
+    mockApprovalEffects.applyApprovalRejectedEffects.mockResolvedValue(undefined);
     mockIssueApprovalService.listIssuesForApproval.mockReset();
     mockIssueApprovalService.linkManyForApproval.mockReset();
     mockSecretService.normalizeHireApprovalPayloadForPersistence.mockReset();
@@ -236,8 +247,7 @@ describe("approval routes idempotent retries", () => {
       .send({});
 
     expect(res.status).toBe(200);
-    expect(mockIssueApprovalService.listIssuesForApproval).not.toHaveBeenCalled();
-    expect(mockHeartbeatService.wakeup).not.toHaveBeenCalled();
+    expect(mockApprovalEffects.applyApprovalApprovedEffects).not.toHaveBeenCalled();
     expect(mockLogActivity).not.toHaveBeenCalled();
   });
 
@@ -358,7 +368,7 @@ describe("approval routes idempotent retries", () => {
       .send({ decisionNote: "ship it" });
 
     expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(mockHeartbeatService.wakeup).toHaveBeenCalled();
+    expect(mockApprovalEffects.applyApprovalApprovedEffects).toHaveBeenCalled();
   });
 
   it("derives approval attribution from the authenticated actor on reject", async () => {

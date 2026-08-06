@@ -43,7 +43,14 @@ import { delegationRoutes } from "./routes/delegations.js";
 import { boundedAgentApproverRoutes } from "./routes/bounded-agent-approvers.js";
 import { stakeholderShareRoutes } from "./routes/stakeholder-shares.js";
 import { pushRoutes } from "./routes/push.js";
-import { coverageSweepService, createInboxDigestChannel, createWebPushChannel, registerChannel } from "./services/index.js";
+import { telegramRoutes } from "./routes/telegram.js";
+import {
+  coverageSweepService,
+  createInboxDigestChannel,
+  createTelegramChannel,
+  createWebPushChannel,
+  registerChannel,
+} from "./services/index.js";
 import { workspacePathClaimRoutes } from "./routes/workspace-path-claims.js";
 import { goalRoutes } from "./routes/goals.js";
 import { boardChatRoutes } from "./routes/board-chat.js";
@@ -233,6 +240,7 @@ export async function createApp(
 
   registerChannel(createInboxDigestChannel(db));
   registerChannel(createWebPushChannel(db));
+  registerChannel(createTelegramChannel(db, { storage: opts.storageService }));
 
   // Mount API routes
   const api = Router();
@@ -270,6 +278,7 @@ export async function createApp(
   api.use(boundedAgentApproverRoutes(db));
   api.use(stakeholderShareRoutes(db));
   api.use(pushRoutes(db));
+  api.use(telegramRoutes(db, { pluginWorkerManager: workerManager }));
   api.use(workspacePathClaimRoutes(db));
   api.use(goalRoutes(db));
   api.use(boardChatRoutes(db, { deploymentMode: opts.deploymentMode }));

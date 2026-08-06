@@ -869,6 +869,13 @@
       "when": 1785100000000,
       "tag": "0123_combo04_token_budget_amounts",
       "breakpoints": true
+    },
+    {
+      "idx": 124,
+      "version": "7",
+      "when": 1785200000000,
+      "tag": "0124_telegram_channel",
+      "breakpoints": true
     }
   ]
 }

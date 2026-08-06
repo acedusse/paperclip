@@ -28,7 +28,7 @@ export type NotificationPayload = {
   push?: { title: string; body: string; url: string; tag?: string; band?: string; approvalId?: string };
 };
 export type DeliveryChannel = {
-  name: "inbox" | "webpush" | "email";
+  name: "inbox" | "webpush" | "email" | "telegram";
   deliver(target: DeliveryTarget, payload: NotificationPayload): Promise<void>;
 };
 

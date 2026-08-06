@@ -640,4 +640,5 @@ export {
 } from "./plugin.js";
 
 export * from "./push.js";
+export * from "./telegram.js";
 // [END: module]

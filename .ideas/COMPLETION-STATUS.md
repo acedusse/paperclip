@@ -92,7 +92,7 @@ Point-in-time audit of the `.ideas/` backlog against the actual Paperclip codeba
 | 063 | Cost & Capacity Forecasting | ⬜ NOT STARTED | Historical cost events exist but no forward projection/runway/attainment. |
 | 064 | Data Import / Migration | ⬜ NOT STARTED | Only imports Paperclip's own format; no Jira/Linear/Asana/CSV importers or mapping wizard. |
 | 065 | Software-Building & Self-Hosting | 🟡 PARTIAL | Git-backed workspaces, workspace-diff plugin, work-products, eval harness, devon/pm-tdd skills exist, but not welded into a first-class build/test/CI-review loop; no self-hosting kernel. |
-| 066 | Chat Channel (Telegram/WhatsApp) | ⬜ NOT STARTED | Zero telegram/whatsapp references; no chat-channel plugin, identity binding, or inline approvals. |
+| 066 | Chat Channel (Telegram/WhatsApp) | 🟡 PARTIAL | **Telegram built** (2026-08-06), WhatsApp not started. `telegram_bot_configs` + `telegram_chat_bindings` (migration 0124); `telegram-channel.ts` registers a `telegram` DeliveryChannel beside webpush, reusing the same `shouldPushToUser` band/quiet-hours floor; `telegram-format.ts` renders inline Approve/Reject with a 64-byte callback codec; `telegram-link.ts` one-time, single-use, expiring codes bind a chat to one user; `telegram-decisions.ts` re-derives authority from the binding and runs the same risk gate + `approvalEffectsService` + `recordDecision` (tagged `channel: "telegram"`) as the HTTP route; `routes/telegram.ts` board setup + secret-token-verified webhook; UI `TelegramChannel` panel on the Digest page. Gaps: no command grammar beyond `/start`, no digest/SEV1 fan-out (approvals only), no intake, WhatsApp untouched. |
 
 ## Combinations rollup (`combinations/`)
 

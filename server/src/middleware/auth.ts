@@ -346,7 +346,7 @@ function stackMembershipRole(value: string | undefined): "owner" | "admin" | "me
   throw new Error("Invalid trusted Cloud tenant stack role");
 }
 
-function constantTimeStringEqual(left: string, right: string): boolean {
+export function constantTimeStringEqual(left: string, right: string): boolean {
   const leftBuffer = Buffer.from(left);
   const rightBuffer = Buffer.from(right);
   return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
