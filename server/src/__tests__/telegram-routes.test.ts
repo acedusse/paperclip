@@ -627,6 +627,47 @@ describeEmbeddedPostgres("telegram routes", () => {
       expect(res.status).toBe(401);
     });
 
+    // The security property here is not "these fail" (already covered above) but that they fail
+    // *identically*. An unauthenticated caller must not be able to distinguish "wrong user" from
+    // "forged signature" from "expired signature" -- if a future edit made the messages reason-specific
+    // while keeping every status at 401, per-case status assertions alone would not catch it.
+    it("gives indistinguishable responses across different unauthenticated failure reasons", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      const app = await createApp(null);
+
+      const unboundUser = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: freshInitData("99999") });
+
+      const tamperedParams = new URLSearchParams(freshInitData());
+      tamperedParams.set("user", JSON.stringify({ id: 999, first_name: "Mallory" }));
+      const tamperedSignature = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: tamperedParams.toString() });
+
+      const staleInitData = signInitData({
+        auth_date: String(Math.floor(Date.now() / 1000) - 3600),
+        user: JSON.stringify({ id: Number(BOUND_TG_USER), first_name: "Dana" }),
+      });
+      const staleSignature = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: staleInitData });
+
+      const disclosureFailure =
+        "an unauthenticated caller must not be able to tell 'not bound' apart from 'bad signature' " +
+        "apart from 'stale' -- status and body must match across every refusal reason";
+      expect(unboundUser.status, disclosureFailure).toBe(401);
+      expect(tamperedSignature.status, disclosureFailure).toBe(401);
+      expect(staleSignature.status, disclosureFailure).toBe(401);
+      expect(tamperedSignature.body, disclosureFailure).toEqual(unboundUser.body);
+      expect(staleSignature.body, disclosureFailure).toEqual(unboundUser.body);
+      expect(unboundUser.body).toEqual({ error: "Could not authenticate this Telegram session" });
+    });
+
     it("404s for a company with no bot", async () => {
       const company = await seedCompany();
       const app = await createApp(null);
