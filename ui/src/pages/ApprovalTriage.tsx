@@ -33,6 +33,12 @@ const RISK_BAND_CLASSES: Record<string, string> = {
   low: "bg-muted text-muted-foreground",
 };
 
+/** Approvals carry a type-specific payload, so take the first human-looking field we recognise. */
+function approvalTitle(item: any): string {
+  const payload = item?.payload ?? {};
+  return payload.title ?? payload.summary ?? payload.name ?? item.type ?? "Approval";
+}
+
 export function ApprovalTriage() {
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -144,7 +150,8 @@ export function ApprovalTriage() {
                   aria-pressed={allSelected}
                   onClick={() => toggleGroup(g.ids)}
                 >
-                  {g.type} · {g.ids.length} items
+                  {g.type}
+                  {g.agentId ? ` · ${g.agentId}` : ""} · {g.ids.length} items
                 </button>
               </li>
             );
@@ -166,23 +173,45 @@ export function ApprovalTriage() {
             <li
               key={it.id}
               data-approval-triage-item={it.id}
-              className="flex items-center gap-3 px-3 py-2"
+              className="flex items-start gap-3 px-3 py-2"
             >
               <input
                 type="checkbox"
                 checked={selected.has(it.id)}
                 onChange={() => toggle(it.id)}
                 aria-label={`select ${it.id}`}
+                className="mt-1"
               />
-              <span
-                className={cn(
-                  "rounded-full px-2 py-0.5 text-[10px] font-medium uppercase",
-                  RISK_BAND_CLASSES[it.risk?.band] ?? RISK_BAND_CLASSES.low,
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-0.5 text-[10px] font-medium uppercase",
+                      RISK_BAND_CLASSES[it.risk?.band] ?? RISK_BAND_CLASSES.low,
+                    )}
+                  >
+                    {it.risk?.band ?? "low"}
+                  </span>
+                  <span className="truncate text-sm font-medium">{approvalTitle(it)}</span>
+                </div>
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                  {[it.type, it.requestedByAgentId ? `by ${it.requestedByAgentId}` : null]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+                {it.risk?.reasons?.length > 0 && (
+                  <ul className="mt-1 flex flex-wrap gap-1">
+                    {it.risk.reasons.slice(0, 3).map((reason: string) => (
+                      <li
+                        key={reason}
+                        className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
+                      >
+                        {reason}
+                      </li>
+                    ))}
+                  </ul>
                 )}
-              >
-                {it.risk?.band ?? "low"}
-              </span>
-              <span className="text-sm">{it.type}</span>
+              </div>
             </li>
           ))}
         </ul>

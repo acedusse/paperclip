@@ -78,6 +78,18 @@ function criticalItem(id: string) {
   };
 }
 
+/** An item carrying everything listTriage actually returns — the point of finding X2. */
+function richItem(id: string, overrides: Record<string, unknown> = {}) {
+  return {
+    ...lowRiskItem(id),
+    type: "budget_increase",
+    requestedByAgentId: "Atlas",
+    payload: { title: "Increase the monthly cap to $4,000" },
+    risk: { score: 88, band: "critical", reasons: ["budget over cap", "no prior approval"] },
+    ...overrides,
+  };
+}
+
 function buildFixture() {
   const critical = criticalItem("approval-critical");
   const lowA = lowRiskItem("approval-low-a");
@@ -126,7 +138,7 @@ describe("ApprovalTriage", () => {
 
   let root: ReturnType<typeof createRoot> | undefined;
 
-  it("renders items highest-risk first", async () => {
+  async function renderTriage() {
     root = createRoot(container);
 
     await act(async () => {
@@ -136,6 +148,16 @@ describe("ApprovalTriage", () => {
         </QueryClientProvider>,
       );
     });
+
+    await vi.waitFor(() => {
+      expect(container.querySelectorAll("[data-approval-triage-item]").length).toBeGreaterThan(0);
+    });
+
+    return { container };
+  }
+
+  it("renders items highest-risk first", async () => {
+    await renderTriage();
 
     await vi.waitFor(() => {
       expect(container.querySelectorAll("[data-approval-triage-item]").length).toBe(3);
@@ -155,15 +177,7 @@ describe("ApprovalTriage", () => {
   });
 
   it("selects a group and bulk-approves its ids", async () => {
-    root = createRoot(container);
-
-    await act(async () => {
-      root!.render(
-        <QueryClientProvider client={queryClient}>
-          <ApprovalTriage />
-        </QueryClientProvider>,
-      );
-    });
+    await renderTriage();
 
     await vi.waitFor(() => {
       expect(container.querySelectorAll("[data-approval-triage-item]").length).toBe(3);
@@ -192,6 +206,41 @@ describe("ApprovalTriage", () => {
       ids: ["approval-low-a", "approval-low-b"],
       action: "approve",
     });
+  });
+
+  it("shows the approval's title, not just its type", async () => {
+    apiMocks.triage.mockResolvedValue({ items: [richItem("a1")], groups: [] });
+    const { container } = await renderTriage();
+    expect(container.textContent).toContain("Increase the monthly cap to $4,000");
+  });
+
+  it("shows the requesting agent on the row", async () => {
+    apiMocks.triage.mockResolvedValue({ items: [richItem("a1")], groups: [] });
+    const { container } = await renderTriage();
+    expect(container.textContent).toContain("Atlas");
+  });
+
+  // The list is sorted by risk score, so the reasons behind that score have to be visible.
+  it("shows the risk reasons behind the score it sorts by", async () => {
+    apiMocks.triage.mockResolvedValue({ items: [richItem("a1")], groups: [] });
+    const { container } = await renderTriage();
+    expect(container.textContent).toContain("budget over cap");
+  });
+
+  it("distinguishes two groups of the same type from different agents", async () => {
+    apiMocks.triage.mockResolvedValue({
+      items: [richItem("a1"), richItem("a2", { requestedByAgentId: "Borealis" })],
+      groups: [
+        { key: "budget_increase::Atlas", type: "budget_increase", agentId: "Atlas", ids: ["a1"] },
+        { key: "budget_increase::Borealis", type: "budget_increase", agentId: "Borealis", ids: ["a2"] },
+      ],
+    });
+    const { container } = await renderTriage();
+    const chips = [...container.querySelectorAll(".approval-triage__groups button")].map(
+      (b) => b.textContent ?? "",
+    );
+    expect(chips).toHaveLength(2);
+    expect(new Set(chips).size).toBe(2);
   });
 });
 // [END: module]
