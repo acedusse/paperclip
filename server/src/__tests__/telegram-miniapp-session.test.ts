@@ -1,7 +1,7 @@
 import { createHmac } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { sql } from "drizzle-orm";
-import { companies, createDb, telegramBotConfigs } from "@paperclipai/db";
+import { authUsers, companies, companyMemberships, createDb, telegramBotConfigs } from "@paperclipai/db";
 import { getEmbeddedPostgresTestSupport, startEmbeddedPostgresTestDatabase } from "./helpers/embedded-postgres.js";
 import { telegramLinkService } from "../services/telegram-link.js";
 import { telegramMiniappSessionService } from "../services/telegram-miniapp-session.js";
@@ -75,6 +75,29 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     const redeemed = await links.redeemLinkCode({ code, chatId, telegramUserId });
     if (!redeemed.ok) throw new Error("seed failed");
     return redeemed.binding;
+  }
+
+  // actorMiddleware's Mini App branch resolves through boardAuth.resolveBoardAccess, which is a real
+  // lookup against `authUsers`/`companyMemberships` -- not just the Telegram binding. A binding alone
+  // (as created by seedBinding above) is not enough to make the middleware treat the user as having
+  // board access, by design: the session must narrow real access, not stand in for it.
+  async function seedBoardUser(companyId: string, userId: string) {
+    const now = new Date();
+    await db.insert(authUsers).values({
+      id: userId,
+      name: "Board User",
+      email: `${userId}@example.test`,
+      emailVerified: true,
+      createdAt: now,
+      updatedAt: now,
+    });
+    await db.insert(companyMemberships).values({
+      companyId,
+      principalType: "user",
+      principalId: userId,
+      status: "active",
+      membershipRole: "member",
+    });
   }
 
   it("mints a session for a bound Telegram user", async () => {
@@ -216,5 +239,58 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     await telegramLinkService(db).revokeBinding({ companyId: company.id, id: binding.id });
 
     expect(await svc.resolve(minted.token, NOW)).toBeNull();
+  });
+
+  it("resolves a minted token to a board actor scoped to one company", async () => {
+    const express = (await import("express")).default;
+    const request = (await import("supertest")).default;
+    const { actorMiddleware } = await import("../middleware/auth.js");
+
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1");
+    await seedBoardUser(company.id, "user-board-1");
+    const minted = await telegramMiniappSessionService(db).mint({
+      companyId: company.id,
+      initData: initDataFor(TG_USER),
+      now: NOW,
+    });
+    if (!minted.ok) throw new Error("expected mint");
+
+    const app = express();
+    app.use(actorMiddleware(db, { deploymentMode: "authenticated" }));
+    app.get("/whoami", (req, res) => res.json(req.actor));
+
+    const res = await request(app).get("/whoami").set("authorization", `Bearer ${minted.token}`);
+
+    expect(res.body.type).toBe("board");
+    expect(res.body.userId).toBe("user-board-1");
+    expect(res.body.source).toBe("telegram_miniapp");
+    expect(res.body.companyIds).toEqual([company.id]);
+  });
+
+  it("does not authenticate a revoked session", async () => {
+    const express = (await import("express")).default;
+    const request = (await import("supertest")).default;
+    const { actorMiddleware } = await import("../middleware/auth.js");
+
+    const company = await seedCompany();
+    await seedBot(company.id);
+    const binding = await seedBinding(company.id, "user-board-1");
+    const minted = await telegramMiniappSessionService(db).mint({
+      companyId: company.id,
+      initData: initDataFor(TG_USER),
+      now: NOW,
+    });
+    if (!minted.ok) throw new Error("expected mint");
+    await telegramLinkService(db).revokeBinding({ companyId: company.id, id: binding.id });
+
+    const app = express();
+    app.use(actorMiddleware(db, { deploymentMode: "authenticated" }));
+    app.get("/whoami", (req, res) => res.json(req.actor));
+
+    const res = await request(app).get("/whoami").set("authorization", `Bearer ${minted.token}`);
+
+    expect(res.body.type).toBe("none");
   });
 });

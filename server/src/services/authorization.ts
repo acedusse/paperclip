@@ -51,6 +51,7 @@ export type AuthorizationActor =
       | "agent_key"
       | "agent_jwt"
       | "cloud_tenant"
+      | "telegram_miniapp"
       | "none";
   };
 

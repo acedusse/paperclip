@@ -23,6 +23,7 @@ import type { BetterAuthSessionResult } from "../auth/better-auth.js";
 import { logger } from "./logger.js";
 import { boardAuthService } from "../services/board-auth.js";
 import { ensureHumanRoleDefaultGrants } from "../services/principal-access-compatibility.js";
+import { telegramMiniappSessionService } from "../services/telegram-miniapp-session.js";
 
 function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
@@ -35,6 +36,7 @@ interface ActorMiddlewareOptions {
 
 export function actorMiddleware(db: Db, opts: ActorMiddlewareOptions): RequestHandler {
   const boardAuth = boardAuthService(db);
+  const miniappSessions = telegramMiniappSessionService(db);
   return async (req, _res, next) => {
     req.actor =
       opts.deploymentMode === "local_trusted"
@@ -137,6 +139,31 @@ export function actorMiddleware(db: Db, opts: ActorMiddlewareOptions): RequestHa
           keyId: boardKey.id,
           runId: runIdHeader || undefined,
           source: "board_key",
+        };
+        next();
+        return;
+      }
+    }
+
+    // A Mini App session is a board session for exactly one company. It resolves through the user's
+    // real access rather than around it: the session narrows what that user can already reach, and
+    // never widens it.
+    const miniappSession = await miniappSessions.resolve(token);
+    if (miniappSession) {
+      const access = await boardAuth.resolveBoardAccess(miniappSession.userId);
+      if (access.user && access.companyIds.includes(miniappSession.companyId)) {
+        await miniappSessions.touch(miniappSession.id);
+        req.actor = {
+          type: "board",
+          userId: miniappSession.userId,
+          userName: access.user.name ?? null,
+          userEmail: access.user.email ?? null,
+          companyId: miniappSession.companyId,
+          companyIds: [miniappSession.companyId],
+          memberships: access.memberships.filter((m) => m.companyId === miniappSession.companyId),
+          isInstanceAdmin: false,
+          runId: runIdHeader || undefined,
+          source: "telegram_miniapp",
         };
         next();
         return;
