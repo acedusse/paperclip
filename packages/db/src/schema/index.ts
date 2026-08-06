@@ -109,6 +109,7 @@ export { pushVapidKeys, type PushVapidKeyRow } from "./push_vapid_keys.js";
 export { pushDeliveryPrefs, type PushDeliveryPrefsRow } from "./push_delivery_prefs.js";
 export { telegramBotConfigs, type TelegramBotConfigRow } from "./telegram_bot_configs.js";
 export { telegramChatBindings, type TelegramChatBindingRow } from "./telegram_chat_bindings.js";
+export { telegramMiniappSessions, type TelegramMiniappSessionRow } from "./telegram_miniapp_sessions.js";
 export { delegationGrants, type DelegationGrantRow } from "./delegation_grants.js";
 export { companyCoverageConfig, type CompanyCoverageConfigRow } from "./company_coverage_config.js";
 export { approvalCoverageEscalations, type ApprovalCoverageEscalationRow } from "./approval_coverage_escalations.js";
