@@ -110,6 +110,17 @@ Checked against [core.telegram.org/bots/api](https://core.telegram.org/bots/api)
 No test performs a live round trip against api.telegram.org — the transport is unit-tested against a
 stubbed `fetch`. Connecting a real bot in dev is still the only way to prove the end-to-end path.
 
+Checked against [core.telegram.org/bots/webapps](https://core.telegram.org/bots/webapps) and
+[core.telegram.org/bots/api](https://core.telegram.org/bots/api) on 2026-08-06 for the Mini App:
+
+| Assumption | Status |
+| --- | --- |
+| `initData` HMAC key derivation: `secret = HMAC_SHA256(key="WebAppData", message=botToken)`, `data_check_string` is remaining fields as `key=value`, sorted by key, newline-joined | ✅ confirmed — "the HMAC-SHA-256 signature of the bot's token with the constant string `WebAppData` used as a key" and "Data-check-string is a chain of all received fields, sorted alphabetically, in the format `key=<value>` with a line feed character... used as separator" |
+| `auth_date` is a Unix timestamp the server must range-check itself (Telegram does not expire it) | ✅ confirmed — "_auth_date_ field, which contains a Unix timestamp of when it was received by the Mini App" |
+| `web_app` inline-keyboard buttons work in group chats | ⚠️ **the opposite is documented.** The Bot API's `InlineKeyboardButton.web_app` field description (mirrored verbatim by aiogram and python-telegram-bot, since `core.telegram.org/bots/api` is too large for automated fetch to reach that section directly): *"Description of the Web App that will be launched when the user presses the button... **Available only in private chats between a user and the bot.**"* A `web_app` button on a group card would silently fail to open. This is why the "Review in full" button is currently `url`, not `web_app` — see Known gaps. |
+| `setChatMenuButton` is set once per bot vs. per chat | ✅ confirmed as **per-chat with a global fallback**, not "once per bot": *"Use this method to change the bot's menu button in a private chat, or the default menu button."* Its `chat_id` parameter: *"Unique identifier for the target private chat. If not specified, default bot's menu button will be changed."* |
+| Mini Apps are restricted to the same ports as webhooks (443/80/88/8443) | ⚠️ **not stated either way.** The docs require HTTPS for a Mini App URL but state no port restriction anywhere on the Mini Apps page — the 443/80/88/8443 restriction appears only in the webhook section. Absence of a stated restriction is not proof none exists; treat "any HTTPS port works for Mini Apps" as likely but unconfirmed, not as a verified fact. |
+
 ## Security model
 
 The webhook is unauthenticated as far as Paperclip's actor middleware is concerned — it must be, because
@@ -155,6 +166,57 @@ your token will have full control over your bot."* Paste the new token into the 
 way `push_vapid_keys` stores the VAPID private key. Anyone with database access can impersonate the bot
 and read approval traffic — treat the row as a credential and rotate via **Replace bot** if exposed.
 
+## Mini App
+
+The bot's menu button and an approval card's **🔎 Review in full** button open Paperclip *inside*
+Telegram, at `{publicBaseUrl}/telegram/app?c=<COMPANY_ID>`. It is the board itself — same build, same
+API — with a six-item bottom nav: Dashboard, Tasks, Triage, Digest, Artifacts, Wikis.
+
+**How it authenticates.** Telegram hands the webview a signed `initData` blob. The page posts it to
+`POST /api/telegram/miniapp/session` with the company id from the URL. The server verifies the HMAC
+using that company's bot token, rejects anything whose `auth_date` is more than 5 minutes old, resolves
+`initData.user.id` against `telegram_chat_bindings.telegram_user_id`, and returns a bearer token valid
+for 12 hours. Only the token's sha256 is stored.
+
+**The grant is larger than the buttons'.** An inline button decides one approval. A Mini App session is
+the board API as that user, for one company. Two consequences:
+
+| Control | Where |
+| --- | --- |
+| A session is scoped to exactly one company and never widens the user's real access | `middleware/auth.ts` |
+| A session never carries instance-admin, even if the user has it | `middleware/auth.ts` |
+| Revoking a chat binding revokes every session it minted | `telegram-link.ts` |
+| A tampered or stale `initData` is refused without saying which | `routes/telegram.ts` |
+| A binding predating migration `0125` has no `telegram_user_id` and cannot mint a session | `telegram-miniapp-session.ts` |
+
+A session is minted with `type: "board"`, `companyIds: [session.companyId]` — a hardcoded single-company
+list, not the user's real `access.companyIds` — and `isInstanceAdmin: false` hardcoded, never the user's
+real value. `resolveBoardAccess` still runs against the user's genuine membership first, so a bearer only
+authenticates at all if the user still has active access to that company; the hardcoding narrows what the
+session is *allowed to claim*, it never widens it. Revocation is atomic: `telegram-link.ts`'s
+`revokeBinding` wraps the binding's `UPDATE` and the call to `revokeForBinding` in one `db.transaction`,
+so a chat binding and every Mini App session it minted go dark together — there is no window where the
+binding is revoked but a session it produced is still live.
+
+**The bearer travels through three modules, not one.** `ui/src/api/client.ts` (the shared fetch helper
+behind `api.get/post/...`) carries the bearer on every board API call, but two more modules make their
+own `fetch()` calls outside that helper: `ui/src/api/health.ts` and `ui/src/api/auth.ts`. Both matter
+because every routed page — including all six Telegram surfaces — renders under `<CloudAccessGate>`,
+which calls `healthApi.get()` unconditionally and, on an `authenticated`-mode deployment,
+`authApi.getSession()`. Inside the Telegram webview there is no session cookie, so without the bearer on these
+two paths as well, `CloudAccessGate` would 401 and redirect every Mini App visitor to a login page that
+does not work in a webview — the board would look broken even though the Mini App session itself was
+fine. All three modules now build their `Authorization` header through one shared function,
+`applyTelegramAuthHeader`, exported from `ui/src/telegram/useTelegramSession.ts`, so the bearer logic
+exists in exactly one place. `client.ts` additionally retries once on a 401: it clears the dead bearer,
+re-mints a fresh one against the `initData` the webview still holds, and replays the same request — a
+session that outlives its 12-hour TTL mid-visit recovers without the user noticing.
+
+**The bot token now forges sessions.** It is the HMAC key for `initData`, so the plaintext-at-rest note
+above is stronger than it was: database access no longer merely impersonates the bot and reads approval
+traffic, it mints board sessions. Rotate with **Replace bot**, which should be followed by revoking
+live bindings if a leak is suspected.
+
 ## Files
 
 | Layer | File |
@@ -177,7 +239,10 @@ and read approval traffic — treat the row as a credential and rotate via **Rep
   `deliverThroughChannels` call before they will appear.
 - Media comes from attachments on the approval's *linked issues*. An approval with no linked issues, or
   whose evidence lives in a work product rather than an issue attachment, still sends as a text card.
-- No command grammar beyond `/start <code>` — no `status`, `pause`, `approve PAP-142`.
+- No command grammar beyond `/start <code>` — **superseded**, not fixed: the Mini App answers the same
+  questions with more room. See `docs/superpowers/specs/2026-08-06-telegram-command-grammar-design.md`.
+- Proposals — the pick-one-of-N gate for choosing between agent-produced candidates — does not exist in
+  core yet, so the Mini App ships with six surfaces rather than seven.
 - No inbound intake (a forwarded message does not become an issue).
 - `setWebhook` is a manual step; Paperclip does not register the webhook for you.
 - WhatsApp is not implemented; its opt-in and 24-hour template rules make it a separate slice.
