@@ -157,6 +157,9 @@ describe("buildApprovalMessage", () => {
     const webApp = flat.find((b) => b.web_app);
     expect(webApp?.web_app?.url).toBe("https://paperclip.example/telegram/app?c=abc");
     expect(webApp?.text).toMatch(/review in full/i);
+    // A mini app url replaces the plain link control rather than supplementing it — pinned here so a
+    // future change to show both is a deliberate decision, not a silent side effect.
+    expect(flat.some((b) => b.url)).toBe(false);
   });
 
   it("keeps the Approve and Reject controls alongside the web_app button", () => {

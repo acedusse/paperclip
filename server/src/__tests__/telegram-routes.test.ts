@@ -208,6 +208,43 @@ describeEmbeddedPostgres("telegram routes", () => {
       expect(await db.select().from(telegramBotConfigs).where(eq(telegramBotConfigs.companyId, company.id))).toHaveLength(0);
       expect(await links.listBindings(company.id)).toHaveLength(0);
     });
+
+    it("saves the config even when the menu button registration fails", async () => {
+      const company = await seedCompany();
+      const app = await createApp(boardActor(company.id));
+      // The chat menu button is best-effort: a transport failure here must not look like a failed save.
+      transport.setChatMenuButton = async () => {
+        throw new Error("telegram unreachable");
+      };
+
+      const res = await request(app)
+        .put(`/api/companies/${company.id}/telegram/config`)
+        .send({ botToken: BOT_TOKEN, botUsername: "tgco_bot", publicBaseUrl: "https://ops.example.com" });
+
+      expect(res.status).toBe(200);
+      const [row] = await db.select().from(telegramBotConfigs).where(eq(telegramBotConfigs.companyId, company.id));
+      expect(row!.botToken).toBe(BOT_TOKEN);
+      expect(row!.publicBaseUrl).toBe("https://ops.example.com");
+    });
+
+    it("registers a persistent menu button pointing at the mini app when a public base URL is set", async () => {
+      const company = await seedCompany();
+      const app = await createApp(boardActor(company.id));
+      const menuButtonCalls: { botToken: string; text: string; url: string }[] = [];
+      transport.setChatMenuButton = async (input) => {
+        menuButtonCalls.push(input);
+      };
+
+      const res = await request(app)
+        .put(`/api/companies/${company.id}/telegram/config`)
+        // Trailing slash on purpose: the handler must strip it before appending the mini app path.
+        .send({ botToken: BOT_TOKEN, botUsername: "tgco_bot", publicBaseUrl: "https://ops.example.com/" });
+
+      expect(res.status).toBe(200);
+      expect(menuButtonCalls).toHaveLength(1);
+      expect(menuButtonCalls[0]!.botToken).toBe(BOT_TOKEN);
+      expect(menuButtonCalls[0]!.url).toBe(`https://ops.example.com/telegram/app?c=${company.id}`);
+    });
   });
 
   describe("chat linking", () => {
