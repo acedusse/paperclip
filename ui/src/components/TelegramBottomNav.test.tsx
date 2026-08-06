@@ -11,12 +11,24 @@
 //   plugin's pluginKey/displayName looks like a wiki AND it declares a page slot to link to, and that
 //   the nav is labelled for assistive tech. `pluginsApi.listUiContributions` is mocked at the real
 //   name/shape verified against ui/src/api/plugins.ts and ui/src/plugins/launchers.tsx — not the
-//   `uiContributions()` name the task brief guessed. Harness modeled on Artifacts.test.tsx
-//   (react-dom/client createRoot + flushSync; @testing-library/react is not installed in this repo).
-// PSEUDOCODE: 1. Mock pluginsApi.listUiContributions. 2. Render with QueryClientProvider + MemoryRouter
-//   via createRoot/flushSync. 3. Poll container text/DOM until the async query resolves. 4. Assert core
-//   items, Wikis presence/absence, and the nav's accessible label.
-// JSON_FLOW: {"file": "ui/src/components/TelegramBottomNav.test.tsx", "imports": "react-dom, react-dom/client, @tanstack/react-query, react-router-dom, vitest, @/api/plugins", "exports": "none"}
+//   `uiContributions()` name the task brief guessed.
+//
+//   Critically, this renders through the REAL @/lib/router shim (only @/context/CompanyContext is
+//   mocked, to supply a company), nested under a `:companyPrefix` route param exactly the way Layout
+//   actually mounts TelegramBottomNav in production. A first version of this test used plain
+//   react-router-dom + literal href strings inside a bare MemoryRouter with no registered routes — that
+//   passed regardless of whether the resolved path existed, and missed that TELEGRAM_NAV_ITEMS'
+//   absolute paths (/dashboard, /approvals/triage, /digest, /plugins/:id) have no unprefixed route and
+//   404 in the running app (only boardRoutes() in App.tsx registers them, under `:companyPrefix`). This
+//   version asserts the *prefixed* hrefs the shim actually produces, so reverting to a bare NavLink or
+//   dropping the shim breaks these tests instead of passing silently.
+// PSEUDOCODE: 1. Mock pluginsApi.listUiContributions and useCompany (selectedCompany.issuePrefix="PAP").
+//   2. Render under MemoryRouter + Routes/Route(":companyPrefix/*") so the shim's useParams().
+//   companyPrefix resolves, mirroring Layout's real nesting under App.tsx's `:companyPrefix` route.
+//   3. Poll container text/DOM until the async query resolves. 4. Assert each nav item's rendered href
+//   is prefixed with the resolved company (proving the shim ran), and cross-reference each target path
+//   against the exact App.tsx line that registers it.
+// JSON_FLOW: {"file": "ui/src/components/TelegramBottomNav.test.tsx", "imports": "react-dom, react-dom/client, @tanstack/react-query, react-router-dom, vitest, @/api/plugins, @/context/CompanyContext", "exports": "none"}
 // ==========================================
 // [START: module]
 // @vitest-environment jsdom
@@ -24,7 +36,7 @@
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PluginUiContribution } from "@/api/plugins";
 import { TelegramBottomNav, TELEGRAM_NAV_ITEMS } from "./TelegramBottomNav";
@@ -32,6 +44,16 @@ import { TelegramBottomNav, TELEGRAM_NAV_ITEMS } from "./TelegramBottomNav";
 const listUiContributions = vi.fn();
 vi.mock("@/api/plugins", () => ({
   pluginsApi: { listUiContributions: () => listUiContributions() },
+}));
+
+// The @/lib/router shim's useActiveCompanyPrefix() reads useCompany() directly (ui/src/lib/router.tsx)
+// — this is the only piece of company context it needs, so it's the only thing mocked. Everything else
+// in this test runs through the real router module, including NavLink's prefix injection.
+vi.mock("@/context/CompanyContext", () => ({
+  useCompany: () => ({
+    selectedCompany: { id: "company-1", issuePrefix: "PAP" },
+    companies: [{ id: "company-1", issuePrefix: "PAP" }],
+  }),
 }));
 
 // Shaped exactly as GET /api/plugins/ui-contributions returns it (see
@@ -47,6 +69,24 @@ const wikiContribution: PluginUiContribution = {
     { type: "page", id: "wiki-page", displayName: "Wiki", exportName: "WikiPage", routePath: "wiki" },
   ],
   launchers: [],
+};
+
+// Each target below is a real <Route path="..."> registered inside boardRoutes(), which App.tsx only
+// mounts as a child of <Route path=":companyPrefix" element={<Layout />}> — there is no unprefixed
+// equivalent. Citing the exact registrations so this map breaks visibly, not silently, if App.tsx's
+// route table ever moves without updating TELEGRAM_NAV_ITEMS.
+//   dashboard         -> App.tsx:96  <Route path="dashboard" .../>
+//   issues             -> App.tsx:146 <Route path="issues" .../>
+//   approvals/triage  -> App.tsx:172 <Route path="approvals/triage" .../>
+//   digest             -> App.tsx:174 <Route path="digest" .../>
+//   artifacts          -> App.tsx:168 <Route path="artifacts" .../>
+//   plugins/:pluginId  -> App.tsx:125 <Route path="plugins/:pluginId" .../>
+const EXPECTED_PREFIXED_HREFS: Record<string, string> = {
+  Dashboard: "/PAP/dashboard",
+  Tasks: "/PAP/issues",
+  Triage: "/PAP/approvals/triage",
+  Digest: "/PAP/digest",
+  Artifacts: "/PAP/artifacts",
 };
 
 async function flush() {
@@ -71,16 +111,27 @@ async function waitForAssertion(assertion: () => void, attempts = 50) {
 function renderNav(container: HTMLDivElement): Root {
   const root = createRoot(container);
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  // Nest under a `:companyPrefix` route param, exactly how App.tsx mounts Layout (and therefore
+  // TelegramBottomNav) in production: <Route path=":companyPrefix" element={<Layout />}>. Without this,
+  // the shim's useParams().companyPrefix would be empty and the test would prove nothing about prefix
+  // injection.
   flushSync(() => {
     root.render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <TelegramBottomNav />
+        <MemoryRouter initialEntries={["/PAP/telegram-nav-under-test"]}>
+          <Routes>
+            <Route path=":companyPrefix/*" element={<TelegramBottomNav />} />
+          </Routes>
         </MemoryRouter>
       </QueryClientProvider>,
     );
   });
   return root;
+}
+
+function linkHref(container: HTMLDivElement, label: string): string | null {
+  const link = [...container.querySelectorAll("a")].find((a) => a.textContent === label);
+  return link?.getAttribute("href") ?? null;
 }
 
 describe("TelegramBottomNav", () => {
@@ -118,14 +169,26 @@ describe("TelegramBottomNav", () => {
     ]);
   });
 
+  // This is the regression guard for the bug the review caught: TelegramBottomNav previously imported
+  // NavLink from plain react-router-dom, so these hrefs rendered as the bare, unregistered
+  // /dashboard, /approvals/triage, /digest paths and 404'd (only /issues and /artifacts happened to
+  // have unprefixed UnprefixedBoardRedirect routes). Asserting the *company-prefixed* href — which only
+  // the @/lib/router shim produces — fails again if that import regresses.
+  it("resolves every core item to its company-prefixed, registered route", async () => {
+    root = renderNav(container);
+    await waitForAssertion(() => {
+      for (const [label, expectedHref] of Object.entries(EXPECTED_PREFIXED_HREFS)) {
+        expect(linkHref(container, label)).toBe(expectedHref);
+      }
+    });
+  });
+
   // There is no /wikis route — the entry is resolved from the installed plugin's page slot, or omitted.
-  it("adds Wikis pointing at the installed wiki plugin", async () => {
+  it("adds Wikis pointing at the installed wiki plugin's company-prefixed page route", async () => {
     listUiContributions.mockResolvedValue([wikiContribution]);
     root = renderNav(container);
     await waitForAssertion(() => {
-      const link = [...container.querySelectorAll("a")].find((a) => a.textContent === "Wikis");
-      expect(link).toBeTruthy();
-      expect(link?.getAttribute("href")).toBe("/plugins/plg_abc123");
+      expect(linkHref(container, "Wikis")).toBe("/PAP/plugins/plg_abc123");
     });
   });
 

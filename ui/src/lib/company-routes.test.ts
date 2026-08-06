@@ -110,6 +110,18 @@ describe("company routes", () => {
       expect(toCompanyRelativePath(`/PAP/${root}`)).toBe(`/${root}`);
     },
   );
+
+  // Regression for the Telegram Mini App bottom nav (task 7, idea 066): TelegramBottomNav's Wikis item
+  // links to `/plugins/<pluginId>` — a real boardRoutes() entry (App.tsx `plugins/:pluginId`) — through
+  // the @/lib/router NavLink shim. Without "plugins" in BOARD_ROUTE_ROOTS, extractCompanyPrefixFromPath
+  // misread "plugins" itself as an already-present company prefix, so applyCompanyPrefix left the link
+  // unprefixed and it 404'd. Same failure mode as the digest/delegations/onboarding case above.
+  it("treats /plugins/:pluginId as a board route that needs a company prefix", () => {
+    expect(isBoardPathWithoutPrefix("/plugins/plg_abc123")).toBe(true);
+    expect(extractCompanyPrefixFromPath("/plugins/plg_abc123")).toBeNull();
+    expect(applyCompanyPrefix("/plugins/plg_abc123", "PAP")).toBe("/PAP/plugins/plg_abc123");
+    expect(toCompanyRelativePath("/PAP/plugins/plg_abc123")).toBe("/plugins/plg_abc123");
+  });
 });
 // [END: module]
 

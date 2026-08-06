@@ -10,16 +10,19 @@
 // INTENT: Give the Mini App the six surfaces the operator asked Telegram to expose. Deliberately a
 //   separate component from MobileBottomNav: that one answers "what does a phone user reach for",
 //   this one answers "what did the operator ask Telegram to expose", and merging them makes both worse.
-//   Uses plain react-router-dom (not the @/lib/router company-prefix shim MobileBottomNav uses): the
-//   Mini App carries its company via ?c= on a single stable /telegram/app entry URL, not a path prefix,
-//   so hrefs here must stay literal.
+//   Uses the @/lib/router company-prefix shim, same as MobileBottomNav — every board route (including
+//   the fixed items below) only exists as `:companyPrefix/<path>` inside boardRoutes() (App.tsx); there
+//   is no unprefixed `/dashboard`, `/approvals/triage`, `/digest`, `/artifacts` or `/plugins/:id` route,
+//   so an absolute `to` needs the shim's prefix injection to resolve to anything but the 404 page.
+//   TelegramAppRedirect (App.tsx) already lands the user on `/:prefix/dashboard?c=X` before this nav
+//   ever renders, so the prefix param the shim reads is populated by the time it matters.
 // PSEUDOCODE: 1. Declare the five fixed-route items. 2. Look up installed plugin UI contributions.
 //   3. Find one whose pluginKey/displayName look like a wiki and that declares a page slot. 4. Append a
 //   Wikis item pointing at /plugins/:pluginId when found. 5. Render a fixed bottom bar of NavLinks.
-// JSON_FLOW: {"file": "ui/src/components/TelegramBottomNav.tsx", "imports": "react-router-dom, @tanstack/react-query, lucide-react, @/api/plugins, @/lib/queryKeys, ../lib/utils", "exports": "TelegramBottomNav, TELEGRAM_NAV_ITEMS, WIKI_PLUGIN_MATCH"}
+// JSON_FLOW: {"file": "ui/src/components/TelegramBottomNav.tsx", "imports": "@/lib/router, @tanstack/react-query, lucide-react, @/api/plugins, @/lib/queryKeys, ../lib/utils", "exports": "TelegramBottomNav, TELEGRAM_NAV_ITEMS, WIKI_PLUGIN_MATCH"}
 // ==========================================
 // [START: module]
-import { NavLink } from "react-router-dom";
+import { NavLink } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, CircleDot, FileText, House, LayoutGrid, ShieldCheck } from "lucide-react";
 import { pluginsApi, type PluginUiContribution } from "@/api/plugins";
