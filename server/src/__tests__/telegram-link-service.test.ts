@@ -88,7 +88,7 @@ describeEmbeddedPostgres("telegramLinkService", () => {
     const companyId = await seedCompany();
     const { code } = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
 
-    const redeemed = await svc.redeemLinkCode({ code, chatId: "555", now: NOW });
+    const redeemed = await svc.redeemLinkCode({ code, chatId: "555", telegramUserId: "42", now: NOW });
 
     expect(redeemed.ok).toBe(true);
     expect(redeemed.ok && redeemed.binding.userId).toBe("user-1");
@@ -99,9 +99,9 @@ describeEmbeddedPostgres("telegramLinkService", () => {
   it("refuses to redeem the same code twice", async () => {
     const companyId = await seedCompany();
     const { code } = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
-    await svc.redeemLinkCode({ code, chatId: "555", now: NOW });
+    await svc.redeemLinkCode({ code, chatId: "555", telegramUserId: "42", now: NOW });
 
-    const replay = await svc.redeemLinkCode({ code, chatId: "999", now: NOW });
+    const replay = await svc.redeemLinkCode({ code, chatId: "999", telegramUserId: "42", now: NOW });
 
     expect(replay).toEqual({ ok: false, reason: "unknown_code" });
   });
@@ -111,12 +111,12 @@ describeEmbeddedPostgres("telegramLinkService", () => {
     const { code } = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW, ttlMinutes: 15 });
 
     const late = new Date(NOW.getTime() + 16 * 60_000);
-    expect(await svc.redeemLinkCode({ code, chatId: "555", now: late })).toEqual({ ok: false, reason: "expired" });
+    expect(await svc.redeemLinkCode({ code, chatId: "555", telegramUserId: "42", now: late })).toEqual({ ok: false, reason: "expired" });
   });
 
   it("refuses a code it never issued", async () => {
     await seedCompany();
-    expect(await svc.redeemLinkCode({ code: "not-a-real-code", chatId: "555", now: NOW })).toEqual({
+    expect(await svc.redeemLinkCode({ code: "not-a-real-code", chatId: "555", telegramUserId: "42", now: NOW })).toEqual({
       ok: false,
       reason: "unknown_code",
     });
@@ -125,7 +125,7 @@ describeEmbeddedPostgres("telegramLinkService", () => {
   it("resolves the live binding for a company and chat", async () => {
     const companyId = await seedCompany();
     const { code } = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
-    await svc.redeemLinkCode({ code, chatId: "555", now: NOW });
+    await svc.redeemLinkCode({ code, chatId: "555", telegramUserId: "42", now: NOW });
 
     const binding = await svc.resolveBinding({ companyId, chatId: "555" });
     expect(binding?.userId).toBe("user-1");
@@ -139,7 +139,7 @@ describeEmbeddedPostgres("telegramLinkService", () => {
   it("stops resolving a binding once it is revoked", async () => {
     const companyId = await seedCompany();
     const { code } = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
-    const redeemed = await svc.redeemLinkCode({ code, chatId: "555", now: NOW });
+    const redeemed = await svc.redeemLinkCode({ code, chatId: "555", telegramUserId: "42", now: NOW });
 
     const revoked = await svc.revokeBinding({ companyId, id: redeemed.ok ? redeemed.binding.id : "" });
 
@@ -150,11 +150,11 @@ describeEmbeddedPostgres("telegramLinkService", () => {
   it("lets a revoked chat be re-linked to a different user", async () => {
     const companyId = await seedCompany();
     const first = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
-    const firstBinding = await svc.redeemLinkCode({ code: first.code, chatId: "555", now: NOW });
+    const firstBinding = await svc.redeemLinkCode({ code: first.code, chatId: "555", telegramUserId: "42", now: NOW });
     await svc.revokeBinding({ companyId, id: firstBinding.ok ? firstBinding.binding.id : "" });
 
     const second = await svc.createLinkCode({ companyId, userId: "user-2", now: NOW });
-    const redeemed = await svc.redeemLinkCode({ code: second.code, chatId: "555", now: NOW });
+    const redeemed = await svc.redeemLinkCode({ code: second.code, chatId: "555", telegramUserId: "42", now: NOW });
 
     expect(redeemed.ok).toBe(true);
     expect((await svc.resolveBinding({ companyId, chatId: "555" }))?.userId).toBe("user-2");
@@ -163,10 +163,10 @@ describeEmbeddedPostgres("telegramLinkService", () => {
   it("supersedes an existing live binding when the same chat redeems a new code", async () => {
     const companyId = await seedCompany();
     const first = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
-    await svc.redeemLinkCode({ code: first.code, chatId: "555", now: NOW });
+    await svc.redeemLinkCode({ code: first.code, chatId: "555", telegramUserId: "42", now: NOW });
 
     const second = await svc.createLinkCode({ companyId, userId: "user-2", now: NOW });
-    const redeemed = await svc.redeemLinkCode({ code: second.code, chatId: "555", now: NOW });
+    const redeemed = await svc.redeemLinkCode({ code: second.code, chatId: "555", telegramUserId: "42", now: NOW });
 
     expect(redeemed.ok).toBe(true);
     expect((await svc.resolveBinding({ companyId, chatId: "555" }))?.userId).toBe("user-2");
@@ -175,9 +175,9 @@ describeEmbeddedPostgres("telegramLinkService", () => {
   it("lists only the live bindings for a company", async () => {
     const companyId = await seedCompany();
     const live = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
-    await svc.redeemLinkCode({ code: live.code, chatId: "555", now: NOW });
+    await svc.redeemLinkCode({ code: live.code, chatId: "555", telegramUserId: "42", now: NOW });
     const revoked = await svc.createLinkCode({ companyId, userId: "user-2", now: NOW });
-    const revokedBinding = await svc.redeemLinkCode({ code: revoked.code, chatId: "777", now: NOW });
+    const revokedBinding = await svc.redeemLinkCode({ code: revoked.code, chatId: "777", telegramUserId: "42", now: NOW });
     await svc.revokeBinding({ companyId, id: revokedBinding.ok ? revokedBinding.binding.id : "" });
     await svc.createLinkCode({ companyId, userId: "user-3", now: NOW }); // never redeemed
 

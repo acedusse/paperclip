@@ -75,7 +75,17 @@ export function telegramLinkService(db: Db) {
       return { id: row!.id, code, expiresAt };
     },
 
-    async redeemLinkCode(input: { code: string; chatId: string; now?: Date }): Promise<RedeemResult> {
+    /**
+     * Redeem a one-time code from a chat. `telegramUserId` is the Telegram account that sent the
+     * `/start` — it becomes the only account allowed to act on this binding, which is what makes a
+     * bound group chat safe.
+     */
+    async redeemLinkCode(input: {
+      code: string;
+      chatId: string;
+      telegramUserId: string;
+      now?: Date;
+    }): Promise<RedeemResult> {
       const now = input.now ?? new Date();
       const [pending] = await db
         .select()
@@ -98,7 +108,13 @@ export function telegramLinkService(db: Db) {
 
       const [linked] = await db
         .update(telegramChatBindings)
-        .set({ chatId: input.chatId, linkedAt: now, linkCode: null, linkCodeExpiresAt: null })
+        .set({
+          chatId: input.chatId,
+          telegramUserId: input.telegramUserId,
+          linkedAt: now,
+          linkCode: null,
+          linkCodeExpiresAt: null,
+        })
         .where(and(eq(telegramChatBindings.id, pending.id), isNull(telegramChatBindings.linkedAt)))
         .returning();
       if (!linked) return { ok: false, reason: "unknown_code" };

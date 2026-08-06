@@ -136,6 +136,33 @@ export function buildApprovalMessage(input: {
   };
 }
 
+/**
+ * The card for a notification that is not a single approval — an SLA breach, a budget incident, a SEV1.
+ * There is no decision to encode, so it carries a link instead of controls; everything else about the
+ * shape (chip, bold headline, quoted detail, escaping) matches the approval card so the two read as one
+ * channel rather than two.
+ */
+export function buildAlertMessage(input: {
+  title: string;
+  body: string;
+  url: string;
+  band?: string;
+  baseUrl?: string | null;
+}): TelegramMessage {
+  const chip = BAND_CHIP[input.band ?? ""] ?? "⚪️";
+  const link = absoluteLink(input.baseUrl, input.url);
+
+  const lines = [`${chip} <b>${escapeHtml(input.title)}</b>`];
+  if (input.body.trim()) lines.push(`<blockquote>${escapeHtml(input.body)}</blockquote>`);
+
+  return {
+    text: truncateForTelegram(lines.join("\n"), TELEGRAM_TEXT_LIMIT),
+    parseMode: "HTML",
+    linkPreviewDisabled: true,
+    ...(link ? { replyMarkup: { inline_keyboard: [[{ text: "🔗 Open in Paperclip", url: link }]] } } : {}),
+  };
+}
+
 function absoluteLink(baseUrl: string | null | undefined, path: string): string | null {
   if (!baseUrl) return null;
   try {

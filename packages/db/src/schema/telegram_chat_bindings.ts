@@ -30,6 +30,11 @@ export const telegramChatBindings = pgTable(
     // Null until the one-time code is redeemed from a chat. Postgres treats nulls as distinct, so
     // many unredeemed codes can coexist under the company-scoped unique index below.
     chatId: text("chat_id"),
+    // The Telegram user who redeemed the code. Authority rests on this, not on the chat: a bound
+    // group chat is visible to everyone in it, so a tapped button is only honoured when the tapper
+    // is this user. Null on bindings created before migration 0125 — those fail closed and must
+    // re-link.
+    telegramUserId: text("telegram_user_id"),
     chatLabel: text("chat_label"),
     linkCode: text("link_code"),
     linkCodeExpiresAt: timestamp("link_code_expires_at", { withTimezone: true }),
@@ -46,6 +51,8 @@ export const telegramChatBindings = pgTable(
     linkCodeUniqueIdx: uniqueIndex("telegram_chat_bindings_link_code_unique_idx").on(table.linkCode),
     companyIdx: index("telegram_chat_bindings_company_idx").on(table.companyId),
     chatIdx: index("telegram_chat_bindings_chat_idx").on(table.chatId),
+    // Mini App sessions will resolve a binding from initData's user id with no chat in hand.
+    telegramUserIdx: index("telegram_chat_bindings_telegram_user_idx").on(table.telegramUserId),
   }),
 );
 export type TelegramChatBindingRow = typeof telegramChatBindings.$inferSelect;

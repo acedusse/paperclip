@@ -78,7 +78,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
 
   async function bindChat(companyId: string, chatId: string, userId: string) {
     const { code } = await links.createLinkCode({ companyId, userId });
-    await links.redeemLinkCode({ code, chatId });
+    await links.redeemLinkCode({ code, chatId, telegramUserId: "42" });
   }
 
   async function activityActions(companyId: string, entityId: string): Promise<string[]> {
@@ -94,7 +94,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
 
-    const result = await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    const result = await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     expect(result).toMatchObject({ ok: true, applied: true, status: "approved" });
     const [row] = await db.select().from(approvals).where(eq(approvals.id, approvalId));
@@ -106,7 +106,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
 
-    await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     const [row] = await db.select().from(approvals).where(eq(approvals.id, approvalId));
     expect(row!.decidedByUserId).toBe("user-1");
@@ -117,7 +117,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
 
-    await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     const [decision] = await db
       .select()
@@ -132,7 +132,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
 
-    await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     expect(await activityActions(companyId, approvalId)).toContain("approval.approved");
   });
@@ -142,7 +142,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
 
-    const result = await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "reject" });
+    const result = await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "reject" });
 
     expect(result).toMatchObject({ ok: true, status: "rejected" });
     expect(await activityActions(companyId, approvalId)).toContain("approval.rejected");
@@ -152,7 +152,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const companyId = await seedCompany();
     const approvalId = await seedApproval(companyId);
 
-    const result = await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    const result = await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     expect(result).toEqual({ ok: false, reason: "not_bound" });
     const [row] = await db.select().from(approvals).where(eq(approvals.id, approvalId));
@@ -166,7 +166,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const [binding] = await links.listBindings(companyId);
     await links.revokeBinding({ companyId, id: binding!.id });
 
-    const result = await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    const result = await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     expect(result).toEqual({ ok: false, reason: "not_bound" });
   });
@@ -177,7 +177,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     await bindChat(companyA, "555", "user-1");
     const approvalId = await seedApproval(companyB);
 
-    const result = await svc.decideFromChat({ companyId: companyA, chatId: "555", approvalId, outcome: "approve" });
+    const result = await svc.decideFromChat({ companyId: companyA, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     expect(result).toEqual({ ok: false, reason: "not_found" });
     const [row] = await db.select().from(approvals).where(eq(approvals.id, approvalId));
@@ -190,7 +190,7 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
 
     const result = await svc.decideFromChat({
       companyId,
-      chatId: "555",
+      chatId: "555", fromTelegramUserId: "42",
       approvalId: randomUUID(),
       outcome: "approve",
     });
@@ -202,9 +202,9 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const companyId = await seedCompany();
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
-    await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
-    const second = await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    const second = await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
     expect(second).toMatchObject({ ok: true, applied: false });
     const decisions = (await activityActions(companyId, approvalId)).filter((a) => a === "approval.decision");
@@ -215,9 +215,9 @@ describeEmbeddedPostgres("telegramDecisionService", () => {
     const companyId = await seedCompany();
     const approvalId = await seedApproval(companyId);
     await bindChat(companyId, "555", "user-1");
-    await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "approve" });
+    await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "approve" });
 
-    const flip = await svc.decideFromChat({ companyId, chatId: "555", approvalId, outcome: "reject" });
+    const flip = await svc.decideFromChat({ companyId, chatId: "555", fromTelegramUserId: "42", approvalId, outcome: "reject" });
 
     expect(flip).toEqual({ ok: false, reason: "already_decided", status: "approved" });
     const [row] = await db.select().from(approvals).where(eq(approvals.id, approvalId));

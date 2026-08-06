@@ -7,13 +7,15 @@
  */
 // ==========================================
 // [META: module]
-// INTENT: Deliver approval notifications to every chat a company's operators have bound, with the same
-//   risk-band and quiet-hours floor web push uses — rendered as an HTML card with inline controls, and
-//   carrying the approval's own screenshots and diagrams so the operator can judge it without a laptop.
-// PSEUDOCODE: 1. Skip payloads with no approval id. 2. Load the company's enabled bot config.
-//   3. Load live bindings + delivery prefs. 4. Resolve the approval's linked issues and their image
-//   attachments once (best-effort; never blocks the send). 5. Per eligible chat pick the richest shape
-//   the Bot API allows: photo+caption+controls, album then controls, document+caption+controls, or text.
+// INTENT: Deliver notifications to the chats a company's operators have bound, with the same risk-band
+//   and quiet-hours floor web push uses. An approval arrives as an HTML card with inline controls,
+//   carrying its own screenshots and diagrams so the operator can judge it without a laptop; anything
+//   else (SLA breach, budget incident) arrives as a plain card with a link back to the board.
+// PSEUDOCODE: 1. Skip payloads with no push block. 2. Load the company's enabled bot config.
+//   3. Load live bindings, narrowed to target.userId when the notification names one, + delivery prefs.
+//   4. For an approval, resolve linked issues and their image attachments once (best-effort; never
+//   blocks the send). 5. Per eligible chat pick the richest shape the Bot API allows: photo+caption+
+//   controls, album then controls, document+caption+controls, or text.
 // JSON_FLOW: {"file": "server/src/services/telegram-channel.ts", "imports": "drizzle-orm, @paperclipai/db, ./telegram-*.js, ./push-prefs.js", "exports": "createTelegramChannel, loadTelegramBotConfig"}
 // ==========================================
 // [START: module]
@@ -29,7 +31,7 @@ import {
   type TelegramBotConfigRow,
 } from "@paperclipai/db";
 import type { DeliveryChannel } from "./notification-delivery.js";
-import { buildApprovalMessage } from "./telegram-format.js";
+import { buildAlertMessage, buildApprovalMessage } from "./telegram-format.js";
 import { telegramLinkService } from "./telegram-link.js";
 import {
   TELEGRAM_MEDIA_GROUP_MAX,
@@ -132,14 +134,17 @@ export function createTelegramChannel(
   return {
     name: "telegram",
     async deliver(target, payload) {
-      // No approval id means no decodable control, and a card whose buttons do nothing is worse than
-      // no card — this channel's whole point is the tap.
-      if (!target.companyId || !payload.push?.approvalId) return;
+      // `push` is what carries a renderable headline; a digest-only payload has nothing to show here.
+      if (!target.companyId || !payload.push) return;
 
       const config = await loadTelegramBotConfig(db, target.companyId);
       if (!config) return;
 
-      const bindings = await links.listBindings(target.companyId);
+      const allBindings = await links.listBindings(target.companyId);
+      // A target naming a user is addressed to that person — the coverage sweep escalates to one
+      // named backup, not to the company. Broadcasting it to every bound chat would disclose one
+      // operator's queue to all of them. With no userId the notification is company-wide by design.
+      const bindings = target.userId ? allBindings.filter((b) => b.userId === target.userId) : allBindings;
       if (bindings.length === 0) return;
 
       const prefRows = await db
@@ -154,27 +159,44 @@ export function createTelegramChannel(
       );
 
       const approvalId = payload.push.approvalId;
-      // Context and media are the same for every chat, so resolve them once per delivery.
-      const linked = await linkedIssueIdentifiers(target.companyId, approvalId).catch((err) => {
-        logger.warn({ err, companyId: target.companyId, approvalId }, "telegram could not read linked issues");
-        return { ids: [] as string[], identifiers: [] as string[] };
-      });
-      const media = await resolveMedia(target.companyId, linked.ids).catch((err) => {
-        logger.warn({ err, companyId: target.companyId, approvalId }, "telegram media resolution failed");
-        return { photos: [], documents: [] } as ResolvedMedia;
-      });
+      // An approval gets the full treatment: inline decision controls plus whatever evidence hangs off
+      // its linked issues. Anything else — an SLA breach, a budget incident — has no decision to encode,
+      // so it arrives as a plain card with a link. Refusing to send those at all was why the coverage
+      // escalation, the alert most in need of a phone, could never reach Telegram.
+      let media: ResolvedMedia = { photos: [], documents: [] };
+      let card: (asCaption: boolean) => ReturnType<typeof buildApprovalMessage>;
 
-      const card = (asCaption: boolean) =>
-        buildApprovalMessage({
-          title: payload.push!.title,
-          body: payload.push!.body,
-          url: payload.push!.url,
-          approvalId,
-          band: payload.push!.band,
-          baseUrl: config.publicBaseUrl,
-          linkedIssues: linked.identifiers,
-          asCaption,
+      if (approvalId) {
+        // Context and media are the same for every chat, so resolve them once per delivery.
+        const linked = await linkedIssueIdentifiers(target.companyId, approvalId).catch((err) => {
+          logger.warn({ err, companyId: target.companyId, approvalId }, "telegram could not read linked issues");
+          return { ids: [] as string[], identifiers: [] as string[] };
         });
+        media = await resolveMedia(target.companyId, linked.ids).catch((err) => {
+          logger.warn({ err, companyId: target.companyId, approvalId }, "telegram media resolution failed");
+          return { photos: [], documents: [] } as ResolvedMedia;
+        });
+        card = (asCaption: boolean) =>
+          buildApprovalMessage({
+            title: payload.push!.title,
+            body: payload.push!.body,
+            url: payload.push!.url,
+            approvalId,
+            band: payload.push!.band,
+            baseUrl: config.publicBaseUrl,
+            linkedIssues: linked.identifiers,
+            asCaption,
+          });
+      } else {
+        card = () =>
+          buildAlertMessage({
+            title: payload.push!.title,
+            body: payload.push!.body,
+            url: payload.push!.url,
+            band: payload.push!.band,
+            baseUrl: config.publicBaseUrl,
+          });
+      }
 
       const band = (payload.push.band as RiskBand | undefined) ?? "high";
       const now = new Date();

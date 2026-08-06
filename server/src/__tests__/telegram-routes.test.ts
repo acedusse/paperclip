@@ -43,6 +43,11 @@ if (!embeddedPostgresSupport.supported) {
 type Db = ReturnType<typeof createDb>;
 const BOT_TOKEN = "123456789:AAHk9Xy_ZqL0pQrStUvWxYz1234567890abc";
 const WEBHOOK_SECRET_HEADER = "x-telegram-bot-api-secret-token";
+/**
+ * The Telegram account that redeems the link code in these tests. Deliberately distinct from the chat
+ * id ("555"): authority follows the user, not the room the card is sitting in.
+ */
+const BOUND_TG_USER = "77";
 
 function boardActor(companyId: string): Express.Request["actor"] {
   return {
@@ -192,7 +197,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       await seedConfig(company.id);
       const links = telegramLinkService(db);
       const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
-      await links.redeemLinkCode({ code, chatId: "555" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
       const app = await createApp(boardActor(company.id));
 
       const res = await request(app).delete(`/api/companies/${company.id}/telegram/config`);
@@ -230,7 +235,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       await seedConfig(company.id);
       const links = telegramLinkService(db);
       const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
-      await links.redeemLinkCode({ code, chatId: "555" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
       const app = await createApp(boardActor(company.id));
 
       const listed = await request(app).get(`/api/companies/${company.id}/telegram/bindings`);
@@ -245,14 +250,19 @@ describeEmbeddedPostgres("telegram routes", () => {
   });
 
   describe("inbound webhook", () => {
-    function callbackUpdate(approvalId: string, outcome: "approve" | "reject", chatId = "555") {
+    function callbackUpdate(
+      approvalId: string,
+      outcome: "approve" | "reject",
+      chatId = "555",
+      fromTelegramUserId: string | null = BOUND_TG_USER,
+    ) {
       return {
         update_id: 1,
         callback_query: {
           id: "cb-1",
           data: encodeApprovalCallback({ approvalId, outcome }),
           message: { message_id: 42, chat: { id: Number(chatId) } },
-          from: { id: Number(chatId) },
+          ...(fromTelegramUserId === null ? {} : { from: { id: Number(fromTelegramUserId) } }),
         },
       };
     }
@@ -306,7 +316,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       const approval = await seedApproval(company.id);
       const links = telegramLinkService(db);
       const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
-      await links.redeemLinkCode({ code, chatId: "555" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
       const app = await createApp(null);
 
       const res = await request(app)
@@ -320,13 +330,147 @@ describeEmbeddedPostgres("telegram routes", () => {
       expect(row!.decidedByUserId).toBe("user-board-1");
     });
 
+    // The group-chat hole: a bound chat is readable and tappable by everyone in it, so the chat alone
+    // must never confer authority. Only the account that redeemed the code may decide.
+    it("refuses a tap from a different member of the bound chat, leaving the approval pending", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const approval = await seedApproval(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post(`/api/telegram/webhook/${company.id}`)
+        .set(WEBHOOK_SECRET_HEADER, "hook-secret")
+        // Same chat, same card — a different Telegram account pressing the button.
+        .send(callbackUpdate(approval.id, "approve", "555", "999"));
+
+      expect(res.status).toBe(200);
+      const [row] = await db.select().from(approvals).where(eq(approvals.id, approval.id));
+      expect(row!.status).toBe("pending");
+      expect(answered[0]!.text).toMatch(/only the person who linked/i);
+      // The card stays live: the bound user has not decided yet.
+      expect(edited).toEqual([]);
+    });
+
+    it("refuses a tap that carries no sender at all", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const approval = await seedApproval(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      const app = await createApp(null);
+
+      await request(app)
+        .post(`/api/telegram/webhook/${company.id}`)
+        .set(WEBHOOK_SECRET_HEADER, "hook-secret")
+        .send(callbackUpdate(approval.id, "approve", "555", null));
+
+      const [row] = await db.select().from(approvals).where(eq(approvals.id, approval.id));
+      expect(row!.status).toBe("pending");
+    });
+
+    // Bindings made before migration 0125 have no recorded Telegram user. Treating "unknown" as
+    // "allowed" would preserve the hole, so they fail closed until the chat re-links.
+    it("refuses a tap on a binding that predates the recorded user identity", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const approval = await seedApproval(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      // Simulate a row written by the pre-0125 code path.
+      await db
+        .update(telegramChatBindings)
+        .set({ telegramUserId: null })
+        .where(eq(telegramChatBindings.companyId, company.id));
+      const app = await createApp(null);
+
+      await request(app)
+        .post(`/api/telegram/webhook/${company.id}`)
+        .set(WEBHOOK_SECRET_HEADER, "hook-secret")
+        .send(callbackUpdate(approval.id, "approve"));
+
+      const [row] = await db.select().from(approvals).where(eq(approvals.id, approval.id));
+      expect(row!.status).toBe("pending");
+      expect(answered[0]!.text).toMatch(/re-link/i);
+    });
+
+    // Group clients send `/start@yourbot <code>`, which is exactly how a shared ops chat gets linked.
+    it("redeems a code sent as the group form of the command", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      const app = await createApp(null);
+
+      await request(app)
+        .post(`/api/telegram/webhook/${company.id}`)
+        .set(WEBHOOK_SECRET_HEADER, "hook-secret")
+        .send({
+          update_id: 2,
+          message: {
+            message_id: 7,
+            chat: { id: 555 },
+            from: { id: Number(BOUND_TG_USER) },
+            text: `/start@tgco_bot ${code}`,
+          },
+        });
+
+      const bindings = await links.listBindings(company.id);
+      expect(bindings.map((b) => b.chatId)).toEqual(["555"]);
+      expect(bindings[0]!.telegramUserId).toBe(BOUND_TG_USER);
+    });
+
+    it("ignores a command that merely starts with the same characters", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post(`/api/telegram/webhook/${company.id}`)
+        .set(WEBHOOK_SECRET_HEADER, "hook-secret")
+        .send({
+          update_id: 2,
+          message: { message_id: 7, chat: { id: 555 }, from: { id: 77 }, text: `/startle ${code}` },
+        });
+
+      expect(res.status).toBe(200);
+      expect(await links.listBindings(company.id)).toHaveLength(0);
+      expect(sent).toHaveLength(0);
+    });
+
+    it("records the sender's Telegram id when a chat redeems a code", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      const app = await createApp(null);
+
+      await request(app)
+        .post(`/api/telegram/webhook/${company.id}`)
+        .set(WEBHOOK_SECRET_HEADER, "hook-secret")
+        .send({
+          update_id: 2,
+          message: { message_id: 7, chat: { id: 555 }, from: { id: Number(BOUND_TG_USER) }, text: `/start ${code}` },
+        });
+
+      const [binding] = await links.listBindings(company.id);
+      expect(binding!.telegramUserId).toBe(BOUND_TG_USER);
+    });
+
     it("acknowledges the tap and retires the buttons", async () => {
       const company = await seedCompany();
       await seedConfig(company.id);
       const approval = await seedApproval(company.id);
       const links = telegramLinkService(db);
       const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
-      await links.redeemLinkCode({ code, chatId: "555" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
       const app = await createApp(null);
 
       await request(app)
@@ -345,7 +489,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       await db.update(approvals).set({ status: "rejected" }).where(eq(approvals.id, approval.id));
       const links = telegramLinkService(db);
       const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
-      await links.redeemLinkCode({ code, chatId: "555" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
       const app = await createApp(null);
 
       await request(app)
@@ -384,7 +528,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       const res = await request(app)
         .post(`/api/telegram/webhook/${company.id}`)
         .set(WEBHOOK_SECRET_HEADER, "hook-secret")
-        .send({ update_id: 2, message: { message_id: 7, chat: { id: 555 }, text: `/start ${code}` } });
+        .send({ update_id: 2, message: { message_id: 7, chat: { id: 555 }, from: { id: Number(BOUND_TG_USER) }, text: `/start ${code}` } });
 
       expect(res.status).toBe(200);
       expect((await links.listBindings(company.id)).map((b) => b.chatId)).toEqual(["555"]);
@@ -399,7 +543,7 @@ describeEmbeddedPostgres("telegram routes", () => {
       await request(app)
         .post(`/api/telegram/webhook/${company.id}`)
         .set(WEBHOOK_SECRET_HEADER, "hook-secret")
-        .send({ update_id: 2, message: { message_id: 7, chat: { id: 555 }, text: "/start bogus" } });
+        .send({ update_id: 2, message: { message_id: 7, chat: { id: 555 }, from: { id: Number(BOUND_TG_USER) }, text: "/start bogus" } });
 
       expect(await telegramLinkService(db).listBindings(company.id)).toHaveLength(0);
       expect(sent[0]!.text).toMatch(/link code/i);

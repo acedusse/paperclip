@@ -45,14 +45,32 @@ type TelegramUpdate = {
   callback_query?: {
     id?: string;
     data?: string;
+    /** The account that pressed the button — the only thing that proves *who* acted. */
+    from?: { id?: number | string };
     message?: { message_id?: number; chat?: { id?: number | string } };
   };
-  message?: { chat?: { id?: number | string }; text?: string };
+  message?: { chat?: { id?: number | string }; from?: { id?: number | string }; text?: string };
 };
 
-function chatIdOf(chat: { id?: number | string } | undefined): string | null {
-  if (chat?.id === undefined || chat.id === null) return null;
-  return String(chat.id);
+/** Telegram ids arrive as numbers; we store and compare them as strings. */
+function idOf(entity: { id?: number | string } | undefined): string | null {
+  if (entity?.id === undefined || entity.id === null) return null;
+  return String(entity.id);
+}
+
+/**
+ * Split a message into its command and argument. A bare `startsWith("/start")` test does not survive
+ * real traffic: clients append `@botname` to commands sent in a group — the exact place a shared ops
+ * chat gets linked — and `/startle` would match the prefix while being a different command.
+ */
+export function parseTelegramCommand(text: string | undefined): { command: string; arg: string } | null {
+  const trimmed = text?.trim();
+  if (!trimmed?.startsWith("/")) return null;
+  const boundary = trimmed.search(/\s/);
+  const head = boundary === -1 ? trimmed : trimmed.slice(0, boundary);
+  const arg = boundary === -1 ? "" : trimmed.slice(boundary + 1).trim();
+  // `/start@yourbot` and `/START` are both the start command.
+  return { command: head.split("@")[0]!.toLowerCase(), arg };
 }
 
 export function telegramRoutes(
@@ -217,7 +235,8 @@ export function telegramRoutes(
 
     try {
       if (update.callback_query) {
-        const chatId = chatIdOf(update.callback_query.message?.chat);
+        const chatId = idOf(update.callback_query.message?.chat);
+        const fromTelegramUserId = idOf(update.callback_query.from);
         const decoded = decodeApprovalCallback(update.callback_query.data);
         const callbackQueryId = update.callback_query.id ?? "";
         if (!chatId || !decoded) {
@@ -235,6 +254,7 @@ export function telegramRoutes(
         const result = await decisions.decideFromChat({
           companyId,
           chatId,
+          fromTelegramUserId,
           approvalId: decoded.approvalId,
           outcome: decoded.outcome,
         });
@@ -244,6 +264,10 @@ export function telegramRoutes(
           ack = buildDecisionAck({ outcome: result.outcome, applied: result.applied });
         } else if (result.reason === "not_bound") {
           ack = "This chat is not linked to a Paperclip user";
+        } else if (result.reason === "not_the_bound_user") {
+          ack = "Only the person who linked this chat can decide here";
+        } else if (result.reason === "binding_predates_user_identity") {
+          ack = "This link is out of date — re-link the chat from the Paperclip board to decide here";
         } else if (result.reason === "not_found") {
           ack = "Approval not found";
         } else if (result.reason === "already_decided") {
@@ -268,11 +292,17 @@ export function telegramRoutes(
         return;
       }
 
-      const text = update.message?.text?.trim();
-      const chatId = chatIdOf(update.message?.chat);
-      if (text?.startsWith("/start") && chatId) {
-        const code = text.slice("/start".length).trim();
-        const redeemed = code ? await links.redeemLinkCode({ code, chatId }) : ({ ok: false, reason: "unknown_code" } as const);
+      const parsed = parseTelegramCommand(update.message?.text);
+      const chatId = idOf(update.message?.chat);
+      const senderId = idOf(update.message?.from);
+      if (parsed?.command === "/start" && chatId) {
+        const code = parsed.arg;
+        // Without a sender there is no identity to bind to — channel posts carry no `from`. Refuse
+        // rather than create a binding that could never satisfy the callback check.
+        const redeemed =
+          code && senderId
+            ? await links.redeemLinkCode({ code, chatId, telegramUserId: senderId })
+            : ({ ok: false, reason: "unknown_code" } as const);
         if (redeemed.ok) {
           const [company] = await db.select().from(companies).where(eq(companies.id, companyId));
           const welcome = buildLinkedMessage({ companyName: company?.name ?? "this company" });

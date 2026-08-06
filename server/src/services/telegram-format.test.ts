@@ -20,6 +20,7 @@ import {
   TELEGRAM_CALLBACK_ANSWER_LIMIT,
   TELEGRAM_CAPTION_LIMIT,
   TELEGRAM_TEXT_LIMIT,
+  buildAlertMessage,
   buildApprovalMessage,
   buildDecisionAck,
   buildLinkedMessage,
@@ -176,6 +177,50 @@ describe("buildDecisionAck", () => {
   it("stays inside the callback answer limit even for a long denial reason", () => {
     const ack = buildDecisionAck({ outcome: "reject", applied: true, detail: "z".repeat(500) });
     expect(ack.length).toBeLessThanOrEqual(TELEGRAM_CALLBACK_ANSWER_LIMIT);
+  });
+});
+
+describe("buildAlertMessage", () => {
+  const alert = { title: "Approvals past SLA", body: "3 approvals awaiting a decision", url: "/approvals/triage" };
+
+  it("renders the headline and the detail", () => {
+    const msg = buildAlertMessage(alert);
+    expect(msg.text).toContain("Approvals past SLA");
+    expect(msg.text).toContain("3 approvals awaiting a decision");
+  });
+
+  it("carries a link button when the company set a public base URL", () => {
+    const msg = buildAlertMessage({ ...alert, baseUrl: "https://paperclip.example" });
+    expect(msg.replyMarkup!.inline_keyboard[0]![0]!.url).toBe("https://paperclip.example/approvals/triage");
+  });
+
+  it("carries no controls at all without a public base URL, rather than a button that goes nowhere", () => {
+    expect(buildAlertMessage(alert).replyMarkup).toBeUndefined();
+  });
+
+  it("never carries decision controls — there is no decision to encode", () => {
+    const msg = buildAlertMessage({ ...alert, baseUrl: "https://paperclip.example" });
+    expect(JSON.stringify(msg.replyMarkup)).not.toContain("callback_data");
+  });
+
+  it("uses the risk chip for the band", () => {
+    expect(buildAlertMessage({ ...alert, band: "critical" }).text.startsWith("🔴")).toBe(true);
+    expect(buildAlertMessage({ ...alert, band: "nonsense" }).text.startsWith("⚪️")).toBe(true);
+  });
+
+  it("escapes markup in a title or body, which may be agent-authored", () => {
+    const msg = buildAlertMessage({ ...alert, title: "5 < 6 & rising", body: "<script>x</script>" });
+    expect(msg.text).toContain("5 &lt; 6 &amp; rising");
+    expect(msg.text).toContain("&lt;script&gt;");
+  });
+
+  it("stays inside the text limit for a very long body", () => {
+    const msg = buildAlertMessage({ ...alert, body: "z".repeat(9000) });
+    expect(msg.text.length).toBeLessThanOrEqual(TELEGRAM_TEXT_LIMIT);
+  });
+
+  it("omits the quoted detail entirely when the body is blank", () => {
+    expect(buildAlertMessage({ ...alert, body: "   " }).text).not.toContain("blockquote");
   });
 });
 

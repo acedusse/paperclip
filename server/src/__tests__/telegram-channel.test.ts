@@ -169,7 +169,9 @@ describeEmbeddedPostgres("createTelegramChannel", () => {
   async function seedBinding(companyId: string, chatId: string, userId: string) {
     const link = telegramLinkService(db);
     const { code } = await link.createLinkCode({ companyId, userId });
-    await link.redeemLinkCode({ code, chatId });
+    // The Telegram account is irrelevant to outbound delivery, but a binding must have one to be
+    // usable inbound — mint a distinct id per chat rather than leaving it null.
+    await link.redeemLinkCode({ code, chatId, telegramUserId: `tg-${chatId}` });
   }
 
   it("sends the approval to every live chat bound to the company", async () => {
@@ -181,6 +183,92 @@ describeEmbeddedPostgres("createTelegramChannel", () => {
     await createTelegramChannel(db, { transport }).deliver({ companyId }, approvalPayload());
 
     expect(sent.map((s) => s.chatId).sort()).toEqual(["111", "222"]);
+  });
+
+  // A notification addressed to one user is that user's business. The coverage sweep escalates to a
+  // single named backup; fanning that out to every bound chat would show one operator's overdue queue
+  // to the whole company.
+  it("sends only to the named user's chats when the notification targets a user", async () => {
+    const companyId = await seedCompany();
+    await seedBot(companyId);
+    await seedBinding(companyId, "111", "user-1");
+    await seedBinding(companyId, "222", "user-2");
+
+    await createTelegramChannel(db, { transport }).deliver({ companyId, userId: "user-1" }, approvalPayload());
+
+    expect(sent.map((s) => s.chatId)).toEqual(["111"]);
+  });
+
+  it("stays silent when the targeted user has no bound chat", async () => {
+    const companyId = await seedCompany();
+    await seedBot(companyId);
+    await seedBinding(companyId, "111", "user-1");
+
+    await createTelegramChannel(db, { transport }).deliver({ companyId, userId: "user-nobody" }, approvalPayload());
+
+    expect(sent).toHaveLength(0);
+  });
+
+  // Before this, `approvalId` gated the whole channel, so the SLA breach — whose entire point is to
+  // reach someone away from their desk — could never arrive.
+  it("delivers a non-approval alert as a plain card with a link and no decision controls", async () => {
+    const companyId = await seedCompany();
+    await seedBot(companyId, { publicBaseUrl: "https://paperclip.example" });
+    await seedBinding(companyId, "111", "user-1");
+
+    await createTelegramChannel(db, { transport }).deliver(
+      { companyId },
+      {
+        kind: "coverage.escalation",
+        title: "Approvals past SLA need a decision",
+        push: {
+          title: "Approvals past SLA",
+          body: "3 approvals awaiting a decision",
+          url: "/approvals/triage",
+          tag: "coverage-escalation",
+          band: "high",
+        },
+      },
+    );
+
+    expect(sent).toHaveLength(1);
+    expect(sent[0]!.text).toContain("Approvals past SLA");
+    const keyboard = sent[0]!.replyMarkup!.inline_keyboard;
+    expect(keyboard).toHaveLength(1);
+    expect(keyboard[0]![0]!.url).toBe("https://paperclip.example/approvals/triage");
+    // No decision to encode, so nothing tappable that would claim otherwise.
+    expect(JSON.stringify(keyboard)).not.toContain("callback_data");
+  });
+
+  it("delivers a non-approval alert with no controls at all when no public base URL is set", async () => {
+    const companyId = await seedCompany();
+    await seedBot(companyId);
+    await seedBinding(companyId, "111", "user-1");
+
+    await createTelegramChannel(db, { transport }).deliver(
+      { companyId },
+      {
+        kind: "coverage.escalation",
+        title: "Approvals past SLA need a decision",
+        push: { title: "Approvals past SLA", body: "3 awaiting", url: "/approvals/triage", band: "high" },
+      },
+    );
+
+    expect(sent).toHaveLength(1);
+    expect(sent[0]!.replyMarkup).toBeUndefined();
+  });
+
+  it("ignores a payload with no push block, such as a digest-only delivery", async () => {
+    const companyId = await seedCompany();
+    await seedBot(companyId);
+    await seedBinding(companyId, "111", "user-1");
+
+    await createTelegramChannel(db, { transport }).deliver(
+      { companyId },
+      { kind: "digest.daily", title: "Your morning digest" },
+    );
+
+    expect(sent).toHaveLength(0);
   });
 
   it("sends with the company's own bot token", async () => {
@@ -250,7 +338,10 @@ describeEmbeddedPostgres("createTelegramChannel", () => {
     expect(sent).toHaveLength(0);
   });
 
-  it("sends nothing rather than dead buttons when the payload names no approval", async () => {
+  // This used to assert the message was dropped entirely. The concern behind it — never render a
+  // button that cannot act — is still enforced; what changed is that a payload naming no approval is
+  // now delivered without decision controls rather than withheld.
+  it("sends a card without decision controls when the payload names no approval", async () => {
     const companyId = await seedCompany();
     await seedBot(companyId);
     await seedBinding(companyId, "111", "user-1");
@@ -259,7 +350,8 @@ describeEmbeddedPostgres("createTelegramChannel", () => {
 
     await createTelegramChannel(db, { transport }).deliver({ companyId }, payload);
 
-    expect(sent).toHaveLength(0);
+    expect(sent).toHaveLength(1);
+    expect(JSON.stringify(sent[0]!.replyMarkup ?? {})).not.toContain("callback_data");
   });
 
   it("honours a user's minimum risk band", async () => {

@@ -35,6 +35,8 @@ const OPEN_STATUSES = new Set(["pending", "revision_requested"]);
 export type TelegramDecisionResult =
   | { ok: true; outcome: ApprovalOutcome; applied: boolean; status: string }
   | { ok: false; reason: "not_bound" }
+  | { ok: false; reason: "not_the_bound_user" }
+  | { ok: false; reason: "binding_predates_user_identity" }
   | { ok: false; reason: "not_found" }
   | { ok: false; reason: "already_decided"; status: string }
   | { ok: false; reason: "forbidden"; detail: string };
@@ -49,11 +51,26 @@ export function telegramDecisionService(db: Db, options: { pluginWorkerManager?:
     async decideFromChat(input: {
       companyId: string;
       chatId: string;
+      /** The Telegram account that pressed the button — `callback_query.from.id`. */
+      fromTelegramUserId: string | null;
       approvalId: string;
       outcome: ApprovalOutcome;
     }): Promise<TelegramDecisionResult> {
       const binding = await links.resolveBinding({ companyId: input.companyId, chatId: input.chatId });
       if (!binding) return { ok: false, reason: "not_bound" };
+
+      // The chat proves only *where* the card is, never *who* tapped it. A bound group chat is
+      // readable and tappable by every member, so without this check any of them would decide as the
+      // person who redeemed the code — with the audit row naming that person.
+      if (!binding.telegramUserId) {
+        // Pre-0125 binding: there is no recorded identity to compare against, and treating "unknown"
+        // as "allowed" would preserve the very hole this check closes. Fail closed; re-linking the
+        // chat records the identity and restores it.
+        return { ok: false, reason: "binding_predates_user_identity" };
+      }
+      if (!input.fromTelegramUserId || input.fromTelegramUserId !== binding.telegramUserId) {
+        return { ok: false, reason: "not_the_bound_user" };
+      }
 
       const approval = await approvalsSvc.getById(input.approvalId);
       // A chat bound to one company must never reach another company's approval, even by guessing an id.

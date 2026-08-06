@@ -80,6 +80,7 @@ export { telegramLinkService, type TelegramBinding } from "./telegram-link.js";
 export { telegramDecisionService, type TelegramDecisionResult } from "./telegram-decisions.js";
 export { createFetchTelegramTransport, type TelegramTransport } from "./telegram-transport.js";
 export {
+  buildAlertMessage,
   buildApprovalMessage,
   buildDecisionAck,
   buildLinkedMessage,

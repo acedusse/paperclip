@@ -8,9 +8,14 @@ This is idea `066` (Telegram half). WhatsApp is not built.
 ## What it does
 
 - **Outbound.** A `telegram` delivery channel sits beside `inbox` and `webpush` in
-  `notification-delivery.ts`. It receives the same approval notifications web push does, and applies the
+  `notification-delivery.ts`. It receives the same notifications web push does, and applies the
   same floor — system minimum band `high`, plus each user's `push_delivery_prefs` (`minBand`, quiet
   hours). Configure once; no separate preference surface.
+  - An **approval** arrives as a card with inline Approve/Reject controls and its evidence attached.
+  - **Anything else** — an SLA breach from the coverage sweep, a budget incident — arrives as a plain
+    card with a link back to the board. There is no decision to encode, so no button pretends there is.
+  - A notification **addressed to a user** (`target.userId`) reaches only that user's bound chats; one
+    with no user is company-wide. The coverage escalation names a single backup, and it stays theirs.
 - **Inbound.** Telegram POSTs updates to `/api/telegram/webhook/:companyId`. A tapped button is decoded,
   attributed to the chat's bound user, and run through the same authority gate, side effects, and audit
   as a decision made in the UI.
@@ -39,7 +44,9 @@ This is idea `066` (Telegram half). WhatsApp is not built.
    ```
 
 4. **Link a chat.** Click **Link a chat** to mint a one-time code, then open the deep link (or send
-   `/start <code>` to the bot). The chat is now bound to *you*.
+   `/start <code>` to the bot). The chat is now bound to *you* — specifically to the Telegram account
+   that sent the `/start`, which is the only account that can decide from it. This works in a group too
+   (`/start@yourbot <code>`); the whole group sees the cards, but only you can act on them.
 5. **Optional deep links.** Set `publicBaseUrl` on the config so approval messages carry a clickable link
    back into the board.
 
@@ -112,6 +119,9 @@ Telegram calls it. Everything therefore rests on these properties:
 | --- | --- |
 | Per-company `webhookSecret`, compared in constant time against `X-Telegram-Bot-Api-Secret-Token` | `routes/telegram.ts` |
 | A chat may only act as the user whose one-time code it redeemed | `telegram-link.ts` |
+| **Only the Telegram account that redeemed the code may decide** — `callback_query.from.id` must match the binding's `telegram_user_id` | `telegram-decisions.ts` |
+| A binding with no recorded `telegram_user_id` (pre-`0125`) cannot decide at all — it fails closed until the chat re-links | `telegram-decisions.ts` |
+| `/start` in a chat with no sender (e.g. a channel post) cannot create a binding | `routes/telegram.ts` |
 | Codes are single-use, expiring (default 60 min), and cleared on redemption | `telegram-link.ts` |
 | One *live* binding per chat per company (partial unique index); revoked rows stay for audit | migration `0124` |
 | A binding for company A can never decide company B's approval | `telegram-decisions.ts` |
@@ -122,6 +132,20 @@ Telegram calls it. Everything therefore rests on these properties:
 
 Nothing in a webhook body is trusted to name the actor or the company: the actor is re-derived from the
 binding, and the company comes from the URL that the secret authenticated.
+
+**Chat vs. user.** The chat proves only *where* a card is, never *who* tapped it. That distinction
+matters the moment the bot is added to a group: a bound group chat is readable and tappable by every
+member, so authority is pinned to `telegram_user_id` — the account that redeemed the link code — rather
+than to the chat. Binding a group is therefore safe and useful: everyone sees the approval, one person
+decides, and the audit row names that person truthfully. What a group still means is that the card's
+contents — the approval title, body and any attached screenshots — are visible to the whole room, so
+bind a group only when that is intended.
+
+**Upgrading past `0125`.** Bindings created before the `telegram_user_id` column existed have nothing to
+compare a tap against. They fail closed rather than fall back to chat-only authority: a tap answers
+"This link is out of date — re-link the chat from the Paperclip board to decide here". Re-linking from
+the board records the identity and restores the binding. There is no backfill, because no existing row
+names a Telegram user.
 
 **Rotating a compromised bot token:** BotFather's `/token` command issues a new one — *"Everyone who has
 your token will have full control over your bot."* Paste the new token into the Telegram panel and press
@@ -135,7 +159,7 @@ and read approval traffic — treat the row as a credential and rotate via **Rep
 
 | Layer | File |
 | --- | --- |
-| Schema | `packages/db/src/schema/telegram_bot_configs.ts`, `telegram_chat_bindings.ts`, migration `0124_telegram_channel.sql` |
+| Schema | `packages/db/src/schema/telegram_bot_configs.ts`, `telegram_chat_bindings.ts`, migrations `0124_telegram_channel.sql`, `0125_telegram_binding_user_identity.sql` |
 | Validators | `packages/shared/src/validators/telegram.ts` |
 | Outbound channel | `server/src/services/telegram-channel.ts` |
 | Message/callback codec | `server/src/services/telegram-format.ts` |
@@ -148,7 +172,9 @@ and read approval traffic — treat the row as a credential and rotate via **Rep
 
 ## Known gaps
 
-- Approvals only. Digests, budget incidents and SEV1 alerts do not fan out to Telegram yet.
+- The channel now carries any `push` payload, but only approvals and the coverage/SLA escalation
+  actually produce one today. Budget incidents, SEV1 alerts and the digest still need their own
+  `deliverThroughChannels` call before they will appear.
 - Media comes from attachments on the approval's *linked issues*. An approval with no linked issues, or
   whose evidence lives in a work product rather than an issue attachment, still sends as a text card.
 - No command grammar beyond `/start <code>` — no `status`, `pause`, `approve PAP-142`.
