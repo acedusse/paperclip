@@ -32,6 +32,7 @@ import {
   decodeApprovalCallback,
   telegramDecisionService,
   telegramLinkService,
+  telegramMiniappSessionService,
   type TelegramTransport,
 } from "../services/index.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
@@ -81,6 +82,7 @@ export function telegramRoutes(
   const transport = options.transport ?? createFetchTelegramTransport();
   const links = telegramLinkService(db);
   const decisions = telegramDecisionService(db, { pluginWorkerManager: options.pluginWorkerManager });
+  const miniappSessions = telegramMiniappSessionService(db);
 
   async function loadConfig(companyId: string) {
     const [row] = await db.select().from(telegramBotConfigs).where(eq(telegramBotConfigs.companyId, companyId));
@@ -210,6 +212,37 @@ export function telegramRoutes(
       return;
     }
     res.json({ ok: true });
+  });
+
+  // ---- mini app session (untrusted; the signature is the whole gate) ---------
+
+  router.post("/telegram/miniapp/session", async (req, res) => {
+    const { companyId, initData } = (req.body ?? {}) as { companyId?: unknown; initData?: unknown };
+    if (typeof companyId !== "string" || typeof initData !== "string") {
+      res.status(400).json({ error: "companyId and initData are required" });
+      return;
+    }
+
+    const result = await miniappSessions.mint({ companyId, initData });
+    if (!result.ok) {
+      if (result.reason === "no_bot") {
+        res.status(404).json({ error: "No Telegram bot for this company" });
+        return;
+      }
+      // Everything else is an authentication failure, and the reason is deliberately not echoed:
+      // an unauthenticated caller learns nothing about which part of their payload was wrong.
+      logger.warn({ companyId, reason: result.reason }, "telegram mini app session refused");
+      res.status(401).json({ error: "Could not authenticate this Telegram session" });
+      return;
+    }
+
+    res.json({
+      token: result.token,
+      expiresAt: result.expiresAt,
+      userId: result.userId,
+      companyId: result.companyId,
+      user: result.user,
+    });
   });
 
   // ---- inbound webhook (untrusted) ----------------------------------------

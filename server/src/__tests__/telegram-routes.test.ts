@@ -14,6 +14,7 @@
 // JSON_FLOW: {"file": "server/src/__tests__/telegram-routes.test.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import { createHmac } from "node:crypto";
 import express from "express";
 import request from "supertest";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -561,6 +562,95 @@ describeEmbeddedPostgres("telegram routes", () => {
 
       expect(res.status).toBe(200);
       expect(sent).toHaveLength(0);
+    });
+  });
+
+  describe("mini app session", () => {
+    function signInitData(fields: Record<string, string>, botToken = BOT_TOKEN): string {
+      const checkString = Object.keys(fields).sort().map((k) => `${k}=${fields[k]}`).join("\n");
+      const secret = createHmac("sha256", "WebAppData").update(botToken).digest();
+      const hash = createHmac("sha256", secret).update(checkString).digest("hex");
+      return new URLSearchParams({ ...fields, hash }).toString();
+    }
+
+    function freshInitData(telegramUserId = BOUND_TG_USER): string {
+      return signInitData({
+        auth_date: String(Math.floor(Date.now() / 1000)),
+        user: JSON.stringify({ id: Number(telegramUserId), first_name: "Dana" }),
+      });
+    }
+
+    it("mints a session for a bound Telegram user", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: freshInitData() });
+
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      expect(res.body.userId).toBe("user-board-1");
+      expect(res.body.companyId).toBe(company.id);
+      expect(typeof res.body.token).toBe("string");
+    });
+
+    it("refuses an unbound Telegram user", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: freshInitData("99999") });
+
+      expect(res.status).toBe(401);
+    });
+
+    it("refuses a tampered initData", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      const params = new URLSearchParams(freshInitData());
+      params.set("user", JSON.stringify({ id: 999, first_name: "Mallory" }));
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: params.toString() });
+
+      expect(res.status).toBe(401);
+    });
+
+    it("404s for a company with no bot", async () => {
+      const company = await seedCompany();
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: freshInitData() });
+
+      expect(res.status).toBe(404);
+    });
+
+    it("never echoes the bot token", async () => {
+      const company = await seedCompany();
+      await seedConfig(company.id);
+      const links = telegramLinkService(db);
+      const { code } = await links.createLinkCode({ companyId: company.id, userId: "user-board-1" });
+      await links.redeemLinkCode({ code, chatId: "555", telegramUserId: BOUND_TG_USER });
+      const app = await createApp(null);
+
+      const res = await request(app)
+        .post("/api/telegram/miniapp/session")
+        .send({ companyId: company.id, initData: freshInitData() });
+
+      expect(JSON.stringify(res.body)).not.toContain(BOT_TOKEN);
     });
   });
 });
