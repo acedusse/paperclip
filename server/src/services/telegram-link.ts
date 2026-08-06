@@ -19,6 +19,7 @@
 import { randomBytes } from "node:crypto";
 import { and, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { telegramChatBindings, type Db, type TelegramChatBindingRow } from "@paperclipai/db";
+import { telegramMiniappSessionService } from "./telegram-miniapp-session.js";
 
 /** Codes are read off a phone screen and typed into a chat, so keep them short but unguessable. */
 const CODE_BYTES = 12;
@@ -48,6 +49,8 @@ export function telegramLinkService(db: Db) {
       );
     return row ?? null;
   }
+
+  const miniappSessions = telegramMiniappSessionService(db);
 
   return {
     resolveBinding,
@@ -133,7 +136,11 @@ export function telegramLinkService(db: Db) {
           ),
         )
         .returning();
-      return revoked.length > 0;
+      if (revoked.length === 0) return false;
+      // Unlinking a chat must also end every Mini App session it produced, or the board's kill
+      // switch would only stop the buttons and leave the webview holding a working board session.
+      await miniappSessions.revokeForBinding(input.id);
+      return true;
     },
 
     async touchBinding(id: string): Promise<void> {

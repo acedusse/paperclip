@@ -77,6 +77,12 @@ export { createWebPushChannel, buildApprovalPushBody } from "./push-notification
 export { shouldPushToUser, type DeliveryPrefs } from "./push-prefs.js";
 export { createTelegramChannel, loadTelegramBotConfig } from "./telegram-channel.js";
 export { telegramLinkService, type TelegramBinding } from "./telegram-link.js";
+export {
+  telegramMiniappSessionService,
+  MINIAPP_SESSION_TTL_HOURS,
+  type TelegramMiniappMintResult,
+} from "./telegram-miniapp-session.js";
+export { verifyTelegramInitData, MINIAPP_INITDATA_MAX_AGE_SECONDS } from "./telegram-initdata.js";
 export { telegramDecisionService, type TelegramDecisionResult } from "./telegram-decisions.js";
 export { createFetchTelegramTransport, type TelegramTransport } from "./telegram-transport.js";
 export {
