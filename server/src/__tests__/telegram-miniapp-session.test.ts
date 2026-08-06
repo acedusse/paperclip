@@ -1,6 +1,6 @@
 import { createHmac } from "node:crypto";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { authUsers, companies, companyMemberships, createDb, telegramBotConfigs } from "@paperclipai/db";
 import { getEmbeddedPostgresTestSupport, startEmbeddedPostgresTestDatabase } from "./helpers/embedded-postgres.js";
 import { telegramLinkService } from "../services/telegram-link.js";
@@ -45,6 +45,9 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
 
   afterEach(async () => {
     await db.execute(sql`TRUNCATE TABLE companies CASCADE`);
+    // authUsers ("user") has no FK to companies, so it does not fall out of the cascade above --
+    // seedBoardUser's fixed test ids would otherwise collide across tests that both seed a board user.
+    await db.execute(sql`TRUNCATE TABLE "user" CASCADE`);
   });
 
   afterAll(async () => {
@@ -292,5 +295,47 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     const res = await request(app).get("/whoami").set("authorization", `Bearer ${minted.token}`);
 
     expect(res.body.type).toBe("none");
+  });
+
+  // The narrowing guard is the whole point of this branch: a live session must still be refused if
+  // the user it points at no longer genuinely has access to the session's company. This is the one
+  // path where a regression would *widen* access instead of denying it.
+  it("does not authenticate when the user's membership in the session's company is gone", async () => {
+    const express = (await import("express")).default;
+    const request = (await import("supertest")).default;
+    const { actorMiddleware } = await import("../middleware/auth.js");
+
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1");
+    await seedBoardUser(company.id, "user-board-1");
+    const minted = await telegramMiniappSessionService(db).mint({
+      companyId: company.id,
+      initData: initDataFor(TG_USER),
+      now: NOW,
+    });
+    if (!minted.ok) throw new Error("expected mint");
+
+    // The Mini App session is still live and the Telegram binding is untouched, but the user's
+    // board membership for this company was deactivated after the session was minted -- e.g. they
+    // were removed from the company. resolveBoardAccess must drop this company out of
+    // access.companyIds, and the middleware's `.includes()` guard must refuse to grant a board
+    // actor rather than falling back to some wider set of companies.
+    await db
+      .update(companyMemberships)
+      .set({ status: "inactive" })
+      .where(
+        and(eq(companyMemberships.companyId, company.id), eq(companyMemberships.principalId, "user-board-1")),
+      );
+
+    const app = express();
+    app.use(actorMiddleware(db, { deploymentMode: "authenticated" }));
+    app.get("/whoami", (req, res) => res.json(req.actor));
+
+    const res = await request(app).get("/whoami").set("authorization", `Bearer ${minted.token}`);
+
+    expect(res.body.type).toBe("none");
+    expect(res.body.source).toBe("none");
+    expect(res.body.companyIds).toBeUndefined();
   });
 });
