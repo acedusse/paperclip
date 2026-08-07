@@ -114,6 +114,30 @@ describeEmbeddedPostgres("telegramLinkService", () => {
     expect(await svc.redeemLinkCode({ code, chatId: "555", telegramUserId: "42", now: late })).toEqual({ ok: false, reason: "expired" });
   });
 
+  // Linking is not a hot path — an operator mints at a desk and redeems on a phone — and migration
+  // 0125 makes every existing chat re-link once. The previous one-hour default lost that race.
+  it("defaults to a 24 hour window", async () => {
+    const companyId = await seedCompany();
+    const { expiresAt } = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
+
+    expect(expiresAt.getTime() - NOW.getTime()).toBe(24 * 60 * 60_000);
+  });
+
+  it("still redeems just inside the default window, and refuses just outside it", async () => {
+    const companyId = await seedCompany();
+    const a = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
+    const justInside = new Date(NOW.getTime() + 24 * 60 * 60_000 - 1000);
+    expect(
+      (await svc.redeemLinkCode({ code: a.code, chatId: "555", telegramUserId: "42", now: justInside })).ok,
+    ).toBe(true);
+
+    const b = await svc.createLinkCode({ companyId, userId: "user-1", now: NOW });
+    const justOutside = new Date(NOW.getTime() + 24 * 60 * 60_000 + 1000);
+    expect(
+      await svc.redeemLinkCode({ code: b.code, chatId: "777", telegramUserId: "43", now: justOutside }),
+    ).toEqual({ ok: false, reason: "expired" });
+  });
+
   it("refuses a code it never issued", async () => {
     await seedCompany();
     expect(await svc.redeemLinkCode({ code: "not-a-real-code", chatId: "555", telegramUserId: "42", now: NOW })).toEqual({
