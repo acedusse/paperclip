@@ -40,11 +40,41 @@ const {
     flushPendingFeedbackTraces: vi.fn(async () => ({ attempted: 0, sent: 0, failed: 0 })),
   };
   const feedbackServiceFactoryMock = vi.fn(() => feedbackExportServiceMock);
-  const fakeServer = {
-    once: vi.fn().mockReturnThis(),
-    off: vi.fn().mockReturnThis(),
+  // Emulates just enough of http.Server: the port is now reserved by listening
+  // and waiting for the "listening" event, not by a listen() callback.
+  const listeners = new Map<string, Array<(...args: unknown[]) => void>>();
+  const fakeServer: Record<string, unknown> = {
+    on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+      const existing = listeners.get(event) ?? [];
+      existing.push(handler);
+      listeners.set(event, existing);
+      return fakeServer;
+    }),
+    once: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+      const wrapped = (...args: unknown[]) => {
+        const current = listeners.get(event) ?? [];
+        listeners.set(
+          event,
+          current.filter((entry) => entry !== wrapped),
+        );
+        handler(...args);
+      };
+      const existing = listeners.get(event) ?? [];
+      existing.push(wrapped);
+      listeners.set(event, existing);
+      return fakeServer;
+    }),
+    off: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+      const existing = listeners.get(event) ?? [];
+      listeners.set(
+        event,
+        existing.filter((entry) => entry !== handler),
+      );
+      return fakeServer;
+    }),
     listen: vi.fn((_port: number, _host: string, callback?: () => void) => {
       callback?.();
+      for (const handler of [...(listeners.get("listening") ?? [])]) handler();
       return fakeServer;
     }),
     close: vi.fn(),

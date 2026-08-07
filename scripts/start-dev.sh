@@ -44,6 +44,12 @@ fi
 echo "Stopping any existing Paperclip dev runner for this repo..."
 pnpm dev:stop || true
 
+# `pnpm dev:stop` only terminates runners in the local service registry. A
+# watcher whose parent died is reparented and drops out of that registry, so it
+# survives the stop and keeps holding the port. Refuse to start in that state
+# rather than quietly coming up on a different port behind a stale server.
+"$REPO_ROOT/server/node_modules/.bin/tsx" "$SCRIPT_DIR/check-dev-port.ts"
+
 echo "Starting Paperclip (pnpm dev)..."
 echo "  API + UI: http://localhost:3100 (or next free port)"
 exec pnpm dev "$@"

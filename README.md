@@ -96,7 +96,7 @@ Agents wake on a schedule, check work, and act. Delegation flows up and down the
 <tr>
 <td align="center">
 <h3>💰 Cost Control</h3>
-Monthly budgets per agent. When they hit the limit, they stop. No runaway costs.
+Budgets per agent, a predictive circuit breaker that throttles before limits blow, quiet-hours schedules, and per-run caps. No runaway costs.
 </td>
 <td align="center">
 <h3>🏢 Multi-Company</h3>
@@ -110,7 +110,7 @@ Every conversation traced. Every decision explained. Full tool-call tracing and 
 <tr>
 <td align="center">
 <h3>🛡️ Governance</h3>
-Approve hires, override strategy, pause or terminate any agent — at any time.
+Approve hires, override strategy, pause, drain, or emergency-stop any agent — or the whole fleet — at any time.
 </td>
 <td align="center">
 <h3>📊 Org Chart</h3>
@@ -118,7 +118,7 @@ Hierarchies, roles, reporting lines. Your agents have a boss, a title, and a job
 </td>
 <td align="center">
 <h3>📱 Mobile Ready</h3>
-Monitor and manage your autonomous businesses from anywhere.
+Monitor and manage your autonomous businesses from anywhere — including approving or rejecting work straight from Telegram.
 </td>
 </tr>
 </table>
@@ -132,7 +132,7 @@ Monitor and manage your autonomous businesses from anywhere.
 | ❌ You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything.                              | ✅ Tasks are ticket-based, conversations are threaded, sessions persist across reboots.                                                |
 | ❌ You manually gather context from several places to remind your bot what you're actually doing.                                     | ✅ Context flows from the task up through the project and company goals — your agent always knows what to do and why.                  |
 | ❌ Folders of agent configs are disorganized and you're re-inventing task management, communication, and coordination between agents. | ✅ Paperclip gives you org charts, ticketing, delegation, and governance out of the box — so you run a company, not a pile of scripts. |
-| ❌ Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened.                           | ✅ Cost tracking surfaces token budgets and throttles agents when they're out. Management prioritizes with budgets.                    |
+| ❌ Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened.                           | ✅ Cost tracking surfaces token budgets, and a predictive circuit breaker throttles or halts agents before budgets blow. Management prioritizes with budgets. |
 | ❌ You have recurring jobs (customer support, social, reports) and have to remember to manually kick them off.                        | ✅ Heartbeats handle regular work on a schedule. Management supervises.                                                                |
 | ❌ You have an idea, you have to find your repo, fire up Claude Code, keep a tab open, and babysit it.                                | ✅ Add a task in Paperclip. Your coding agent works on it until it's done. Management reviews their work.                              |
 
@@ -145,6 +145,10 @@ Paperclip handles the hard orchestration details correctly.
 |                                   |                                                                                                               |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | **Atomic execution.**             | Task checkout and budget enforcement are atomic, so no double-work and no runaway spend.                      |
+| **Fleet-wide admission control.** | Instance- and company-level concurrency caps with crash-safe reconciliation govern how much runs at once.     |
+| **Predictive spend protection.**  | A budget circuit breaker watches burn rate and throttles or halts before limits are hit; quiet-hours schedules cap activity while you sleep. |
+| **Emergency stop & drain.**       | One switch winds down a company (or the whole instance) gracefully — and resumes safely through the same governed admission loop. |
+| **Bounded runs.**                 | Per-run wall-clock, cost, and turn caps plus per-agent WIP limits keep individual runs and queues from getting away from you.  |
 | **Persistent agent state.**       | Agents resume the same task context across heartbeats instead of restarting from scratch.                     |
 | **Runtime skill injection.**      | Agents can learn Paperclip workflows and project context at runtime, without retraining.                      |
 | **Governance with rollback.**     | Approval gates are enforced, config changes are revisioned, and bad changes can be rolled back safely.        |
@@ -207,7 +211,7 @@ Paperclip is a full control plane, not a wrapper. Before you build any of this y
 </td>
 <td>
 
-**Heartbeat Execution** — DB-backed wakeup queue with coalescing, budget checks, workspace resolution, secret injection, skill loading, and adapter invocation. Runs produce structured logs, cost events, session state, and audit trails. Recovery handles orphaned runs automatically.
+**Heartbeat Execution** — DB-backed wakeup queue with coalescing, budget checks, workspace resolution, secret injection, skill loading, and adapter invocation. Idle agents automatically back off their cadence; event wakeups stay instant. Runs produce structured logs, cost events, session state, and audit trails. Recovery handles orphaned runs automatically.
 
 </td>
 </tr>
@@ -226,7 +230,7 @@ Paperclip is a full control plane, not a wrapper. Before you build any of this y
 <tr>
 <td>
 
-**Budget & Cost Control** — Token and cost tracking by company, agent, project, goal, issue, provider, and model. Scoped budget policies with warning thresholds and hard stops. Overspend pauses agents and cancels queued work automatically.
+**Budget & Cost Control** — Token and cost tracking by company, agent, project, goal, issue, provider, and model. Scoped budget policies with warning thresholds and hard stops. A predictive circuit breaker watches burn rate and throttles or halts before limits are hit. Overspend pauses agents and cancels queued work automatically.
 
 </td>
 <td>
@@ -256,6 +260,18 @@ Paperclip is a full control plane, not a wrapper. Before you build any of this y
 <td>
 
 **Company Portability** — Export and import entire organizations — agents, skills, projects, routines, and issues — with secret scrubbing and collision handling. One deployment, many companies, complete data isolation.
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Runtime Control Plane** — Fleet-wide and per-company concurrency caps with crash-safe admission reconciliation, quiet-hours schedules with boost/quiet-now overrides, emergency stop and graceful drain, per-run wall-clock/cost/turn caps, per-agent WIP limits with flow metrics, and workspace conflict coordination so parallel agents don't trample each other's paths.
+
+</td>
+<td>
+
+**Notification Channels** — Digest-aware delivery over web push and Telegram, with quiet-hours floors. Approvals arrive as inline Approve/Reject actions on your phone and run through the exact same risk gates and audit trail as the web UI.
 
 </td>
 </tr>
@@ -385,6 +401,8 @@ See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
 - ✅ Better Budgeting
 - ✅ Agent Reviews and Approvals
 - ✅ Multiple Human Users
+- ✅ Runtime Control Plane — fleet concurrency caps, predictive budget circuit breaker, quiet-hours schedules, emergency stop & drain, per-run resource caps, WIP limits, workspace conflict coordination
+- ✅ Telegram approvals — approve/reject from your phone through the same risk gates and audit trail
 - ⚪ Cloud / Sandbox agents (e.g. Cursor / e2b / Novita agents)
 - ⚪ Artifacts & Work Products
 - ⚪ Memory / Knowledge
@@ -399,6 +417,19 @@ See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
 - ⚪ Desktop App
 
 This is the short roadmap preview. See the full roadmap in [ROADMAP.md](ROADMAP.md).
+
+### Where we're headed
+
+Beyond the milestones above, we maintain a public idea backlog in [`.ideas/`](.ideas/README.md) — 66 improvement ideas grounded in the current codebase, synthesized into [13 combined feature directions](.ideas/combinations/README.md). The runtime control plane (the first of those combinations) has shipped; the near-term focus is:
+
+1. **Operator Review & Approval Cockpit** — approval triage and policy batching, a run change-review surface, mobile push for fast approvals, delegation and coverage, and scheduled operator digests — unblocking the human bottleneck that stalls 24/7 autonomy.
+2. **Autonomous Company Health Sentinel** — diminishing-returns detection, blocker-graph deadlock detection, goal-drift auditing, agent reliability SLOs, org bottleneck heatmaps, and run-level tracing — catching the expensive failures that look healthy.
+3. **Day-One Adoption Kit** — a guided demo company, a company blueprint library, dry-run cost estimation, data import from existing tools, and work templates with definitions of done.
+4. **Autonomous CFO Suite** — unit-economics dashboards, token-denominated budgets, revenue & P&L tracking, and cost/capacity forecasting.
+5. **Mixed-Economy Model & Provider Fabric** — first-class local LLM adapters, quota-aware provider fallback chains, and fair-share rate limiting across shared credentials.
+6. **Zero-Trust Security & Governance** — policy-as-code, secret leasing and leak scanning, per-agent egress allow-listing, and a tamper-evident audit log — unlocking real, regulated businesses.
+
+Longer-horizon directions include self-staffing and self-organizing workforces, resilience and incident response, institutional memory and continuous learning, two-way external integration, and a governed cross-company fabric (holding companies, inter-company services, and company-to-company mail).
 
 <br/>
 

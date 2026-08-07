@@ -19,7 +19,9 @@
 // HTTP server, so trace coverage does not depend on incidental timing.
 import { instrumentationReady, shutdownInstrumentation } from "./instrumentation.js";
 import { existsSync, readFileSync, rmSync } from "node:fs";
-import { createServer } from "node:http";
+import { createServer, type RequestListener } from "node:http";
+import { reserveListenPort } from "./lib/reserve-listen-port.js";
+import { describeStartupFailureRemedy } from "./lib/startup-failure-remedy.js";
 import { resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
@@ -535,7 +537,24 @@ export async function startServer(): Promise<StartedServer> {
   }
 
   const requestedListenPort = config.port;
-  const listenPort = await detectPort(requestedListenPort);
+  // Bind the listening socket before the long startup (embedded Postgres,
+  // migrations, plugin loading) rather than after it. Probing for a free port
+  // here and binding it thousands of milliseconds later leaves a window in
+  // which a leftover dev watcher can take the port, which used to surface as a
+  // fatal EADDRINUSE despite the "next free port" fallback.
+  const server = createServer();
+  // Requests that arrive before the app is mounted get an explicit "starting"
+  // response instead of hanging on an unhandled socket.
+  const respondStarting: RequestListener = (_req, res) => {
+    res.writeHead(503, { "content-type": "text/plain", "retry-after": "5" });
+    res.end("Paperclip is still starting up.\n");
+  };
+  server.on("request", respondStarting);
+  const listenPort = await reserveListenPort({
+    server,
+    requestedPort: requestedListenPort,
+    host: config.host,
+  });
   if (config.authBaseUrlMode === "explicit" && config.authPublicBaseUrl) {
     config.authPublicBaseUrl = rewriteLocalUrlPort(config.authPublicBaseUrl, listenPort);
   }
@@ -687,7 +706,9 @@ export async function startServer(): Promise<StartedServer> {
     resolveSession,
     pluginWorkerManager,
   });
-  const server = createServer(app as unknown as Parameters<typeof createServer>[0]);
+  // The socket is already bound; swap the "starting up" placeholder for the app.
+  server.off("request", respondStarting);
+  server.on("request", app as unknown as RequestListener);
 
   // Increase keep-alive timeouts to safely outlive default idle timeouts
   // of common reverse proxies and load balancers (like AWS ALB, Nginx, or Traefik).
@@ -1033,66 +1054,56 @@ export async function startServer(): Promise<StartedServer> {
     throw err;
   }
 
-  await new Promise<void>((resolveListen, rejectListen) => {
-    const onError = (err: Error) => {
-      server.off("error", onError);
-      rejectListen(err);
-    };
-
-    server.once("error", onError);
-    server.listen(listenPort, config.host, () => {
-      server.off("error", onError);
-      logger.info(`Server listening on ${config.host}:${listenPort}`);
-      if (process.env.PAPERCLIP_OPEN_ON_LISTEN === "true") {
-        const openHost = config.host === "0.0.0.0" || config.host === "::" ? "127.0.0.1" : config.host;
-        const url = `http://${openHost}:${listenPort}`;
-        void import("open")
-          .then((mod) => mod.default(url))
-          .then(() => {
-            logger.info(`Opened browser at ${url}`);
-          })
-          .catch((err) => {
-            logger.warn({ err, url }, "Failed to open browser on startup");
-          });
-      }
-        printStartupBanner({
-          bind: config.bind,
-          host: config.host,
-          deploymentMode: config.deploymentMode,
-        deploymentExposure: config.deploymentExposure,
-        authReady,
-        requestedPort: requestedListenPort,
-        listenPort,
-        uiMode,
-        db: startupDbInfo,
-        migrationSummary,
-        heartbeatSchedulerEnabled: config.heartbeatSchedulerEnabled,
-        heartbeatSchedulerIntervalMs: config.heartbeatSchedulerIntervalMs,
-        databaseBackupEnabled: config.databaseBackupEnabled,
-        databaseBackupIntervalMinutes: config.databaseBackupIntervalMinutes,
-        databaseBackupRetentionDays: config.databaseBackupRetentionDays,
-        databaseBackupDir: config.databaseBackupDir,
-      });
-
-      const boardClaimUrl = getBoardClaimWarningUrl(config.host, listenPort);
-      if (boardClaimUrl) {
-        const red = "\x1b[41m\x1b[30m";
-        const yellow = "\x1b[33m";
-        const reset = "\x1b[0m";
-        console.log(
-          [
-            `${red}  BOARD CLAIM REQUIRED  ${reset}`,
-            `${yellow}This instance was previously local_trusted and still has local-board as the only admin.${reset}`,
-            `${yellow}Sign in with a real user and open this one-time URL to claim ownership:${reset}`,
-            `${yellow}${boardClaimUrl}${reset}`,
-            `${yellow}If you are connecting over Tailscale, replace the host in this URL with your Tailscale IP/MagicDNS name.${reset}`,
-          ].join("\n"),
-        );
-      }
-
-      resolveListen();
+  {
+    // The port was reserved before startup began, so this only announces it.
+    logger.info(`Server listening on ${config.host}:${listenPort}`);
+    if (process.env.PAPERCLIP_OPEN_ON_LISTEN === "true") {
+      const openHost = config.host === "0.0.0.0" || config.host === "::" ? "127.0.0.1" : config.host;
+      const url = `http://${openHost}:${listenPort}`;
+      void import("open")
+        .then((mod) => mod.default(url))
+        .then(() => {
+          logger.info(`Opened browser at ${url}`);
+        })
+        .catch((err) => {
+          logger.warn({ err, url }, "Failed to open browser on startup");
+        });
+    }
+    printStartupBanner({
+      bind: config.bind,
+      host: config.host,
+      deploymentMode: config.deploymentMode,
+      deploymentExposure: config.deploymentExposure,
+      authReady,
+      requestedPort: requestedListenPort,
+      listenPort,
+      uiMode,
+      db: startupDbInfo,
+      migrationSummary,
+      heartbeatSchedulerEnabled: config.heartbeatSchedulerEnabled,
+      heartbeatSchedulerIntervalMs: config.heartbeatSchedulerIntervalMs,
+      databaseBackupEnabled: config.databaseBackupEnabled,
+      databaseBackupIntervalMinutes: config.databaseBackupIntervalMinutes,
+      databaseBackupRetentionDays: config.databaseBackupRetentionDays,
+      databaseBackupDir: config.databaseBackupDir,
     });
-  });
+
+    const boardClaimUrl = getBoardClaimWarningUrl(config.host, listenPort);
+    if (boardClaimUrl) {
+      const red = "\x1b[41m\x1b[30m";
+      const yellow = "\x1b[33m";
+      const reset = "\x1b[0m";
+      console.log(
+        [
+          `${red}  BOARD CLAIM REQUIRED  ${reset}`,
+          `${yellow}This instance was previously local_trusted and still has local-board as the only admin.${reset}`,
+          `${yellow}Sign in with a real user and open this one-time URL to claim ownership:${reset}`,
+          `${yellow}${boardClaimUrl}${reset}`,
+          `${yellow}If you are connecting over Tailscale, replace the host in this URL with your Tailscale IP/MagicDNS name.${reset}`,
+        ].join("\n"),
+      );
+    }
+  }
   
   {
     const shutdown = async (signal: "SIGINT" | "SIGTERM") => {
@@ -1151,6 +1162,10 @@ function isMainModule(metaUrl: string): boolean {
 if (isMainModule(import.meta.url)) {
   void startServer().catch((err) => {
     logger.error({ err }, "Paperclip server failed to start");
+    const remedy = describeStartupFailureRemedy(err);
+    if (remedy) {
+      console.error(`\n${remedy}\n`);
+    }
     process.exit(1);
   });
 }
