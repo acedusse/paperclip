@@ -371,6 +371,23 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     expect(session?.bindingId).toBe(newest.id);
   });
 
+  // The three tests below drive the real actorMiddleware, which calls resolve() with the *real* clock
+  // rather than a caller-supplied `now`. Minting against the frozen NOW therefore produced a session
+  // that silently expired once wall-clock UTC passed NOW + MINIAPP_SESSION_TTL_HOURS -- a time bomb
+  // that made "resolves to a board actor" start failing, and would have made the two "expects none"
+  // tests below start passing for the wrong reason. Mint against the real clock instead, with an
+  // initData signed at the same instant so it is not stale either.
+  async function mintLiveSession(companyId: string) {
+    const at = new Date();
+    const minted = await telegramMiniappSessionService(db).mint({
+      companyId,
+      initData: initDataFor(TG_USER, at),
+      now: at,
+    });
+    if (!minted.ok) throw new Error("expected mint");
+    return minted;
+  }
+
   it("resolves a minted token to a board actor scoped to one company", async () => {
     const express = (await import("express")).default;
     const request = (await import("supertest")).default;
@@ -380,12 +397,7 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     await seedBot(company.id);
     await seedBinding(company.id, "user-board-1");
     await seedBoardUser(company.id, "user-board-1");
-    const minted = await telegramMiniappSessionService(db).mint({
-      companyId: company.id,
-      initData: initDataFor(TG_USER),
-      now: NOW,
-    });
-    if (!minted.ok) throw new Error("expected mint");
+    const minted = await mintLiveSession(company.id);
 
     const app = express();
     app.use(actorMiddleware(db, { deploymentMode: "authenticated" }));
@@ -407,12 +419,7 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     const company = await seedCompany();
     await seedBot(company.id);
     const binding = await seedBinding(company.id, "user-board-1");
-    const minted = await telegramMiniappSessionService(db).mint({
-      companyId: company.id,
-      initData: initDataFor(TG_USER),
-      now: NOW,
-    });
-    if (!minted.ok) throw new Error("expected mint");
+    const minted = await mintLiveSession(company.id);
     await telegramLinkService(db).revokeBinding({ companyId: company.id, id: binding.id });
 
     const app = express();
@@ -436,12 +443,7 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     await seedBot(company.id);
     await seedBinding(company.id, "user-board-1");
     await seedBoardUser(company.id, "user-board-1");
-    const minted = await telegramMiniappSessionService(db).mint({
-      companyId: company.id,
-      initData: initDataFor(TG_USER),
-      now: NOW,
-    });
-    if (!minted.ok) throw new Error("expected mint");
+    const minted = await mintLiveSession(company.id);
 
     // The Mini App session is still live and the Telegram binding is untouched, but the user's
     // board membership for this company was deactivated after the session was minted -- e.g. they

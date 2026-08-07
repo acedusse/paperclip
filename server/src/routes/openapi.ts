@@ -567,6 +567,10 @@ const PUBLIC_OPERATIONS = new Set([
   // per-company secret token header, and every governed action is re-derived from the
   // chat's binding rather than from anything in the request body.
   "POST /api/telegram/webhook/{companyId}",
+  // The Mini App trades Telegram's signed initData for a bearer, so by definition it is called before
+  // any Paperclip actor exists. Its credential is the initData HMAC, verified against the company's
+  // bot token, and the identity it yields is re-derived from the chat binding rather than the body.
+  "POST /api/telegram/miniapp/session",
 ]);
 
 const BOARD_ONLY_PREFIXES = [
@@ -2586,6 +2590,22 @@ registry.registerPath({
   summary: "Revoke a linked Telegram chat",
   request: { params: z.object({ companyId: z.string(), id: z.string() }) },
   responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/telegram/miniapp/session",
+  tags: ["approvals"],
+  summary: "Exchange a signed Telegram initData for a Mini App board session bearer",
+  request: {
+    body: jsonBody(
+      z.object({
+        companyId: z.string(),
+        initData: z.string(),
+      }),
+    ),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
 });
 
 registry.registerPath({
