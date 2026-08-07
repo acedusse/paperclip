@@ -25,7 +25,16 @@ import { telegramMiniappSessionService } from "./telegram-miniapp-session.js";
 
 /** Codes are read off a phone screen and typed into a chat, so keep them short but unguessable. */
 const CODE_BYTES = 12;
-const DEFAULT_TTL_MINUTES = 60;
+/**
+ * A day, not an hour. Linking is not a hot path: an operator mints a code at a desk and redeems it on
+ * a phone that may be in another room, and migration 0125 makes re-linking something every existing
+ * chat has to do once. An hour turned that into a race people lost.
+ *
+ * The window is safe to widen because the code's strength is not its lifetime: it is 12 random bytes,
+ * single-use, cleared the moment it is redeemed, and it grants only what the issuing user already has.
+ * Callers that want a tighter window still pass `ttlMinutes` (1–1440, enforced by the validator).
+ */
+const DEFAULT_TTL_MINUTES = 24 * 60;
 
 export type TelegramBinding = TelegramChatBindingRow;
 export type RedeemResult =
