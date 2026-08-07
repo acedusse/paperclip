@@ -10,7 +10,7 @@
 // INTENT: Prove the seam between useTelegramSession's status and what TelegramGate actually renders:
 //   a pass-through outside Telegram (the load-bearing guarantee for the rest of the UI), a
 //   "Connecting..." placeholder while not yet ready, the failure text (verbatim, since the hook's error
-//   string is user-facing) when status is "failed", and children once ready. Also proves the Telegram
+//   string is user-facing) when status is "failed" or the terminal "expired", and children once ready. Also proves the Telegram
 //   lifecycle calls (ready/expand/applyTelegramTheme, and re-applying on themeChanged) only fire inside
 //   Telegram.
 // PSEUDOCODE: 1. Mock ./webapp and ./useTelegramSession so status/error and Telegram presence are
@@ -45,6 +45,9 @@ vi.mock("./useTelegramSession", () => ({
 }));
 
 const { TelegramGate } = await import("./TelegramGate");
+// TelegramGate hands Telegram's colorScheme to ThemeContext (so the provider does not overwrite it a
+// tick later), which means it must render inside a real ThemeProvider -- the provider is not mocked.
+const { ThemeProvider } = await import("../context/ThemeContext");
 
 async function flush() {
   await Promise.resolve();
@@ -55,9 +58,11 @@ function renderGate(container: HTMLDivElement): Root {
   const root = createRoot(container);
   flushSync(() => {
     root.render(
-      <TelegramGate>
-        <div data-testid="board">board content</div>
-      </TelegramGate>,
+      <ThemeProvider>
+        <TelegramGate>
+          <div data-testid="board">board content</div>
+        </TelegramGate>
+      </ThemeProvider>,
     );
   });
   return root;
@@ -127,6 +132,19 @@ describe("TelegramGate", () => {
       "This Telegram account is not linked to Paperclip. Link it from the board, then reopen.",
     );
     expect(container.querySelector('[data-testid="board"]')).toBeFalsy();
+  });
+
+  it("shows the terminal expired message and withholds children", async () => {
+    getTelegramWebApp.mockReturnValue(fakeApp);
+    sessionState.status = "expired";
+    sessionState.error = "Your Paperclip session has expired. Close this window and reopen Paperclip from Telegram.";
+    root = renderGate(container);
+    await flush();
+    expect(container.textContent).toContain(
+      "Your Paperclip session has expired. Close this window and reopen Paperclip from Telegram.",
+    );
+    expect(container.querySelector('[data-testid="board"]')).toBeFalsy();
+    expect(container.textContent).not.toContain("Connecting");
   });
 
   it("renders children once the session is ready", async () => {

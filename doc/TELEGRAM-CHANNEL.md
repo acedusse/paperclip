@@ -138,7 +138,7 @@ Telegram calls it. Everything therefore rests on these properties:
 | A binding for company A can never decide company B's approval | `telegram-decisions.ts` |
 | Decisions pass the same `canDecide(band, "explicit_human")` gate as the HTTP route | `telegram-decisions.ts` |
 | Every decision writes `approval.decision` with `details.channel = "telegram"` plus the chat id | `telegram-decisions.ts` |
-| Disconnecting the bot revokes every binding | `routes/telegram.ts` |
+| Disconnecting the bot revokes every binding **and every Mini App session those bindings minted**, in one transaction | `routes/telegram.ts` → `telegram-link.ts` |
 | Every interpolated value is HTML-escaped before rendering, so agent-supplied text cannot inject markup | `telegram-format.ts` |
 
 Nothing in a webhook body is trusted to name the actor or the company: the actor is re-derived from the
@@ -196,21 +196,33 @@ the board API as that user, for one company. Two consequences:
 | Control | Where |
 | --- | --- |
 | A session is scoped to exactly one company and never widens the user's real access | `middleware/auth.ts` |
-| A session never carries instance-admin, even if the user has it | `middleware/auth.ts` |
-| Revoking a chat binding revokes every session it minted | `telegram-link.ts` |
+| A session never carries instance-admin, even if the user has it — and the policy layer refuses to re-derive it from the user id, so the guarantee holds downstream of the middleware too | `middleware/auth.ts`, `services/authorization.ts` |
+| Every revocation path — unlink chat, **Disconnect bot**, and re-linking a chat to someone else — revokes the sessions the binding minted, in the same transaction | `telegram-link.ts`, `routes/telegram.ts` |
+| Setting the bot to `enabled: false`, or deleting its config, stops existing sessions resolving — not just new mints | `telegram-miniapp-session.ts` |
 | A tampered or stale `initData` is refused without saying which | `routes/telegram.ts` |
 | A binding predating migration `0125` has no `telegram_user_id` and cannot mint a session | `telegram-miniapp-session.ts` |
+| Two live bindings naming different Paperclip users for the same Telegram account refuse to mint rather than silently picking one | `telegram-miniapp-session.ts` |
+| Mini App actions are audited as `telegram_miniapp`, never as a browser `session` | `routes/authz.ts` |
 
 A session is minted with `type: "board"`, `companyIds: [session.companyId]` — a hardcoded single-company
 list, not the user's real `access.companyIds` — and `isInstanceAdmin: false` hardcoded, never the user's
 real value. `resolveBoardAccess` still runs against the user's genuine membership first, so a bearer only
 authenticates at all if the user still has active access to that company; the hardcoding narrows what the
-session is *allowed to claim*, it never widens it. Revocation is atomic: `telegram-link.ts`'s
-`revokeBinding` wraps the binding's `UPDATE` and the call to `revokeForBinding` in one `db.transaction`,
-so a chat binding and every Mini App session it minted go dark together — there is no window where the
-binding is revoked but a session it produced is still live.
+session is *allowed to claim*, it never widens it. The `isInstanceAdmin: false` is enforced twice, on
+purpose: `services/authorization.ts` treats `telegram_miniapp` the way it already treats `cloud_tenant`
+and refuses to re-derive instance-admin from the user id, so an operator who genuinely administers the
+instance from a browser does *not* get that authority through a webview bearer. Hardcoding `false` in
+the middleware alone would not have held — `decide()` reads `req.actor` directly from a dozen route
+sites and used to fall back to a database lookup keyed on the user.
 
-**The bearer travels through three modules, not one.** `ui/src/api/client.ts` (the shared fetch helper
+Revocation is atomic on every path. `telegram-link.ts`'s `revokeBinding` (unlink a chat),
+`revokeAllBindings` (**Disconnect bot**) and the supersede inside `redeemLinkCode` (re-linking a chat to
+a different user) each wrap the binding `UPDATE` and the session revocation in one `db.transaction`, so
+a chat binding and every Mini App session it minted go dark together. Turning the bot off short of that
+also works: `resolve()` joins the bot config and requires it to still exist and be `enabled`, so
+`enabled: false` ends live sessions rather than only blocking new ones.
+
+**The bearer travels through four modules, not one.** `ui/src/api/client.ts` (the shared fetch helper
 behind `api.get/post/...`) carries the bearer on every board API call, but two more modules make their
 own `fetch()` calls outside that helper: `ui/src/api/health.ts` and `ui/src/api/auth.ts`. Both matter
 because every routed page — including all six Telegram surfaces — renders under `<CloudAccessGate>`,
@@ -218,11 +230,19 @@ which calls `healthApi.get()` unconditionally and, on an `authenticated`-mode de
 `authApi.getSession()`. Inside the Telegram webview there is no session cookie, so without the bearer on these
 two paths as well, `CloudAccessGate` would 401 and redirect every Mini App visitor to a login page that
 does not work in a webview — the board would look broken even though the Mini App session itself was
-fine. All three modules now build their `Authorization` header through one shared function,
+fine. All of these build their `Authorization` header through one shared function,
 `applyTelegramAuthHeader`, exported from `ui/src/telegram/useTelegramSession.ts`, so the bearer logic
-exists in exactly one place. `client.ts` additionally retries once on a 401: it clears the dead bearer,
-re-mints a fresh one against the `initData` the webview still holds, and replays the same request — a
-session that outlives its 12-hour TTL mid-visit recovers without the user noticing.
+exists in exactly one place. The plugin bundle loader (`ui/src/plugins/slots.tsx`), which fetches
+JavaScript source rather than JSON and so cannot go through `client.ts`, carries the bearer the same
+way — without it the Wikis surface fails to load inside the webview.
+
+**An expired session is terminal, not recoverable.** A 401 on a bearer-carrying request ends the
+session: `client.ts` marks it expired and the shell tells the operator to reopen Paperclip from
+Telegram. There is deliberately no silent re-mint. Telegram hands the webview one `initData` blob at
+launch with a fixed `auth_date`, the server rejects anything older than five minutes, and the session
+lasts twelve hours — so re-minting from the held blob could only ever succeed in the first five minutes
+of the webview's life, never in the case it would exist for. Telegram exposes no API to re-source
+`initData` while the Mini App is open.
 
 **The bot token now forges sessions.** It is the HMAC key for `initData`, so the plaintext-at-rest note
 above is stronger than it was: database access no longer merely impersonates the bot and reads approval
@@ -242,7 +262,8 @@ live bindings if a leak is suspected.
 | Decision path | `server/src/services/telegram-decisions.ts` |
 | Shared approval effects | `server/src/services/approval-effects.ts` |
 | Routes | `server/src/routes/telegram.ts` |
-| UI | `ui/src/components/telegram/TelegramChannel.tsx`, `ui/src/api/telegram.ts` |
+| Mini App session | `server/src/services/telegram-miniapp-session.ts`, `server/src/services/telegram-initdata.ts` |
+| UI | `ui/src/components/telegram/TelegramChannel.tsx`, `ui/src/api/telegram.ts`, `ui/src/telegram/` |
 
 ## Known gaps
 
@@ -259,6 +280,16 @@ live bindings if a leak is suspected.
   approval cards is built (`telegram-format.ts`) but not wired into delivery (`telegram-channel.ts`
   never passes `miniAppUrl`), because `web_app` buttons are private-chat-only and the send path does not
   yet vary by chat type. A bound group chat would otherwise get a silently-dead button.
+- **Not every request the board makes can carry the Mini App bearer.** `client.ts`, `health.ts`,
+  `auth.ts` and the plugin bundle loader (`plugins/slots.tsx`) all attach it, but four other modules
+  make their own `fetch()` calls that do not: `adapters/dynamic-loader.ts` (adapter UI parser bundles),
+  `adapters/schema-config-fields.tsx` (adapter config schemas), `pages/BoardChat.tsx` (the board chat
+  SSE stream) and `IssueAttachmentsSection.tsx` (attachment text previews). Separately, subresources
+  the browser loads on its own — `<img src>` and `<video src>` pointing at attachment content paths in
+  `IssueAttachmentsSection.tsx` — cannot carry an `Authorization` header at all, by construction. Inside
+  the webview these paths 401: adapter-driven config fields degrade, board chat does not stream, and
+  attachment images and video do not render. None of the six shipped Mini App surfaces depends on them
+  today, but any surface that grows one will break there first.
 - No inbound intake (a forwarded message does not become an issue).
 - `setWebhook` is a manual step; Paperclip does not register the webhook for you.
 - WhatsApp is not implemented; its opt-in and 24-hour template rules make it a separate slice.

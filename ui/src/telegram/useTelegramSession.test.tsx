@@ -11,13 +11,15 @@
 //   the UI suite), that it mints and stores a bearer on success, that it reports a distinct message for
 //   each failure mode (missing ?c=, 401 unlinked account, other HTTP failure, network failure) -- the
 //   caller renders `error` verbatim, so the message text is behavior, not incidental -- and that
-//   applyTelegramAuthHeader/refreshTelegramBearer (shared by client.ts, health.ts and auth.ts) behave
-//   correctly for the expiry-then-recovery path a 401 triggers.
+//   applyTelegramAuthHeader (shared by client.ts, health.ts and auth.ts) behaves correctly, and that
+//   markTelegramSessionExpired -- what a 401 now triggers instead of an impossible re-mint -- drops the
+//   bearer and drives every mounted hook to a terminal, actionable "reopen from Telegram" state.
 // PSEUDOCODE: 1. Mock ./webapp's getTelegramWebApp so tests control Telegram presence/initData.
 //   2. Stub global fetch to control the /api/telegram/miniapp/session response per test.
 //   3. Render a probe component through useTelegramSession and poll its rendered status/error.
 //   4. Separately assert getTelegramBearer()/clearTelegramBearer() against the module's bearer state,
-//   and refreshTelegramBearer()/applyTelegramAuthHeader() against a header-building caller's contract.
+//   applyTelegramAuthHeader() against a header-building caller's contract, and markTelegramSessionExpired()
+//   against both the module state and a mounted hook.
 // JSON_FLOW: {"file": "ui/src/telegram/useTelegramSession.test.tsx", "imports": "react-dom, react-dom/client, vitest, ./webapp, ./useTelegramSession", "exports": "none"}
 // ==========================================
 // [START: module]
@@ -34,8 +36,16 @@ vi.mock("./webapp", () => ({
 }));
 
 // Imported after the mock so the hook picks up the mocked ./webapp.
-const { useTelegramSession, getTelegramBearer, clearTelegramBearer, applyTelegramAuthHeader, refreshTelegramBearer } =
-  await import("./useTelegramSession");
+const {
+  useTelegramSession,
+  getTelegramBearer,
+  clearTelegramBearer,
+  applyTelegramAuthHeader,
+  markTelegramSessionExpired,
+  isTelegramSessionExpired,
+  resetTelegramSessionExpiry,
+  TELEGRAM_SESSION_EXPIRED_MESSAGE,
+} = await import("./useTelegramSession");
 
 async function flush() {
   await Promise.resolve();
@@ -258,7 +268,7 @@ describe("applyTelegramAuthHeader", () => {
   });
 });
 
-describe("refreshTelegramBearer", () => {
+describe("markTelegramSessionExpired", () => {
   let container: HTMLDivElement;
   let root: Root | null;
   let originalSearch: string;
@@ -270,6 +280,7 @@ describe("refreshTelegramBearer", () => {
     originalSearch = window.location.search;
     getTelegramWebApp.mockReset();
     clearTelegramBearer();
+    resetTelegramSessionExpiry();
     vi.stubGlobal("fetch", vi.fn());
   });
 
@@ -278,71 +289,65 @@ describe("refreshTelegramBearer", () => {
     container.remove();
     window.history.pushState({}, "", `${window.location.pathname}${originalSearch}`);
     clearTelegramBearer();
+    resetTelegramSessionExpiry();
     vi.unstubAllGlobals();
   });
 
-  it("returns null outside Telegram", async () => {
-    getTelegramWebApp.mockReturnValue(null);
-    await expect(refreshTelegramBearer()).resolves.toBeNull();
-    expect(fetch).not.toHaveBeenCalled();
-  });
-
-  // (No companyId ever bound is covered structurally, not as a standalone test: boundCompanyId is
-  // private module state set only by a successful mint and intentionally never cleared by
-  // clearTelegramBearer -- see its doc comment in useTelegramSession.ts -- so once any test in this
-  // file's shared module instance has minted successfully, "never bound" can no longer be reproduced in
-  // isolation here without a test-only reset hook this module deliberately doesn't expose.)
-
-  it("re-mints against the last-bound companyId and stores the fresh token (expiry-then-recovery)", async () => {
-    // Bootstrap a real bearer through the hook first, exactly like an API client's first successful
-    // request would have observed, so this test exercises the actual companyId-binding path rather than
-    // asserting against hand-set internal state.
+  it("drops the bearer and records the session as terminally expired", async () => {
     getTelegramWebApp.mockReturnValue(fakeApp);
     window.history.pushState({}, "", "/board?c=company-9");
-    vi.mocked(fetch).mockResolvedValueOnce(
-      new Response(JSON.stringify({ token: "tok_expiring" }), { status: 200 }),
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ token: "tok_live" }), { status: 200 }),
     );
-    root = createRoot(container);
-    flushSync(() => {
-      root!.render(<Probe />);
-    });
-    await waitForAssertion(() => expect(getTelegramBearer()).toBe("tok_expiring"));
+    root = renderProbe(container);
+    await waitForAssertion(() => expect(getTelegramBearer()).toBe("tok_live"));
 
-    // Simulate the 12-hour token having expired: the caller (client.ts) clears nothing itself --
-    // refreshTelegramBearer does both the clear and the re-mint.
-    vi.mocked(fetch).mockResolvedValueOnce(
-      new Response(JSON.stringify({ token: "tok_fresh" }), { status: 200 }),
-    );
-    const fresh = await refreshTelegramBearer();
+    markTelegramSessionExpired();
 
-    expect(fresh).toBe("tok_fresh");
-    expect(getTelegramBearer()).toBe("tok_fresh");
-    const mintCalls = vi.mocked(fetch).mock.calls.filter(([url]) => url === "/api/telegram/miniapp/session");
-    expect(mintCalls).toHaveLength(2);
-    const [, secondInit] = mintCalls[1] as [string, RequestInit];
-    expect(JSON.parse(secondInit.body as string)).toEqual({
-      companyId: "company-9",
-      initData: fakeApp.initData,
-    });
-  });
-
-  it("clears the bearer and returns null when the re-mint itself fails (binding revoked)", async () => {
-    getTelegramWebApp.mockReturnValue(fakeApp);
-    window.history.pushState({}, "", "/board?c=company-9");
-    vi.mocked(fetch).mockResolvedValueOnce(
-      new Response(JSON.stringify({ token: "tok_expiring" }), { status: 200 }),
-    );
-    root = createRoot(container);
-    flushSync(() => {
-      root!.render(<Probe />);
-    });
-    await waitForAssertion(() => expect(getTelegramBearer()).toBe("tok_expiring"));
-
-    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 401 }));
-    const fresh = await refreshTelegramBearer();
-
-    expect(fresh).toBeNull();
     expect(getTelegramBearer()).toBeNull();
+    expect(isTelegramSessionExpired()).toBe(true);
+  });
+
+  // The whole point of dropping the old retry-and-re-mint: expiry has to reach the operator, because
+  // nothing in the webview can fix it for them.
+  it("flips a mounted hook to the terminal expired state with an actionable message", async () => {
+    getTelegramWebApp.mockReturnValue(fakeApp);
+    window.history.pushState({}, "", "/board?c=company-9");
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ token: "tok_live" }), { status: 200 }),
+    );
+    root = renderProbe(container);
+    await waitForAssertion(() => expect(statusText(container)).toBe("ready"));
+
+    markTelegramSessionExpired();
+
+    await waitForAssertion(() => expect(statusText(container)).toBe("expired"));
+    expect(errorText(container)).toBe(TELEGRAM_SESSION_EXPIRED_MESSAGE);
+    expect(errorText(container)).toMatch(/reopen paperclip from telegram/i);
+  });
+
+  it("never issues a re-mint request of its own", async () => {
+    getTelegramWebApp.mockReturnValue(fakeApp);
+    window.history.pushState({}, "", "/board?c=company-9");
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ token: "tok_live" }), { status: 200 }),
+    );
+    root = renderProbe(container);
+    await waitForAssertion(() => expect(getTelegramBearer()).toBe("tok_live"));
+    const before = vi.mocked(fetch).mock.calls.length;
+
+    markTelegramSessionExpired();
+    await flush();
+
+    expect(vi.mocked(fetch).mock.calls.length).toBe(before);
+  });
+
+  it("reports the expired state to a hook mounted after the fact", async () => {
+    getTelegramWebApp.mockReturnValue(null);
+    markTelegramSessionExpired();
+    root = renderProbe(container);
+    await waitForAssertion(() => expect(statusText(container)).toBe("expired"));
   });
 });
+
 // [END: module]

@@ -55,6 +55,14 @@ export type AuthorizationActor =
       | "none";
   };
 
+/**
+ * Actor sources that are company-scoped by contract: whatever the underlying user can do elsewhere in
+ * the instance, an actor arriving through one of these may never be elevated to instance admin. Kept as
+ * a set rather than a chain of `!==` so adding the next such source is one line in one place — the
+ * `telegram_miniapp` hole existed precisely because the rule read as a cloud_tenant special case.
+ */
+const COMPANY_SCOPED_ACTOR_SOURCES: ReadonlySet<string> = new Set(["cloud_tenant", "telegram_miniapp"]);
+
 export type AuthorizationAction =
   | PermissionKey
   | "agent_config:read"
@@ -1043,11 +1051,15 @@ export function authorizationService(db: Db) {
           explanation: "Allowed because the actor is the local implicit board.",
         });
       }
-      // cloud_tenant actors are company-scoped by contract and must never be
-      // elevated — not even via stale instance_admin rows left behind by
-      // deployments that ran the pre-hardening cloud_tenant path.
+      // Company-scoped actor sources are elevated by nobody — not even via
+      // instance_admin rows their underlying user genuinely holds. cloud_tenant
+      // was the first such source (stale instance_admin rows left behind by
+      // deployments that ran the pre-hardening cloud_tenant path);
+      // telegram_miniapp is the second: the middleware hands the session
+      // `isInstanceAdmin: false` on purpose, and re-deriving it from the user id
+      // here would hand the whole instance back to a webview bearer.
       if (
-        input.actor.source !== "cloud_tenant" &&
+        !COMPANY_SCOPED_ACTOR_SOURCES.has(input.actor.source ?? "") &&
         (input.actor.isInstanceAdmin || await isInstanceAdmin(input.actor.userId))
       ) {
         return allow({

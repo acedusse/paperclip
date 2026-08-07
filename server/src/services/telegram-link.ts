@@ -12,7 +12,9 @@
 // PSEUDOCODE: 1. createLinkCode inserts an unredeemed row holding a random code + expiry.
 //   2. redeemLinkCode finds a live code, revokes any prior live binding for that chat, then stamps
 //   chat_id/linked_at and clears the code so it cannot be replayed.
-//   3. resolveBinding returns only linked, unrevoked rows. 4. revokeBinding/listBindings for the board UI.
+//   3. resolveBinding returns only linked, unrevoked rows. 4. revokeBinding/revokeAllBindings/listBindings
+//   for the board UI. Every path that revokes a binding -- unlink, disconnect-bot, and the supersede
+//   inside redeemLinkCode -- also revokes the Mini App sessions that binding minted, in one transaction.
 // JSON_FLOW: {"file": "server/src/services/telegram-link.ts", "imports": "node:crypto, drizzle-orm, @paperclipai/db", "exports": "telegramLinkService, TelegramBinding, RedeemResult"}
 // ==========================================
 // [START: module]
@@ -35,8 +37,13 @@ function newCode(): string {
 }
 
 export function telegramLinkService(db: Db) {
-  async function resolveBinding(input: { companyId: string; chatId: string }): Promise<TelegramBinding | null> {
-    const [row] = await db
+  async function resolveBinding(
+    input: { companyId: string; chatId: string },
+    // Typed `any` to match this codebase's existing dbOrTx convention (see document-annotations.ts):
+    // the handle drizzle hands a transaction callback is not structurally identical to `Db`.
+    dbOrTx: any = db,
+  ): Promise<TelegramBinding | null> {
+    const [row] = await dbOrTx
       .select()
       .from(telegramChatBindings)
       .where(
@@ -100,28 +107,34 @@ export function telegramLinkService(db: Db) {
       }
 
       // A chat speaks for one user at a time: redeeming a new code retires the previous binding
-      // rather than silently adding a second identity for the same chat.
-      const existing = await resolveBinding({ companyId: pending.companyId, chatId: input.chatId });
-      if (existing) {
-        await db
-          .update(telegramChatBindings)
-          .set({ revokedAt: now })
-          .where(eq(telegramChatBindings.id, existing.id));
-      }
+      // rather than silently adding a second identity for the same chat. Superseding is a revocation
+      // like any other, so it must take the superseded binding's Mini App sessions down with it --
+      // otherwise re-linking a chat to a different user leaves the old user's webview session live for
+      // up to the full session TTL. Both writes plus the new binding's link commit together.
+      return db.transaction(async (tx) => {
+        const existing = await resolveBinding({ companyId: pending.companyId, chatId: input.chatId }, tx);
+        if (existing) {
+          await tx
+            .update(telegramChatBindings)
+            .set({ revokedAt: now })
+            .where(eq(telegramChatBindings.id, existing.id));
+          await miniappSessions.revokeForBinding(existing.id, tx);
+        }
 
-      const [linked] = await db
-        .update(telegramChatBindings)
-        .set({
-          chatId: input.chatId,
-          telegramUserId: input.telegramUserId,
-          linkedAt: now,
-          linkCode: null,
-          linkCodeExpiresAt: null,
-        })
-        .where(and(eq(telegramChatBindings.id, pending.id), isNull(telegramChatBindings.linkedAt)))
-        .returning();
-      if (!linked) return { ok: false, reason: "unknown_code" };
-      return { ok: true, binding: linked };
+        const [linked] = await tx
+          .update(telegramChatBindings)
+          .set({
+            chatId: input.chatId,
+            telegramUserId: input.telegramUserId,
+            linkedAt: now,
+            linkCode: null,
+            linkCodeExpiresAt: null,
+          })
+          .where(and(eq(telegramChatBindings.id, pending.id), isNull(telegramChatBindings.linkedAt)))
+          .returning();
+        if (!linked) return { ok: false, reason: "unknown_code" } as RedeemResult;
+        return { ok: true, binding: linked } as RedeemResult;
+      });
     },
 
     async revokeBinding(input: { companyId: string; id: string }): Promise<boolean> {
@@ -146,6 +159,32 @@ export function telegramLinkService(db: Db) {
         await miniappSessions.revokeForBinding(input.id, tx);
         return true;
       });
+    },
+
+    /**
+     * Revoke every live binding for a company and, with them, every Mini App session those bindings
+     * minted. This is what "Disconnect bot" means: an operator reaching for it because a phone was
+     * stolen has to be cutting *all* access, not just the inline buttons. Accepts the caller's
+     * transaction so the config delete and the revocations commit together.
+     */
+    async revokeAllBindings(input: { companyId: string }, dbOrTx: any = db): Promise<number> {
+      const run = async (tx: any) => {
+        const revoked = await tx
+          .update(telegramChatBindings)
+          .set({ revokedAt: new Date() })
+          .where(
+            and(
+              eq(telegramChatBindings.companyId, input.companyId),
+              isNull(telegramChatBindings.revokedAt),
+            ),
+          )
+          .returning({ id: telegramChatBindings.id });
+        for (const row of revoked as { id: string }[]) {
+          await miniappSessions.revokeForBinding(row.id, tx);
+        }
+        return (revoked as { id: string }[]).length;
+      };
+      return dbOrTx === db ? db.transaction(run) : run(dbOrTx);
     },
 
     async touchBinding(id: string): Promise<void> {

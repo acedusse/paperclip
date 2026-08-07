@@ -19,8 +19,8 @@
 // [START: module]
 import { randomBytes } from "node:crypto";
 import { Router } from "express";
-import { and, eq, isNull } from "drizzle-orm";
-import { companies, telegramBotConfigs, telegramChatBindings, type Db } from "@paperclipai/db";
+import { eq } from "drizzle-orm";
+import { companies, telegramBotConfigs, type Db } from "@paperclipai/db";
 import { telegramConfigSchema, telegramLinkCodeSchema } from "@paperclipai/shared";
 import { validate } from "../middleware/validate.js";
 import { logger } from "../middleware/logger.js";
@@ -161,12 +161,15 @@ export function telegramRoutes(
     const companyId = req.params.companyId as string;
     assertBoard(req);
     assertCompanyAccess(req, companyId);
-    await db.delete(telegramBotConfigs).where(eq(telegramBotConfigs.companyId, companyId));
-    // Removing the bot must also end every chat's authority to act for this company.
-    await db
-      .update(telegramChatBindings)
-      .set({ revokedAt: new Date() })
-      .where(and(eq(telegramChatBindings.companyId, companyId), isNull(telegramChatBindings.revokedAt)));
+    // Removing the bot must also end every chat's authority to act for this company -- including the
+    // Mini App sessions those chats minted, which outlive the buttons by up to the session TTL unless
+    // they are revoked here too. links.revokeAllBindings does both halves; running it in the same
+    // transaction as the config delete means there is no window where the bot is gone but a webview
+    // still holds a working board session.
+    await db.transaction(async (tx) => {
+      await tx.delete(telegramBotConfigs).where(eq(telegramBotConfigs.companyId, companyId));
+      await links.revokeAllBindings({ companyId }, tx);
+    });
     res.json({ ok: true });
   });
 

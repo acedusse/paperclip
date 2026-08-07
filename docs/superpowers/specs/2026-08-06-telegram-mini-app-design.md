@@ -88,10 +88,20 @@ POST /api/telegram/miniapp/session
    revoked_at)`, modelled on `agent_api_keys`. `actorMiddleware` gains a branch that resolves it to a
    board actor scoped to that one company.
 
-**Lifetime.** `MINIAPP_SESSION_TTL_HOURS`, default 12. Short is cheap here because the Mini App holds
-`initData` for as long as it is open and can mint a replacement silently on a 401, so the operator
-never sees an expiry. Revoking a chat binding revokes its live sessions, keeping the board's existing
-"unlink chat" control a real kill switch.
+**Lifetime.** `MINIAPP_SESSION_TTL_HOURS`, default 12. **Expiry is terminal — there is no silent
+renewal.** An earlier draft of this section claimed the webview could mint a replacement on a 401 from
+the `initData` it still holds; that is wrong, and the code that implemented it was dead. Telegram hands
+the webview one `initData` blob at launch, with a fixed `auth_date`, and step 3 above rejects anything
+older than 300 seconds. A re-mint from the held blob can therefore only succeed inside the first five
+minutes of the webview's life — never the twelve-hour case it would exist for — and Telegram exposes no
+API to re-source `initData` while the Mini App is open. So a 401 on a bearer-carrying request ends the
+session and the shell tells the operator to reopen Paperclip from Telegram, which issues fresh
+`initData`. Twelve hours is chosen to make that rare, not invisible.
+
+Every path that revokes a binding — "unlink chat", "Disconnect bot", and re-linking a chat to a
+different user — revokes that binding's live sessions in the same transaction, so the board's kill
+switch is real on all three. Disabling or deleting the bot config does the same by a different route:
+`resolve()` requires the company's bot to still exist and be enabled.
 
 **This is a far larger grant than the chat ever had.** An inline button could approve or reject one
 approval. A Mini App session is the board API as that user. That is the point of the phase, but it

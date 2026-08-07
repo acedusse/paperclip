@@ -72,10 +72,16 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     });
   }
 
-  async function seedBinding(companyId: string, userId: string, telegramUserId = TG_USER, chatId = "555") {
+  async function seedBinding(
+    companyId: string,
+    userId: string,
+    telegramUserId = TG_USER,
+    chatId = "555",
+    linkedAt?: Date,
+  ) {
     const links = telegramLinkService(db);
     const { code } = await links.createLinkCode({ companyId, userId });
-    const redeemed = await links.redeemLinkCode({ code, chatId, telegramUserId });
+    const redeemed = await links.redeemLinkCode({ code, chatId, telegramUserId, now: linkedAt });
     if (!redeemed.ok) throw new Error("seed failed");
     return redeemed.binding;
   }
@@ -242,6 +248,127 @@ describeEmbeddedPostgres("telegramMiniappSessionService", () => {
     await telegramLinkService(db).revokeBinding({ companyId: company.id, id: binding.id });
 
     expect(await svc.resolve(minted.token, NOW)).toBeNull();
+  });
+
+  // "Disconnect bot" is the control an operator reaches for when a phone is stolen. Deleting the bot
+  // config and revoking the bindings is only half of it: the sessions those bindings minted are what a
+  // webview is actually holding, and they outlive the buttons by up to the full TTL unless revoked too.
+  it("revokes live sessions when the bot is disconnected from the board", async () => {
+    const express = (await import("express")).default;
+    const request = (await import("supertest")).default;
+    const { telegramRoutes } = await import("../routes/telegram.js");
+    const { errorHandler } = await import("../middleware/index.js");
+
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1");
+    const svc = telegramMiniappSessionService(db);
+    const minted = await svc.mint({ companyId: company.id, initData: initDataFor(TG_USER), now: NOW });
+    if (!minted.ok) throw new Error("expected mint");
+    expect(await svc.resolve(minted.token, NOW)).not.toBeNull();
+
+    const app = express();
+    app.use(express.json());
+    app.use((req, _res, next) => {
+      (req as unknown as { actor: unknown }).actor = {
+        type: "board",
+        userId: "user-board-1",
+        companyIds: [company.id],
+        memberships: [{ companyId: company.id, membershipRole: "owner", status: "active" }],
+        source: "session",
+      };
+      next();
+    });
+    app.use("/api", telegramRoutes(db));
+    app.use(errorHandler);
+
+    const res = await request(app).delete(`/api/companies/${company.id}/telegram/config`);
+    expect(res.status).toBe(200);
+
+    expect(await svc.resolve(minted.token, NOW)).toBeNull();
+  });
+
+  // Re-linking a chat supersedes the prior binding. That is a revocation too, and the superseded
+  // user's Mini App session has to go with it -- otherwise handing a chat to a colleague leaves the
+  // previous operator's webview acting as themselves for hours.
+  it("revokes live sessions when the chat is re-linked to another user", async () => {
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1", TG_USER, "555");
+    const svc = telegramMiniappSessionService(db);
+    const minted = await svc.mint({ companyId: company.id, initData: initDataFor(TG_USER), now: NOW });
+    if (!minted.ok) throw new Error("expected mint");
+    expect(await svc.resolve(minted.token, NOW)).not.toBeNull();
+
+    // Same chat, a code issued by a different board user: the old binding is superseded.
+    await seedBinding(company.id, "user-board-2", TG_USER, "555");
+
+    expect(await svc.resolve(minted.token, NOW)).toBeNull();
+  });
+
+  // `enabled: false` already blocks minting. Left at that, it would mean "off for new sessions only".
+  it("stops resolving sessions once the company's bot is disabled", async () => {
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1");
+    const svc = telegramMiniappSessionService(db);
+    const minted = await svc.mint({ companyId: company.id, initData: initDataFor(TG_USER), now: NOW });
+    if (!minted.ok) throw new Error("expected mint");
+    expect(await svc.resolve(minted.token, NOW)).not.toBeNull();
+
+    await db
+      .update(telegramBotConfigs)
+      .set({ enabled: false })
+      .where(eq(telegramBotConfigs.companyId, company.id));
+
+    expect(await svc.resolve(minted.token, NOW)).toBeNull();
+  });
+
+  it("stops resolving sessions once the company's bot config is deleted outright", async () => {
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1");
+    const svc = telegramMiniappSessionService(db);
+    const minted = await svc.mint({ companyId: company.id, initData: initDataFor(TG_USER), now: NOW });
+    if (!minted.ok) throw new Error("expected mint");
+
+    await db.delete(telegramBotConfigs).where(eq(telegramBotConfigs.companyId, company.id));
+
+    expect(await svc.resolve(minted.token, NOW)).toBeNull();
+  });
+
+  // (companyId, telegramUserId) is not unique -- the live-binding unique index is (companyId, chatId).
+  // One Telegram account that redeemed codes issued by two different board users in the same company
+  // therefore has two live bindings naming two different Paperclip identities, and an unordered
+  // `select ... limit 1` would let Postgres pick whose identity the session assumes.
+  it("refuses to mint when two live bindings name different Paperclip users", async () => {
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1", TG_USER, "chat-a");
+    await seedBinding(company.id, "user-board-2", TG_USER, "chat-b");
+    const svc = telegramMiniappSessionService(db);
+
+    const result = await svc.mint({ companyId: company.id, initData: initDataFor(TG_USER), now: NOW });
+
+    expect(result).toEqual({ ok: false, reason: "ambiguous_binding" });
+  });
+
+  // Two chats, one operator: no ambiguity about *who*, so this must still work -- and must attach to
+  // the most recently linked binding, so a later unlink of that chat is what kills the session.
+  it("mints deterministically against the newest binding when both name the same user", async () => {
+    const company = await seedCompany();
+    await seedBot(company.id);
+    await seedBinding(company.id, "user-board-1", TG_USER, "chat-a", new Date(NOW.getTime() - 60_000));
+    const newest = await seedBinding(company.id, "user-board-1", TG_USER, "chat-b", NOW);
+    const svc = telegramMiniappSessionService(db);
+
+    const result = await svc.mint({ companyId: company.id, initData: initDataFor(TG_USER), now: NOW });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.userId).toBe("user-board-1");
+    const session = await svc.resolve(result.token, NOW);
+    expect(session?.bindingId).toBe(newest.id);
   });
 
   it("resolves a minted token to a board actor scoped to one company", async () => {

@@ -12,7 +12,11 @@
 // JSON_FLOW: {"file": "ui/src/api/client.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
-import { applyTelegramAuthHeader, getTelegramBearer, refreshTelegramBearer } from "../telegram/useTelegramSession";
+import {
+  applyTelegramAuthHeader,
+  getTelegramBearer,
+  markTelegramSessionExpired,
+} from "../telegram/useTelegramSession";
 
 const BASE = "/api";
 
@@ -48,18 +52,13 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
 
-  // The Mini App's 12-hour bearer can expire mid-session. Re-mint once from the initData the webview
-  // still holds and retry this same request -- outside Telegram, or if the binding was revoked,
-  // refreshTelegramBearer() returns null and this falls through to the ordinary 401 handling below.
+  // The Mini App's 12-hour bearer can expire mid-visit, and it cannot be renewed from inside the
+  // webview -- Telegram's initData is stale after five minutes and there is no API to re-source it. So
+  // a 401 on a bearer-carrying request is the end of the session, not a retryable blip: record it so
+  // the shell can tell the operator to reopen from Telegram, then fall through to ordinary 401
+  // handling for this request.
   if (res.status === 401 && hadBearer) {
-    const fresh = await refreshTelegramBearer();
-    if (fresh) {
-      res = await fetch(`${BASE}${path}`, {
-        headers: buildHeaders(),
-        credentials: "include",
-        ...init,
-      });
-    }
+    markTelegramSessionExpired();
   }
 
   if (!res.ok) {

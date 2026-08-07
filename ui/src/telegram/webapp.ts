@@ -41,8 +41,13 @@ export function isTelegramWebApp(): boolean {
 
 /**
  * Telegram's themeParams are snake_case colour strings. Map the ones the board actually uses onto its
- * existing custom properties, and set the light/dark attribute from colorScheme, so the webview reads
- * as native rather than as a website in a box.
+ * existing custom properties, and put the board into its own dark mode from colorScheme, so the webview
+ * reads as native rather than as a website in a box.
+ *
+ * The board's dark mode is a `dark` class on the root element (see ThemeContext's applyTheme), not a
+ * `data-theme` attribute. Getting that wrong is not a cosmetic miss: the themeParams above are inline
+ * styles, which outrank the class-scoped defaults, so Telegram's near-white dark `text_color` would be
+ * painted onto cards still styled light. The class and the variables have to move together.
  */
 export function applyTelegramTheme(app: TelegramWebApp, root: HTMLElement): void {
   const params = app.themeParams ?? {};
@@ -55,6 +60,11 @@ export function applyTelegramTheme(app: TelegramWebApp, root: HTMLElement): void
   assign("--muted-foreground", "hint_color");
   assign("--primary", "button_color");
   assign("--primary-foreground", "button_text_color");
-  if (app.colorScheme) root.setAttribute("data-theme", app.colorScheme);
+  if (app.colorScheme) {
+    const isDark = app.colorScheme === "dark";
+    root.classList.toggle("dark", isDark);
+    // Matches ThemeContext.applyTheme, so native controls (scrollbars, form widgets) agree too.
+    root.style.colorScheme = isDark ? "dark" : "light";
+  }
 }
 // [END: module]
