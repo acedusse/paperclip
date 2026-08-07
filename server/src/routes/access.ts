@@ -80,6 +80,7 @@ import {
   logActivity,
   notifyHireApproved
 } from "../services/index.js";
+import { COMPANY_SCOPED_ACTOR_SOURCES } from "../lib/actor-scope.js";
 import {
   grantsForHumanRole,
   normalizeHumanRole,
@@ -2575,6 +2576,27 @@ export function accessRoutes(
         (!req.actor.userId && !isLocalImplicit(req))
       ) {
         throw unauthorized("Sign in before approving CLI access");
+      }
+
+      // Approving mints a board API key, and the credential it produces is rebuilt from the *user
+      // row* on every later request: a `board_key` actor gets every company the user belongs to and
+      // `isInstanceAdmin` straight off their instance_user_roles row. So the minted key is never
+      // narrower than the user, whatever approved it. A company-scoped session that approves here
+      // therefore launders itself into a long-lived credential with its scoping stripped off — and
+      // unlike a request-scoped escalation, revoking the session does not take the key back. The GET
+      // above has always reported `canApprove: false` to these actors; this is the server-side half
+      // of that promise, which until now the UI was keeping on its own.
+      if (COMPANY_SCOPED_ACTOR_SOURCES.has(req.actor.source ?? "")) {
+        throw forbidden("This session cannot approve CLI access");
+      }
+
+      const challenge = await boardAuth.describeCliAuthChallenge(id, req.body.token);
+      if (!challenge) throw notFound("CLI auth challenge not found");
+      if (challenge.requestedAccess === "instance_admin_required") {
+        // The credential question, not the user question. board-auth re-reads the approving user's
+        // admin row, which cannot see that the middleware denied *this actor* instance-admin
+        // authority; the shared helper reads the flag the middleware actually set.
+        assertInstanceAdmin(req);
       }
 
       const userId = req.actor.userId ?? "local-board";

@@ -33,6 +33,7 @@ import {
   type TrustPresetResolution,
 } from "./trust-preset-resolver.js";
 import { logger } from "../middleware/logger.js";
+import { COMPANY_SCOPED_ACTOR_SOURCES } from "../lib/actor-scope.js";
 
 export type AuthorizationActor =
   {
@@ -54,14 +55,6 @@ export type AuthorizationActor =
       | "telegram_miniapp"
       | "none";
   };
-
-/**
- * Actor sources that are company-scoped by contract: whatever the underlying user can do elsewhere in
- * the instance, an actor arriving through one of these may never be elevated to instance admin. Kept as
- * a set rather than a chain of `!==` so adding the next such source is one line in one place — the
- * `telegram_miniapp` hole existed precisely because the rule read as a cloud_tenant special case.
- */
-const COMPANY_SCOPED_ACTOR_SOURCES: ReadonlySet<string> = new Set(["cloud_tenant", "telegram_miniapp"]);
 
 export type AuthorizationAction =
   | PermissionKey

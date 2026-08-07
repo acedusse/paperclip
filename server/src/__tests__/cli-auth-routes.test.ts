@@ -212,6 +212,13 @@ describe.sequential("cli auth routes", () => {
   });
 
   it.sequential("approves a CLI auth challenge for a signed-in board user", async () => {
+    // The approve route reads the challenge before authorising: how much authority the minted key
+    // will carry depends on `requestedAccess`, and that lives on the challenge, not the request.
+    mockBoardAuthService.describeCliAuthChallenge.mockResolvedValue({
+      id: "challenge-1",
+      status: "pending",
+      requestedAccess: "board",
+    });
     mockBoardAuthService.approveCliAuthChallenge.mockResolvedValue({
       status: "approved",
       challenge: {
@@ -257,6 +264,11 @@ describe.sequential("cli auth routes", () => {
   });
 
   it.sequential("logs approve activity for instance admins without company memberships", async () => {
+    mockBoardAuthService.describeCliAuthChallenge.mockResolvedValue({
+      id: "challenge-2",
+      status: "pending",
+      requestedAccess: "instance_admin_required",
+    });
     mockBoardAuthService.approveCliAuthChallenge.mockResolvedValue({
       status: "approved",
       challenge: {

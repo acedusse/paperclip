@@ -203,6 +203,7 @@ the board API as that user, for one company. Two consequences:
 | A binding predating migration `0125` has no `telegram_user_id` and cannot mint a session | `telegram-miniapp-session.ts` |
 | Two live bindings naming different Paperclip users for the same Telegram account refuse to mint rather than silently picking one | `telegram-miniapp-session.ts` |
 | Mini App actions are audited as `telegram_miniapp`, never as a browser `session` | `routes/authz.ts` |
+| A session cannot approve a CLI auth challenge at all. Approving mints a board API key, and a `board_key` actor is rebuilt from the *user row* — full `companyIds`, real `isInstanceAdmin` — so the minted credential would outrank the session that approved it and outlive every revocation path above | `routes/access.ts` |
 
 A session is minted with `type: "board"`, `companyIds: [session.companyId]` — a hardcoded single-company
 list, not the user's real `access.companyIds` — and `isInstanceAdmin: false` hardcoded, never the user's

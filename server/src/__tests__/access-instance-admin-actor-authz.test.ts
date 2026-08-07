@@ -20,6 +20,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest
 import {
   activityLog,
   authUsers,
+  boardApiKeys,
+  cliAuthChallenges,
   companies,
   companyMemberships,
   createDb,
@@ -79,6 +81,8 @@ describeEmbeddedPostgres("instance-admin routes authorise the credential, not th
 
   afterEach(async () => {
     await db.delete(activityLog);
+    await db.delete(cliAuthChallenges);
+    await db.delete(boardApiKeys);
     await db.delete(companyMemberships);
     await db.delete(companies);
     await db.delete(instanceUserRoles);
@@ -150,6 +154,114 @@ describeEmbeddedPostgres("instance-admin routes authorise the credential, not th
       source: "session",
     };
   }
+
+  /**
+   * A `board_key` actor: the CLI's own `paperclipai auth challenge approve` runs as one. Its
+   * `isInstanceAdmin` comes straight off the user row, so this is the non-company-scoped control —
+   * the fix must not turn the API-parity command into a denial.
+   */
+  function boardKeyActor(userId: string, companyId: string): Express.Request["actor"] {
+    return {
+      type: "board",
+      userId,
+      userName: "Genuine Instance Admin",
+      userEmail: null,
+      companyIds: [companyId],
+      memberships: [{ companyId, membershipRole: "owner", status: "active" }],
+      isInstanceAdmin: true,
+      keyId: randomUUID(),
+      source: "board_key",
+    };
+  }
+
+  /**
+   * Challenges are created unauthenticated (the CLI has no credential yet), so any app instance
+   * will do — the actor only matters at approval time.
+   */
+  async function createChallenge(
+    app: express.Express,
+    requestedAccess: "board" | "instance_admin_required",
+  ) {
+    const res = await request(app)
+      .post("/api/cli-auth/challenges")
+      .send({
+        command: "paperclipai admin users promote",
+        clientName: "paperclipai cli",
+        requestedAccess,
+      });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    return { id: res.body.id as string, token: res.body.token as string };
+  }
+
+  /**
+   * Approving mints a long-lived board API key. That key is re-authorised from the *user row* on
+   * every later request, so it carries the user's real instance-admin status and every company
+   * they belong to — none of the Mini App session's scoping survives into it. If a key exists
+   * after a denied approval, the escalation happened.
+   */
+  async function boardKeysFor(userId: string) {
+    return db.select().from(boardApiKeys).where(eq(boardApiKeys.userId, userId));
+  }
+
+  it("refuses a telegram_miniapp bearer approving an instance_admin_required CLI challenge and mints no key", async () => {
+    const { userId, companyId } = await createRealInstanceAdmin(db);
+    const app = await createApp(db, miniappActor(userId, companyId));
+    const challenge = await createChallenge(app, "instance_admin_required");
+
+    const res = await request(app)
+      .post(`/api/cli-auth/challenges/${challenge.id}/approve`)
+      .send({ token: challenge.token });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(await boardKeysFor(userId)).toHaveLength(0);
+    const [row] = await db
+      .select()
+      .from(cliAuthChallenges)
+      .where(eq(cliAuthChallenges.id, challenge.id));
+    expect(row?.approvedAt ?? null).toBeNull();
+    expect(row?.boardApiKeyId ?? null).toBeNull();
+  }, 15_000);
+
+  it("refuses a telegram_miniapp bearer approving an ordinary board CLI challenge, whose key would still outrank the session", async () => {
+    const { userId, companyId } = await createRealInstanceAdmin(db);
+    const app = await createApp(db, miniappActor(userId, companyId));
+    const challenge = await createChallenge(app, "board");
+
+    const res = await request(app)
+      .post(`/api/cli-auth/challenges/${challenge.id}/approve`)
+      .send({ token: challenge.token });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(await boardKeysFor(userId)).toHaveLength(0);
+  }, 15_000);
+
+  it("still lets the same user approve an instance_admin_required challenge from a browser session", async () => {
+    const { userId, companyId } = await createRealInstanceAdmin(db);
+    const app = await createApp(db, sessionActor(userId, companyId));
+    const challenge = await createChallenge(app, "instance_admin_required");
+
+    const res = await request(app)
+      .post(`/api/cli-auth/challenges/${challenge.id}/approve`)
+      .send({ token: challenge.token });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.approved).toBe(true);
+    expect(res.body.keyId).toBeTruthy();
+    expect(await boardKeysFor(userId)).toHaveLength(1);
+  }, 15_000);
+
+  it("still lets an existing board API key approve an ordinary challenge, so the CLI parity command keeps working", async () => {
+    const { userId, companyId } = await createRealInstanceAdmin(db);
+    const app = await createApp(db, boardKeyActor(userId, companyId));
+    const challenge = await createChallenge(app, "board");
+
+    const res = await request(app)
+      .post(`/api/cli-auth/challenges/${challenge.id}/approve`)
+      .send({ token: challenge.token });
+
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.approved).toBe(true);
+  }, 15_000);
 
   it("refuses a telegram_miniapp bearer on GET /admin/users even though the user is a real instance admin", async () => {
     const { userId, companyId } = await createRealInstanceAdmin(db);

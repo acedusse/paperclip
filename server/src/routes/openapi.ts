@@ -3334,7 +3334,9 @@ registry.registerPath({
     params: z.object({ id: z.string() }),
     body: jsonBody(resolveCliAuthChallengeSchema),
   },
-  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+  // 403: company-scoped credentials (Telegram Mini App, cloud tenant) may not approve at all, and
+  // an `instance_admin_required` challenge additionally needs the approving actor's admin flag.
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 403: r.forbidden, 404: r.notFound },
 });
 
 registry.registerPath({
