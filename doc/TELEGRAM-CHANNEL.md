@@ -133,7 +133,7 @@ Telegram calls it. Everything therefore rests on these properties:
 | **Only the Telegram account that redeemed the code may decide** — `callback_query.from.id` must match the binding's `telegram_user_id` | `telegram-decisions.ts` |
 | A binding with no recorded `telegram_user_id` (pre-`0125`) cannot decide at all — it fails closed until the chat re-links | `telegram-decisions.ts` |
 | `/start` in a chat with no sender (e.g. a channel post) cannot create a binding | `routes/telegram.ts` |
-| Codes are single-use, expiring (default 60 min), and cleared on redemption | `telegram-link.ts` |
+| Codes are single-use, expiring (default 24 h, override with `ttlMinutes` 1–1440), and cleared on redemption | `telegram-link.ts` |
 | One *live* binding per chat per company (partial unique index); revoked rows stay for audit | migration `0124` |
 | A binding for company A can never decide company B's approval | `telegram-decisions.ts` |
 | Decisions pass the same `canDecide(band, "explicit_human")` gate as the HTTP route | `telegram-decisions.ts` |
