@@ -18,14 +18,30 @@ import { approvals, approvalRisk } from "@paperclipai/db";
 import { logger } from "../middleware/logger.js";
 import { approvalService } from "./approvals.js";
 import { approvalRiskService } from "./approval-risk.js";
+import { approvalEffectsService } from "./approval-effects.js";
 import { canDecide } from "./approval-authority.js";
 import { recordDecision } from "./approval-decision-audit.js";
+import type { PluginWorkerManager } from "./plugin-worker-manager.js";
 
 const OPEN_STATUSES = ["pending", "revision_requested"];
 
-export function approvalTriageService(db: Db) {
+/** The post-decision effects a bulk resolve needs; the route injects its own configured instance. */
+export type ApprovalTriageEffects = Pick<
+  ReturnType<typeof approvalEffectsService>,
+  "applyApprovalApprovedEffects" | "applyApprovalRejectedEffects"
+>;
+
+export function approvalTriageService(
+  db: Db,
+  options: { effects?: ApprovalTriageEffects; pluginWorkerManager?: PluginWorkerManager } = {},
+) {
   const svc = approvalService(db);
   const riskSvc = approvalRiskService(db);
+  // A bulk decision must be indistinguishable from a single one, so it runs the same effects the HTTP
+  // route, auto-approve and the Telegram inline buttons run. Callers that already own a configured
+  // instance pass it in rather than building a second one.
+  const effects =
+    options.effects ?? approvalEffectsService(db, { pluginWorkerManager: options.pluginWorkerManager });
 
   return {
     async listTriage(companyId: string) {
@@ -82,11 +98,20 @@ export function approvalTriageService(db: Db) {
           // it throws unless the approval is pending, so reaching here means it
           // actually transitioned (applied === true).
           let applied = true;
-          if (input.action === "approve") ({ applied } = await svc.approve(id, input.actor.actorId, input.note));
-          else if (input.action === "reject") ({ applied } = await svc.reject(id, input.actor.actorId, input.note));
+          let decided = approval;
+          if (input.action === "approve") ({ approval: decided, applied } = await svc.approve(id, input.actor.actorId, input.note));
+          else if (input.action === "reject") ({ approval: decided, applied } = await svc.reject(id, input.actor.actorId, input.note));
           else await svc.requestRevision(id, input.actor.actorId, input.note);
 
           if (applied) {
+            // FIX 3: emit the domain event and wake the requesting agent, exactly as the single-item
+            // routes do. Without this a bulk approve leaves every requester asleep — the stall the
+            // triage surface exists to clear. request_changes has no effects owner anywhere yet, so
+            // it stays a status transition here too rather than inventing one path out of step.
+            const effectsActor = { actorType: "user" as const, actorId: input.actor.actorId };
+            if (input.action === "approve") await effects.applyApprovalApprovedEffects(decided, effectsActor);
+            else if (input.action === "reject") await effects.applyApprovalRejectedEffects(decided, effectsActor);
+
             // FIX 2: the mutation has already committed, so the decision is real.
             // Isolate the audit write: if recordDecision throws, log it but keep
             // the item ok:true (it truly succeeded) rather than misreporting a

@@ -193,7 +193,7 @@ type SecretConsumerContext = {
   configPath?: string | null;
   actorType?: "agent" | "user" | "system" | "plugin";
   actorId?: string | null;
-  actorSource?: "local_implicit" | "session" | "board_key" | "agent_key" | "agent_jwt" | "cloud_tenant";
+  actorSource?: "local_implicit" | "session" | "board_key" | "agent_key" | "agent_jwt" | "cloud_tenant" | "telegram_miniapp";
   issueId?: string | null;
   heartbeatRunId?: string | null;
   pluginId?: string | null;
@@ -716,13 +716,18 @@ export function secretService(db: Db) {
         : {
             type: "board" as const,
             userId: context.actorId,
+            // telegram_miniapp must survive the round trip: decide() refuses to elevate it to instance
+            // admin, and collapsing it to "session" here would reconstruct an actor that does get
+            // elevated -- the same hole, reopened one layer down.
             source: context.actorSource === "local_implicit"
               ? "local_implicit" as const
               : context.actorSource === "board_key"
                 ? "board_key" as const
                 : context.actorSource === "cloud_tenant"
                   ? "cloud_tenant" as const
-                  : "session" as const,
+                  : context.actorSource === "telegram_miniapp"
+                    ? "telegram_miniapp" as const
+                    : "session" as const,
           };
     const decision = await authorization.decide({
       actor,

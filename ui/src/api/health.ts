@@ -12,6 +12,8 @@
 // JSON_FLOW: {"file": "ui/src/api/health.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import { applyTelegramAuthHeader } from "../telegram/useTelegramSession";
+
 export type DevServerHealthStatus = {
   enabled: true;
   restartRequired: boolean;
@@ -42,9 +44,11 @@ export type HealthStatus = {
 
 export const healthApi = {
   get: async (): Promise<HealthStatus> => {
+    const headers = new Headers({ Accept: "application/json" });
+    applyTelegramAuthHeader(headers);
     const res = await fetch("/api/health", {
       credentials: "include",
-      headers: { Accept: "application/json" },
+      headers,
     });
     if (!res.ok) {
       const payload = await res.json().catch(() => null) as { error?: string } | null;
@@ -53,10 +57,12 @@ export const healthApi = {
     return res.json();
   },
   requestDevServerRestart: async (): Promise<void> => {
+    const headers = new Headers({ Accept: "application/json" });
+    applyTelegramAuthHeader(headers);
     const res = await fetch("/api/health/dev-server/restart", {
       method: "POST",
       credentials: "include",
-      headers: { Accept: "application/json" },
+      headers,
     });
     if (!res.ok) {
       const payload = await res.json().catch(() => null) as { error?: string } | null;

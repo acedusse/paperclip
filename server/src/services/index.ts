@@ -60,6 +60,7 @@ export {
 } from "./approval-risk.js";
 export { canDecide, canDecideUnderDelegation, canDecideAsBoundedAgent, METHOD_PRECEDENCE, type DecisionMethod } from "./approval-authority.js";
 export { recordDecision } from "./approval-decision-audit.js";
+export { approvalEffectsService, type ApprovalEffectsActor } from "./approval-effects.js";
 export { evaluateAutoApprove, autoApprovePolicyService, type AutoApprovePolicy } from "./auto-approve-policy.js";
 export { approvalTriageService } from "./approval-triage.js";
 export { delegationService } from "./delegation.js";
@@ -74,6 +75,25 @@ export { createInboxDigestChannel } from "./notification-delivery.js";
 export { pushVapidService } from "./push-vapid.js";
 export { createWebPushChannel, buildApprovalPushBody } from "./push-notifications.js";
 export { shouldPushToUser, type DeliveryPrefs } from "./push-prefs.js";
+export { createTelegramChannel, loadTelegramBotConfig } from "./telegram-channel.js";
+export { telegramLinkService, type TelegramBinding } from "./telegram-link.js";
+export {
+  telegramMiniappSessionService,
+  MINIAPP_SESSION_TTL_HOURS,
+  type TelegramMiniappMintResult,
+} from "./telegram-miniapp-session.js";
+export { verifyTelegramInitData, MINIAPP_INITDATA_MAX_AGE_SECONDS } from "./telegram-initdata.js";
+export { telegramDecisionService, type TelegramDecisionResult } from "./telegram-decisions.js";
+export { createFetchTelegramTransport, type TelegramTransport } from "./telegram-transport.js";
+export {
+  buildAlertMessage,
+  buildApprovalMessage,
+  buildDecisionAck,
+  buildLinkedMessage,
+  decodeApprovalCallback,
+  encodeApprovalCallback,
+  type ApprovalOutcome,
+} from "./telegram-format.js";
 export { budgetService } from "./budgets.js";
 export { secretService } from "./secrets.js";
 export { routineService } from "./routines.js";

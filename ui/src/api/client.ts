@@ -12,6 +12,12 @@
 // JSON_FLOW: {"file": "ui/src/api/client.ts", "imports": "see code", "exports": "see code"}
 // ==========================================
 // [START: module]
+import {
+  applyTelegramAuthHeader,
+  getTelegramBearer,
+  markTelegramSessionExpired,
+} from "../telegram/useTelegramSession";
+
 const BASE = "/api";
 
 export class ApiError extends Error {
@@ -27,17 +33,34 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const headers = new Headers(init?.headers ?? undefined);
-  const body = init?.body;
-  if (!(body instanceof FormData) && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }
+  // Outside Telegram, applyTelegramAuthHeader is always a no-op, so nothing changes for the ordinary
+  // board (which authenticates via the session cookie sent through credentials: "include").
+  const buildHeaders = (): Headers => {
+    const headers = new Headers(init?.headers ?? undefined);
+    const body = init?.body;
+    if (!(body instanceof FormData) && !headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
+    applyTelegramAuthHeader(headers);
+    return headers;
+  };
 
-  const res = await fetch(`${BASE}${path}`, {
-    headers,
+  const hadBearer = getTelegramBearer() !== null;
+  let res = await fetch(`${BASE}${path}`, {
+    headers: buildHeaders(),
     credentials: "include",
     ...init,
   });
+
+  // The Mini App's 12-hour bearer can expire mid-visit, and it cannot be renewed from inside the
+  // webview -- Telegram's initData is stale after five minutes and there is no API to re-source it. So
+  // a 401 on a bearer-carrying request is the end of the session, not a retryable blip: record it so
+  // the shell can tell the operator to reopen from Telegram, then fall through to ordinary 401
+  // handling for this request.
+  if (res.status === 401 && hadBearer) {
+    markTelegramSessionExpired();
+  }
+
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null);
     throw new ApiError(

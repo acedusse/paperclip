@@ -31,6 +31,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { initPluginBridge } from "./plugins/bridge-init";
 import { PluginLauncherProvider } from "./plugins/launchers";
+import { TelegramGate } from "./telegram/TelegramGate";
 import "@mdxeditor/editor/style.css";
 import "./index.css";
 
@@ -56,33 +57,41 @@ function CompanyAwareBreadcrumbProvider({ children }: { children: React.ReactNod
   return <BreadcrumbProvider companyName={selectedCompany?.name ?? null}>{children}</BreadcrumbProvider>;
 }
 
+// TelegramGate (ui/src/telegram/TelegramGate.tsx) holds the board back from rendering until the Mini
+// App has a bearer token, and paints Telegram's theme onto the board's CSS variables. Placed outside the
+// router (rather than inside App.tsx) so that nothing beneath it -- including CompanyProvider's own data
+// fetching -- starts making board API calls before there is a token for them to carry. Outside Telegram,
+// getTelegramWebApp() is null on every render and it is a pure pass-through, so the ordinary board is
+// untouched.
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <BrowserRouter>
-          <CompanyProvider>
-            <EditorAutocompleteProvider>
-              <ToastProvider>
-                <LiveUpdatesProvider>
-                  <TooltipProvider>
-                    <CompanyAwareBreadcrumbProvider>
-                      <SidebarProvider>
-                        <PanelProvider>
-                          <PluginLauncherProvider>
-                            <DialogProvider>
-                              <App />
-                            </DialogProvider>
-                          </PluginLauncherProvider>
-                        </PanelProvider>
-                      </SidebarProvider>
-                    </CompanyAwareBreadcrumbProvider>
-                  </TooltipProvider>
-                </LiveUpdatesProvider>
-              </ToastProvider>
-            </EditorAutocompleteProvider>
-          </CompanyProvider>
-        </BrowserRouter>
+        <TelegramGate>
+          <BrowserRouter>
+            <CompanyProvider>
+              <EditorAutocompleteProvider>
+                <ToastProvider>
+                  <LiveUpdatesProvider>
+                    <TooltipProvider>
+                      <CompanyAwareBreadcrumbProvider>
+                        <SidebarProvider>
+                          <PanelProvider>
+                            <PluginLauncherProvider>
+                              <DialogProvider>
+                                <App />
+                              </DialogProvider>
+                            </PluginLauncherProvider>
+                          </PanelProvider>
+                        </SidebarProvider>
+                      </CompanyAwareBreadcrumbProvider>
+                    </TooltipProvider>
+                  </LiveUpdatesProvider>
+                </ToastProvider>
+              </EditorAutocompleteProvider>
+            </CompanyProvider>
+          </BrowserRouter>
+        </TelegramGate>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>

@@ -97,7 +97,7 @@ export function resolveCommandContext(
     recoverAuth: explicitApiKey || !canAttemptInteractiveBoardAuth()
       ? undefined
       : async ({ error }) => {
-          const requestedAccess = error.message.includes("Instance admin required")
+          const requestedAccess = isInstanceAdminDenial(error.message)
             ? "instance_admin_required"
             : "board";
           if (!shouldRecoverBoardAuth(error)) {
@@ -194,10 +194,18 @@ function resolveApiKey(
   return { value: undefined, source: "none" };
 }
 
+// The server denies instance-admin routes with two wordings: the shared `assertInstanceAdmin`
+// helper says "Instance admin access required", while a few older call sites still say
+// "Instance admin required". Neither string contains the other, so match both — missing one only
+// costs the user the interactive re-login prompt, silently, at the moment they need it.
+function isInstanceAdminDenial(message: string): boolean {
+  return message.includes("Instance admin required") || message.includes("Instance admin access required");
+}
+
 function shouldRecoverBoardAuth(error: ApiRequestError): boolean {
   if (error.status === 401) return true;
   if (error.status !== 403) return false;
-  return error.message.includes("Board access required") || error.message.includes("Instance admin required");
+  return error.message.includes("Board access required") || isInstanceAdminDenial(error.message);
 }
 
 function canAttemptInteractiveBoardAuth(): boolean {

@@ -83,6 +83,8 @@ import {
   pushUnsubscribeSchema,
   pushPrefsSchema,
   pushDeviceRenameSchema,
+  telegramConfigSchema,
+  telegramLinkCodeSchema,
   // Review cockpit — delegation + coverage
   createDelegationGrantSchema,
   coverageConfigSchema,
@@ -561,6 +563,14 @@ const PUBLIC_OPERATIONS = new Set([
   // Phase 4c: the stakeholder page is deliberately unauthenticated — the token
   // is the credential. It is read-only and renders only curated fields.
   "GET /api/stakeholder/{token}",
+  // Telegram calls this itself, so it carries no Paperclip actor. Its credential is the
+  // per-company secret token header, and every governed action is re-derived from the
+  // chat's binding rather than from anything in the request body.
+  "POST /api/telegram/webhook/{companyId}",
+  // The Mini App trades Telegram's signed initData for a bearer, so by definition it is called before
+  // any Paperclip actor exists. Its credential is the initData HMAC, verified against the company's
+  // bot token, and the identity it yields is re-derived from the chat binding rather than the body.
+  "POST /api/telegram/miniapp/session",
 ]);
 
 const BOARD_ONLY_PREFIXES = [
@@ -633,6 +643,12 @@ const BOARD_ONLY_OPERATIONS = new Set([
   "DELETE /api/companies/{companyId}/push/subscriptions/{id}",
   "GET /api/companies/{companyId}/push/prefs",
   "PUT /api/companies/{companyId}/push/prefs",
+  "GET /api/companies/{companyId}/telegram/config",
+  "PUT /api/companies/{companyId}/telegram/config",
+  "DELETE /api/companies/{companyId}/telegram/config",
+  "POST /api/companies/{companyId}/telegram/link-codes",
+  "GET /api/companies/{companyId}/telegram/bindings",
+  "DELETE /api/companies/{companyId}/telegram/bindings/{id}",
   "GET /api/companies/{companyId}/delegations",
   "POST /api/companies/{companyId}/delegations",
   "POST /api/delegations/{id}/revoke",
@@ -2514,6 +2530,93 @@ registry.registerPath({
   responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
 });
 
+// ─── Review cockpit — Telegram channel ────────────────────────────────────────
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/telegram/config",
+  tags: ["approvals"],
+  summary: "Get the company's Telegram bot registration (never returns the bot token)",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/api/companies/{companyId}/telegram/config",
+  tags: ["approvals"],
+  summary: "Register or replace the company's Telegram bot",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(telegramConfigSchema),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/api/companies/{companyId}/telegram/config",
+  tags: ["approvals"],
+  summary: "Disconnect Telegram and revoke every linked chat",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/companies/{companyId}/telegram/link-codes",
+  tags: ["approvals"],
+  summary: "Issue a one-time code binding a Telegram chat to the calling user",
+  request: {
+    params: z.object({ companyId: z.string() }),
+    body: jsonBody(telegramLinkCodeSchema),
+  },
+  responses: { 201: r.ok(), 400: r.badRequest, 401: r.unauthorized, 409: r.conflict },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/api/companies/{companyId}/telegram/bindings",
+  tags: ["approvals"],
+  summary: "List the company's linked Telegram chats",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/api/companies/{companyId}/telegram/bindings/{id}",
+  tags: ["approvals"],
+  summary: "Revoke a linked Telegram chat",
+  request: { params: z.object({ companyId: z.string(), id: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/telegram/miniapp/session",
+  tags: ["approvals"],
+  summary: "Exchange a signed Telegram initData for a Mini App board session bearer",
+  request: {
+    body: jsonBody(
+      z.object({
+        companyId: z.string(),
+        initData: z.string(),
+      }),
+    ),
+  },
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/api/telegram/webhook/{companyId}",
+  tags: ["approvals"],
+  summary: "Receive a Telegram update (authenticated by the per-company secret token header)",
+  request: { params: z.object({ companyId: z.string() }) },
+  responses: { 200: r.ok(), 401: r.unauthorized, 404: r.notFound },
+});
+
 // ─── Review cockpit — delegation & coverage ───────────────────────────────────
 
 registry.registerPath({
@@ -3231,7 +3334,9 @@ registry.registerPath({
     params: z.object({ id: z.string() }),
     body: jsonBody(resolveCliAuthChallengeSchema),
   },
-  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 404: r.notFound },
+  // 403: company-scoped credentials (Telegram Mini App, cloud tenant) may not approve at all, and
+  // an `instance_admin_required` challenge additionally needs the approving actor's admin flag.
+  responses: { 200: r.ok(), 400: r.badRequest, 401: r.unauthorized, 403: r.forbidden, 404: r.notFound },
 });
 
 registry.registerPath({

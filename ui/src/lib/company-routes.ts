@@ -28,6 +28,9 @@ const BOARD_ROUTE_ROOTS = new Set([
   "goals",
   "artifacts",
   "approvals",
+  "digest",
+  "delegations",
+  "onboarding",
   "costs",
   "usage",
   "activity",
@@ -38,6 +41,11 @@ const BOARD_ROUTE_ROOTS = new Set([
   "design-guide",
   "search",
   "settings",
+  // Plugin page slots mount at boardRoutes()'s `plugins/:pluginId` (App.tsx) — company-scoped like every
+  // other entry here. Missing until PAP-Telegram-066: TelegramBottomNav's Wikis link resolved to
+  // `/plugins/<id>` unprefixed and 404'd, same failure mode as the digest/delegations/onboarding
+  // regression below (a root missing from this set is read as a company prefix instead).
+  "plugins",
 ]);
 
 const GLOBAL_ROUTE_ROOTS = new Set(["auth", "invite", "board-claim", "cli-auth", "docs", "instance"]);

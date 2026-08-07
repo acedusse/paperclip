@@ -33,6 +33,7 @@ import {
   type TrustPresetResolution,
 } from "./trust-preset-resolver.js";
 import { logger } from "../middleware/logger.js";
+import { COMPANY_SCOPED_ACTOR_SOURCES } from "../lib/actor-scope.js";
 
 export type AuthorizationActor =
   {
@@ -51,6 +52,7 @@ export type AuthorizationActor =
       | "agent_key"
       | "agent_jwt"
       | "cloud_tenant"
+      | "telegram_miniapp"
       | "none";
   };
 
@@ -1042,11 +1044,15 @@ export function authorizationService(db: Db) {
           explanation: "Allowed because the actor is the local implicit board.",
         });
       }
-      // cloud_tenant actors are company-scoped by contract and must never be
-      // elevated — not even via stale instance_admin rows left behind by
-      // deployments that ran the pre-hardening cloud_tenant path.
+      // Company-scoped actor sources are elevated by nobody — not even via
+      // instance_admin rows their underlying user genuinely holds. cloud_tenant
+      // was the first such source (stale instance_admin rows left behind by
+      // deployments that ran the pre-hardening cloud_tenant path);
+      // telegram_miniapp is the second: the middleware hands the session
+      // `isInstanceAdmin: false` on purpose, and re-deriving it from the user id
+      // here would hand the whole instance back to a webview bearer.
       if (
-        input.actor.source !== "cloud_tenant" &&
+        !COMPANY_SCOPED_ACTOR_SOURCES.has(input.actor.source ?? "") &&
         (input.actor.isInstanceAdmin || await isInstanceAdmin(input.actor.userId))
       ) {
         return allow({

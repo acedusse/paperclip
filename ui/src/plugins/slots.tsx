@@ -53,6 +53,7 @@ import type {
 } from "@paperclipai/shared";
 import { pluginsApi, type PluginUiContribution } from "@/api/plugins";
 import { authApi } from "@/api/auth";
+import { applyTelegramAuthHeader } from "@/telegram/useTelegramSession";
 import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import {
@@ -434,8 +435,13 @@ async function importPluginModule(url: string): Promise<Record<string, unknown>>
     return import(/* @vite-ignore */ url);
   }
 
-  // Fetch the module source text
-  const response = await fetch(url);
+  // Fetch the module source text. This is a raw fetch rather than an api.* call because the response is
+  // JavaScript source, not JSON -- but the plugin bundle route still requires board auth, so inside the
+  // Telegram webview (no session cookie) it must carry the Mini App bearer or every plugin-provided
+  // surface, Wikis included, fails to load.
+  const headers = new Headers();
+  applyTelegramAuthHeader(headers);
+  const response = await fetch(url, { headers, credentials: "include" });
   if (!response.ok) {
     throw new Error(`Failed to fetch plugin module: ${response.status} ${response.statusText}`);
   }

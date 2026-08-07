@@ -101,7 +101,7 @@ export function getActorInfo(req: Request): (
     actorId: string;
     agentId: null;
     runId: string | null;
-    actorSource: "local_implicit" | "session" | "board_key" | "cloud_tenant";
+    actorSource: "local_implicit" | "session" | "board_key" | "cloud_tenant" | "telegram_miniapp";
   }
 ) {
   assertAuthenticated(req);
@@ -116,10 +116,14 @@ export function getActorInfo(req: Request): (
     };
   }
 
+  // "session" is the fallback, not a catch-all label: a source that has its own identity must keep it
+  // through to the audit row, or a Mini App action is recorded as a browser login by someone who was
+  // never at a browser.
   const actorSource =
     req.actor.source === "local_implicit" ||
       req.actor.source === "board_key" ||
-      req.actor.source === "cloud_tenant"
+      req.actor.source === "cloud_tenant" ||
+      req.actor.source === "telegram_miniapp"
       ? req.actor.source
       : "session";
 

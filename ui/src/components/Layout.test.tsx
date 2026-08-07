@@ -46,6 +46,7 @@ const mockSetPeeking = vi.hoisted(() => vi.fn());
 const mockSidebarState = vi.hoisted(() => ({
   sidebarOpen: true,
   isMobile: false,
+  isTelegram: false,
   collapsed: false,
   peeking: false,
 }));
@@ -109,8 +110,17 @@ vi.mock("./ToastViewport", () => ({
   ToastViewport: () => null,
 }));
 
+// Distinguishable markers (not both `() => null`): a review found that mocking both bottom navs to the
+// same no-op made it impossible for a test to tell whether Layout picked the right one, inverted the
+// ternary, dropped the `isMobile &&` guard, or rendered neither/both — every variant produced identical
+// (empty) output. Rendering distinct text lets "renders the Telegram bottom nav instead of the mobile
+// one when isTelegram" actually fail if that branch regresses.
 vi.mock("./MobileBottomNav", () => ({
-  MobileBottomNav: () => null,
+  MobileBottomNav: () => <div data-testid="mobile-bottom-nav">mobile bottom nav marker</div>,
+}));
+
+vi.mock("./TelegramBottomNav", () => ({
+  TelegramBottomNav: () => <div data-testid="telegram-bottom-nav">telegram bottom nav marker</div>,
 }));
 
 vi.mock("./WorktreeBanner", () => ({
@@ -191,6 +201,7 @@ vi.mock("../context/SidebarContext", () => ({
     peeking: mockSidebarState.peeking,
     setPeeking: mockSetPeeking,
     isMobile: mockSidebarState.isMobile,
+    isTelegram: mockSidebarState.isTelegram,
     forceCollapsed: false,
     setForceCollapsed: mockSetForceCollapsed,
     routeRequestsCollapsed: false,
@@ -263,6 +274,7 @@ describe("Layout", () => {
     mockPluginSlotContexts.length = 0;
     mockSidebarState.sidebarOpen = true;
     mockSidebarState.isMobile = false;
+    mockSidebarState.isTelegram = false;
     mockSidebarState.collapsed = false;
     mockSidebarState.peeking = false;
     mockSetPeeking.mockClear();
@@ -465,6 +477,84 @@ describe("Layout", () => {
     expect(selectorText).toContain("instance general");
     expect(selectorText).toContain("instance environments");
     expect(selectorText).toContain("instance plugins");
+
+    await act(async () => {
+      root.unmount();
+    });
+  });
+
+  it("renders the mobile bottom nav (not the Telegram nav) on a mobile viewport outside Telegram", async () => {
+    mockSidebarState.isMobile = true;
+    mockSidebarState.isTelegram = false;
+    const root = createRoot(container);
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <Layout />
+        </QueryClientProvider>,
+      );
+    });
+    await flushReact();
+    await flushReact();
+
+    expect(container.querySelector('[data-testid="mobile-bottom-nav"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="telegram-bottom-nav"]')).toBeNull();
+
+    await act(async () => {
+      root.unmount();
+    });
+  });
+
+  it("renders the Telegram bottom nav (not the mobile nav) when isTelegram, even on a mobile viewport", async () => {
+    mockSidebarState.isMobile = true;
+    mockSidebarState.isTelegram = true;
+    const root = createRoot(container);
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <Layout />
+        </QueryClientProvider>,
+      );
+    });
+    await flushReact();
+    await flushReact();
+
+    expect(container.querySelector('[data-testid="telegram-bottom-nav"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="mobile-bottom-nav"]')).toBeNull();
+
+    await act(async () => {
+      root.unmount();
+    });
+  });
+
+  it("renders neither bottom nav on a desktop viewport outside Telegram", async () => {
+    mockSidebarState.isMobile = false;
+    mockSidebarState.isTelegram = false;
+    const root = createRoot(container);
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <Layout />
+        </QueryClientProvider>,
+      );
+    });
+    await flushReact();
+    await flushReact();
+
+    expect(container.querySelector('[data-testid="mobile-bottom-nav"]')).toBeNull();
+    expect(container.querySelector('[data-testid="telegram-bottom-nav"]')).toBeNull();
 
     await act(async () => {
       root.unmount();

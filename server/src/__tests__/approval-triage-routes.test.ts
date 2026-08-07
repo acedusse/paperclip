@@ -15,9 +15,10 @@
 import express from "express";
 import request from "supertest";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import {
   activityLog,
+  agents,
   approvalRisk,
   approvals,
   companies,
@@ -85,10 +86,23 @@ async function seedCompany(db: Db, label: string) {
     .then((rows) => rows[0]!);
 }
 
+async function seedAgent(db: Db, companyId: string, name = "Atlas") {
+  return db
+    .insert(agents)
+    .values({ companyId, name, role: "engineer", adapterType: "codex_local", adapterConfig: {} })
+    .returning()
+    .then((rows) => rows[0]!);
+}
+
 async function seedApproval(
   db: Db,
   companyId: string,
-  input: { type: string; payload: Record<string, unknown>; risk: { score: number; band: string } },
+  input: {
+    type: string;
+    payload: Record<string, unknown>;
+    risk: { score: number; band: string };
+    requestedByAgentId?: string;
+  },
 ) {
   const approval = await db
     .insert(approvals)
@@ -97,6 +111,7 @@ async function seedApproval(
       type: input.type,
       payload: input.payload,
       status: "pending",
+      requestedByAgentId: input.requestedByAgentId ?? null,
     })
     .returning()
     .then((rows) => rows[0]!);
@@ -122,10 +137,11 @@ describeEmbeddedPostgres("approval triage inbox + bulk resolve", () => {
   }, 20_000);
 
   afterEach(async () => {
-    await db.delete(activityLog);
-    await db.delete(approvalRisk);
-    await db.delete(approvals);
-    await db.delete(companies);
+    // A bulk approve wakes the requesting agent, which writes across the whole heartbeat subgraph
+    // (runs, run events, runtime state, wakeup requests). Enumerating those tables here would couple
+    // this suite to the heartbeat's schema, so let the FK graph do it: everything under test hangs
+    // off companies.
+    await db.execute(sql`TRUNCATE TABLE companies CASCADE`);
   });
 
   afterAll(async () => {
@@ -218,6 +234,73 @@ describeEmbeddedPostgres("approval triage inbox + bulk resolve", () => {
       .from(activityLog)
       .where(and(eq(activityLog.companyId, company.id), eq(activityLog.action, "approval.decision")));
     expect(decisionRows).toHaveLength(3);
+  });
+
+  // A bulk decision must be indistinguishable from a decision made one-at-a-time in the UI or from
+  // Telegram: same gate, same audit row, and — the part that was missing — the same post-decision
+  // effects. Without them the requesting agent is never woken and stalls until something else
+  // happens to wake it, which is the exact deadlock the triage surface exists to clear.
+  it("applies the approved effects on bulk approve, emitting approval.approved and waking the requester", async () => {
+    const company = await seedCompany(db, "Fx");
+    const agent = await seedAgent(db, company.id);
+    const app = await createApp(db, boardActor(company.id));
+
+    const first = await seedApproval(db, company.id, {
+      type: "work_product",
+      payload: { title: "Draft copy" },
+      risk: { score: 5, band: "low" },
+      requestedByAgentId: agent.id,
+    });
+    const second = await seedApproval(db, company.id, {
+      type: "work_product",
+      payload: { title: "Draft copy 2" },
+      risk: { score: 8, band: "low" },
+      requestedByAgentId: agent.id,
+    });
+
+    const bulkRes = await request(app)
+      .post(`/api/companies/${company.id}/approvals/bulk`)
+      .send({ ids: [first.id, second.id], action: "approve" });
+    expect(bulkRes.status, JSON.stringify(bulkRes.body)).toBe(200);
+
+    const approvedRows = await db
+      .select()
+      .from(activityLog)
+      .where(and(eq(activityLog.companyId, company.id), eq(activityLog.action, "approval.approved")));
+    expect(approvedRows.map((r) => r.entityId).sort()).toEqual([first.id, second.id].sort());
+
+    // The wakeup is best-effort by design, so assert only that it was attempted for each approval —
+    // whether it queued a run or failed, the effects pipeline ran.
+    const wakeupRows = await db
+      .select()
+      .from(activityLog)
+      .where(eq(activityLog.companyId, company.id));
+    const attempted = wakeupRows.filter(
+      (r) => r.action === "approval.requester_wakeup_queued" || r.action === "approval.requester_wakeup_failed",
+    );
+    expect(attempted.map((r) => r.entityId).sort()).toEqual([first.id, second.id].sort());
+  });
+
+  it("applies the rejected effects on bulk reject, emitting approval.rejected", async () => {
+    const company = await seedCompany(db, "Rej");
+    const app = await createApp(db, boardActor(company.id));
+
+    const low = await seedApproval(db, company.id, {
+      type: "work_product",
+      payload: { title: "Draft copy" },
+      risk: { score: 5, band: "low" },
+    });
+
+    const bulkRes = await request(app)
+      .post(`/api/companies/${company.id}/approvals/bulk`)
+      .send({ ids: [low.id], action: "reject" });
+    expect(bulkRes.status, JSON.stringify(bulkRes.body)).toBe(200);
+
+    const rejectedRows = await db
+      .select()
+      .from(activityLog)
+      .where(and(eq(activityLog.entityId, low.id), eq(activityLog.action, "approval.rejected")));
+    expect(rejectedRows).toHaveLength(1);
   });
 
   it("treats a duplicate id in one batch as an idempotent success and writes exactly one audit row", async () => {

@@ -28,6 +28,7 @@ import { NewAgentDialog } from "./NewAgentDialog";
 import { KeyboardShortcutsCheatsheet } from "./KeyboardShortcutsCheatsheet";
 import { ToastViewport } from "./ToastViewport";
 import { MobileBottomNav } from "./MobileBottomNav";
+import { TelegramBottomNav } from "./TelegramBottomNav";
 import { WorktreeBanner } from "./WorktreeBanner";
 import { DevRestartBanner } from "./DevRestartBanner";
 import { StandaloneBrowserControls } from "./StandaloneBrowserControls";
@@ -74,6 +75,7 @@ export function Layout() {
     peeking,
     setPeeking,
     isMobile,
+    isTelegram,
     setForceCollapsed,
   } = useSidebar();
   const { openNewIssue, openOnboarding } = useDialogActions();
@@ -594,7 +596,7 @@ export function Layout() {
           </div>
         </div>
       </div>
-      {isMobile && <MobileBottomNav visible={mobileNavVisible} />}
+      {isTelegram ? <TelegramBottomNav /> : isMobile && <MobileBottomNav visible={mobileNavVisible} />}
       <CommandPalette />
       <NewIssueDialog />
       <NewProjectDialog />

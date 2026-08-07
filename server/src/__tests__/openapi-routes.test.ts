@@ -68,6 +68,7 @@ const apiPrefixes: Record<string, string> = {
   "sidebar-preferences.ts": "/api",
   "stakeholder-shares.ts": "/api",
   "teams-catalog.ts": "/api",
+  "telegram.ts": "/api",
   "user-profiles.ts": "/api",
   "workspace-path-claims.ts": "/api",
 };

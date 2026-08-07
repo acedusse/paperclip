@@ -993,6 +993,68 @@ describeEmbeddedPostgres("authorization service", () => {
     expect(sessionDecision).toMatchObject({ allowed: true, reason: "allow_instance_admin" });
   });
 
+  // The middleware hands a Mini App session `isInstanceAdmin: false` on purpose, but decide() used to
+  // re-derive the flag from instance_user_roles keyed on the *user id* -- so an instance admin who
+  // opened the Mini App got the whole instance back at the policy layer, through a webview bearer
+  // scoped to one company. A middleware-level test cannot catch this: req.actor reaches decide()
+  // directly from ~12 route sites, and the re-derivation happens downstream of all of them.
+  it("never elevates telegram_miniapp actors, even when the user really is an instance admin", async () => {
+    const sessionCompany = await createCompany(db, "MiniAppSession");
+    const otherCompany = await createCompany(db, "MiniAppOther");
+    const userId = `user-${randomUUID()}`;
+    const targetAgent = await createAgent(db, otherCompany.id, { role: "engineer" });
+    await db.insert(companyMemberships).values({
+      companyId: sessionCompany.id,
+      principalType: "user",
+      principalId: userId,
+      status: "active",
+      membershipRole: "owner",
+    });
+    // Not a stale row: this operator genuinely administers the instance from the browser board.
+    await db.insert(instanceUserRoles).values({ userId, role: "instance_admin" });
+
+    const decision = await authorizationService(db).decide({
+      actor: {
+        type: "board",
+        userId,
+        companyIds: [sessionCompany.id],
+        isInstanceAdmin: false,
+        source: "telegram_miniapp",
+      },
+      action: "tasks:assign",
+      resource: { type: "issue", companyId: otherCompany.id, assigneeAgentId: targetAgent.id },
+      scope: { assigneeAgentId: targetAgent.id },
+    });
+
+    expect(decision.allowed).toBe(false);
+    expect(decision.reason).not.toBe("allow_instance_admin");
+
+    // An instance-scoped action inside the session's own company is refused for the same reason: the
+    // carve-out is about the actor source, not about crossing a company boundary.
+    const inCompany = await authorizationService(db).decide({
+      actor: {
+        type: "board",
+        userId,
+        companyIds: [sessionCompany.id],
+        isInstanceAdmin: false,
+        source: "telegram_miniapp",
+      },
+      action: "runtime:manage",
+      resource: { type: "company", companyId: sessionCompany.id },
+    });
+    expect(inCompany.reason).not.toBe("allow_instance_admin");
+
+    // Control: the very same user, same instance_admin row, arriving through an ordinary browser
+    // session is still elevated -- the carve-out is scoped to the Mini App source only.
+    const sessionDecision = await authorizationService(db).decide({
+      actor: { type: "board", userId, companyIds: [sessionCompany.id], source: "session" },
+      action: "tasks:assign",
+      resource: { type: "issue", companyId: otherCompany.id, assigneeAgentId: targetAgent.id },
+      scope: { assigneeAgentId: targetAgent.id },
+    });
+    expect(sessionDecision).toMatchObject({ allowed: true, reason: "allow_instance_admin" });
+  });
+
   it("denies simple-mode assignment to a target agent from another company", async () => {
     const sourceCompany = await createCompany(db, "AssignmentSource");
     const targetCompany = await createCompany(db, "AssignmentTarget");

@@ -27,6 +27,7 @@ import { validate } from "../middleware/validate.js";
 import { logger } from "../middleware/logger.js";
 import {
   approvalService,
+  approvalEffectsService,
   approvalRiskService,
   approvalTriageService,
   autoApprovePolicyService,
@@ -198,107 +199,24 @@ export function approvalRoutes(
 
   const riskSvc = approvalRiskService(db);
   const autoPolicySvc = autoApprovePolicyService(db);
-  const triageSvc = approvalTriageService(db);
   const access = accessService(db);
-  const heartbeat = heartbeatService(db, {
-    pluginWorkerManager: options.pluginWorkerManager,
-  });
   const issueApprovalsSvc = issueApprovalService(db);
   const secretsSvc = secretService(db);
   const strictSecretsMode = process.env.PAPERCLIP_SECRETS_STRICT_MODE === "true";
 
   // Shared post-approval side effects for BOTH the human approve route and the Phase-2a auto-approve
   // path: emit the `approval.approved` domain event and wake the requesting agent so it can resume.
-  // Callers add their own recordDecision (explicit_human vs auto_policy). Keep this the single owner.
-  async function applyApprovalApprovedEffects(
-    approval: {
-      id: string;
-      companyId: string;
-      type: string;
-      status: string;
-      requestedByAgentId: string | null;
-    },
-    actor: { actorType: "user" | "system" | "agent"; actorId: string },
-  ): Promise<{ linkedIssueIds: string[]; primaryIssueId: string | null }> {
-    const linkedIssues = await issueApprovalsSvc.listIssuesForApproval(approval.id);
-    const linkedIssueIds = linkedIssues.map((issue) => issue.id);
-    const primaryIssueId = linkedIssueIds[0] ?? null;
+  // Callers add their own recordDecision (explicit_human vs auto_policy). approvalEffectsService is the
+  // single owner — the Telegram inline-button path in routes/telegram.ts calls the very same code.
+  const approvalEffects = approvalEffectsService(db, {
+    pluginWorkerManager: options.pluginWorkerManager,
+    heartbeat: heartbeatService(db, { pluginWorkerManager: options.pluginWorkerManager }),
+  });
+  const { applyApprovalApprovedEffects } = approvalEffects;
 
-    await logActivity(db, {
-      companyId: approval.companyId,
-      actorType: actor.actorType,
-      actorId: actor.actorId,
-      action: "approval.approved",
-      entityType: "approval",
-      entityId: approval.id,
-      details: {
-        type: approval.type,
-        requestedByAgentId: approval.requestedByAgentId,
-        linkedIssueIds,
-      },
-    });
-
-    if (approval.requestedByAgentId) {
-      try {
-        const wakeRun = await heartbeat.wakeup(approval.requestedByAgentId, {
-          source: "automation",
-          triggerDetail: "system",
-          reason: "approval_approved",
-          payload: {
-            approvalId: approval.id,
-            approvalStatus: approval.status,
-            issueId: primaryIssueId,
-            issueIds: linkedIssueIds,
-          },
-          requestedByActorType: actor.actorType,
-          requestedByActorId: actor.actorId,
-          contextSnapshot: {
-            source: "approval.approved",
-            approvalId: approval.id,
-            approvalStatus: approval.status,
-            issueId: primaryIssueId,
-            issueIds: linkedIssueIds,
-            taskId: primaryIssueId,
-            wakeReason: "approval_approved",
-          },
-        });
-
-        await logActivity(db, {
-          companyId: approval.companyId,
-          actorType: actor.actorType,
-          actorId: actor.actorId,
-          action: "approval.requester_wakeup_queued",
-          entityType: "approval",
-          entityId: approval.id,
-          details: {
-            requesterAgentId: approval.requestedByAgentId,
-            wakeRunId: wakeRun?.id ?? null,
-            linkedIssueIds,
-          },
-        });
-      } catch (err) {
-        logger.warn(
-          { err, approvalId: approval.id, requestedByAgentId: approval.requestedByAgentId },
-          "failed to queue requester wakeup after approval",
-        );
-        await logActivity(db, {
-          companyId: approval.companyId,
-          actorType: actor.actorType,
-          actorId: actor.actorId,
-          action: "approval.requester_wakeup_failed",
-          entityType: "approval",
-          entityId: approval.id,
-          details: {
-            requesterAgentId: approval.requestedByAgentId,
-            linkedIssueIds,
-            error: err instanceof Error ? err.message : String(err),
-          },
-        });
-      }
-    }
-
-    return { linkedIssueIds, primaryIssueId };
-  }
+  // Bulk resolve runs the same effects as every other decision path — share this one instance so the
+  // injected heartbeat (and the services-barrel seam these tests stub) covers the triage route too.
+  const triageSvc = approvalTriageService(db, { effects: approvalEffects });
 
   async function requireApprovalAccess(req: Request, id: string) {
     const approval = await svc.getById(id);
