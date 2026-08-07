@@ -42,6 +42,22 @@ type MemberArchiveInput = {
 export function accessService(db: Db) {
   const authorization = authorizationService(db);
 
+  /**
+   * Answers one question only: "is user X an instance admin?" — a fact about a *person*, read
+   * straight off their `instanceUserRoles` row.
+   *
+   * It does NOT answer "may the current actor exercise instance-admin authority right now?".
+   * That is a fact about a *credential*, and the only correct source for it is
+   * `req.actor.isInstanceAdmin` — reached through `assertInstanceAdmin` in `routes/authz.ts`.
+   * The actor flag encodes provenance the user row cannot see: company-scoped credentials
+   * (`telegram_miniapp`, `cloud_tenant`) are handed `isInstanceAdmin: false` on purpose even when
+   * the underlying user genuinely holds the admin row. Authorising the current actor by calling
+   * this function re-derives the answer from the user and silently discards that decision — which
+   * is how a webview bearer ends up reaching instance-admin routes.
+   *
+   * Legitimate uses look like: "may this member be removed", "build another user's snapshot",
+   * "which of these users are admins" — always about some user, never about the caller.
+   */
   async function isInstanceAdmin(userId: string | null | undefined): Promise<boolean> {
     if (!userId) return false;
     const row = await db

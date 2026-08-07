@@ -90,7 +90,7 @@ import {
   collapseDuplicatePendingHumanJoinRequests,
   findReusableHumanJoinRequest,
 } from "../lib/join-request-dedupe.js";
-import { assertAuthenticated, assertCompanyAccess } from "./authz.js";
+import { assertAuthenticated, assertCompanyAccess, assertInstanceAdmin } from "./authz.js";
 import {
   claimBoardOwnership,
   inspectBoardClaimChallenge
@@ -2443,13 +2443,6 @@ export function accessRoutes(
     ? { ...defaultInviteResolutionNetwork, ...opts.inviteResolutionNetwork }
     : inviteResolutionNetwork;
 
-  async function assertInstanceAdmin(req: Request) {
-    if (req.actor.type !== "board") throw unauthorized();
-    if (isLocalImplicit(req)) return;
-    const allowed = await access.isInstanceAdmin(req.actor.userId);
-    if (!allowed) throw forbidden("Instance admin required");
-  }
-
   router.get("/board-claim/:token", async (req, res) => {
     const token = (req.params.token as string).trim();
     const code =
@@ -3880,7 +3873,7 @@ export function accessRoutes(
       .then((rows) => rows[0] ?? null);
     if (!invite) throw notFound("Invite not found");
     if (invite.inviteType === "bootstrap_ceo") {
-      await assertInstanceAdmin(req);
+      assertInstanceAdmin(req);
     } else {
       if (!invite.companyId) throw conflict("Invite is missing company scope");
       await assertCompanyPermission(req, invite.companyId, "users:invite");
@@ -4536,7 +4529,7 @@ export function accessRoutes(
   router.post(
     "/admin/users/:userId/promote-instance-admin",
     async (req, res) => {
-      await assertInstanceAdmin(req);
+      assertInstanceAdmin(req);
       const userId = req.params.userId as string;
       const result = await access.promoteInstanceAdmin(userId);
       res.status(201).json(result);
@@ -4544,7 +4537,7 @@ export function accessRoutes(
   );
 
   router.get("/admin/users", async (req, res) => {
-    await assertInstanceAdmin(req);
+    assertInstanceAdmin(req);
     const query = searchAdminUsersQuerySchema.parse(req.query);
     const needle = query.query.trim().toLowerCase();
     const users = await db
@@ -4606,7 +4599,7 @@ export function accessRoutes(
   router.post(
     "/admin/users/:userId/demote-instance-admin",
     async (req, res) => {
-      await assertInstanceAdmin(req);
+      assertInstanceAdmin(req);
       const userId = req.params.userId as string;
       const removed = await access.demoteInstanceAdmin(userId);
       if (!removed) throw notFound("Instance admin role not found");
@@ -4615,7 +4608,7 @@ export function accessRoutes(
   );
 
   router.get("/admin/users/:userId/company-access", async (req, res) => {
-    await assertInstanceAdmin(req);
+    assertInstanceAdmin(req);
     const userId = req.params.userId as string;
     res.json(await loadUserCompanyAccessResponse(db, access, userId));
   });
@@ -4624,7 +4617,7 @@ export function accessRoutes(
     "/admin/users/:userId/company-access",
     validate(updateUserCompanyAccessSchema),
     async (req, res) => {
-      await assertInstanceAdmin(req);
+      assertInstanceAdmin(req);
       const userId = req.params.userId as string;
       await access.setUserCompanyAccess(
         userId,
