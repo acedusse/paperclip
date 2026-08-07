@@ -196,7 +196,8 @@ the board API as that user, for one company. Two consequences:
 | Control | Where |
 | --- | --- |
 | A session is scoped to exactly one company and never widens the user's real access | `middleware/auth.ts` |
-| A session never carries instance-admin, even if the user has it — and the policy layer refuses to re-derive it from the user id, so the guarantee holds downstream of the middleware too | `middleware/auth.ts`, `services/authorization.ts` |
+| A session never carries instance-admin, even if the user has it — and no downstream layer re-derives it from the user id, so the guarantee survives past the middleware | `middleware/auth.ts`, `services/authorization.ts`, `services/secrets.ts`, `routes/access.ts` |
+| A session cannot approve a CLI auth challenge, so it cannot mint a board API key that would outlive it | `routes/access.ts` |
 | Every revocation path — unlink chat, **Disconnect bot**, and re-linking a chat to someone else — revokes the sessions the binding minted, in the same transaction | `telegram-link.ts`, `routes/telegram.ts` |
 | Setting the bot to `enabled: false`, or deleting its config, stops existing sessions resolving — not just new mints | `telegram-miniapp-session.ts` |
 | A tampered or stale `initData` is refused without saying which | `routes/telegram.ts` |
@@ -267,6 +268,11 @@ live bindings if a leak is suspected.
 | UI | `ui/src/components/telegram/TelegramChannel.tsx`, `ui/src/api/telegram.ts`, `ui/src/telegram/` |
 
 ## Known gaps
+
+- `GET /api/cli-auth/me` still answers from `resolveBoardAccess`, so it *reports* `isInstanceAdmin:
+  true` and the user's full `companyIds` to a Mini App bearer whose session carries neither. It grants
+  nothing — every authorising path now reads the actor flag — but the response overstates the session's
+  authority. Fixing it means moving the scope fields and the flag together, so it is its own change.
 
 - The channel now carries any `push` payload, but only approvals and the coverage/SLA escalation
   actually produce one today. Budget incidents, SEV1 alerts and the digest still need their own
